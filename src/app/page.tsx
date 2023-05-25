@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import styles from './page.module.css';
+import { getAppConfig } from './global/config';
 
 export default function Home() {
+  const { TEST_ENV_VAR } = getAppConfig();
   return (
     <main className={styles.main}>
       <div className={styles.description}>
@@ -27,7 +29,7 @@ export default function Home() {
           </a>
         </div>
       </div>
-      <h1>Name: {`${process.env.NEXT_PUBLIC_NAME}`}</h1>
+      <h1>env var {`${TEST_ENV_VAR}`}</h1>
       <div className={styles.center}>
         <Image
           className={styles.logo}
