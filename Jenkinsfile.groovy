@@ -1,3 +1,4 @@
+#!/usr/bin/env groovy
 /*
  * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
  *
@@ -23,12 +24,31 @@ def commit = "UNKNOWN"
 def version = "UNKNOWN"
 
 pipeline {
-  agent any
-  stages {
-      stage("Build"){
-        steps {
-          echo "Building..."a
+    agent any
+    stages {
+        stage('Prepare') {
+            steps {
+                echo 'Stage: Prepare..'
+                script {
+                    commit = sh(returnStdout: true, script: 'git describe --always').trim()
+                    version = sh(returnStdout: true, script: 'cat ./package.json | grep version | cut -d \':\' -f2 | sed -e \'s/"//\' -e \'s/",//\'').trim()
+                }
+            }
         }
-      }
-  }
+        stage('Test') {
+            steps {
+                echo 'Stage: Test...'
+                script {
+                    //sh "node --version && npm ci && npm t"
+                    sh "    node --version"
+                
+                }
+            }
+        }
+    }
+    post {
+        always {
+            echo "${commit} + ${version}"
+        }
+    }
 }
