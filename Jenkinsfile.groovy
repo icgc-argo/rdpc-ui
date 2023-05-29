@@ -19,36 +19,125 @@
  */
 
 def dockerRegistry = "ghcr.io"
-def githubRepo = "icgc-argo/platform-ui"
+def githubRepo = "icgc-argo/rdpc-ui"
 def commit = "UNKNOWN"
 def version = "UNKNOWN"
 
 pipeline {
-    agent any
+    kubernetes {
+        label 'platform-ui-executor'
+        yaml: """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: node
+    image: node:16.13.0
+    tty: true
+  - name: docker
+    image: docker:18-git
+    tty: true
+    env:
+    - name: DOCKER_HOST
+      value: tcp://localhost:2375
+    - name: HOME
+      value: /home/jenkins/agent
+  - name: dind-daemon
+    image: docker:18.06-dind
+    securityContext:
+      privileged: true
+      runAsUser: 0
+    volumeMounts:
+    - name: docker-graph-storage
+      mountPath: /var/lib/docker
+  securityContext:
+    runAsUser: 1000
+  volumes:
+  - name: docker-graph-storage
+    emptyDir: {}
+"""
+    }
+
     stages {
         stage('Prepare') {
             steps {
-                echo 'Stage: Prepare..'
+                echo 'Prepare..'
                 script {
                     commit = sh(returnStdout: true, script: 'git describe --always').trim()
                     version = sh(returnStdout: true, script: 'cat ./package.json | grep version | cut -d \':\' -f2 | sed -e \'s/"//\' -e \'s/",//\'').trim()
                 }
             }
         }
+
         stage('Test') {
             steps {
-                echo 'Stage: Test...'
-                script {
-                    //sh "node --version && npm ci && npm t"
-                    sh "    node --version"
-                
+                echo 'Test...'
+                container('node') {
+                    sh "npm ci && npm t"
+
                 }
+            }
+        }
+
+        stage('Build container') {
+            steps {
+                container('docker') {
+                    // DNS error if --network is default
+                    sh "docker build --network=host -f Dockerfile . -t ${dockerRegistry}/${githubRepo}:${commit}"
+                }
+            }
+        }
+
+        stage('Deploy to argo-dev') {
+            when {
+                branch "develop"
+            }
+            steps {
+                container('docker') {
+                    withCredentials([usernamePassword(credentialsId: 'argoContainers', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "docker login ${dockerRegistry} -u $USERNAME -p $PASSWORD"
+                    }
+                    sh "docker tag ${dockerRegistry}/${githubRepo}:${commit} ${dockerRegistry}/${githubRepo}:${version}-${commit}"
+                    sh "docker push ${dockerRegistry}/${githubRepo}:${version}-${commit}"
+                }
+                build(job: "/ARGO/provision/platform-ui", parameters: [
+                        [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'dev'],
+                        [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}-${commit}"]
+                ])
+            }
+        }
+
+        stage('Deploy to argo-qa') {
+            when {
+                branch "master"
+            }
+            steps {
+                container('docker') {
+                    withCredentials([usernamePassword(credentialsId: 'argoGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        sh "git tag ${version}"
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${githubRepo} --tags --no-verify"
+                    }
+                    withCredentials([usernamePassword(credentialsId: 'argoContainers', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "docker login ${dockerRegistry} -u $USERNAME -p $PASSWORD"
+                    }
+                    sh "docker tag ${dockerRegistry}/${githubRepo}:${commit} ${dockerRegistry}/${githubRepo}:${version}"
+                    sh "docker tag ${dockerRegistry}/${githubRepo}:${commit} ${dockerRegistry}/${githubRepo}:latest"
+                    sh "docker push ${dockerRegistry}/${githubRepo}:${version}"
+                    sh "docker push ${dockerRegistry}/${githubRepo}:latest"
+                }
+                build(job: "/ARGO/provision/platform-ui", parameters: [
+                        [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'qa'],
+                        [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}"]
+                ])
             }
         }
     }
     post {
-        always {
-            echo "${commit} + ${version}"
+        unsuccesful {
+            echo "Failure"
+        }
+        fixed {
+            echo "Fixed!"
         }
     }
 }
