@@ -25,14 +25,13 @@ def version = "UNKNOWN"
 
 pipeline {
     kubernetes {
-        label 'platform-ui-executor'
         yaml: """
 apiVersion: v1
 kind: Pod
 spec:
   containers:
   - name: node
-    image: node:16.13.0
+    image: node:18.12.0
     tty: true
   - name: docker
     image: docker:18-git
@@ -74,7 +73,6 @@ spec:
                 echo 'Test...'
                 container('node') {
                     sh "npm ci && npm t"
-
                 }
             }
         }
@@ -100,7 +98,7 @@ spec:
                     sh "docker tag ${dockerRegistry}/${githubRepo}:${commit} ${dockerRegistry}/${githubRepo}:${version}-${commit}"
                     sh "docker push ${dockerRegistry}/${githubRepo}:${version}-${commit}"
                 }
-                build(job: "/ARGO/provision/platform-ui", parameters: [
+                build(job: "/ARGO/provision/rdpc-ui", parameters: [
                         [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'dev'],
                         [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}-${commit}"]
                 ])
@@ -125,13 +123,14 @@ spec:
                     sh "docker push ${dockerRegistry}/${githubRepo}:${version}"
                     sh "docker push ${dockerRegistry}/${githubRepo}:latest"
                 }
-                build(job: "/ARGO/provision/platform-ui", parameters: [
+                build(job: "/ARGO/provision/rdpc-ui", parameters: [
                         [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'qa'],
                         [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}"]
                 ])
             }
         }
     }
+    
     post {
         unsuccesful {
             echo "Failure"
