@@ -24,8 +24,9 @@ def commit = "UNKNOWN"
 def version = "UNKNOWN"
 
 pipeline {
-    kubernetes {
-        yaml: """
+    agent {
+        kubernetes {
+            yaml: """
 apiVersion: v1
 kind: Pod
 spec:
@@ -55,8 +56,8 @@ spec:
   - name: docker-graph-storage
     emptyDir: {}
 """
+        }
     }
-
     stages {
         stage('Prepare') {
             steps {
@@ -132,7 +133,7 @@ spec:
     }
 
     post {
-        unsuccesful {
+        unsuccessful {
             echo "Failure"
         }
         fixed {
