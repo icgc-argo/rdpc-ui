@@ -22,6 +22,12 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables
 
+## Local dev
+
+docker compose file for local development
+created an `.env` file based on `.env.schema`
+in `compose` folder, run `docker-compose up` command
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
