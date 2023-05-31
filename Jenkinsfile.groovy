@@ -107,7 +107,7 @@ spec:
 
         stage('Deploy to argo-qa') {
             when {
-                branch "master"
+                branch "main"
             }
             steps {
                 container('docker') {
@@ -130,7 +130,7 @@ spec:
             }
         }
     }
-    
+
     post {
         unsuccesful {
             echo "Failure"
