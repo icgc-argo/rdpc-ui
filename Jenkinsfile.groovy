@@ -26,8 +26,7 @@ def version = "UNKNOWN"
 pipeline {
     agent {
         kubernetes {
-            label 'ci-executor'
-            yaml: """
+            yaml """
 apiVersion: v1
 kind: Pod
 spec:
