@@ -87,7 +87,7 @@ spec:
             }
         }
 
-        stage('Deploy to rdpc-dev') {
+        stage('Publish develop image') {
             when {
                 branch "develop"
             }
@@ -102,7 +102,7 @@ spec:
             }
         }
 
-        stage('Deploy to rdpc-qa') {
+        stage('Publish main image') {
             when {
                 branch "main"
             }
