@@ -87,7 +87,7 @@ spec:
             }
         }
 
-        stage('Deploy to argo-dev') {
+        stage('Deploy to rdpc-dev') {
             when {
                 branch "develop"
             }
@@ -99,14 +99,10 @@ spec:
                     sh "docker tag ${dockerRegistry}/${githubRepo}:${commit} ${dockerRegistry}/${githubRepo}:${version}-${commit}"
                     sh "docker push ${dockerRegistry}/${githubRepo}:${version}-${commit}"
                 }
-                build(job: "/ARGO/provision/rdpc-ui", parameters: [
-                        [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'dev'],
-                        [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}-${commit}"]
-                ])
             }
         }
 
-        stage('Deploy to argo-qa') {
+        stage('Deploy to rdpc-qa') {
             when {
                 branch "main"
             }
@@ -124,10 +120,23 @@ spec:
                     sh "docker push ${dockerRegistry}/${githubRepo}:${version}"
                     sh "docker push ${dockerRegistry}/${githubRepo}:latest"
                 }
-                build(job: "/ARGO/provision/rdpc-ui", parameters: [
-                        [$class: 'StringParameterValue', name: 'AP_ARGO_ENV', value: 'qa'],
-                        [$class: 'StringParameterValue', name: 'AP_ARGS_LINE', value: "--set-string image.tag=${version}"]
+            }
+        }
+
+        stage('deploy to rdpc-dev') {
+            when {
+                branch "develop"
+            }
+            steps {
+                build(job: "/provision/update-app-version", parameters: [
+                    [$class: 'StringParameterValue', name: 'RDPC_ENV', value: 'dev' ],
+                    [$class: 'StringParameterValue', name: 'TARGET_RELEASE', value: 'rdpc-ui'],
+                    [$class: 'StringParameterValue', name: 'NEW_APP_VERSION', value: "${version}-${commit}" ]
                 ])
+                // sleep(time:30,unit:"SECONDS")
+                // build(job: "/provision/rdpc-gateway-restart", parameters: [
+                //     [$class: 'StringParameterValue', name: 'AP_RDPC_ENV', value: 'dev' ],
+                // ])
             }
         }
     }
