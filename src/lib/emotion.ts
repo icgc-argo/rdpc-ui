@@ -19,6 +19,4 @@
 
 'use client';
 
-export { defaultTheme as ARGOTheme } from '@icgc-argo/uikit';
-export { css, useTheme, ThemeProvider } from '@emotion/react';
-export { default as styled } from '@emotion/styled';
+export { defaultTheme, ThemeProvider, css, useTheme, styled } from '@icgc-argo/uikit';

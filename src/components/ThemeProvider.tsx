@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ARGOTheme, ThemeProvider } from '@/lib/emotion';
+import { defaultTheme, ThemeProvider } from '@/lib/emotion';
 
 export default ({ children }: { children: React.ReactNode }) => (
-	<ThemeProvider theme={ARGOTheme}>{children}</ThemeProvider>
+	<ThemeProvider theme={defaultTheme}>{children}</ThemeProvider>
 );
