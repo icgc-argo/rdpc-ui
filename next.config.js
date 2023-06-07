@@ -18,6 +18,12 @@
  */
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+	publicRuntimeConfig: {
+		EGO_API_ROOT: process.env.EGO_API_ROOT,
+		EGO_CLIENT_ID: process.env.EGO_CLIENT_ID,
+		EGO_PUBLIC_KEY: process.env.EGO_PUBLIC_KEY,
+	},
+};
 
 module.exports = nextConfig;
