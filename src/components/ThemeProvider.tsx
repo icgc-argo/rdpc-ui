@@ -17,6 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-'use client';
+import { ARGOTheme, ThemeProvider } from '@/lib/emotion';
 
-export { css, useTheme, defaultTheme as ARGOTheme, styled, ThemeProvider } from '@icgc-argo/uikit';
+export default ({ children }: { children: React.ReactNode }) => (
+	<ThemeProvider theme={ARGOTheme}>{children}</ThemeProvider>
+);

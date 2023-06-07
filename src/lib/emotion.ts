@@ -17,6 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Button } from '@icgc-argo/uikit';
+'use client';
 
-export default Button;
+export { defaultTheme as ARGOTheme } from '@icgc-argo/uikit';
+export { css, useTheme, ThemeProvider } from '@emotion/react';
+export { default as styled } from '@emotion/styled';
