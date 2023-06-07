@@ -16,99 +16,110 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+'use client';
 
-import Image from 'next/image';
-import styles from './page.module.css';
-import { getAppConfig } from './global/config';
+import Button from '@/components/Button';
+import Typography from '@/components/Typography';
+import Icon from '@/components/Icon';
+
+import { useTheme, css } from '@emotion/react';
+import styled from '@emotion/styled';
+
+// const Hero = styled('div')`
+// 	background-image: ${({ theme }) =>
+// 		`linear-gradient(to bottom,
+//       ${theme.colors.primary},
+//       ${theme.colors.accent2}00 105%),
+//       url('/assets/icgc-galaxy-bg.jpg');`};
+// 	background-position: center;
+// 	background-size: cover;
+// 	background-color: ${({ theme }) => {
+// 		console.log('ts', theme);
+// 		return theme.colors.primary;
+// 	}};
+// 	width: 100%;
+// `;
+
+const Test = styled('div')`
+	background-color: ${({ theme }) => {
+		console.log('ts', theme);
+		return theme.colors.primary;
+	}};
+`;
+
+const style = css({
+	color: 'blue',
+	fontFaamily: '-moz-initial',
+});
 
 export default function Home() {
-  const { TEST_ENV_VAR } = getAppConfig();
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-      <h1>env var {`${TEST_ENV_VAR}`}</h1>
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+	const theme = useTheme();
+	const x = theme.colors.accent1;
+	console.log('color', x);
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+	return (
+		<>
+			<main>
+				<div
+					css={() =>
+						css({
+							color: 'blue',
+							fontFamily: '-moz-initial',
+						})
+					}
+				>
+					zz
+				</div>
+				<div
+					css={(theme) => {
+						console.log('css theem', theme);
+						return '';
+					}}
+				></div>
+				<Test />
+				{/* <div>
+					<DataCallout
+						iconName={'dna_locked'}
+						iconFill={'secondary'}
+						circleFill={'secondary_3'}
+						title={'Access Controlled Data'}
+						urlData={{
+							text: 'How to apply',
+							href: '',
+						}}
+					>
+						The <b>Data Access Compliance Office (DACO)</b> handles approval for access to
+						controlled molecular data in the ARGO Data Platform.
+					</DataCallout>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+					<DataCallout
+						iconName={'download'}
+						iconFill={'accent4_dark'}
+						circleFill={'accent4_3'}
+						title="Data Submission Guide"
+						urlData={{
+							text: 'Data Submission Guide',
+							href: '',
+						}}
+					>
+						Instructions for programs to submit clinical and molecular data.
+					</DataCallout>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>Instantly deploy your Next.js site to a shareable URL with Vercel.</p>
-        </a>
-      </div>
-    </main>
-  );
+					<DataCallout
+						iconName={'workflow'}
+						iconFill={'accent2_dark'}
+						circleFill={'accent2_3'}
+						title={'Data Analysis Workflows'}
+						urlData={{
+							text: 'About our Workflows',
+							href: '',
+						}}
+					>
+						ARGO RPDC uniformly analyzes molecular data against the{' '}
+						<b>GRCh38 Human Reference Genome.</b>
+					</DataCallout>
+				</div> */}
+			</main>
+		</>
+	);
 }
