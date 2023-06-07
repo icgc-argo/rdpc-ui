@@ -7,16 +7,8 @@ declare global {
 		}
 	}
 }
-declare module '@emotion/react' {
-	interface Theme extends ARGOThemeType {
-		custom: string;
-	}
+declare module '@icgc-argo/uikit' {
+	interface ARGOTheme {}
 }
-
-// declare module '@icgc-argo/uikit' {
-// 	interface Theme extends ARGOThemeType {
-// 		custom: string;
-// 	}
-// }
 
 export {};
