@@ -17,10 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-type AppConfig = { TEST_ENV_VAR: string };
+type AppConfig = {
+	TEST_ENV_VAR: string;
+	EGO_API_ROOT: string | undefined;
+	EGO_CLIENT_ID: string | undefined;
+	EGO_PUBLIC_KEY: string | undefined;
+};
 
 export const getAppConfig = (): AppConfig => {
-  return {
-    TEST_ENV_VAR: process.env.NEXT_PUBLIC_TEST,
-  };
+	return {
+		TEST_ENV_VAR: process.env.NEXT_PUBLIC_TEST,
+		EGO_API_ROOT: process.env.EGO_API_ROOT,
+		EGO_CLIENT_ID: process.env.EGO_CLIENT_ID,
+		EGO_PUBLIC_KEY: process.env.EGO_PUBLIC_KEY,
+	};
 };
