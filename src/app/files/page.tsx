@@ -47,9 +47,6 @@ export default function Home() {
 					<button>Logout</button>
 				</a>
 			</div>
-			<div>
-				<Image src="/next.svg" alt="Next.js Logo" width={180} height={37} priority />
-			</div>
 		</main>
 	);
 }
