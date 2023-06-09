@@ -18,6 +18,8 @@
  */
 
 import Image from 'next/image';
+import GoogleLogin from './components/GoogleLogin';
+
 import styles from './page.module.css';
 import { getAppConfig } from './global/config';
 
@@ -32,7 +34,8 @@ export const NavBarLoginButton = () => {
 };
 
 export default function Home() {
-	const { TEST_ENV_VAR } = getAppConfig();
+	const { TEST_ENV_VAR, EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
+	const url = `${EGO_API_ROOT}/api/oauth/login/google?client_id=${EGO_CLIENT_ID}`;
 
 	return (
 		<main className={styles.main}>
@@ -60,7 +63,9 @@ export default function Home() {
 				</div>
 			</div>
 			<h1>env var {`${TEST_ENV_VAR}`}</h1>
+			{/* <GoogleLogin link={url}> */}
 			<NavBarLoginButton />
+			{/* </> */}
 			<div className={styles.center}>
 				<Image
 					className={styles.logo}
