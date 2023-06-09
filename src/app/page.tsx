@@ -16,12 +16,108 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+'use client';
 
+import { styled, css, useTheme } from '@/lib/emotion';
+import { Button, DataCallout, Link, GoogleLogin, Typography, overtureLogo } from '@icgc-argo/uikit';
 import Image from 'next/image';
-import GoogleLogin from './components/GoogleLogin';
 
 import styles from './page.module.css';
 import { getAppConfig } from './global/config';
+
+const OvertureBanner: ComponentType<{}> = ({}) => {
+	const theme = useTheme();
+	return (
+		<div
+			css={css`
+				padding: 10px 12%;
+				display: flex;
+				text-align: center;
+				justify-content: center;
+				align-items: center;
+				border-top: 1px solid ${theme.colors.grey_2};
+				background-color: ${theme.colors.grey_4};
+			`}
+		>
+			<Link
+				href="https://www.overture.bio/"
+				target="_blank"
+				css={css`
+					padding-top: 4px;
+				`}
+			>
+				<Image alt="Logo for Ontario Institute for Cancer Research" src={overtureLogo} />
+			</Link>
+			<Typography
+				color={theme.colors.grey}
+				variant="data"
+				css={css`
+					margin-left: 20px;
+				`}
+			>
+				The ARGO Data Platform is built with open-source products that you can incorporate into your
+				systems though{' '}
+				<Link href="https://www.overture.bio/" target="_blank">
+					Overture.bio
+				</Link>
+				.
+			</Typography>
+		</div>
+	);
+};
+
+const DataCallouts = () => (
+	<div
+		css={css`
+			display: flex;
+			height: 275px;
+
+			> div {
+				flex: 1 1 0;
+			}
+		`}
+	>
+		<DataCallout
+			iconName={'dna_locked'}
+			iconFill={'secondary'}
+			circleFill={'secondary_3'}
+			title={'Access Controlled Data'}
+			urlData={{
+				text: 'How to apply',
+				href: '',
+			}}
+		>
+			The <b>Data Access Compliance Office (DACO)</b> handles approval for access to controlled
+			molecular data in the ARGO Data Platform.
+		</DataCallout>
+
+		<DataCallout
+			iconName={'download'}
+			iconFill={'accent4_dark'}
+			circleFill={'accent4_3'}
+			title="Data Submission Guide"
+			urlData={{
+				text: 'Data Submission Guide',
+				href: '',
+			}}
+		>
+			Instructions for programs to submit clinical and molecular data.
+		</DataCallout>
+
+		<DataCallout
+			iconName={'workflow'}
+			iconFill={'accent2_dark'}
+			circleFill={'accent2_3'}
+			title={'Data Analysis Workflows'}
+			urlData={{
+				text: 'About our Workflows',
+				href: '',
+			}}
+		>
+			ARGO RPDC uniformly analyzes molecular data against the <b>GRCh38 Human Reference Genome.</b>
+		</DataCallout>
+	</div>
+);
 
 export const NavBarLoginButton = () => {
 	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
@@ -33,99 +129,17 @@ export const NavBarLoginButton = () => {
 	);
 };
 
+// const { TEST_ENV_VAR, EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
+// 	const url = `${EGO_API_ROOT}/api/oauth/login/google?client_id=${EGO_CLIENT_ID}`;
+//   			{/* <GoogleLogin link={url}> */}
+//         <NavBarLoginButton />
+//         {/* </> */}
+
 export default function Home() {
-	const { TEST_ENV_VAR, EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
-	const url = `${EGO_API_ROOT}/api/oauth/login/google?client_id=${EGO_CLIENT_ID}`;
-
 	return (
-		<main className={styles.main}>
-			<div className={styles.description}>
-				<p>
-					Get started by editing&nbsp;
-					<code className={styles.code}>src/app/page.tsx</code>
-				</p>
-				<div>
-					<a
-						href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						By{' '}
-						<Image
-							src="/vercel.svg"
-							alt="Vercel Logo"
-							className={styles.vercelLogo}
-							width={100}
-							height={24}
-							priority
-						/>
-					</a>
-				</div>
-			</div>
-			<h1>env var {`${TEST_ENV_VAR}`}</h1>
-			{/* <GoogleLogin link={url}> */}
-			<NavBarLoginButton />
-			{/* </> */}
-			<div className={styles.center}>
-				<Image
-					className={styles.logo}
-					src="/next.svg"
-					alt="Next.js Logo"
-					width={180}
-					height={37}
-					priority
-				/>
-			</div>
-
-			<div className={styles.grid}>
-				<a
-					href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-					className={styles.card}
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<h2>
-						Docs <span>-&gt;</span>
-					</h2>
-					<p>Find in-depth information about Next.js features and API.</p>
-				</a>
-
-				<a
-					href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-					className={styles.card}
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<h2>
-						Learn <span>-&gt;</span>
-					</h2>
-					<p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-				</a>
-
-				<a
-					href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-					className={styles.card}
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<h2>
-						Templates <span>-&gt;</span>
-					</h2>
-					<p>Explore the Next.js 13 playground.</p>
-				</a>
-
-				<a
-					href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-					className={styles.card}
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<h2>
-						Deploy <span>-&gt;</span>
-					</h2>
-					<p>Instantly deploy your Next.js site to a shareable URL with Vercel.</p>
-				</a>
-			</div>
+		<main>
+			<DataCallouts />
+			<OvertureBanner />
 		</main>
 	);
 }

@@ -36,3 +36,18 @@ To learn more about Next.js, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+## Uikit
+
+react + react dom + emotion all versions needs to be in sync
+
+tied to a lot of uikit choices
+sooo
+prefer css prop over "styled" usage
+
+- easier to debug
+- "cleaner"
+
+to try and keep things clean and bug free, Emotion is used directly from UIKit
+it is only installed as a dependency in this project for types
+note it should still appear in node_modules as a peer dependency for uikit

@@ -17,18 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/** @type {import('next').NextConfig} */
+import { defaultTheme, ThemeProvider } from '@/lib/emotion';
 
-const nextConfig = {
-	reactStrictMode: true,
-	compiler: {
-		emotion: true,
-	},
-	publicRuntimeConfig: {
-		EGO_API_ROOT: process.env.EGO_API_ROOT,
-		EGO_CLIENT_ID: process.env.EGO_CLIENT_ID,
-		EGO_PUBLIC_KEY: process.env.EGO_PUBLIC_KEY,
-	},
-};
-
-module.exports = nextConfig;
+export default ({ children }: { children: React.ReactNode }) => (
+	<ThemeProvider theme={defaultTheme}>{children}</ThemeProvider>
+);
