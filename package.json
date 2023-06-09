@@ -11,9 +11,9 @@
     "test": "echo 'Add tests please :)'"
   },
   "dependencies": {
-    "@types/url-join": "^4.0.1",
     "@emotion/styled": "^11.11.0",
     "@icgc-argo/uikit": "file:../uikit/dist",
+    "@types/url-join": "^4.0.1",
     "next": "^13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",

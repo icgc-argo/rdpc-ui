@@ -18,12 +18,12 @@
  */
 'use client';
 
-import { styled, css, useTheme } from '@/lib/emotion';
-import { Button, DataCallout, Link, GoogleLogin, Typography, overtureLogo } from '@icgc-argo/uikit';
+import { ComponentType } from 'react';
+import { css, useTheme } from '@/lib/emotion';
+import { GoogleLogin, Link, Typography, overtureLogo } from '@icgc-argo/uikit';
 import Image from 'next/image';
 
-import styles from './page.module.css';
-import { getAppConfig } from './global/config';
+import { getAppConfig } from '../global/config';
 
 const OvertureBanner: ComponentType<{}> = ({}) => {
 	const theme = useTheme();
@@ -66,6 +66,20 @@ const OvertureBanner: ComponentType<{}> = ({}) => {
 	);
 };
 
+export const NavBarLoginButton = () => {
+	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
+	const url = `${EGO_API_ROOT}/api/oauth/login/google?client_id=${EGO_CLIENT_ID}`;
+
+	return (
+		<div>
+			<GoogleLogin link={url} />
+			<a href={`${EGO_API_ROOT}/api/oauth/login/google?client_id=${EGO_CLIENT_ID}`}>
+				<button>Login</button>
+			</a>
+		</div>
+	);
+};
+
 const DataCallouts = () => (
 	<div
 		css={css`
@@ -77,7 +91,8 @@ const DataCallouts = () => (
 			}
 		`}
 	>
-		<DataCallout
+		<NavBarLoginButton />
+		{/*	<DataCallout
 			iconName={'dna_locked'}
 			iconFill={'secondary'}
 			circleFill={'secondary_3'}
@@ -115,25 +130,9 @@ const DataCallouts = () => (
 			}}
 		>
 			ARGO RPDC uniformly analyzes molecular data against the <b>GRCh38 Human Reference Genome.</b>
-		</DataCallout>
+		</DataCallout> */}
 	</div>
 );
-
-export const NavBarLoginButton = () => {
-	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
-
-	return (
-		<a href={`${EGO_API_ROOT}/api/oauth/login/google?client_id=${EGO_CLIENT_ID}`}>
-			<button>Login</button>
-		</a>
-	);
-};
-
-// const { TEST_ENV_VAR, EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
-// 	const url = `${EGO_API_ROOT}/api/oauth/login/google?client_id=${EGO_CLIENT_ID}`;
-//   			{/* <GoogleLogin link={url}> */}
-//         <NavBarLoginButton />
-//         {/* </> */}
 
 export default function Home() {
 	return (

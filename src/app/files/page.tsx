@@ -19,7 +19,7 @@
 
 import Image from 'next/image';
 import styles from '../page.module.css';
-import { getAppConfig } from '../global/config';
+import { getAppConfig } from '../../global/config';
 
 export default function Home() {
 	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
