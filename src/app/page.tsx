@@ -26,7 +26,6 @@ import {
 	Button,
 	Icon,
 	Link,
-	Section,
 	Typography,
 	overtureLogo,
 } from '@icgc-argo/uikit';
