@@ -18,108 +18,109 @@
  */
 'use client';
 
-import Button from '@/components/Button';
-import Typography from '@/components/Typography';
-import Icon from '@/components/Icon';
+import { styled, css, useTheme } from '@/lib/emotion';
+import { Button, Typography, DataCallout, Link, overtureLogo } from '@icgc-argo/uikit';
+import Image from 'next/image';
 
-import { useTheme, css } from '@emotion/react';
-import styled from '@emotion/styled';
+const OvertureBanner: ComponentType<{}> = ({}) => {
+	const theme = useTheme();
+	return (
+		<div
+			css={css`
+				padding: 10px 12%;
+				display: flex;
+				text-align: center;
+				justify-content: center;
+				align-items: center;
+				border-top: 1px solid ${theme.colors.grey_2};
+				background-color: ${theme.colors.grey_4};
+			`}
+		>
+			<Link
+				href="https://www.overture.bio/"
+				target="_blank"
+				css={css`
+					padding-top: 4px;
+				`}
+			>
+				<Image alt="Logo for Ontario Institute for Cancer Research" src={overtureLogo} />
+			</Link>
+			<Typography
+				color={theme.colors.grey}
+				variant="data"
+				css={css`
+					margin-left: 20px;
+				`}
+			>
+				The ARGO Data Platform is built with open-source products that you can incorporate into your
+				systems though{' '}
+				<Link href="https://www.overture.bio/" target="_blank">
+					Overture.bio
+				</Link>
+				.
+			</Typography>
+		</div>
+	);
+};
 
-// const Hero = styled('div')`
-// 	background-image: ${({ theme }) =>
-// 		`linear-gradient(to bottom,
-//       ${theme.colors.primary},
-//       ${theme.colors.accent2}00 105%),
-//       url('/assets/icgc-galaxy-bg.jpg');`};
-// 	background-position: center;
-// 	background-size: cover;
-// 	background-color: ${({ theme }) => {
-// 		console.log('ts', theme);
-// 		return theme.colors.primary;
-// 	}};
-// 	width: 100%;
-// `;
+const DataCallouts = () => (
+	<div
+		css={css`
+			display: flex;
+			height: 275px;
 
-const Test = styled('div')`
-	background-color: ${({ theme }) => {
-		console.log('ts', theme);
-		return theme.colors.primary;
-	}};
-`;
+			> div {
+				flex: 1 1 0;
+			}
+		`}
+	>
+		<DataCallout
+			iconName={'dna_locked'}
+			iconFill={'secondary'}
+			circleFill={'secondary_3'}
+			title={'Access Controlled Data'}
+			urlData={{
+				text: 'How to apply',
+				href: '',
+			}}
+		>
+			The <b>Data Access Compliance Office (DACO)</b> handles approval for access to controlled
+			molecular data in the ARGO Data Platform.
+		</DataCallout>
 
-const style = css({
-	color: 'blue',
-	fontFaamily: '-moz-initial',
-});
+		<DataCallout
+			iconName={'download'}
+			iconFill={'accent4_dark'}
+			circleFill={'accent4_3'}
+			title="Data Submission Guide"
+			urlData={{
+				text: 'Data Submission Guide',
+				href: '',
+			}}
+		>
+			Instructions for programs to submit clinical and molecular data.
+		</DataCallout>
+
+		<DataCallout
+			iconName={'workflow'}
+			iconFill={'accent2_dark'}
+			circleFill={'accent2_3'}
+			title={'Data Analysis Workflows'}
+			urlData={{
+				text: 'About our Workflows',
+				href: '',
+			}}
+		>
+			ARGO RPDC uniformly analyzes molecular data against the <b>GRCh38 Human Reference Genome.</b>
+		</DataCallout>
+	</div>
+);
 
 export default function Home() {
-	const theme = useTheme();
-	const x = theme.colors.accent1;
-	console.log('color', x);
-
 	return (
-		<>
-			<main>
-				<div
-					css={() =>
-						css({
-							color: 'blue',
-							fontFamily: '-moz-initial',
-						})
-					}
-				>
-					zz
-				</div>
-				<div
-					css={(theme) => {
-						console.log('css theem', theme);
-						return '';
-					}}
-				></div>
-				<Test />
-				{/* <div>
-					<DataCallout
-						iconName={'dna_locked'}
-						iconFill={'secondary'}
-						circleFill={'secondary_3'}
-						title={'Access Controlled Data'}
-						urlData={{
-							text: 'How to apply',
-							href: '',
-						}}
-					>
-						The <b>Data Access Compliance Office (DACO)</b> handles approval for access to
-						controlled molecular data in the ARGO Data Platform.
-					</DataCallout>
-
-					<DataCallout
-						iconName={'download'}
-						iconFill={'accent4_dark'}
-						circleFill={'accent4_3'}
-						title="Data Submission Guide"
-						urlData={{
-							text: 'Data Submission Guide',
-							href: '',
-						}}
-					>
-						Instructions for programs to submit clinical and molecular data.
-					</DataCallout>
-
-					<DataCallout
-						iconName={'workflow'}
-						iconFill={'accent2_dark'}
-						circleFill={'accent2_3'}
-						title={'Data Analysis Workflows'}
-						urlData={{
-							text: 'About our Workflows',
-							href: '',
-						}}
-					>
-						ARGO RPDC uniformly analyzes molecular data against the{' '}
-						<b>GRCh38 Human Reference Genome.</b>
-					</DataCallout>
-				</div> */}
-			</main>
-		</>
+		<main>
+			<DataCallouts />
+			<OvertureBanner />
+		</main>
 	);
 }
