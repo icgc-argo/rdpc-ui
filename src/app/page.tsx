@@ -16,13 +16,15 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 'use client';
 
-import { styled, css, useTheme } from '@/lib/emotion';
-import { Button, Typography, DataCallout, Link, overtureLogo } from '@icgc-argo/uikit';
+import { css, useTheme } from '@/lib/emotion';
+import { DataCallout, Link, Typography, overtureLogo } from '@icgc-argo/uikit';
 import Image from 'next/image';
+import { ComponentType } from 'react';
 
-const OvertureBanner: ComponentType<{}> = ({}) => {
+const OvertureBanner: ComponentType = () => {
 	const theme = useTheme();
 	return (
 		<div
@@ -63,7 +65,7 @@ const OvertureBanner: ComponentType<{}> = ({}) => {
 	);
 };
 
-const DataCallouts = () => (
+const ActionBox: ComponentType = () => (
 	<div css={css({ container: 'callouts / inline-size' })}>
 		<div
 			css={css`
@@ -88,10 +90,10 @@ const DataCallouts = () => (
 			`}
 		>
 			<DataCallout
-				iconName={'dna_locked'}
-				iconFill={'secondary'}
-				circleFill={'secondary_3'}
-				title={'Access Controlled Data'}
+				iconName="dna_locked"
+				iconFill="secondary"
+				circleFill="secondary_3"
+				title="Access Controlled Data"
 				urlData={{
 					text: 'How to apply',
 					href: '',
@@ -102,9 +104,9 @@ const DataCallouts = () => (
 			</DataCallout>
 
 			<DataCallout
-				iconName={'download'}
-				iconFill={'accent4_dark'}
-				circleFill={'accent4_3'}
+				iconName="download"
+				iconFill="accent4_dark"
+				circleFill="accent4_3"
 				title="Data Submission Guide"
 				urlData={{
 					text: 'Data Submission Guide',
@@ -115,10 +117,10 @@ const DataCallouts = () => (
 			</DataCallout>
 
 			<DataCallout
-				iconName={'workflow'}
-				iconFill={'accent2_dark'}
-				circleFill={'accent2_3'}
-				title={'Data Analysis Workflows'}
+				iconName="workflow"
+				iconFill="accent2_dark"
+				circleFill="accent2_3"
+				title="Data Analysis Workflows"
 				urlData={{
 					text: 'About our Workflows',
 					href: '',
@@ -134,7 +136,7 @@ const DataCallouts = () => (
 export default function Home() {
 	return (
 		<main>
-			<DataCallouts />
+			<ActionBox />
 			<OvertureBanner />
 		</main>
 	);
