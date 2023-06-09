@@ -21,8 +21,18 @@ import Image from 'next/image';
 import styles from './page.module.css';
 import { getAppConfig } from './global/config';
 
+export const NavBarLoginButton = () => {
+	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
+
+	return (
+		<a href={`${EGO_API_ROOT}/api/oauth/login/google?client_id=${EGO_CLIENT_ID}`}>
+			<button>Login</button>
+		</a>
+	);
+};
+
 export default function Home() {
-	const { TEST_ENV_VAR, EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
+	const { TEST_ENV_VAR } = getAppConfig();
 
 	return (
 		<main className={styles.main}>
@@ -50,9 +60,7 @@ export default function Home() {
 				</div>
 			</div>
 			<h1>env var {`${TEST_ENV_VAR}`}</h1>
-			<a href={`${EGO_API_ROOT}/api/oauth/login/google?client_id=${EGO_CLIENT_ID}`}>
-				<button>Login</button>
-			</a>
+			<NavBarLoginButton />
 			<div className={styles.center}>
 				<Image
 					className={styles.logo}
