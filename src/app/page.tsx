@@ -64,55 +64,70 @@ const OvertureBanner: ComponentType<{}> = ({}) => {
 };
 
 const DataCallouts = () => (
-	<div
-		css={css`
-			display: flex;
-			height: 275px;
+	<div css={css({ container: 'callouts / inline-size' })}>
+		<div
+			css={css`
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				margin: 60px 0 40px 0;
 
-			> div {
-				flex: 1 1 0;
-			}
-		`}
-	>
-		<DataCallout
-			iconName={'dna_locked'}
-			iconFill={'secondary'}
-			circleFill={'secondary_3'}
-			title={'Access Controlled Data'}
-			urlData={{
-				text: 'How to apply',
-				href: '',
-			}}
-		>
-			The <b>Data Access Compliance Office (DACO)</b> handles approval for access to controlled
-			molecular data in the ARGO Data Platform.
-		</DataCallout>
+				> div:not(:last-child) {
+					border-right: 1px solid #dcdde1;
+				}
 
-		<DataCallout
-			iconName={'download'}
-			iconFill={'accent4_dark'}
-			circleFill={'accent4_3'}
-			title="Data Submission Guide"
-			urlData={{
-				text: 'Data Submission Guide',
-				href: '',
-			}}
-		>
-			Instructions for programs to submit clinical and molecular data.
-		</DataCallout>
+				@container callouts (width < 768px) {
+					grid-template-columns: 1fr;
+					row-gap: 20px;
+					padding: 0 5%;
 
-		<DataCallout
-			iconName={'workflow'}
-			iconFill={'accent2_dark'}
-			circleFill={'accent2_3'}
-			title={'Data Analysis Workflows'}
-			urlData={{
-				text: 'About our Workflows',
-				href: '',
-			}}
+					> div:not(:last-child) {
+						border-right: none;
+						border-bottom: 1px solid #dcdde1;
+					}
+				}
+			`}
 		>
-			ARGO RPDC uniformly analyzes molecular data against the <b>GRCh38 Human Reference Genome.</b>
-		</DataCallout>
+			<DataCallout
+				iconName={'dna_locked'}
+				iconFill={'secondary'}
+				circleFill={'secondary_3'}
+				title={'Access Controlled Data'}
+				urlData={{
+					text: 'How to apply',
+					href: '',
+				}}
+			>
+				The <b>Data Access Compliance Office (DACO)</b> handles approval for access to controlled
+				molecular data in the ARGO Data Platform.
+			</DataCallout>
+
+			<DataCallout
+				iconName={'download'}
+				iconFill={'accent4_dark'}
+				circleFill={'accent4_3'}
+				title="Data Submission Guide"
+				urlData={{
+					text: 'Data Submission Guide',
+					href: '',
+				}}
+			>
+				Instructions for programs to submit clinical and molecular data.
+			</DataCallout>
+
+			<DataCallout
+				iconName={'workflow'}
+				iconFill={'accent2_dark'}
+				circleFill={'accent2_3'}
+				title={'Data Analysis Workflows'}
+				urlData={{
+					text: 'About our Workflows',
+					href: '',
+				}}
+			>
+				ARGO RPDC uniformly analyzes molecular data against the{' '}
+				<b>GRCh38 Human Reference Genome.</b>
+			</DataCallout>
+		</div>
 	</div>
 );
 
