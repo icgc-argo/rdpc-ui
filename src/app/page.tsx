@@ -20,8 +20,18 @@
 
 import { ComponentType } from 'react';
 import { css, useTheme } from '@/lib/emotion';
-import { GoogleLogin, Link, Typography, overtureLogo } from '@icgc-argo/uikit';
+import {
+	AppBar,
+	AppBarMenuItem,
+	Button,
+	Icon,
+	Link,
+	Section,
+	Typography,
+	overtureLogo,
+} from '@icgc-argo/uikit';
 import Image from 'next/image';
+import NextLink from 'next/link';
 
 import { getAppConfig } from '../global/config';
 
@@ -68,15 +78,35 @@ const OvertureBanner: ComponentType<{}> = ({}) => {
 
 export const NavBarLoginButton = () => {
 	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
-	const url = `${EGO_API_ROOT}/api/oauth/login/google?client_id=${EGO_CLIENT_ID}`;
+	const loginUrl = `${EGO_API_ROOT}/api/oauth/login/google?client_id=${EGO_CLIENT_ID}`;
 
 	return (
-		<div>
-			<GoogleLogin link={url} />
-			<a href={`${EGO_API_ROOT}/api/oauth/login/google?client_id=${EGO_CLIENT_ID}`}>
-				<button>Login</button>
-			</a>
-		</div>
+		<a
+			href={loginUrl}
+			css={css`
+				align-self: center;
+				text-decoration: none;
+				padding: 0 16px;
+			`}
+		>
+			<Button>
+				<span
+					css={css`
+						display: flex;
+						justify-content: center;
+						align-items: center;
+					`}
+				>
+					<Icon
+						name="google"
+						css={css`
+							margin-right: 5px;
+						`}
+					/>
+					Login
+				</span>
+			</Button>
+		</a>
 	);
 };
 
@@ -91,7 +121,6 @@ const DataCallouts = () => (
 			}
 		`}
 	>
-		<NavBarLoginButton />
 		{/*	<DataCallout
 			iconName={'dna_locked'}
 			iconFill={'secondary'}
@@ -137,6 +166,34 @@ const DataCallouts = () => (
 export default function Home() {
 	return (
 		<main>
+			<AppBar
+				css={css`
+					position: sticky;
+					top: 0px;
+					z-index: 2;
+				`}
+			>
+				<AppBarMenuItem>
+					<NextLink href={'/'} id="home-login">
+						<div
+							css={css`
+								padding: 0 18px;
+							`}
+						>
+							<Image
+								alt="ICGC ARGO"
+								layout="fixed"
+								src={'/argo-logo.svg'}
+								width="208"
+								height="60"
+							/>
+						</div>
+					</NextLink>
+				</AppBarMenuItem>
+				<AppBarMenuItem>
+					<NavBarLoginButton />
+				</AppBarMenuItem>
+			</AppBar>
 			<DataCallouts />
 			<OvertureBanner />
 		</main>
