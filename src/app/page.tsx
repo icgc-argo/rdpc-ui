@@ -77,7 +77,8 @@ const ActionBox: ComponentType = () => (
 					border-right: 1px solid #dcdde1;
 				}
 
-				@container callouts (width < 768px) {
+				/* breakpoint where buttons will soft wrap and look worse with icon on second line */
+				@container callouts (width < 840px) {
 					grid-template-columns: 1fr;
 					row-gap: 20px;
 					padding: 0 5%;
