@@ -27,8 +27,8 @@ type AppConfig = {
 export const getAppConfig = (): AppConfig => {
 	return {
 		TEST_ENV_VAR: process.env.NEXT_PUBLIC_TEST || '',
-		EGO_API_ROOT: process.env.EGO_API_ROOT || '',
-		EGO_CLIENT_ID: process.env.EGO_CLIENT_ID || '',
+		EGO_API_ROOT: process.env.EGO_API_ROOT || 'https://ego.dev.argo.cancercollaboratory.org',
+		EGO_CLIENT_ID: process.env.EGO_CLIENT_ID || 'rdpc-ui-local',
 		EGO_PUBLIC_KEY: process.env.EGO_PUBLIC_KEY || '',
 	};
 };

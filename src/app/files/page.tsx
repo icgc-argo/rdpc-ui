@@ -25,17 +25,18 @@ import { useEffect } from 'react';
 import urljoin from 'url-join';
 import { EGO_JWT_KEY } from '../../global/constants';
 import { getAppConfig } from '../../global/config';
+import { removeToken } from '../../global/hooks';
 
-const redirect = (res, url: string) => {
-	if (res) {
-		res.writeHead(302, {
-			Location: url,
-		});
-		res.end();
-	} else {
-		Router.push(url);
-	}
-};
+// const redirect = (res: Response, url: string) => {
+// 	if (res) {
+// 		res.writeHead(302, {
+// 			Location: url,
+// 		});
+// 		res.end();
+// 	} else {
+// 		Router.push(url);
+// 	}
+// };
 
 export default function Home() {
 	const { EGO_CLIENT_ID, EGO_API_ROOT } = getAppConfig();
@@ -80,7 +81,7 @@ export default function Home() {
 			<h1>Welcome! {EGO_CLIENT_ID}</h1>
 			<div>
 				<a href={`/`}>
-					<button>Logout</button>
+					<button onClick={removeToken}>Logout</button>
 				</a>
 			</div>
 		</main>
