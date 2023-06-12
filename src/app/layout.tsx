@@ -24,14 +24,55 @@
 
 import { Work_Sans } from 'next/font/google';
 import ThemeProvider from '@/components/ThemeProvider';
+import { AppBar, css, useTheme } from '@icgc-argo/uikit';
+import Link from 'next/link';
+import Image from 'next/image';
+import argoLogo from '../../public/assets/argo-logo.svg';
 
 const workSans = Work_Sans({ subsets: ['latin'] });
+
+const Header = () => {
+	const theme = useTheme();
+	return (
+		<header>
+			<div
+				css={css({
+					position: 'sticky',
+					top: '0px',
+					zIndex: 2,
+					display: 'flex',
+					flexDirection: 'row',
+					justifyContent: 'space-between',
+					alignItems: 'center',
+					width: '100%',
+					padding: '0 18px',
+					minHeight: '58px',
+					backgroundColor: theme.colors.primary,
+				})}
+			>
+				<div css={css({ height: '30px', width: '208px', position: 'relative' })}>
+					<Link href="/">
+						<Image alt="ICGC ARGO" src={argoLogo} fill />
+					</Link>
+				</div>
+
+				{/** keep this div. header will have more items, will be "right-aligned" */}
+				<div>
+					<h1 style={{ color: 'white' }}>Login Button</h1> {/** replace me with Login button */}
+				</div>
+			</div>
+		</header>
+	);
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en">
 			<body className={workSans.className}>
-				<ThemeProvider>{children}</ThemeProvider>
+				<ThemeProvider>
+					<Header />
+					{children}
+				</ThemeProvider>
 			</body>
 		</html>
 	);
