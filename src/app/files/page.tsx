@@ -25,7 +25,7 @@ import { useEffect } from 'react';
 import urljoin from 'url-join';
 import { EGO_JWT_KEY } from '../../global/constants';
 import { getAppConfig } from '../../global/config';
-import { removeToken } from '../../global/hooks';
+import { removeToken } from '../../global/hooks/auth';
 
 // const redirect = (res: Response, url: string) => {
 // 	if (res) {
