@@ -17,10 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-type AppConfig = { TEST_ENV_VAR: string };
+type AppConfig = { TEST_ENV_VAR: string; ARGO_DOCS_URL_ROOT: string };
 
 export const getAppConfig = (): AppConfig => {
+	console.log('rpce', process.env.NEXT_PUBLIC_ARGO_DOCS_URL_ROOT);
 	return {
 		TEST_ENV_VAR: process.env.NEXT_PUBLIC_TEST,
+		ARGO_DOCS_URL_ROOT: process.env.NEXT_PUBLIC_ARGO_DOCS_URL_ROOT || '',
 	};
 };
