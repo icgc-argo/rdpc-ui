@@ -18,11 +18,47 @@
  */
 'use client';
 
+import Cookies from 'js-cookie';
 import Image from 'next/image';
+import Router from 'next/router';
+import { useEffect } from 'react';
+import urljoin from 'url-join';
+import { EGO_JWT_KEY } from '../../global/constants';
 import { getAppConfig } from '../../global/config';
 
+const redirect = (res, url: string) => {
+	if (res) {
+		res.writeHead(302, {
+			Location: url,
+		});
+		res.end();
+	} else {
+		Router.push(url);
+	}
+};
+
 export default function Home() {
-	const { EGO_CLIENT_ID } = getAppConfig();
+	const { EGO_CLIENT_ID, EGO_API_ROOT } = getAppConfig();
+
+	useEffect(() => {
+		const egoLoginUrl = urljoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
+		fetch(egoLoginUrl, {
+			credentials: 'include',
+			headers: { accept: '*/*' },
+			body: null,
+			method: 'GET',
+			mode: 'cors',
+		})
+			.then((res) => res.text())
+			.then((egoToken) => {
+				Cookies.set(EGO_JWT_KEY, egoToken);
+				// redirect(egoToken);
+			})
+			.catch((err) => {
+				console.warn('err: ', err);
+				// redirect(null);
+			});
+	});
 
 	return (
 		<main>
