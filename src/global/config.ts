@@ -18,6 +18,7 @@
  */
 
 type AppConfig = {
+	ARGO_DOCS_URL_ROOT: string;
 	TEST_ENV_VAR: string;
 	EGO_API_ROOT: string;
 	EGO_CLIENT_ID: string;
@@ -30,5 +31,6 @@ export const getAppConfig = (): AppConfig => {
 		EGO_API_ROOT: process.env.EGO_API_ROOT || 'https://ego.dev.argo.cancercollaboratory.org',
 		EGO_CLIENT_ID: process.env.EGO_CLIENT_ID || 'rdpc-ui-local',
 		EGO_PUBLIC_KEY: process.env.EGO_PUBLIC_KEY || '',
+		ARGO_DOCS_URL_ROOT: process.env.NEXT_PUBLIC_ARGO_DOCS_URL_ROOT || '',
 	};
 };

@@ -19,7 +19,9 @@
 'use client';
 
 import { ComponentType } from 'react';
-import { css, useTheme } from '@/lib/emotion';
+import Image from 'next/image';
+import NextLink from 'next/link';
+import urlJoin from 'url-join';
 import {
 	AppBar,
 	AppBarMenuItem,
@@ -30,12 +32,12 @@ import {
 	Typography,
 	overtureLogo,
 } from '@icgc-argo/uikit';
-import Image from 'next/image';
-import NextLink from 'next/link';
+import { getAppConfig } from '@/global/config';
+import { css, useTheme } from '@/lib/emotion';
 
-import { getAppConfig } from '../global/config';
+const { ARGO_DOCS_URL_ROOT } = getAppConfig();
 
-const OvertureBanner: ComponentType<{}> = ({}) => {
+const OvertureBanner: ComponentType = () => {
 	const theme = useTheme();
 	return (
 		<div
@@ -110,56 +112,72 @@ const LoginButton = () => {
 	);
 };
 
-const DataCallouts = () => (
-	<div
-		css={css`
-			display: flex;
-			height: 275px;
+const ActionBox: ComponentType = () => (
+	<div css={css({ container: 'callouts / inline-size' })}>
+		<div
+			css={css`
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				margin: 60px 0 40px 0;
 
-			> div {
-				flex: 1 1 0;
-			}
-		`}
-	>
-		<DataCallout
-			iconName={'dna_locked'}
-			iconFill={'secondary'}
-			circleFill={'secondary_3'}
-			title={'Access Controlled Data'}
-			urlData={{
-				text: 'How to apply',
-				href: '',
-			}}
-		>
-			The <b>Data Access Compliance Office (DACO)</b> handles approval for access to controlled
-			molecular data in the ARGO Data Platform.
-		</DataCallout>
+				> div:not(:last-child) {
+					border-right: 1px solid #dcdde1;
+				}
 
-		<DataCallout
-			iconName={'download'}
-			iconFill={'accent4_dark'}
-			circleFill={'accent4_3'}
-			title="Data Submission Guide"
-			urlData={{
-				text: 'Data Submission Guide',
-				href: '',
-			}}
-		>
-			Instructions for programs to submit clinical and molecular data.
-		</DataCallout>
+				/* breakpoint where buttons will soft wrap and look worse with icon on second line */
+				@container callouts (width < 840px) {
+					grid-template-columns: 1fr;
+					row-gap: 20px;
+					padding: 0 5%;
 
-		<DataCallout
-			iconName={'workflow'}
-			iconFill={'accent2_dark'}
-			circleFill={'accent2_3'}
-			title={'Data Analysis Workflows'}
-			urlData={{
-				text: 'About our Workflows',
-				href: '',
-			}}
+					> div:not(:last-child) {
+						border-right: none;
+						border-bottom: 1px solid #dcdde1;
+					}
+				}
+			`}
 		>
-			ARGO RPDC uniformly analyzes molecular data against the <b>GRCh38 Human Reference Genome.</b>
-		</DataCallout>
+			<DataCallout
+				iconName="dna_locked"
+				iconFill="secondary"
+				circleFill="secondary_3"
+				title="Access Controlled Data"
+				urlData={{
+					text: 'How to apply',
+					href: urlJoin(ARGO_DOCS_URL_ROOT, 'docs/data-access/daco/applying'),
+				}}
+			>
+				The <b>Data Access Compliance Office (DACO)</b> handles approval for access to controlled
+				molecular data in the ARGO Data Platform.
+			</DataCallout>
+
+			<DataCallout
+				iconName="download"
+				iconFill="accent4_dark"
+				circleFill="accent4_3"
+				title="Data Submission Guide"
+				urlData={{
+					text: 'Data Submission Guide',
+					href: urlJoin(ARGO_DOCS_URL_ROOT, 'docs/submission/submission-overview'),
+				}}
+			>
+				Instructions for programs to submit clinical and molecular data.
+			</DataCallout>
+
+			<DataCallout
+				iconName="workflow"
+				iconFill="accent2_dark"
+				circleFill="accent2_3"
+				title="Data Analysis Workflows"
+				urlData={{
+					text: 'About our Workflows',
+					href: urlJoin(ARGO_DOCS_URL_ROOT, 'docs/analysis-workflows/analysis-overview'),
+				}}
+			>
+				ARGO RPDC uniformly analyzes molecular data against the{' '}
+				<b>GRCh38 Human Reference Genome.</b>
+			</DataCallout>
+		</div>
 	</div>
 );
 
@@ -180,21 +198,13 @@ export default function Home() {
 								padding: 0 18px;
 							`}
 						>
-							<Image
-								alt="ICGC ARGO"
-								layout="fixed"
-								src={'/argo-logo.svg'}
-								width="208"
-								height="60"
-							/>
+							<Image alt="ICGC ARGO" src={'/argo-logo.svg'} width="208" height="60" />
 						</div>
 					</NextLink>
 				</AppBarMenuItem>
-				<AppBarMenuItem>
-					<LoginButton />
-				</AppBarMenuItem>
+				<LoginButton />
 			</AppBar>
-			<DataCallouts />
+			<ActionBox />
 			<OvertureBanner />
 		</main>
 	);

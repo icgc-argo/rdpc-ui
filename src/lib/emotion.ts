@@ -19,4 +19,8 @@
 
 'use client';
 
-export { defaultTheme, ThemeProvider, css, useTheme, styled } from '@icgc-argo/uikit';
+/*
+ * future proofing these functions in a single file
+ * we can change them here instead of every single file that imports them
+ */
+export { defaultTheme, ThemeProvider, css, useTheme, styled, Global } from '@icgc-argo/uikit';

@@ -37,17 +37,15 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Uikit
+## Uikit & Styling
 
-react + react dom + emotion all versions needs to be in sync
+In using UIKit we are tied to using a CSS-in-JS paradigm of styling.
+Please prefer usage of the `css` prop and functions over the `styled` method.
 
-tied to a lot of uikit choices
-sooo
-prefer css prop over "styled" usage
+- it's easier to debug (less wrapping in the browser inspectors)
+- typechecking css property values is possible
 
-- easier to debug
-- "cleaner"
+In an attempt to try and keep things clean and bug free, Emotion functions are used directly from UIKit.
+@emotion/react is only installed as a dependency in this project for types.
 
-to try and keep things clean and bug free, Emotion is used directly from UIKit
-it is only installed as a dependency in this project for types
-note it should still appear in node_modules as a peer dependency for uikit
+react + react dom + emotion all versions needs to be in sync with @icgc-argo/uikit
