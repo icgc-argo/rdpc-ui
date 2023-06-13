@@ -22,18 +22,20 @@
  */
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { Work_Sans } from 'next/font/google';
 import ThemeProvider from '@/components/ThemeProvider';
-import { AuthProvider } from '../global/hooks/auth';
+import AuthProvider from '../global/hooks/auth';
 
 const workSans = Work_Sans({ subsets: ['latin'] });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+	const [egoJwt, setEgoJwt] = useState('');
+
 	return (
 		<html lang="en">
 			<body className={workSans.className}>
-				<AuthProvider authData={{}}>
+				<AuthProvider authData={{ egoJwt }}>
 					<ThemeProvider>{children}</ThemeProvider>
 				</AuthProvider>
 			</body>

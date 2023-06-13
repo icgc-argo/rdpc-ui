@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import { EGO_JWT_KEY } from '../constants';
 
 type T_AuthContext = {
-	egoJwt?: string;
+	egoJwt: string;
 };
 
 const AuthContext = createContext<T_AuthContext>({
@@ -18,7 +18,7 @@ export const logOut = () => {
 	removeToken();
 };
 
-export function AuthProvider({
+export default function AuthProvider({
 	authData,
 	children,
 }: {
