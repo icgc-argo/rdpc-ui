@@ -17,26 +17,43 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * React.Context, used by ThemeProvider, doesn't work server side so we're defaulting to client side rendering
- */
-'use client';
+import { AppBar, css, useTheme } from '@icgc-argo/uikit';
+import Link from 'next/link';
+import Image from 'next/image';
+import argoLogo from '../../public/assets/argo-logo.svg';
 
-import { Work_Sans } from 'next/font/google';
-import ThemeProvider from '@/components/ThemeProvider';
-import Header from './components/Header';
-
-const workSans = Work_Sans({ subsets: ['latin'] });
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+const Header = () => {
+	const theme = useTheme();
 	return (
-		<html lang="en">
-			<body className={workSans.className}>
-				<ThemeProvider>
-					<Header />
-					{children}
-				</ThemeProvider>
-			</body>
-		</html>
+		<header>
+			<div
+				css={css({
+					position: 'sticky',
+					top: '0px',
+					zIndex: 2,
+					display: 'flex',
+					flexDirection: 'row',
+					justifyContent: 'space-between',
+					alignItems: 'center',
+					width: '100%',
+					padding: '0 18px',
+					minHeight: '58px',
+					backgroundColor: theme.colors.primary,
+				})}
+			>
+				<div css={css({ height: '30px', width: '208px', position: 'relative' })}>
+					<Link href="/">
+						<Image alt="ICGC ARGO" src={argoLogo} fill />
+					</Link>
+				</div>
+
+				{/** keep this div. header will have more items, will be "right-aligned" */}
+				<div>
+					<h1 style={{ color: 'white' }}>Login Button</h1> {/** replace me with Login button */}
+				</div>
+			</div>
+		</header>
 	);
-}
+};
+
+export default Header;
