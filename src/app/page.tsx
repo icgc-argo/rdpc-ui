@@ -24,6 +24,7 @@ import {
 	AppBar,
 	AppBarMenuItem,
 	Button,
+	DataCallout,
 	Icon,
 	Link,
 	Typography,
@@ -75,7 +76,7 @@ const OvertureBanner: ComponentType<{}> = ({}) => {
 	);
 };
 
-export const NavBarLoginButton = () => {
+const LoginButton = () => {
 	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
 	const loginUrl = `${EGO_API_ROOT}/api/oauth/login/google?client_id=${EGO_CLIENT_ID}`;
 
@@ -120,7 +121,7 @@ const DataCallouts = () => (
 			}
 		`}
 	>
-		{/*	<DataCallout
+		<DataCallout
 			iconName={'dna_locked'}
 			iconFill={'secondary'}
 			circleFill={'secondary_3'}
@@ -158,7 +159,7 @@ const DataCallouts = () => (
 			}}
 		>
 			ARGO RPDC uniformly analyzes molecular data against the <b>GRCh38 Human Reference Genome.</b>
-		</DataCallout> */}
+		</DataCallout>
 	</div>
 );
 
@@ -190,7 +191,7 @@ export default function Home() {
 					</NextLink>
 				</AppBarMenuItem>
 				<AppBarMenuItem>
-					<NavBarLoginButton />
+					<LoginButton />
 				</AppBarMenuItem>
 			</AppBar>
 			<DataCallouts />

@@ -17,8 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { defaultTheme, ThemeProvider } from '@/lib/emotion';
+import { ReactNode } from 'react';
+import { defaultTheme, ThemeProvider } from '../lib/emotion';
 
-export default ({ children }: { children: React.ReactNode }) => (
+export default ({ children }: { children: ReactNode }) => (
 	<ThemeProvider theme={defaultTheme}>{children}</ThemeProvider>
 );

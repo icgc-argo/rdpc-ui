@@ -20,23 +20,11 @@
 
 import Cookies from 'js-cookie';
 import Image from 'next/image';
-import Router from 'next/router';
 import { useEffect } from 'react';
 import urljoin from 'url-join';
 import { EGO_JWT_KEY } from '../../global/constants';
 import { getAppConfig } from '../../global/config';
-import { removeToken } from '../../global/hooks/auth';
-
-// const redirect = (res: Response, url: string) => {
-// 	if (res) {
-// 		res.writeHead(302, {
-// 			Location: url,
-// 		});
-// 		res.end();
-// 	} else {
-// 		Router.push(url);
-// 	}
-// };
+import { logOut } from '../../global/hooks/auth';
 
 export default function Home() {
 	const { EGO_CLIENT_ID, EGO_API_ROOT } = getAppConfig();
@@ -53,11 +41,9 @@ export default function Home() {
 			.then((res) => res.text())
 			.then((egoToken) => {
 				Cookies.set(EGO_JWT_KEY, egoToken);
-				// redirect(egoToken);
 			})
 			.catch((err) => {
 				console.warn('err: ', err);
-				// redirect(null);
 			});
 	});
 
@@ -81,7 +67,7 @@ export default function Home() {
 			<h1>Welcome! {EGO_CLIENT_ID}</h1>
 			<div>
 				<a href={`/`}>
-					<button onClick={removeToken}>Logout</button>
+					<button onClick={logOut}>Logout</button>
 				</a>
 			</div>
 		</main>
