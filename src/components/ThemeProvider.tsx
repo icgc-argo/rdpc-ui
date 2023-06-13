@@ -17,13 +17,52 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/** @type {import('next').NextConfig} */
+import { css, defaultTheme, ThemeProvider as UIKitThemeProvider, Global } from '@/lib/emotion';
 
-const nextConfig = {
-	reactStrictMode: true,
-	compiler: {
-		emotion: true,
-	},
-};
+export default function ThemeProvider({ children }: { children: React.ReactNode }) {
+	return (
+		<>
+			<Global
+				styles={css`
+					*,
+					*::before,
+					*::after {
+						box-sizing: border-box;
+					}
 
-module.exports = nextConfig;
+					* {
+						margin: 0;
+					}
+
+					body {
+						line-height: 1.5;
+						-webkit-font-smoothing: antialiased;
+					}
+
+					input,
+					button,
+					textarea,
+					select {
+						font: inherit;
+					}
+
+					p,
+					h1,
+					h2,
+					h3,
+					h4,
+					h5,
+					h6 {
+						overflow-wrap: break-word;
+					}
+
+					#root,
+					#__next {
+						isolation: isolate;
+					}
+				`}
+			/>
+			<UIKitThemeProvider theme={defaultTheme}>{children}</UIKitThemeProvider>
+		</>
+	);
+}
