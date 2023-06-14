@@ -20,16 +20,8 @@
 
 import { ComponentType } from 'react';
 import Image from 'next/image';
-import NextLink from 'next/link';
 import urlJoin from 'url-join';
-import {
-	AppBar,
-	AppBarMenuItem,
-	DataCallout,
-	Link,
-	Typography,
-	overtureLogo,
-} from '@icgc-argo/uikit';
+import { DataCallout, Link, Typography, overtureLogo } from '@icgc-argo/uikit';
 import { getAppConfig } from '@/global/config';
 import { css, useTheme } from '@/lib/emotion';
 
