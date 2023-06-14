@@ -21,11 +21,11 @@ import { createContext, ReactNode } from 'react';
 import Cookies from 'js-cookie';
 import { EGO_JWT_KEY } from './constants';
 
-type T_AuthContext = {
+type AuthContextValue = {
 	egoJwt: string;
 };
 
-const AuthContext = createContext<T_AuthContext>({
+const AuthContext = createContext<AuthContextValue>({
 	egoJwt: '',
 });
 
@@ -41,7 +41,7 @@ export default function AuthProvider({
 	authData,
 	children,
 }: {
-	authData: T_AuthContext;
+	authData: AuthContextValue;
 	children: ReactNode;
 }) {
 	return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;
