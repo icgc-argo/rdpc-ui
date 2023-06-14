@@ -25,7 +25,7 @@
 import { ReactNode, useState } from 'react';
 import { Work_Sans } from 'next/font/google';
 import ThemeProvider from '@/components/ThemeProvider';
-import AuthProvider from '../global/hooks/auth';
+import AuthProvider from '@/global/auth';
 
 const workSans = Work_Sans({ subsets: ['latin'] });
 

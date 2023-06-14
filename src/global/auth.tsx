@@ -19,7 +19,7 @@
 
 import { createContext, ReactNode } from 'react';
 import Cookies from 'js-cookie';
-import { EGO_JWT_KEY } from '../constants';
+import { EGO_JWT_KEY } from './constants';
 
 type T_AuthContext = {
 	egoJwt: string;
@@ -29,7 +29,7 @@ const AuthContext = createContext<T_AuthContext>({
 	egoJwt: '',
 });
 
-export const removeToken = () => {
+const removeToken = () => {
 	Cookies.remove(EGO_JWT_KEY);
 };
 

@@ -22,9 +22,9 @@ import Cookies from 'js-cookie';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import urljoin from 'url-join';
-import { EGO_JWT_KEY } from '../../global/constants';
-import { getAppConfig } from '../../global/config';
-import { logOut } from '../../global/hooks/auth';
+import { EGO_JWT_KEY } from '@/global/constants';
+import { getAppConfig } from '@/global/config';
+import { logOut } from '@/global/auth';
 
 export default function Home() {
 	const { EGO_CLIENT_ID, EGO_API_ROOT } = getAppConfig();

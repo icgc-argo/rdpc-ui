@@ -20,7 +20,7 @@
 import memoize from 'lodash/memoize';
 
 import createEgoUtils from '@icgc-argo/ego-token-utils';
-import { getAppConfig } from '../../config';
+import { getAppConfig } from '@/global/config';
 
 const TokenUtils = createEgoUtils(getAppConfig().EGO_PUBLIC_KEY);
 
