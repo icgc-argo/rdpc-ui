@@ -25,9 +25,7 @@ import urlJoin from 'url-join';
 import {
 	AppBar,
 	AppBarMenuItem,
-	Button,
 	DataCallout,
-	Icon,
 	Link,
 	Typography,
 	overtureLogo,
@@ -75,40 +73,6 @@ const OvertureBanner: ComponentType = () => {
 				.
 			</Typography>
 		</div>
-	);
-};
-
-const LoginButton = () => {
-	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
-	const loginUrl = `${EGO_API_ROOT}/api/oauth/login/google?client_id=${EGO_CLIENT_ID}`;
-
-	return (
-		<a
-			href={loginUrl}
-			css={css`
-				align-self: center;
-				text-decoration: none;
-				padding: 0 16px;
-			`}
-		>
-			<Button>
-				<span
-					css={css`
-						display: flex;
-						justify-content: center;
-						align-items: center;
-					`}
-				>
-					<Icon
-						name="google"
-						css={css`
-							margin-right: 5px;
-						`}
-					/>
-					Login
-				</span>
-			</Button>
-		</a>
 	);
 };
 
@@ -184,26 +148,6 @@ const ActionBox: ComponentType = () => (
 export default function Home() {
 	return (
 		<main>
-			<AppBar
-				css={css`
-					position: sticky;
-					top: 0px;
-					z-index: 2;
-				`}
-			>
-				<AppBarMenuItem>
-					<NextLink href={'/'} id="home-login">
-						<div
-							css={css`
-								padding: 0 18px;
-							`}
-						>
-							<Image alt="ICGC ARGO" src={'/argo-logo.svg'} width="208" height="60" />
-						</div>
-					</NextLink>
-				</AppBarMenuItem>
-				<LoginButton />
-			</AppBar>
 			<ActionBox />
 			<OvertureBanner />
 		</main>

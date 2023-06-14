@@ -20,7 +20,8 @@
 import { AppBar, css } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import Image from 'next/image';
-import argoLogo from '../../../public/assets/argo-logo.svg';
+import argoLogo from '@/../public/assets/argo-logo.svg';
+import LoginButton from './LoginButton';
 
 const Header = () => (
 	<header>
@@ -33,7 +34,7 @@ const Header = () => (
 
 			{/** keep this div. header will have more items, will be "right-aligned" */}
 			<div>
-				<h1 style={{ color: 'white' }}>Login Button</h1> {/** replace me with Login button */}
+				<LoginButton />
 			</div>
 		</AppBar>
 	</header>
