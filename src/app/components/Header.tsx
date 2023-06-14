@@ -17,32 +17,26 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * React.Context, used by ThemeProvider, doesn't work server side so we're defaulting to client side rendering
- */
-'use client';
+import { AppBar, css } from '@icgc-argo/uikit';
+import Link from 'next/link';
+import Image from 'next/image';
+import argoLogo from '../../../public/assets/argo-logo.svg';
 
-import { ReactNode, useState } from 'react';
-import { Work_Sans } from 'next/font/google';
-import ThemeProvider from '@/components/ThemeProvider';
-import AuthProvider from '@/global/auth';
-import Header from './components/Header';
+const Header = () => (
+	<header>
+		<AppBar>
+			<div css={css({ height: '30px', width: '208px', position: 'relative' })}>
+				<Link href="/">
+					<Image alt="ICGC ARGO" src={argoLogo} fill />
+				</Link>
+			</div>
 
-const workSans = Work_Sans({ subsets: ['latin'] });
+			{/** keep this div. header will have more items, will be "right-aligned" */}
+			<div>
+				<h1 style={{ color: 'white' }}>Login Button</h1> {/** replace me with Login button */}
+			</div>
+		</AppBar>
+	</header>
+);
 
-export default function RootLayout({ children }: { children: ReactNode }) {
-	const [egoJwt, setEgoJwt] = useState('');
-
-	return (
-		<html lang="en">
-			<body className={workSans.className}>
-				<AuthProvider authData={{ egoJwt }}>
-					<ThemeProvider>
-						<Header />
-						{children}
-					</ThemeProvider>
-				</AuthProvider>
-			</body>
-		</html>
-	);
-}
+export default Header;
