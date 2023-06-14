@@ -19,7 +19,6 @@
 'use client';
 
 import Cookies from 'js-cookie';
-import Image from 'next/image';
 import { useEffect } from 'react';
 import urljoin from 'url-join';
 import { EGO_JWT_KEY } from '@/global/constants';
@@ -54,15 +53,6 @@ export default function Home() {
 					Get started by editing&nbsp;
 					<code>src/app/files/page.tsx</code>
 				</p>
-				<div>
-					<a
-						href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						By <Image src="/vercel.svg" alt="Vercel Logo" width={100} height={24} priority />
-					</a>
-				</div>
 			</div>
 			<h1>Welcome! {EGO_CLIENT_ID}</h1>
 			<div>
