@@ -16,6 +16,7 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+'use client';
 
 import { AppBar, css } from '@icgc-argo/uikit';
 import Link from 'next/link';
@@ -23,21 +24,21 @@ import Image from 'next/image';
 import argoLogo from '@/../public/assets/argo-logo.svg';
 import LoginButton from './LoginButton';
 
-const Header = () => (
-	<header>
-		<AppBar>
-			<div css={css({ height: '30px', width: '208px', position: 'relative' })}>
-				<Link href="/">
-					<Image alt="ICGC ARGO" src={argoLogo} fill />
-				</Link>
-			</div>
+const Header = ({ loggedIn }: { loggedIn: boolean }) => {
+	return (
+		<header>
+			<AppBar>
+				<div css={css({ height: '30px', width: '208px', position: 'relative' })}>
+					<Link href="/">
+						<Image alt="ICGC ARGO" src={argoLogo} fill />
+					</Link>
+				</div>
 
-			{/** keep this div. header will have more items, will be "right-aligned" */}
-			<div>
-				<LoginButton />
-			</div>
-		</AppBar>
-	</header>
-);
+				{/** keep this div. header will have more items, will be "right-aligned" */}
+				<div>{loggedIn ? null : <LoginButton />}</div>
+			</AppBar>
+		</header>
+	);
+};
 
 export default Header;

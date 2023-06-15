@@ -19,17 +19,23 @@
 'use client';
 
 import Cookies from 'js-cookie';
-import { useEffect } from 'react';
-import urljoin from 'url-join';
-import { EGO_JWT_KEY } from '@/global/constants';
+import { useRouter } from 'next/navigation';
+import urlJoin from 'url-join';
+
+import { css, DnaLoader, useTheme } from '@icgc-argo/uikit';
+import { getToken } from '@/global/utils/auth';
 import { getAppConfig } from '@/global/config';
-import { logOut } from '@/global/auth';
+import { EGO_JWT_KEY } from '@/global/constants';
+import { isValidJwt } from '@/lib/egoJwt';
 
-export default function Home() {
-	const { EGO_CLIENT_ID, EGO_API_ROOT } = getAppConfig();
+export default function createPage() {
+	const router = useRouter();
+	const theme = useTheme();
+	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
+	const egoJwt = getToken();
 
-	useEffect(() => {
-		const egoLoginUrl = urljoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
+	if (!egoJwt || !isValidJwt(egoJwt)) {
+		const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
 		fetch(egoLoginUrl, {
 			credentials: 'include',
 			headers: { accept: '*/*' },
@@ -40,26 +46,25 @@ export default function Home() {
 			.then((res) => res.text())
 			.then((egoToken) => {
 				Cookies.set(EGO_JWT_KEY, egoToken);
+				router.push('/landing-page');
 			})
 			.catch((err) => {
 				console.warn('err: ', err);
 			});
-	});
+	} else {
+		router.push('/');
+	}
 
 	return (
-		<main>
-			<div>
-				<p>
-					Get started by editing&nbsp;
-					<code>src/app/files/page.tsx</code>
-				</p>
-			</div>
-			<h1>Welcome! {EGO_CLIENT_ID}</h1>
-			<div>
-				<a href={`/`}>
-					<button onClick={logOut}>Logout</button>
-				</a>
-			</div>
-		</main>
+		<div
+			css={css`
+				background-color: ${theme.colors.grey_4};
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			`}
+		>
+			<DnaLoader />
+		</div>
 	);
 }

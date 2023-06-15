@@ -16,16 +16,22 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+'use client';
 
-import memoize from 'lodash/memoize';
+import Cookies from 'js-cookie';
+import { EGO_JWT_KEY } from '../constants';
 
-import createEgoUtils from '@icgc-argo/ego-token-utils';
-import { getAppConfig } from '@/global/config';
+export const getToken = () => Cookies.get(EGO_JWT_KEY);
 
-const TokenUtils = createEgoUtils(getAppConfig().EGO_PUBLIC_KEY);
+export const storeToken = (egoToken: string) => {
+	Cookies.set(EGO_JWT_KEY, egoToken);
+};
 
-export const decodeToken = memoize((egoJwt?: string) =>
-	egoJwt ? TokenUtils.decodeToken(egoJwt) : null,
-);
+const removeToken = () => {
+	Cookies.remove(EGO_JWT_KEY);
+};
 
-export const isValidJwt = (egoJwt: string) => !!egoJwt && TokenUtils.isValidJwt(egoJwt);
+export const logOut = () => {
+	removeToken();
+	// Clear Context, etc.
+};

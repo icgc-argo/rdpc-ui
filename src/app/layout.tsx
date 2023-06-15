@@ -22,26 +22,29 @@
  */
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import { Work_Sans } from 'next/font/google';
-import AuthProvider from '@/global/auth';
+import { getToken } from '@/global/utils/auth';
+import { isValidJwt } from '@/lib/egoJwt';
 import Header from './components/Header';
 import ThemeProvider from './components/ThemeProvider';
 
 const workSans = Work_Sans({ subsets: ['latin'] });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-	const [egoJwt, setEgoJwt] = useState('');
+	const egoJwt = getToken() || '';
+	console.log('egoJwt', egoJwt);
+	console.log('is valid', isValidJwt(egoJwt));
+
+	const loggedIn = Boolean(egoJwt && isValidJwt(egoJwt));
 
 	return (
 		<html lang="en">
 			<body className={workSans.className}>
-				<AuthProvider authData={{ egoJwt }}>
-					<ThemeProvider>
-						<Header />
-						{children}
-					</ThemeProvider>
-				</AuthProvider>
+				<ThemeProvider>
+					<Header loggedIn={loggedIn} />
+					{children}
+				</ThemeProvider>
 			</body>
 		</html>
 	);

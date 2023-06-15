@@ -16,33 +16,28 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+'use client';
 
-import { createContext, ReactNode } from 'react';
-import Cookies from 'js-cookie';
-import { EGO_JWT_KEY } from './constants';
+import { getAppConfig } from '@/global/config';
+import { logOut } from '@/global/utils/auth';
 
-type AuthContextValue = {
-	egoJwt: string;
-};
+export default function LandingPage() {
+	const { EGO_CLIENT_ID } = getAppConfig();
 
-const AuthContext = createContext<AuthContextValue>({
-	egoJwt: '',
-});
-
-const removeToken = () => {
-	Cookies.remove(EGO_JWT_KEY);
-};
-
-export const logOut = () => {
-	removeToken();
-};
-
-export default function AuthProvider({
-	authData,
-	children,
-}: {
-	authData: AuthContextValue;
-	children: ReactNode;
-}) {
-	return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;
+	return (
+		<main>
+			<div>
+				<p>
+					Get started by editing&nbsp;
+					<code>src/app/files/page.tsx</code>
+				</p>
+			</div>
+			<h1>Welcome! {EGO_CLIENT_ID}</h1>
+			<div>
+				<a href={`/`}>
+					<button onClick={logOut}>Logout</button>
+				</a>
+			</div>
+		</main>
+	);
 }
