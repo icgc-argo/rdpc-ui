@@ -17,13 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/** @type {import('next').NextConfig} */
+'use client';
 
-const nextConfig = {
-	reactStrictMode: true,
-	compiler: {
-		emotion: true,
-	},
-};
-
-module.exports = nextConfig;
+/*
+ * future proofing these functions in a single file
+ * we can change them here instead of every single file that imports them
+ */
+export { defaultTheme, ThemeProvider, css, useTheme, styled, Global } from '@icgc-argo/uikit';

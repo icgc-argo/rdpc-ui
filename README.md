@@ -22,6 +22,12 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables
 
+## Local dev
+
+docker compose file for local development
+created an `.env` file based on `.env.schema`
+in `compose` folder, run `docker-compose up` command
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
@@ -30,3 +36,16 @@ To learn more about Next.js, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+## Uikit & Styling
+
+In using UIKit we are tied to using a CSS-in-JS paradigm of styling.
+Please prefer usage of the `css` prop and functions over the `styled` method.
+
+- it's easier to debug (less wrapping in the browser inspectors)
+- typechecking css property values is possible
+
+In an attempt to try and keep things clean and bug free, Emotion functions are used directly from UIKit.
+@emotion/react is only installed as a dependency in this project for types.
+
+react + react dom + emotion all versions needs to be in sync with @icgc-argo/uikit
