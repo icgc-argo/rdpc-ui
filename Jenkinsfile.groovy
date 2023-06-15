@@ -139,6 +139,19 @@ spec:
                 // ])
             }
         }
+
+        stage('deploy to rdpc-qa') {
+            when {
+                branch "main"
+            }
+            steps {
+                build(job: "/provision/update-app-version", parameters: [
+                    [$class: 'StringParameterValue', name: 'RDPC_ENV', value: 'qa' ],
+                    [$class: 'StringParameterValue', name: 'TARGET_RELEASE', value: 'rdpc-ui'],
+                    [$class: 'StringParameterValue', name: 'NEW_APP_VERSION', value: "${version}-${commit}" ]
+                ])
+            }
+        }
     }
 
     post {
