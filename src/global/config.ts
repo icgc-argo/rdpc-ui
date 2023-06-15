@@ -17,13 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/** @type {import('next').NextConfig} */
+type AppConfig = { ARGO_DOCS_URL_ROOT: string };
 
-const nextConfig = {
-	reactStrictMode: true,
-	compiler: {
-		emotion: true,
-	},
+export const getAppConfig = (): AppConfig => {
+	return {
+		ARGO_DOCS_URL_ROOT: process.env.NEXT_PUBLIC_ARGO_DOCS_URL_ROOT || '',
+	};
 };
-
-module.exports = nextConfig;

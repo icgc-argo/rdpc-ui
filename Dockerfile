@@ -14,5 +14,5 @@ COPY . .
 RUN npm ci
 RUN npx next build
 
-EXPOSE 8080
-CMD ["npx", "next", "start", "--", "-p", "8080"]
+EXPOSE 3000
+CMD ["npx", "next", "start", "--", "-p", "3000"]
