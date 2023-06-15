@@ -33,8 +33,6 @@ const workSans = Work_Sans({ subsets: ['latin'] });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
 	const egoJwt = getToken() || '';
-	console.log('egoJwt', egoJwt);
-	console.log('is valid', isValidJwt(egoJwt));
 
 	const loggedIn = Boolean(egoJwt && isValidJwt(egoJwt));
 
