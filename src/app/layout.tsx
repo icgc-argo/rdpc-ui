@@ -28,6 +28,7 @@ import { AppBar, css, useTheme } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import Image from 'next/image';
 import argoLogo from '../../public/assets/argo-logo.svg';
+import Footer from './components/Footer';
 
 const workSans = Work_Sans({ subsets: ['latin'] });
 
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<ThemeProvider>
 					<Header />
 					{children}
+					<Footer />
 				</ThemeProvider>
 			</body>
 		</html>

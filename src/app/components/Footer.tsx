@@ -17,13 +17,50 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import packageJSON from '../../package.json';
+import { getAppConfig } from '@/global/config';
+import * as urls from '@/global/urls';
+import { Footer } from '@icgc-argo/uikit';
 
-type AppConfig = { DOCS_URL_ROOT: string; UI_VERSION: string };
+const { UI_VERSION } = getAppConfig();
+const subtitle = `RDPC Germany Clinical Data Submission Portal - ${UI_VERSION}`;
 
-export const getAppConfig = (): AppConfig => {
-	return {
-		DOCS_URL_ROOT: process.env.NEXT_PUBLIC_DOCS_URL_ROOT || 'https://docs.icgc-argo.org/',
-		UI_VERSION: packageJSON.version,
-	};
-};
+const Logo = () => <div>RDPC</div>;
+
+export default function GlobalFooter() {
+	return (
+		<Footer
+			Logo={<Logo />}
+			subtitle={subtitle}
+			links={[
+				{
+					displayName: 'Contact',
+					href: '/contact',
+				},
+				{
+					displayName: 'Documentation',
+					href: urls.DOCS_URL_ROOT,
+					target: '_blank',
+				},
+				{
+					displayName: 'The Team',
+					href: '',
+				},
+				{
+					displayName: 'Privacy Policy',
+					href: urls.ARGO_PRIVACY_PAGE,
+					target: '_blank',
+				},
+				{
+					displayName: 'Terms & Conditions',
+					href: urls.ARGO_TERMS_PAGE,
+					target: '_blank',
+				},
+				{
+					displayName: 'Publication Policy',
+					href: urls.ARGO_PUBLICATION_PAGE,
+					target: '_blank',
+				},
+			]}
+		/>
+	);
+}

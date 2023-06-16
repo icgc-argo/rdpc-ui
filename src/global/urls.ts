@@ -17,13 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import packageJSON from '../../package.json';
+import urljoin from 'url-join';
+import { getAppConfig } from '@/global/config';
 
-type AppConfig = { DOCS_URL_ROOT: string; UI_VERSION: string };
+// ARGO
+export const ARGO_ROOT = 'https://www.icgc-argo.org';
+export const ARGO_PRIVACY_PAGE = `${ARGO_ROOT}/page/2/privacy`;
+export const ARGO_TERMS_PAGE = `${ARGO_ROOT}/page/1/terms-and-conditions`;
+export const ARGO_PUBLICATION_PAGE = `${ARGO_ROOT}/page/77/e3-publication-policy`;
 
-export const getAppConfig = (): AppConfig => {
-	return {
-		DOCS_URL_ROOT: process.env.NEXT_PUBLIC_DOCS_URL_ROOT || 'https://docs.icgc-argo.org/',
-		UI_VERSION: packageJSON.version,
-	};
-};
+// Docs
+const { DOCS_URL_ROOT } = getAppConfig();
+export { DOCS_URL_ROOT };
