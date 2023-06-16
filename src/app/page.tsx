@@ -19,10 +19,14 @@
 
 'use client';
 
+import { getAppConfig } from '@/global/config';
 import { css, useTheme } from '@/lib/emotion';
 import { DataCallout, Link, Typography, overtureLogo } from '@icgc-argo/uikit';
 import Image from 'next/image';
 import { ComponentType } from 'react';
+import urlJoin from 'url-join';
+
+const { DOCS_URL_ROOT } = getAppConfig();
 
 const OvertureBanner: ComponentType = () => {
 	const theme = useTheme();
@@ -97,7 +101,7 @@ const ActionBox: ComponentType = () => (
 				title="Access Controlled Data"
 				urlData={{
 					text: 'How to apply',
-					href: '',
+					href: urlJoin(DOCS_URL_ROOT, 'docs/data-access/daco/applying'),
 				}}
 			>
 				The <b>Data Access Compliance Office (DACO)</b> handles approval for access to controlled
@@ -111,7 +115,7 @@ const ActionBox: ComponentType = () => (
 				title="Data Submission Guide"
 				urlData={{
 					text: 'Data Submission Guide',
-					href: '',
+					href: urlJoin(DOCS_URL_ROOT, 'docs/submission/submission-overview'),
 				}}
 			>
 				Instructions for programs to submit clinical and molecular data.
@@ -124,7 +128,7 @@ const ActionBox: ComponentType = () => (
 				title="Data Analysis Workflows"
 				urlData={{
 					text: 'About our Workflows',
-					href: '',
+					href: urlJoin(DOCS_URL_ROOT, 'docs/analysis-workflows/analysis-overview'),
 				}}
 			>
 				ARGO RPDC uniformly analyzes molecular data against the{' '}

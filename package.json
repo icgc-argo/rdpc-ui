@@ -11,9 +11,8 @@
     "test": "echo 'Add tests please :)'"
   },
   "dependencies": {
-    "@emotion/styled": "^11.11.0",
-    "@icgc-argo/uikit": "file:../uikit/dist",
     "next": "^13.4.4",
+    "@icgc-argo/uikit": "^3.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "url-join": "^5.0.0"
