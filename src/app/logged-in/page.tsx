@@ -18,24 +18,21 @@
  */
 'use client';
 
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
+import { useQuery } from 'react-query';
 import urlJoin from 'url-join';
 
 import { css, DnaLoader, useTheme } from '@icgc-argo/uikit';
-import { getToken } from '@/global/utils/auth';
 import { getAppConfig } from '@/global/config';
-import { EGO_JWT_KEY } from '@/global/constants';
-import { isValidJwt } from '@/lib/egoJwt';
+import { storeToken } from '@/global/utils/auth';
 
-export default function createPage() {
+export default async function createPage() {
+	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
 	const router = useRouter();
 	const theme = useTheme();
-	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
-	const egoJwt = getToken();
 
-	if (!egoJwt || !isValidJwt(egoJwt)) {
-		const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
+	const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
+	const { data: egoToken } = useQuery('egoJwt', () =>
 		fetch(egoLoginUrl, {
 			credentials: 'include',
 			headers: { accept: '*/*' },
@@ -44,15 +41,14 @@ export default function createPage() {
 			mode: 'cors',
 		})
 			.then((res) => res.text())
-			.then((egoToken) => {
-				Cookies.set(EGO_JWT_KEY, egoToken);
-				router.push('/landing-page');
-			})
 			.catch((err) => {
 				console.warn('err: ', err);
-			});
-	} else {
-		router.push('/');
+			}),
+	);
+
+	if (egoToken) {
+		storeToken(egoToken);
+		router.push('/landing-page');
 	}
 
 	return (

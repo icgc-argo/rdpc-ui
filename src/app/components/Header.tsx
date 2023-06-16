@@ -21,10 +21,13 @@
 import { AppBar, css } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useAuthContext } from '@/global/utils/auth';
 import argoLogo from '@/../public/assets/argo-logo.svg';
 import LoginButton from './LoginButton';
 
-const Header = ({ loggedIn }: { loggedIn: boolean }) => {
+const Header = () => {
+	const { egoJwt, loggingIn } = useAuthContext();
+
 	return (
 		<header>
 			<AppBar>
@@ -35,7 +38,7 @@ const Header = ({ loggedIn }: { loggedIn: boolean }) => {
 				</div>
 
 				{/** keep this div. header will have more items, will be "right-aligned" */}
-				<div>{loggedIn ? null : <LoginButton />}</div>
+				<div>{egoJwt || loggingIn ? null : <LoginButton />}</div>
 			</AppBar>
 		</header>
 	);

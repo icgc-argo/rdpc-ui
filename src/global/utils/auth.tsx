@@ -18,13 +18,30 @@
  */
 'use client';
 
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext } from 'react';
 import Cookies from 'js-cookie';
 import { EGO_JWT_KEY } from '../constants';
 
-export const getToken = () => Cookies.get(EGO_JWT_KEY);
+type AuthContextValue = {
+	egoJwt: string;
+	setEgoJwt: Dispatch<SetStateAction<string>>;
+	loggingIn: boolean;
+	setLoggingIn: Dispatch<SetStateAction<boolean>>;
+};
+
+const AuthContext = createContext<AuthContextValue>({
+	egoJwt: '',
+	setEgoJwt: () => {},
+	loggingIn: false,
+	setLoggingIn: () => false,
+});
+
+export const getToken = () => Cookies.get(EGO_JWT_KEY) || '';
 
 export const storeToken = (egoToken: string) => {
+	const { setEgoJwt } = useAuthContext();
 	Cookies.set(EGO_JWT_KEY, egoToken);
+	setEgoJwt(egoToken);
 };
 
 const removeToken = () => {
@@ -35,3 +52,15 @@ export const logOut = () => {
 	removeToken();
 	// Clear Context, etc.
 };
+
+export function AuthProvider({
+	authData,
+	children,
+}: {
+	authData: AuthContextValue;
+	children: ReactNode;
+}) {
+	return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;
+}
+
+export const useAuthContext = () => useContext(AuthContext);
