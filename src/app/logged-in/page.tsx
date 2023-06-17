@@ -24,15 +24,23 @@ import urlJoin from 'url-join';
 
 import { css, DnaLoader, useTheme } from '@icgc-argo/uikit';
 import { getAppConfig } from '@/global/config';
-import { storeToken } from '@/global/utils/auth';
+import { getToken, storeToken } from '@/global/utils/auth';
+import { useState } from 'react';
 
 export default async function createPage() {
 	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
 	const router = useRouter();
 	const theme = useTheme();
+	const storedToken = getToken();
+
+	const [egoToken, setEgoToken] = useState(storedToken);
+
+	if (egoToken) {
+		router.push('/landing-page');
+	}
 
 	const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
-	const { data: egoToken } = useQuery('egoJwt', () =>
+	useQuery('egoJwt', () =>
 		fetch(egoLoginUrl, {
 			credentials: 'include',
 			headers: { accept: '*/*' },
@@ -40,16 +48,15 @@ export default async function createPage() {
 			method: 'GET',
 			mode: 'cors',
 		})
-			.then((res) => res.text())
+			.then(async (res) => {
+				const newToken = await res.text();
+				storeToken(newToken);
+				setEgoToken(newToken);
+			})
 			.catch((err) => {
 				console.warn('err: ', err);
 			}),
 	);
-
-	if (egoToken) {
-		storeToken(egoToken);
-		router.push('/landing-page');
-	}
 
 	return (
 		<div

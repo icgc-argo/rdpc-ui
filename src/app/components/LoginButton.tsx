@@ -22,22 +22,13 @@ import urljoin from 'url-join';
 
 import { GoogleLogin } from '@icgc-argo/uikit';
 import { getAppConfig } from '@/global/config';
-import { useAuthContext } from '@/global/utils/auth';
 
 const LoginButton = () => {
 	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
-	const { setLoggingIn } = useAuthContext();
 
 	const loginUrl = urljoin(EGO_API_ROOT, '/api/oauth/login/google', `?client_id=${EGO_CLIENT_ID}`);
 
-	return (
-		<GoogleLogin
-			link={loginUrl}
-			onClick={() => {
-				setLoggingIn(true);
-			}}
-		/>
-	);
+	return <GoogleLogin link={loginUrl} />;
 };
 
 export default LoginButton;

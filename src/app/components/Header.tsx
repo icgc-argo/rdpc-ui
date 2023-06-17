@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { AppBar, css } from '@icgc-argo/uikit';
+import { AppBar, css, UserBadge } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuthContext } from '@/global/utils/auth';
@@ -38,7 +38,18 @@ const Header = () => {
 				</div>
 
 				{/** keep this div. header will have more items, will be "right-aligned" */}
-				<div>{egoJwt || loggingIn ? null : <LoginButton />}</div>
+				<div>
+					{loggingIn ? null : egoJwt ? (
+						<UserBadge
+							showGreeting={true}
+							firstName={'Test'}
+							lastName={'User'}
+							title={'DCC Member'}
+						/>
+					) : (
+						<LoginButton />
+					)}
+				</div>
 			</AppBar>
 		</header>
 	);

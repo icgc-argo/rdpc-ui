@@ -25,14 +25,15 @@
 import { ReactNode, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Work_Sans } from 'next/font/google';
-import { getToken, AuthProvider } from '@/global/utils/auth';
+import { AuthProvider } from '@/global/utils/auth';
 import Header from './components/Header';
 import ThemeProvider from './components/ThemeProvider';
 
 const workSans = Work_Sans({ subsets: ['latin'] });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-	const [egoJwt, setEgoJwt] = useState(getToken());
+	const [egoJwt, setEgoJwt] = useState('');
+
 	const [loggingIn, setLoggingIn] = useState(false);
 
 	return (

@@ -36,21 +36,14 @@ const AuthContext = createContext<AuthContextValue>({
 	setLoggingIn: () => false,
 });
 
-export const getToken = () => Cookies.get(EGO_JWT_KEY) || '';
+export const getToken = () => Cookies.get(EGO_JWT_KEY);
 
 export const storeToken = (egoToken: string) => {
-	const { setEgoJwt } = useAuthContext();
 	Cookies.set(EGO_JWT_KEY, egoToken);
-	setEgoJwt(egoToken);
-};
-
-const removeToken = () => {
-	Cookies.remove(EGO_JWT_KEY);
 };
 
 export const logOut = () => {
-	removeToken();
-	// Clear Context, etc.
+	Cookies.remove(EGO_JWT_KEY);
 };
 
 export function AuthProvider({
