@@ -23,13 +23,12 @@ import { getToken, logOut, useAuthContext } from '@/global/utils/auth';
 
 export default function LandingPage() {
 	const { EGO_CLIENT_ID } = getAppConfig();
-	const { egoJwt, setEgoJwt, loggingIn, setLoggingIn } = useAuthContext();
+	const { egoJwt, setEgoJwt } = useAuthContext();
 	const storedToken = getToken();
 
-	// if (storedToken && !egoJwt) {
-	// 	setEgoJwt(storedToken);
-	// }
-	// if (loggingIn) setLoggingIn(false);
+	if (storedToken && !egoJwt) {
+		setEgoJwt(storedToken);
+	}
 
 	return (
 		<main>
