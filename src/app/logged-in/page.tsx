@@ -24,16 +24,19 @@ import urlJoin from 'url-join';
 
 import { css, DnaLoader, useTheme } from '@icgc-argo/uikit';
 import { getAppConfig } from '@/global/config';
-import { getToken, storeToken } from '@/global/utils/auth';
+import { getToken, storeToken, useAuthContext } from '@/global/utils/auth';
 import { useState } from 'react';
 
 export default async function createPage() {
 	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
 	const router = useRouter();
 	const theme = useTheme();
+	const { loggingIn, setLoggingIn } = useAuthContext();
 	const storedToken = getToken();
 
 	const [egoToken, setEgoToken] = useState(storedToken);
+
+	if (!loggingIn && !egoToken) setLoggingIn(true);
 
 	if (egoToken) {
 		router.push('/landing-page');
