@@ -22,6 +22,7 @@ import LoginButton from './LoginButton';
 import galaxyImage from '../../../public/assets/galaxy.png';
 import RegionBanner from './RegionBanner';
 import Link from 'next/link';
+import { getAppConfig } from '@/global/config';
 
 const BackLink = (
 	<div
@@ -47,6 +48,7 @@ const BackLink = (
 
 const Hero = () => {
 	const theme = useTheme();
+	const { REGION } = getAppConfig();
 	return (
 		<div
 			css={css({
@@ -68,7 +70,7 @@ const Hero = () => {
 					maxWidth: '860px',
 				})}
 			>
-				<RegionBanner region="Germany" />
+				<RegionBanner region={REGION} />
 
 				<Typography
 					variant="hero"

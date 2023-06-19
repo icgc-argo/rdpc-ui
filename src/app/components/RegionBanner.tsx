@@ -19,25 +19,33 @@
 
 import { css } from '@icgc-argo/uikit';
 import Image from 'next/image';
-import flagGermany from '../../../public/assets/flags/germany.png';
+import { Region } from '@/global/types';
 
-const flags = { germany: './assets/flags/germany.png' };
+const flags: { [k in Region]: string } = {
+	Germany: '/assets/flags/germany.png',
+};
 
-const Flag = ({ region }) => (
-	<div css={css({ display: 'inline-block', marginLeft: '12px' })}>
-		<Image src={flagGermany} alt={`flag of ${region}`} />
-	</div>
+const Flag = ({ region }: { region: Region }) => (
+	<Image
+		src={flags[region]}
+		width="27"
+		height="27"
+		alt={`flag of ${region}`}
+		css={css({ display: 'inline-block', marginLeft: '12px' })}
+	/>
 );
 
-const RegionBanner = ({ region }: { region: string }) => (
+const RegionBanner = ({ region }: { region: Region }) => (
 	<div
-		css={css`
-			border-radius: 3px;
-			background-color: #0774d3;
-			padding: 4px 8px;
-			color: white;
-			font-size: 24px;
-		`}
+		css={css({
+			borderRadius: '3px',
+			backgroundColor: '#0774d3',
+			padding: '4px 8px',
+			color: 'white',
+			fontSize: '24px',
+			display: 'flex',
+			alignItems: 'center',
+		})}
 	>
 		{region}
 		<Flag region={region} />
