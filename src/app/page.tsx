@@ -25,6 +25,7 @@ import { DataCallout, Link, Typography, overtureLogo } from '@icgc-argo/uikit';
 import Image from 'next/image';
 import { ComponentType } from 'react';
 import urlJoin from 'url-join';
+import Hero from './components/Hero';
 
 const { ARGO_DOCS_URL_ROOT } = getAppConfig();
 
@@ -141,6 +142,7 @@ const ActionBox: ComponentType = () => (
 export default function Home() {
 	return (
 		<main>
+			<Hero />
 			<ActionBox />
 			<OvertureBanner />
 		</main>
