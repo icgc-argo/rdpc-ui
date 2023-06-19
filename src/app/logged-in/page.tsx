@@ -42,7 +42,7 @@ export default async function createPage() {
 
 	useEffect(() => {
 		router.push('/landing-page');
-	}, [egoToken]);
+	}, [storedToken && egoToken]);
 
 	const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
 	useQuery('egoJwt', () =>

@@ -39,14 +39,14 @@ const Header = () => {
 
 				{/** keep this div. header will have more items, will be "right-aligned" */}
 				<div>
-					{loggingIn ? null : egoJwt ? (
+					{egoJwt ? (
 						<UserBadge
 							showGreeting={true}
 							firstName={'Test'}
 							lastName={'User'}
 							title={'DCC Member'}
 						/>
-					) : (
+					) : loggingIn ? null : (
 						<LoginButton />
 					)}
 				</div>

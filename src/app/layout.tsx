@@ -28,12 +28,13 @@ import { Work_Sans } from 'next/font/google';
 import { AuthProvider } from '@/global/utils/auth';
 import Header from './components/Header';
 import ThemeProvider from './components/ThemeProvider';
+import { getToken } from '@/global/utils/auth';
 
 const workSans = Work_Sans({ subsets: ['latin'] });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-	const [egoJwt, setEgoJwt] = useState('');
-
+	const storedToken = getToken();
+	const [egoJwt, setEgoJwt] = useState(storedToken || '');
 	const [loggingIn, setLoggingIn] = useState(false);
 
 	return (
