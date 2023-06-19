@@ -17,127 +17,91 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Typography, Button, Icon } from '@icgc-argo/uikit';
+import { Typography, css, useTheme } from '@icgc-argo/uikit';
+import LoginButton from './LoginButton';
+import galaxyImage from '../../../public/assets/galaxy.png';
+import RegionBanner from './RegionBanner';
 import Link from 'next/link';
 
-const heroCss = (theme: any) =>
-	css({
-		backgroundImage: `linear-gradient(to bottom, 
-      ${theme.colors.primary}, 
-      ${theme.colors.accent2}00 105%),
-      url('/images/icgc-galaxy-bg.jpg')`,
-		backgroundPosition: 'center',
-		backgroundSize: 'cover',
-		backgroundColor: `${theme.colors.primary}`,
-		width: '100%',
-	});
+const BackLink = (
+	<div
+		css={css`
+			padding: 17px 0 0 17px;
+			* {
+				line-height: 28px;
+				color: white;
+				font-size: 12px;
+				font-weight: 600;
+			}
+		`}
+	>
+		<span>{`< `}</span>
+		<Link
+			href="#"
+			css={css({
+				textDecoration: 'underline',
+			})}
+		>{`Back to ICGC ARGO`}</Link>
+	</div>
+);
 
-const HeroDiv = styled('div')`
-	// TODO: MAKE ME CSS!
-	background-image: ${({ theme }) =>
-		`linear-gradient(to bottom, 
-      ${theme.colors.primary}, 
-      ${theme.colors.accent2}00 105%),
-      url('/images/icgc-galaxy-bg.jpg');`};
-
-	background-position: center;
-	background-size: cover;
-	background-color: ${({ theme }) => theme.colors.primary};
-	width: 100%;
-`;
-
-export default function Hero() {
+const Hero = () => {
+	const theme = useTheme();
 	return (
-		<HeroDiv>
+		<div
+			css={css({
+				backgroundImage: `linear-gradient(180deg, rgba(0, 0, 0, 0) 41.37%, #000000 100%), url(${galaxyImage.src})`,
+				backgroundSize: 'cover',
+				backgroundColor: `${theme.colors.primary}`,
+				width: '100%',
+			})}
+		>
+			{BackLink}
 			<div
-				css={css`
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					justify-content: space-evenly;
-					padding-bottom: ${true ? '40px' : '0px'};
-				`}
+				css={css({
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+					justifyContent: 'space-evenly',
+					padding: '20px 15px 76px 15px',
+					margin: '0 auto',
+					maxWidth: '860px',
+				})}
 			>
+				<RegionBanner region="Germany" />
+
 				<Typography
 					variant="hero"
 					color="white"
 					bold={true}
-					css={css`
-						margin: 30px 50px 10px;
-						text-align: center;
-					`}
+					css={css({
+						margin: '18px 50px 35px',
+						textAlign: 'center',
+					})}
 					as="h1"
 				>
-					ICGC ARGO Data Platform
+					RPDC Clinical Data Submission Portal{' '}
 				</Typography>
+
 				<Typography
 					as="p"
-					variant="title"
+					variant="sectionHeader"
 					color="white"
-					css={css`
-						margin: 0 50px;
-						font-size: 15px;
-						line-height: 24px;
-						text-align: center;
-						width: 60%;
-					`}
+					css={css({
+						marginBottom: '62px',
+						lineHeight: '24px',
+					})}
 				>
 					The International Cancer Genome Consortium Accelerating Research in Genomic Oncology (ICGC
-					ARGO) aims to{' '}
-					<b>uniformly analyze specimens from 100,000 donors with high quality clinical data </b>
-					in order to address outstanding questions that are vital to the quest to defeat cancer.
+					ARGO) aims to uniformly analyze specimens from 100,000 donors with high quality clinical
+					data in order to address outstanding questions that are vital to the quest to defeat
+					cancer.
 				</Typography>
-				<div
-					css={css`
-						display: flex;
-						flex-direction: row;
-						justify-content: space-between;
-						margin-top: 20px;
-					`}
-				>
-					<NextLink href={FILE_REPOSITORY_PATH}>
-						<Link
-							underline={false}
-							css={css`
-								margin: 0 15px;
-							`}
-						>
-							<Button variant="secondary">
-								<Icon
-									css={css`
-										padding-right: 2px;
-									`}
-									name="file"
-									fill="accent2"
-									height="12px"
-								/>
-								Browse the Data
-							</Button>
-						</Link>
-					</NextLink>
 
-					<Link
-						href="https://www.icgc-argo.org/"
-						underline={false}
-						css={css`
-							margin: 0 15px;
-						`}
-						target="_blank"
-					>
-						<Button variant="secondary">
-							<Icon
-								css={css`
-									padding-right: 2px;
-								`}
-								name="programs"
-								fill="accent2"
-								height="12px"
-							/>
-							About ICGC ARGO
-						</Button>
-					</Link>
-				</div>
+				<LoginButton showLogo={false}>LOGIN</LoginButton>
 			</div>
-		</HeroDiv>
+		</div>
 	);
-}
+};
+
+export default Hero;
