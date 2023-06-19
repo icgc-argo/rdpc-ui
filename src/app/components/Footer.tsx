@@ -21,8 +21,8 @@ import { getAppConfig } from '@/global/config';
 import * as urls from '@/global/urls';
 import { Footer } from '@icgc-argo/uikit';
 
-const { UI_VERSION } = getAppConfig();
-const subtitle = `RDPC Germany Clinical Data Submission Portal - ${UI_VERSION}`;
+const { UI_VERSION, REGION } = getAppConfig();
+const subtitle = `RDPC ${REGION} Clinical Data Submission Portal - ${UI_VERSION}`;
 
 const Logo = () => <div>RDPC</div>;
 

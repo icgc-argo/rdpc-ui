@@ -25,6 +25,7 @@ import { DataCallout, Link, Typography, overtureLogo } from '@icgc-argo/uikit';
 import Image from 'next/image';
 import { ComponentType } from 'react';
 import urlJoin from 'url-join';
+import Footer from './components/Footer';
 
 const { DOCS_URL_ROOT } = getAppConfig();
 
@@ -143,6 +144,7 @@ export default function Home() {
 		<main>
 			<ActionBox />
 			<OvertureBanner />
+			<Footer />
 		</main>
 	);
 }
