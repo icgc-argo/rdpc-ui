@@ -17,25 +17,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { RegionKey, isRegionKey, regionKeys } from './types';
+/**
+ * RDPCs
+ */
+export const regions = {
+	GERMANY: 'Germany',
+	CANADA: 'Canada',
+} as const;
 
-type AppConfig = { ARGO_DOCS_URL_ROOT: string; REGION: RegionKey };
+export const regionKeys = Object.keys(regions);
 
-const getRegion = () => {
-	const envRegionKey = process.env.NEXT_PUBLIC_REGION_KEY || '';
-	const normalizedKey = envRegionKey.toUpperCase().trim();
+export type RegionKey = keyof typeof regions;
 
-	// is valid region?
-	if (isRegionKey(normalizedKey)) {
-		return normalizedKey;
-	} else {
-		throw Error(`Invalid region. Must be one of ${regionKeys.join(', ')}`);
-	}
-};
-
-export const getAppConfig = (): AppConfig => {
-	return {
-		ARGO_DOCS_URL_ROOT: process.env.NEXT_PUBLIC_ARGO_DOCS_URL_ROOT || '',
-		REGION: getRegion(),
-	};
-};
+export const isRegionKey = (value: string): value is RegionKey =>
+	regionKeys.some((region) => region === value);
