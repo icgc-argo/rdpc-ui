@@ -25,6 +25,8 @@
 import { ReactNode, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Work_Sans } from 'next/font/google';
+import { usePathname } from 'next/navigation';
+
 import { AuthProvider } from '@/global/utils/auth';
 import Header from './components/Header';
 import ThemeProvider from './components/ThemeProvider';
@@ -33,9 +35,11 @@ import { getToken } from '@/global/utils/auth';
 const workSans = Work_Sans({ subsets: ['latin'] });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+	const path = usePathname();
 	const storedToken = getToken();
 	const [egoJwt, setEgoJwt] = useState(storedToken || '');
-	const [loggingIn, setLoggingIn] = useState(false);
+	const initLoginState = path === '/logged-in' && !storedToken ? true : false;
+	const [loggingIn, setLoggingIn] = useState(initLoginState);
 
 	return (
 		<html lang="en">
