@@ -19,13 +19,13 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import urlJoin from 'url-join';
 
 import { css, DnaLoader, useTheme } from '@icgc-argo/uikit';
 import { getAppConfig } from '@/global/config';
 import { getToken, storeToken, useAuthContext } from '@/global/utils/auth';
-import { useState } from 'react';
 
 export default async function createPage() {
 	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
@@ -36,11 +36,13 @@ export default async function createPage() {
 
 	const [egoToken, setEgoToken] = useState(storedToken);
 
-	if (!loggingIn && !egoToken) setLoggingIn(true);
+	useEffect(() => {
+		setLoggingIn(true);
+	}, [!loggingIn && !egoToken]);
 
-	if (egoToken) {
+	useEffect(() => {
 		router.push('/landing-page');
-	}
+	}, [egoToken]);
 
 	const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
 	useQuery('egoJwt', () =>
