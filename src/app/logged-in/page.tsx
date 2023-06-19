@@ -33,35 +33,31 @@ export default async function createPage() {
 	const theme = useTheme();
 	const { loggingIn, setLoggingIn } = useAuthContext();
 	const storedToken = getToken();
-
-	const [egoToken, setEgoToken] = useState(storedToken);
-
-	useEffect(() => {
-		setLoggingIn(true);
-	}, [!loggingIn && !egoToken]);
-
-	useEffect(() => {
-		router.push('/landing-page');
-	}, [storedToken && egoToken]);
-
 	const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
-	useQuery('egoJwt', () =>
-		fetch(egoLoginUrl, {
-			credentials: 'include',
-			headers: { accept: '*/*' },
-			body: null,
-			method: 'GET',
-			mode: 'cors',
-		})
-			.then(async (res) => {
-				const newToken = await res.text();
-				storeToken(newToken);
-				setEgoToken(newToken);
-			})
-			.catch((err) => {
-				console.warn('err: ', err);
-			}),
-	);
+
+	if (!storedToken) {
+		if (!loggingIn) setLoggingIn(true);
+		else {
+			useQuery('egoJwt', () => {
+				fetch(egoLoginUrl, {
+					credentials: 'include',
+					headers: { accept: '*/*' },
+					body: null,
+					method: 'GET',
+					mode: 'cors',
+				})
+					.then(async (res) => {
+						const newToken = await res.text();
+						storeToken(newToken);
+						setLoggingIn(false);
+						router.push('/landing-page');
+					})
+					.catch((err) => {
+						console.warn('err: ', err);
+					});
+			});
+		}
+	}
 
 	return (
 		<div

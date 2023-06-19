@@ -29,7 +29,7 @@ export default function LandingPage() {
 
 	useEffect(() => {
 		if (storedToken && !egoJwt) setEgoJwt(storedToken);
-	}, [storedToken && !egoJwt]);
+	}, []);
 
 	return (
 		<main>
