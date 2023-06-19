@@ -17,10 +17,21 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-type AppConfig = { ARGO_DOCS_URL_ROOT: string };
+type AppConfig = { ARGO_DOCS_URL_ROOT: string; REGION: string };
+
+const getRegion = () => {
+	const envRegion = process.env.NEXT_PUBLIC_REGION || '';
+	// is valid region?
+	if (['germany'].includes(envRegion.toLowerCase().trim())) {
+		return envRegion;
+	} else {
+		throw Error('invalid region');
+	}
+};
 
 export const getAppConfig = (): AppConfig => {
 	return {
 		ARGO_DOCS_URL_ROOT: process.env.NEXT_PUBLIC_ARGO_DOCS_URL_ROOT || '',
+		REGION: getRegion(),
 	};
 };
