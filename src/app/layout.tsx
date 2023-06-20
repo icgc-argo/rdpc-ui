@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 	const path = usePathname();
 	const storedToken = getToken();
 	const [egoJwt, setEgoJwt] = useState(storedToken || '');
-	const initLoginState = path === '/logged-in' && !(storedToken || egoJwt) ? true : false;
+	const initLoginState = path === '/logging-in' && !(storedToken || egoJwt) ? true : false;
 	const [loggingIn, setLoggingIn] = useState(initLoginState);
 
 	return (

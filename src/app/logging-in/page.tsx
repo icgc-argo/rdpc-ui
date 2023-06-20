@@ -19,7 +19,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import urlJoin from 'url-join';
 
@@ -68,7 +68,7 @@ export default async function createPage() {
 				align-items: center;
 			`}
 		>
-			<DnaLoader />
+			<Suspense fallback={<DnaLoader />}>{children}</Suspense>
 		</div>
 	);
 }
