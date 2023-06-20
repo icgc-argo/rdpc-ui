@@ -18,8 +18,9 @@
  */
 'use client';
 
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext } from 'react';
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
 import Cookies from 'js-cookie';
+import { usePathname } from 'next/navigation';
 import { EGO_JWT_KEY } from '../constants';
 
 type AuthContextValue = {
@@ -46,14 +47,16 @@ export const logOut = () => {
 	Cookies.remove(EGO_JWT_KEY);
 };
 
-export function AuthProvider({
-	authData,
-	children,
-}: {
-	authData: AuthContextValue;
-	children: ReactNode;
-}) {
-	return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;
+export function AuthProvider({ children }: { children: ReactNode }) {
+	const path = usePathname();
+	const storedToken = getToken();
+	const [egoJwt, setEgoJwt] = useState(storedToken || '');
+	const initLoginState = path === '/logging-in' && !(storedToken || egoJwt) ? true : false;
+	const [loggingIn, setLoggingIn] = useState(initLoginState);
+
+	const value: AuthContextValue = { egoJwt, setEgoJwt, loggingIn, setLoggingIn };
+
+	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export const useAuthContext = () => useContext(AuthContext);
