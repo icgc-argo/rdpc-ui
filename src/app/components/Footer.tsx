@@ -16,24 +16,51 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import packageJSON from '../../package.json';
 
-type AppConfig = {
-	UI_VERSION: string;
-	REGION: string;
-	DOCS_URL_ROOT: string;
-	EGO_API_ROOT: string;
-	EGO_CLIENT_ID: string;
-	EGO_PUBLIC_KEY: string;
-};
+import { getAppConfig } from '@/global/config';
+import * as urls from '@/global/urls';
+import { Footer } from '@icgc-argo/uikit';
 
-export const getAppConfig = (): AppConfig => {
-	return {
-		UI_VERSION: packageJSON.version,
-		REGION: process.env.NEXT_PUBLIC_REGION || '',
-		DOCS_URL_ROOT: process.env.NEXT_PUBLIC_DOCS_URL_ROOT || 'https://docs.icgc-argo.org/',
-		EGO_API_ROOT: process.env.EGO_API_ROOT || 'https://ego.dev.argo.cancercollaboratory.org',
-		EGO_CLIENT_ID: process.env.EGO_CLIENT_ID || 'rdpc-ui-local',
-		EGO_PUBLIC_KEY: process.env.EGO_PUBLIC_KEY || '',
-	};
-};
+const { UI_VERSION, REGION } = getAppConfig();
+const subtitle = `RDPC ${REGION} Clinical Data Submission Portal - ${UI_VERSION}`;
+
+const Logo = () => <div>RDPC</div>;
+
+export default function GlobalFooter() {
+	return (
+		<Footer
+			Logo={<Logo />}
+			subtitle={subtitle}
+			links={[
+				{
+					displayName: 'Contact',
+					href: '/contact',
+				},
+				{
+					displayName: 'Documentation',
+					href: urls.DOCS_URL_ROOT,
+					target: '_blank',
+				},
+				{
+					displayName: 'The Team',
+					href: '',
+				},
+				{
+					displayName: 'Privacy Policy',
+					href: urls.ARGO_PRIVACY_PAGE,
+					target: '_blank',
+				},
+				{
+					displayName: 'Terms & Conditions',
+					href: urls.ARGO_TERMS_PAGE,
+					target: '_blank',
+				},
+				{
+					displayName: 'Publication Policy',
+					href: urls.ARGO_PUBLICATION_PAGE,
+					target: '_blank',
+				},
+			]}
+		/>
+	);
+}
