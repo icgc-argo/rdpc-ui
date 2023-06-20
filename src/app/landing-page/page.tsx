@@ -18,19 +18,11 @@
  */
 'use client';
 
-import { useEffect } from 'react';
 import { getAppConfig } from '@/global/config';
-import { getToken, logOut, useAuthContext } from '@/global/utils/auth';
+import { logOut } from '@/global/utils/auth';
 
 export default function LandingPage() {
 	const { EGO_CLIENT_ID } = getAppConfig();
-	const { egoJwt, setEgoJwt } = useAuthContext();
-	const storedToken = getToken();
-
-	useEffect(() => {
-		if (storedToken && !egoJwt) setEgoJwt(storedToken);
-	}, []);
-
 	return (
 		<main>
 			<div>
