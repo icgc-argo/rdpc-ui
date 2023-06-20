@@ -19,12 +19,18 @@
 
 import packageJSON from '../../package.json';
 
-type AppConfig = { DOCS_URL_ROOT: string; UI_VERSION: string; REGION: string };
+type AppConfig = {
+	DOCS_URL_ROOT: string;
+	UI_VERSION: string;
+	REGION: string;
+	PLATFORM_UI_ROOT: string;
+};
 
 export const getAppConfig = (): AppConfig => {
 	return {
 		DOCS_URL_ROOT: process.env.NEXT_PUBLIC_DOCS_URL_ROOT || 'https://docs.icgc-argo.org/',
 		UI_VERSION: packageJSON.version,
 		REGION: process.env.NEXT_PUBLIC_REGION || '',
+		PLATFORM_UI_ROOT: process.env.NEXT_PUBLIC_PLATFORM_UI_ROOT || '',
 	};
 };

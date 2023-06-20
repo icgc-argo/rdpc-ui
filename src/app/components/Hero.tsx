@@ -23,6 +23,7 @@ import galaxyImage from '../../../public/assets/galaxy.png';
 import RegionBanner from './RegionBanner';
 import Link from 'next/link';
 import { getAppConfig } from '@/global/config';
+import { PLATFORM_UI_ROOT } from '@/global/urls';
 
 const BackLink = (
 	<div
@@ -38,7 +39,7 @@ const BackLink = (
 	>
 		<span>{`< `}</span>
 		<Link
-			href="#"
+			href={PLATFORM_UI_ROOT}
 			css={css({
 				textDecoration: 'underline',
 			})}
