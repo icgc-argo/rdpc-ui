@@ -18,7 +18,15 @@
  */
 'use client';
 
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
+import {
+	createContext,
+	Dispatch,
+	ReactNode,
+	SetStateAction,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 import Cookies from 'js-cookie';
 import { usePathname } from 'next/navigation';
 import { EGO_JWT_KEY } from '../constants';
@@ -37,7 +45,7 @@ const AuthContext = createContext<AuthContextValue>({
 	setLoggingIn: () => false,
 });
 
-export const getToken = () => Cookies.get(EGO_JWT_KEY);
+export const getStoredToken = () => Cookies.get(EGO_JWT_KEY);
 
 export const storeToken = (egoToken: string) => {
 	Cookies.set(EGO_JWT_KEY, egoToken);
@@ -47,10 +55,31 @@ export const logOut = () => {
 	Cookies.remove(EGO_JWT_KEY);
 };
 
+const LOCAL_AUTH_URL = 'http://localhost:3000/auth';
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-	const path = usePathname();
-	const storedToken = getToken();
+	const storedToken = getStoredToken();
 	const [egoJwt, setEgoJwt] = useState(storedToken || '');
+
+	useEffect(() => {
+		const getToken = async () => {
+			const tokenResponse = await fetch(LOCAL_AUTH_URL);
+			const clone = await tokenResponse.clone();
+			const authHeaders = clone.headers.get('auth');
+
+			return authHeaders;
+		};
+
+		getToken()
+			.then((serverToken) => {
+				if (serverToken?.length && !egoJwt?.length) {
+					setEgoJwt(serverToken);
+				}
+			})
+			.catch(console.error);
+	}, [egoJwt]);
+
+	const path = usePathname();
 	const initLoginState = path === '/logging-in' && !(storedToken || egoJwt) ? true : false;
 	const [loggingIn, setLoggingIn] = useState(initLoginState);
 

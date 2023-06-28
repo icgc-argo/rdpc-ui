@@ -17,35 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * React.Context, used by ThemeProvider, doesn't work server side so we're defaulting to client side rendering
- */
-'use client';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
-import { PropsWithChildren } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { Work_Sans } from 'next/font/google';
+export async function GET(request: NextRequest) {
+	const response = new NextResponse();
+	const hasToken = request.cookies.has('EGO_JWT');
 
-import { AuthProvider } from '@/global/utils/auth';
-import Header from './components/Header';
-import ThemeProvider from './components/ThemeProvider';
+	if (hasToken) {
+		const egoJwt = request.cookies.get('EGO_JWT');
+		console.log('egoJwt', egoJwt);
+	} else {
+		response.headers.set('auth', '');
+	}
 
-const workSans = Work_Sans({ subsets: ['latin'] });
-
-export default async function RootLayout(props: PropsWithChildren) {
-	const { children } = props;
-	return (
-		<html lang="en">
-			<body className={workSans.className}>
-				<ThemeProvider>
-					<QueryClientProvider client={new QueryClient()}>
-						<AuthProvider>
-							<Header />
-							{children}
-						</AuthProvider>
-					</QueryClientProvider>
-				</ThemeProvider>
-			</body>
-		</html>
-	);
+	return response;
 }
