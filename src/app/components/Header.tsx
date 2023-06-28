@@ -22,12 +22,12 @@ import { AppBar, css, UserBadge } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import Image from 'next/image';
 import argoLogo from '/public/argo-logo.svg';
-import { getToken, useAuthContext } from '@/global/utils/auth';
+import { getStoredToken, useAuthContext } from '@/global/utils/auth';
 import LoginButton from './LoginButton';
 
 const Header = () => {
 	const { egoJwt, loggingIn } = useAuthContext();
-	const storedToken = getToken();
+	const storedToken = getStoredToken();
 
 	return (
 		<header>

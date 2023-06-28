@@ -22,7 +22,7 @@
  */
 'use client';
 
-import { ReactNode } from 'react';
+import { PropsWithChildren } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Work_Sans } from 'next/font/google';
 
@@ -32,7 +32,7 @@ import ThemeProvider from './components/ThemeProvider';
 
 const workSans = Work_Sans({ subsets: ['latin'] });
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: PropsWithChildren) {
 	return (
 		<html lang="en">
 			<body className={workSans.className}>

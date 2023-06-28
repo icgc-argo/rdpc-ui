@@ -24,14 +24,14 @@ import urlJoin from 'url-join';
 
 import { css, DnaLoader, useTheme } from '@icgc-argo/uikit';
 import { getAppConfig } from '@/global/config';
-import { getToken, storeToken, useAuthContext } from '@/global/utils/auth';
+import { getStoredToken, storeToken, useAuthContext } from '@/global/utils/auth';
 
 export default async function createPage() {
 	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
 	const router = useRouter();
 	const theme = useTheme();
 	const { loggingIn, setLoggingIn } = useAuthContext();
-	const storedToken = getToken();
+	const storedToken = getStoredToken();
 	const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
 
 	if (!storedToken) {
@@ -51,9 +51,7 @@ export default async function createPage() {
 						setLoggingIn(false);
 						router.push('/landing-page');
 					})
-					.catch((err) => {
-						console.warn('err: ', err);
-					});
+					.catch(console.error);
 			});
 		}
 	}
