@@ -32,8 +32,7 @@ import ThemeProvider from './components/ThemeProvider';
 
 const workSans = Work_Sans({ subsets: ['latin'] });
 
-export default async function RootLayout(props: PropsWithChildren) {
-	const { children } = props;
+export default async function RootLayout({ children }: PropsWithChildren) {
 	return (
 		<html lang="en">
 			<body className={workSans.className}>
