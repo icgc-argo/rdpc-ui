@@ -17,17 +17,21 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createContext, ReactNode } from 'react';
+import { createContext, Dispatch, ReactNode, SetStateAction, useState, useContext } from 'react';
 import Cookies from 'js-cookie';
 import { EGO_JWT_KEY } from './constants';
 
 type AuthContextValue = {
 	egoJwt: string;
+	setEgoJwt: Dispatch<SetStateAction<string>>;
 };
 
 const AuthContext = createContext<AuthContextValue>({
 	egoJwt: '',
+	setEgoJwt: () => {},
 });
+
+export const useAuthContext = () => useContext(AuthContext);
 
 const removeToken = () => {
 	Cookies.remove(EGO_JWT_KEY);
@@ -38,6 +42,8 @@ export const logOut = () => {
 };
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
-	const authData = { egoJwt: '' };
+	const storedToken = Cookies.get(EGO_JWT_KEY);
+	const [egoJwt, setEgoJwt] = useState(storedToken || '');
+	const authData = { egoJwt, setEgoJwt };
 	return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;
 }

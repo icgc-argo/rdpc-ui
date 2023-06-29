@@ -22,8 +22,9 @@
  */
 'use client';
 
-import { ReactNode, useState } from 'react';
 import { Work_Sans } from 'next/font/google';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactNode } from 'react';
 import AuthProvider from '@/global/auth';
 import Header from './components/Header';
 import ThemeProvider from './components/ThemeProvider';
@@ -35,10 +36,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 		<html lang="en">
 			<body className={workSans.className}>
 				<ThemeProvider>
-					<AuthProvider>
-						<Header />
-						{children}
-					</AuthProvider>
+					<QueryClientProvider client={new QueryClient()}>
+						<AuthProvider>
+							<Header />
+							{children}
+						</AuthProvider>
+					</QueryClientProvider>
 				</ThemeProvider>
 			</body>
 		</html>

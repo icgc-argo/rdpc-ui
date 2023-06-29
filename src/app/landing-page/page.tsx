@@ -18,52 +18,26 @@
  */
 'use client';
 
-import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation';
-import { css, DnaLoader, useTheme } from '@icgc-argo/uikit';
-import { useEffect } from 'react';
-import { useQuery } from 'react-query';
-import urljoin from 'url-join';
-import { EGO_JWT_KEY } from '@/global/constants';
 import { getAppConfig } from '@/global/config';
-import { useAuthContext } from '@/global/auth';
+import { logOut } from '@/global/auth';
 
-export default async function createPage() {
-	const { EGO_CLIENT_ID, EGO_API_ROOT } = getAppConfig();
-	const egoLoginUrl = urljoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
-	const { setEgoJwt } = useAuthContext();
-	const router = useRouter();
-	const theme = useTheme();
-
-	useQuery('egoJwt', () => {
-		fetch(egoLoginUrl, {
-			credentials: 'include',
-			headers: { accept: '*/*' },
-			body: null,
-			method: 'GET',
-			mode: 'cors',
-		})
-			.then(async (res: Response) => {
-				const egoToken = await res.text();
-				Cookies.set(EGO_JWT_KEY, egoToken);
-				setEgoJwt(egoToken);
-				router.push('/landing-page');
-			})
-			.catch((err) => {
-				console.warn('err: ', err);
-			});
-	});
+export default function LandingPage() {
+	const { EGO_CLIENT_ID } = getAppConfig();
 
 	return (
-		<div
-			css={css`
-				background-color: ${theme.colors.grey_4};
-				display: flex;
-				justify-content: center;
-				align-items: center;
-			`}
-		>
-			<DnaLoader />
-		</div>
+		<main>
+			<div>
+				<p>
+					Get started by editing&nbsp;
+					<code>src/app/files/page.tsx</code>
+				</p>
+			</div>
+			<h1>Welcome! {EGO_CLIENT_ID}</h1>
+			<div>
+				<a href={`/`}>
+					<button onClick={logOut}>Logout</button>
+				</a>
+			</div>
+		</main>
 	);
 }
