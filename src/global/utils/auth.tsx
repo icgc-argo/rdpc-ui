@@ -75,7 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 			return authHeaders;
 		};
 
-		if (!storedToken && !egoJwt?.length && loggingIn) {
+		if (!egoJwt?.length && loggingIn) {
 			getToken()
 				.then((serverToken) => {
 					const tokenResponse = serverToken?.length ? serverToken : '';
