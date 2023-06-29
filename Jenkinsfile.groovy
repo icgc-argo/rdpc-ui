@@ -128,15 +128,28 @@ spec:
                 branch "develop"
             }
             steps {
-                build(job: "/provision/update-app-version", parameters: [
-                    [$class: 'StringParameterValue', name: 'RDPC_ENV', value: 'dev' ],
-                    [$class: 'StringParameterValue', name: 'TARGET_RELEASE', value: 'rdpc-ui'],
-                    [$class: 'StringParameterValue', name: 'NEW_APP_VERSION', value: "${version}-${commit}" ]
+                build(job: '/provision/update-app-version', parameters: [
+                    string(name: 'RDPC_ENV', value: 'dev'),
+                    string(name: 'TARGET_RELEASE', value: 'rdpc-ui'),
+                    string(name: 'NEW_APP_VERSION', value: "${version}-${commit}"),
                 ])
                 // sleep(time:30,unit:"SECONDS")
                 // build(job: "/provision/rdpc-gateway-restart", parameters: [
                 //     [$class: 'StringParameterValue', name: 'AP_RDPC_ENV', value: 'dev' ],
                 // ])
+            }
+        }
+
+        stage('deploy to rdpc-qa') {
+            when {
+                branch "main"
+            }
+            steps {
+                build(job: '/provision/update-app-version', parameters: [
+                    string(name: 'RDPC_ENV', value: 'qa'),
+                    string(name: 'TARGET_RELEASE', value: 'rdpc-ui'),
+                    string(name: 'NEW_APP_VERSION', value: "${version}"),
+                ])
             }
         }
     }
