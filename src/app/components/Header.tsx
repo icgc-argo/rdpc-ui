@@ -20,7 +20,7 @@
 import { AppBar, css } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import Image from 'next/image';
-import argoLogo from '@/../public/assets/argo-logo.svg';
+import argoLogo from '/public/assets/argo-logo.svg';
 import LoginButton from './LoginButton';
 
 const Header = () => (

@@ -37,12 +37,7 @@ export const logOut = () => {
 	removeToken();
 };
 
-export default function AuthProvider({
-	authData,
-	children,
-}: {
-	authData: AuthContextValue;
-	children: ReactNode;
-}) {
+export default function AuthProvider({ children }: { children: ReactNode }) {
+	const authData = { egoJwt: '' };
 	return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;
 }

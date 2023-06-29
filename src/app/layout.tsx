@@ -31,17 +31,15 @@ import ThemeProvider from './components/ThemeProvider';
 const workSans = Work_Sans({ subsets: ['latin'] });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-	const [egoJwt] = useState('');
-
 	return (
 		<html lang="en">
 			<body className={workSans.className}>
-				<AuthProvider authData={{ egoJwt }}>
-					<ThemeProvider>
+				<ThemeProvider>
+					<AuthProvider>
 						<Header />
 						{children}
-					</ThemeProvider>
-				</AuthProvider>
+					</AuthProvider>
+				</ThemeProvider>
 			</body>
 		</html>
 	);
