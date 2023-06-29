@@ -23,12 +23,14 @@ import {
 	Dispatch,
 	ReactNode,
 	SetStateAction,
+	Suspense,
 	useContext,
 	useEffect,
 	useState,
 } from 'react';
 import Cookies from 'js-cookie';
 import { usePathname } from 'next/navigation';
+import { DnaLoader } from '@icgc-argo/uikit';
 import { EGO_JWT_KEY } from '../constants';
 
 type AuthContextValue = {
@@ -73,11 +75,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 			return authHeaders;
 		};
 
-		if (!storedToken && !egoJwt?.length) {
+		if (!storedToken && !egoJwt?.length && loggingIn) {
 			getToken()
 				.then((serverToken) => {
 					const tokenResponse = serverToken?.length ? serverToken : '';
-					setEgoJwt(tokenResponse);
+					if (tokenResponse?.length) setEgoJwt(tokenResponse);
 					setLoggingIn(false);
 				})
 				.catch(console.error);
@@ -86,7 +88,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 	const value: AuthContextValue = { egoJwt, setEgoJwt, loggingIn, setLoggingIn };
 
-	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+	return (
+		<AuthContext.Provider value={value}>
+			<Suspense fallback={<DnaLoader />}>{children}</Suspense>
+		</AuthContext.Provider>
+	);
 }
 
 export const useAuthContext = () => useContext(AuthContext);

@@ -30,7 +30,7 @@ export default async function createPage() {
 	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
 	const router = useRouter();
 	const theme = useTheme();
-	const { loggingIn, setLoggingIn } = useAuthContext();
+	const { setEgoJwt, loggingIn, setLoggingIn } = useAuthContext();
 	const storedToken = getStoredToken();
 	const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
 
@@ -48,6 +48,7 @@ export default async function createPage() {
 					.then(async (res) => {
 						const newToken = await res.text();
 						storeToken(newToken);
+						setEgoJwt(newToken);
 						setLoggingIn(false);
 						router.push('/landing-page');
 					})
