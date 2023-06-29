@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { AppBar, css, UserBadge } from '@icgc-argo/uikit';
+import { AppBar, css, DnaLoader, UserBadge } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import Image from 'next/image';
 import argoLogo from '/public/argo-logo.svg';
@@ -45,8 +45,13 @@ const Header = () => {
 							firstName={'Test'}
 							lastName={'User'}
 							title={'DCC Member'}
+							css={css`
+								color: white;
+							`}
 						/>
-					) : loggingIn ? null : (
+					) : loggingIn ? (
+						<DnaLoader />
+					) : (
 						<LoginButton />
 					)}
 				</div>
