@@ -60,6 +60,9 @@ const LOCAL_AUTH_URL = 'http://localhost:3000/auth';
 export function AuthProvider({ children }: { children: ReactNode }) {
 	const storedToken = getStoredToken();
 	const [egoJwt, setEgoJwt] = useState(storedToken || '');
+	const path = usePathname();
+	const initLoginState = path === '/logging-in' || !egoJwt.length ? true : false;
+	const [loggingIn, setLoggingIn] = useState(initLoginState);
 
 	useEffect(() => {
 		const getToken = async () => {
@@ -70,18 +73,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 			return authHeaders;
 		};
 
-		getToken()
-			.then((serverToken) => {
-				if (serverToken?.length && !egoJwt?.length) {
-					setEgoJwt(serverToken);
-				}
-			})
-			.catch(console.error);
+		if (!storedToken && !egoJwt?.length) {
+			getToken()
+				.then((serverToken) => {
+					const tokenResponse = serverToken?.length ? serverToken : '';
+					setEgoJwt(tokenResponse);
+					setLoggingIn(false);
+				})
+				.catch(console.error);
+		}
 	}, [egoJwt]);
-
-	const path = usePathname();
-	const initLoginState = path === '/logging-in' && !(storedToken || egoJwt) ? true : false;
-	const [loggingIn, setLoggingIn] = useState(initLoginState);
 
 	const value: AuthContextValue = { egoJwt, setEgoJwt, loggingIn, setLoggingIn };
 

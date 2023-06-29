@@ -20,13 +20,17 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+let serverJwt = '';
+
 export async function GET(request: NextRequest) {
 	const response = new NextResponse();
 	const hasToken = request.cookies.has('EGO_JWT');
+	const egoJwt = request.cookies.get('EGO_JWT');
 
-	if (hasToken) {
-		const egoJwt = request.cookies.get('EGO_JWT');
-		console.log('egoJwt', egoJwt);
+	if (hasToken && egoJwt?.value.length && !serverJwt.length) {
+		const authCookie = JSON.stringify(egoJwt);
+		serverJwt = authCookie;
+		response.headers.set('auth', authCookie);
 	} else {
 		response.headers.set('auth', '');
 	}

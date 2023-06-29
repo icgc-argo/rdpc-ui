@@ -22,12 +22,11 @@ import { AppBar, css, UserBadge } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import Image from 'next/image';
 import argoLogo from '/public/argo-logo.svg';
-import { getStoredToken, useAuthContext } from '@/global/utils/auth';
+import { useAuthContext } from '@/global/utils/auth';
 import LoginButton from './LoginButton';
 
 const Header = () => {
 	const { egoJwt, loggingIn } = useAuthContext();
-	const storedToken = getStoredToken();
 
 	return (
 		<header>
@@ -40,7 +39,7 @@ const Header = () => {
 
 				{/** keep this div. header will have more items, will be "right-aligned" */}
 				<div>
-					{storedToken || egoJwt ? (
+					{egoJwt ? (
 						<UserBadge
 							showGreeting={true}
 							firstName={'Test'}
