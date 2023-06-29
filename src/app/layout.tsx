@@ -31,7 +31,7 @@ import ThemeProvider from './components/ThemeProvider';
 const workSans = Work_Sans({ subsets: ['latin'] });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-	const [egoJwt, setEgoJwt] = useState('');
+	const [egoJwt] = useState('');
 
 	return (
 		<html lang="en">
