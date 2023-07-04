@@ -31,12 +31,14 @@ import ThemeProvider from './components/ThemeProvider';
 
 const workSans = Work_Sans({ subsets: ['latin'] });
 
+const queryClient = new QueryClient();
+
 export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en">
 			<body className={workSans.className}>
 				<ThemeProvider>
-					<QueryClientProvider client={new QueryClient()}>
+					<QueryClientProvider client={queryClient}>
 						<AuthProvider>
 							<Header />
 							{children}
