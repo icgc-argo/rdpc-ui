@@ -17,7 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import urljoin from 'url-join';
 import { getAppConfig } from '@/global/config';
 
 const { DOCS_URL_ROOT, PLATFORM_UI_ROOT, EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();

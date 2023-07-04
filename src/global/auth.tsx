@@ -28,7 +28,7 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue>({
 	egoJwt: '',
-	setEgoJwt: () => {},
+	setEgoJwt: () => '',
 });
 
 export const useAuthContext = () => useContext(AuthContext);
