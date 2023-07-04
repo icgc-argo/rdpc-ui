@@ -27,7 +27,7 @@ import { EGO_JWT_KEY } from '@/global/constants';
 import { getAppConfig } from '@/global/config';
 import { useAuthContext } from '@/global/auth';
 
-export default async function CreatePage() {
+export default async function LoggedIn() {
 	const { EGO_CLIENT_ID, EGO_API_ROOT } = getAppConfig();
 	const egoLoginUrl = urljoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
 	const { setEgoJwt } = useAuthContext();
