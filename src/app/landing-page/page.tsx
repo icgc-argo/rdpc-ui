@@ -16,25 +16,28 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+'use client';
 
-import packageJSON from '../../package.json';
+import { getAppConfig } from '@/global/config';
+import { logOut } from '@/global/auth';
 
-type AppConfig = {
-	DOCS_URL_ROOT: string;
-	EGO_API_ROOT: string;
-	EGO_CLIENT_ID: string;
-	EGO_PUBLIC_KEY: string;
-	REGION: string;
-	UI_VERSION: string;
-};
+export default function LandingPage() {
+	const { EGO_CLIENT_ID } = getAppConfig();
 
-export const getAppConfig = (): AppConfig => {
-	return {
-		DOCS_URL_ROOT: process.env.NEXT_PUBLIC_DOCS_URL_ROOT || 'https://docs.icgc-argo.org/',
-		EGO_API_ROOT: process.env.NEXT_PUBLIC_EGO_API_ROOT || 'http://localhost:8081',
-		EGO_CLIENT_ID: process.env.EGO_CLIENT_ID || 'rdpc-ui-local',
-		EGO_PUBLIC_KEY: process.env.EGO_PUBLIC_KEY || '',
-		UI_VERSION: packageJSON.version,
-		REGION: process.env.NEXT_PUBLIC_REGION || '',
-	};
-};
+	return (
+		<main>
+			<div>
+				<p>
+					Get started by editing&nbsp;
+					<code>src/app/files/page.tsx</code>
+				</p>
+			</div>
+			<h1>Welcome! {EGO_CLIENT_ID}</h1>
+			<div>
+				<a href={`/`}>
+					<button onClick={logOut}>Logout</button>
+				</a>
+			</div>
+		</main>
+	);
+}

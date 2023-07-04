@@ -23,18 +23,25 @@
 'use client';
 
 import { Work_Sans } from 'next/font/google';
-import ThemeProvider from '@/components/ThemeProvider';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactNode } from 'react';
+import AuthProvider from '@/global/auth';
 import Header from './components/Header';
+import ThemeProvider from './components/ThemeProvider';
 
 const workSans = Work_Sans({ subsets: ['latin'] });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en">
 			<body className={workSans.className}>
 				<ThemeProvider>
-					<Header />
-					{children}
+					<QueryClientProvider client={new QueryClient()}>
+						<AuthProvider>
+							<Header />
+							{children}
+						</AuthProvider>
+					</QueryClientProvider>
 				</ThemeProvider>
 			</body>
 		</html>

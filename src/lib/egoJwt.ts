@@ -17,24 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import packageJSON from '../../package.json';
+import memoize from 'lodash/memoize';
 
-type AppConfig = {
-	DOCS_URL_ROOT: string;
-	EGO_API_ROOT: string;
-	EGO_CLIENT_ID: string;
-	EGO_PUBLIC_KEY: string;
-	REGION: string;
-	UI_VERSION: string;
-};
+import createEgoUtils from '@icgc-argo/ego-token-utils';
+import { getAppConfig } from '@/global/config';
 
-export const getAppConfig = (): AppConfig => {
-	return {
-		DOCS_URL_ROOT: process.env.NEXT_PUBLIC_DOCS_URL_ROOT || 'https://docs.icgc-argo.org/',
-		EGO_API_ROOT: process.env.NEXT_PUBLIC_EGO_API_ROOT || 'http://localhost:8081',
-		EGO_CLIENT_ID: process.env.EGO_CLIENT_ID || 'rdpc-ui-local',
-		EGO_PUBLIC_KEY: process.env.EGO_PUBLIC_KEY || '',
-		UI_VERSION: packageJSON.version,
-		REGION: process.env.NEXT_PUBLIC_REGION || '',
-	};
-};
+const TokenUtils = createEgoUtils(getAppConfig().EGO_PUBLIC_KEY);
+
+export const decodeToken = memoize((egoJwt?: string) =>
+	egoJwt ? TokenUtils.decodeToken(egoJwt) : null,
+);
+
+export const isValidJwt = (egoJwt: string) => !!egoJwt && TokenUtils.isValidJwt(egoJwt);
+
+export const getPermissionsFromToken: (egoJwt: string) => string[] = (egoJwt) =>
+	isValidJwt(egoJwt) ? TokenUtils.getPermissionsFromToken(egoJwt) : [];
