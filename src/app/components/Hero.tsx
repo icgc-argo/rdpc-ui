@@ -17,13 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Typography, css, useTheme } from '@icgc-argo/uikit';
+import { Button, Typography, css, useTheme } from '@icgc-argo/uikit';
 import LoginButton from './LoginButton';
 import galaxyImage from '../../../public/assets/galaxy.png';
 import RegionBanner from './RegionBanner';
 import Link from 'next/link';
 import { getAppConfig } from '@/global/config';
-import { PLATFORM_UI_ROOT } from '@/global/urls';
+import { EGO_LOGIN_URL, PLATFORM_UI_ROOT } from '@/global/urls';
 
 const BackLink = (
 	<div
@@ -101,7 +101,9 @@ const Hero = () => {
 					cancer.
 				</Typography>
 
-				<LoginButton showLogo={false}>LOGIN</LoginButton>
+				<Link href={EGO_LOGIN_URL}>
+					<Button>LOGIN</Button>
+				</Link>
 			</div>
 		</div>
 	);
