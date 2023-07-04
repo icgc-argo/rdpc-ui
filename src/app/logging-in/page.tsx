@@ -21,14 +21,13 @@
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { css, DnaLoader, useTheme } from '@icgc-argo/uikit';
-import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import urljoin from 'url-join';
 import { EGO_JWT_KEY } from '@/global/constants';
 import { getAppConfig } from '@/global/config';
 import { useAuthContext } from '@/global/auth';
 
-export default async function createPage() {
+export default async function CreatePage() {
 	const { EGO_CLIENT_ID, EGO_API_ROOT } = getAppConfig();
 	const egoLoginUrl = urljoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
 	const { setEgoJwt } = useAuthContext();
