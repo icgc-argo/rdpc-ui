@@ -18,6 +18,7 @@
  */
 
 import { getAppConfig } from '@/global/config';
+import urljoin from 'url-join';
 
 const { DOCS_URL_ROOT, PLATFORM_UI_ROOT, EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
 
