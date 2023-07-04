@@ -19,21 +19,21 @@
 import packageJSON from '../../package.json';
 
 type AppConfig = {
-	UI_VERSION: string;
-	REGION: string;
 	DOCS_URL_ROOT: string;
 	EGO_API_ROOT: string;
 	EGO_CLIENT_ID: string;
 	EGO_PUBLIC_KEY: string;
+	REGION: string;
+	UI_VERSION: string;
 };
 
 export const getAppConfig = (): AppConfig => {
 	return {
-		UI_VERSION: packageJSON.version,
-		REGION: process.env.NEXT_PUBLIC_REGION || '',
 		DOCS_URL_ROOT: process.env.NEXT_PUBLIC_DOCS_URL_ROOT || 'https://docs.icgc-argo.org/',
-		EGO_API_ROOT: process.env.EGO_API_ROOT || 'https://ego.dev.argo.cancercollaboratory.org',
+		EGO_API_ROOT: process.env.NEXT_PUBLIC_EGO_API_ROOT || 'http://localhost:8081',
 		EGO_CLIENT_ID: process.env.EGO_CLIENT_ID || 'rdpc-ui-local',
 		EGO_PUBLIC_KEY: process.env.EGO_PUBLIC_KEY || '',
+		UI_VERSION: packageJSON.version,
+		REGION: process.env.NEXT_PUBLIC_REGION || '',
 	};
 };

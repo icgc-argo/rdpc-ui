@@ -22,22 +22,23 @@
  */
 'use client';
 
-import { PropsWithChildren } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { Work_Sans } from 'next/font/google';
-
+import { ReactNode } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { AuthProvider } from '@/global/utils/auth';
 import Header from './components/Header';
 import ThemeProvider from './components/ThemeProvider';
 
 const workSans = Work_Sans({ subsets: ['latin'] });
 
-export default async function RootLayout({ children }: PropsWithChildren) {
+const queryClient = new QueryClient();
+
+export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en">
 			<body className={workSans.className}>
 				<ThemeProvider>
-					<QueryClientProvider client={new QueryClient()}>
+					<QueryClientProvider client={queryClient}>
 						<AuthProvider>
 							<Header />
 							{children}

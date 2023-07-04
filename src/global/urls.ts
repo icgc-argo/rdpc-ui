@@ -17,7 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import urljoin from 'url-join';
 import { getAppConfig } from '@/global/config';
 
 // ARGO

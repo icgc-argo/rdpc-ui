@@ -30,3 +30,6 @@ export const decodeToken = memoize((egoJwt?: string) =>
 );
 
 export const isValidJwt = (egoJwt: string) => !!egoJwt && TokenUtils.isValidJwt(egoJwt);
+
+export const getPermissionsFromToken: (egoJwt: string) => string[] = (egoJwt) =>
+	isValidJwt(egoJwt) ? TokenUtils.getPermissionsFromToken(egoJwt) : [];
