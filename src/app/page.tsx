@@ -25,6 +25,7 @@ import { DataCallout, Link, Typography, overtureLogo } from '@icgc-argo/uikit';
 import { getAppConfig } from '@/global/config';
 import { css, useTheme } from '@/lib/emotion';
 import Footer from './components/Footer';
+import Hero from './components/Hero';
 
 const { DOCS_URL_ROOT } = getAppConfig();
 
@@ -141,6 +142,7 @@ const ActionBox: ComponentType = () => (
 export default function Home() {
 	return (
 		<main>
+			<Hero />
 			<ActionBox />
 			<OvertureBanner />
 			<Footer />

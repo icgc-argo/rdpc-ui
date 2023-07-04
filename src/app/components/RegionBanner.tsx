@@ -17,26 +17,22 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { getAppConfig } from '@/global/config';
-import urljoin from 'url-join';
+import { css } from '@icgc-argo/uikit';
 
-const { DOCS_URL_ROOT, PLATFORM_UI_ROOT, EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
-
-// ARGO
-export const ARGO_ROOT = 'https://www.icgc-argo.org';
-export const ARGO_PRIVACY_PAGE = urljoin(ARGO_ROOT, '/page/2/privacy');
-export const ARGO_TERMS_PAGE = urljoin(ARGO_ROOT, '/page/1/terms-and-conditions');
-export const ARGO_PUBLICATION_PAGE = urljoin(ARGO_ROOT, '/page/77/e3-publication-policy');
-
-// Docs
-export { DOCS_URL_ROOT };
-
-// Platform
-export { PLATFORM_UI_ROOT };
-
-// Ego
-export const EGO_LOGIN_URL = urljoin(
-	EGO_API_ROOT,
-	'/api/oauth/login/google',
-	`?client_id=${EGO_CLIENT_ID}`,
+const RegionBanner = ({ region }: { region: string }) => (
+	<div
+		css={css({
+			borderRadius: '3px',
+			backgroundColor: '#0774d3',
+			padding: '4px 8px',
+			color: 'white',
+			fontSize: '24px',
+			display: 'flex',
+			alignItems: 'center',
+		})}
+	>
+		{region}
+	</div>
 );
+
+export default RegionBanner;
