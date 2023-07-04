@@ -11,14 +11,22 @@
     "test": "echo 'Add tests please :)'"
   },
   "dependencies": {
-    "next": "^13.4.4",
+    "@emotion/styled": "^11.11.0",
+    "@icgc-argo/ego-token-utils": "^8.2.0",
     "@icgc-argo/uikit": "^3.0.1",
+    "@types/url-join": "^4.0.1",
+    "js-cookie": "^3.0.5",
+    "lodash": "^4.17.21",
+    "next": "^13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-query": "^3.39.3",
     "url-join": "^5.0.0"
   },
   "devDependencies": {
     "@emotion/react": "^11.11.0",
+    "@types/js-cookie": "^3.0.3",
+    "@types/lodash": "^4.14.195",
     "@types/node": "20.2.3",
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
@@ -30,7 +38,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
     "prettier": "2.8.8",
-    "typescript": "^5.0.4"
+    "typescript": "^5.1.3"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

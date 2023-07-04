@@ -16,15 +16,14 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 'use client';
 
+import { ComponentType } from 'react';
+import Image from 'next/image';
+import urlJoin from 'url-join';
+import { DataCallout, Link, Typography, overtureLogo } from '@icgc-argo/uikit';
 import { getAppConfig } from '@/global/config';
 import { css, useTheme } from '@/lib/emotion';
-import { DataCallout, Link, Typography, overtureLogo } from '@icgc-argo/uikit';
-import Image from 'next/image';
-import { ComponentType } from 'react';
-import urlJoin from 'url-join';
 import Footer from './components/Footer';
 
 const { DOCS_URL_ROOT } = getAppConfig();
