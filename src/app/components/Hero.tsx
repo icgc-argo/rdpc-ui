@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Button, Typography, css, useTheme } from '@icgc-argo/uikit';
+import { BUTTON_SIZES, Button, Typography, css, useTheme } from '@icgc-argo/uikit';
 import LoginButton from './LoginButton';
 import galaxyImage from '../../../public/assets/galaxy.png';
 import RegionBanner from './RegionBanner';
@@ -29,7 +29,8 @@ const BackLink = (
 	<div
 		css={css`
 			padding: 17px 0 0 17px;
-			* {
+			> span,
+			a {
 				line-height: 28px;
 				color: white;
 				font-size: 12px;
@@ -101,8 +102,20 @@ const Hero = () => {
 					cancer.
 				</Typography>
 
-				<Link href={EGO_LOGIN_URL}>
-					<Button>LOGIN</Button>
+				<Link
+					href={EGO_LOGIN_URL}
+					css={css`
+						text-decoration: none;
+					`}
+				>
+					<Button
+						size={BUTTON_SIZES.MD}
+						css={css`
+							font-size: 24px;
+						`}
+					>
+						LOGIN
+					</Button>
 				</Link>
 			</div>
 		</div>
