@@ -17,26 +17,33 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import packageJSON from '../../package.json';
+import { createContext, Dispatch, ReactNode, SetStateAction, useState, useContext } from 'react';
+import Cookies from 'js-cookie';
+import { EGO_JWT_KEY } from './constants';
 
-type AppConfig = {
-	DOCS_URL_ROOT: string;
-	EGO_API_ROOT: string;
-	EGO_CLIENT_ID: string;
-	EGO_PUBLIC_KEY: string;
-	REGION: string;
-	UI_VERSION: string;
-	PLATFORM_UI_ROOT: string;
+type AuthContextValue = {
+	egoJwt: string;
+	setEgoJwt: Dispatch<SetStateAction<string>>;
 };
 
-export const getAppConfig = (): AppConfig => {
-	return {
-		DOCS_URL_ROOT: process.env.NEXT_PUBLIC_DOCS_URL_ROOT || 'https://docs.icgc-argo.org/',
-		EGO_API_ROOT: process.env.NEXT_PUBLIC_EGO_API_ROOT || 'http://localhost:8081',
-		EGO_CLIENT_ID: process.env.EGO_CLIENT_ID || 'rdpc-ui-local',
-		EGO_PUBLIC_KEY: process.env.EGO_PUBLIC_KEY || '',
-		UI_VERSION: packageJSON.version,
-		REGION: process.env.NEXT_PUBLIC_REGION || '',
-		PLATFORM_UI_ROOT: process.env.NEXT_PUBLIC_PLATFORM_UI_ROOT || '',
-	};
+const AuthContext = createContext<AuthContextValue>({
+	egoJwt: '',
+	setEgoJwt: () => {},
+});
+
+export const useAuthContext = () => useContext(AuthContext);
+
+const removeToken = () => {
+	Cookies.remove(EGO_JWT_KEY);
 };
+
+export const logOut = () => {
+	removeToken();
+};
+
+export default function AuthProvider({ children }: { children: ReactNode }) {
+	const storedToken = Cookies.get(EGO_JWT_KEY);
+	const [egoJwt, setEgoJwt] = useState(storedToken || '');
+	const authData = { egoJwt, setEgoJwt };
+	return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;
+}
