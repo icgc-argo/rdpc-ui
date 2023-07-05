@@ -58,34 +58,12 @@ export const logOut = () => {
 	Cookies.remove(EGO_JWT_KEY);
 };
 
-const LOCAL_AUTH_URL = 'http://localhost:3000/auth';
-
 export function AuthProvider({ children }: { children: ReactNode }) {
 	const storedToken = getStoredToken();
 	const [egoJwt, setEgoJwt] = useState(storedToken || '');
 	const path = usePathname();
-	const initLoginState = path === '/logging-in' || !egoJwt.length ? true : false;
+	const initLoginState = path === '/logging-in' && !egoJwt.length ? true : false;
 	const [loggingIn, setLoggingIn] = useState(initLoginState);
-
-	useEffect(() => {
-		const getToken = async () => {
-			const tokenResponse = await fetch(LOCAL_AUTH_URL);
-			const clone = await tokenResponse.clone();
-			const authHeaders = clone.headers.get('auth');
-
-			return authHeaders;
-		};
-
-		if (!egoJwt?.length && loggingIn) {
-			getToken()
-				.then((serverToken) => {
-					const tokenResponse = serverToken?.length ? serverToken : '';
-					if (tokenResponse?.length) setEgoJwt(tokenResponse);
-					setLoggingIn(false);
-				})
-				.catch(console.error);
-		}
-	}, [egoJwt, loggingIn]);
 
 	const value: AuthContextValue = { egoJwt, setEgoJwt, loggingIn, setLoggingIn };
 
