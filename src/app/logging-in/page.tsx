@@ -18,21 +18,24 @@
  */
 'use client';
 
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import { css, DnaLoader, useTheme } from '@icgc-argo/uikit';
 import { useQuery } from 'react-query';
-import urljoin from 'url-join';
-import { EGO_JWT_KEY } from '@/global/constants';
-import { getAppConfig } from '@/global/config';
-import { useAuthContext } from '@/global/auth';
+import urlJoin from 'url-join';
 
-export default async function LoggedIn() {
-	const { EGO_CLIENT_ID, EGO_API_ROOT } = getAppConfig();
-	const egoLoginUrl = urljoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
-	const { setEgoJwt } = useAuthContext();
+import { css, DnaLoader, useTheme } from '@icgc-argo/uikit';
+import { getAppConfig } from '@/global/config';
+import { storeToken, useAuthContext } from '@/global/utils/auth';
+
+export default async function LoggingIn() {
+	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
 	const router = useRouter();
 	const theme = useTheme();
+	const { egoJwt, setEgoJwt, loggingIn, setLoggingIn } = useAuthContext();
+	const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
+
+	if (egoJwt) router.push('/landing-page');
+
+	if (!loggingIn && !egoJwt) setLoggingIn(true);
 
 	useQuery('egoJwt', () => {
 		fetch(egoLoginUrl, {
@@ -42,15 +45,13 @@ export default async function LoggedIn() {
 			method: 'GET',
 			mode: 'cors',
 		})
-			.then(async (res: Response) => {
-				const egoToken = await res.text();
-				Cookies.set(EGO_JWT_KEY, egoToken);
-				setEgoJwt(egoToken);
-				router.push('/landing-page');
+			.then(async (res) => {
+				const newToken = await res.text();
+				storeToken(newToken);
+				setEgoJwt(newToken);
+				setLoggingIn(false);
 			})
-			.catch((err) => {
-				console.warn('err: ', err);
-			});
+			.catch(console.error);
 	});
 
 	return (

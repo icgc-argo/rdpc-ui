@@ -31,6 +31,7 @@ export default function GlobalFooter() {
 		<Footer
 			Logo={<Logo />}
 			subtitle={subtitle}
+			version={UI_VERSION}
 			links={[
 				{
 					displayName: 'Contact',

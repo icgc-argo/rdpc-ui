@@ -17,33 +17,23 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createContext, Dispatch, ReactNode, SetStateAction, useState, useContext } from 'react';
-import Cookies from 'js-cookie';
-import { EGO_JWT_KEY } from './constants';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
-type AuthContextValue = {
-	egoJwt: string;
-	setEgoJwt: Dispatch<SetStateAction<string>>;
-};
+let serverJwt = '';
 
-const AuthContext = createContext<AuthContextValue>({
-	egoJwt: '',
-	setEgoJwt: () => '',
-});
+export async function GET(request: NextRequest) {
+	const response = new NextResponse();
+	const hasToken = request.cookies.has('EGO_JWT');
+	const egoJwt = request.cookies.get('EGO_JWT');
 
-export const useAuthContext = () => useContext(AuthContext);
+	if (hasToken && egoJwt?.value.length && !serverJwt.length) {
+		const authCookie = JSON.stringify(egoJwt);
+		serverJwt = authCookie;
+		response.headers.set('auth', authCookie);
+	} else {
+		response.headers.set('auth', '');
+	}
 
-const removeToken = () => {
-	Cookies.remove(EGO_JWT_KEY);
-};
-
-export const logOut = () => {
-	removeToken();
-};
-
-export default function AuthProvider({ children }: { children: ReactNode }) {
-	const storedToken = Cookies.get(EGO_JWT_KEY);
-	const [egoJwt, setEgoJwt] = useState(storedToken || '');
-	const authData = { egoJwt, setEgoJwt };
-	return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;
+	return response;
 }
