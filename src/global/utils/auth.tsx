@@ -30,6 +30,7 @@ import {
 } from 'react';
 import Cookies from 'js-cookie';
 import { usePathname } from 'next/navigation';
+import Header from '@/app/components/Header';
 import { DnaLoader } from '@icgc-argo/uikit';
 import { EGO_JWT_KEY } from '../constants';
 
@@ -84,13 +85,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 				})
 				.catch(console.error);
 		}
-	}, [egoJwt]);
+	}, [egoJwt, loggingIn]);
 
 	const value: AuthContextValue = { egoJwt, setEgoJwt, loggingIn, setLoggingIn };
 
 	return (
 		<AuthContext.Provider value={value}>
-			<Suspense fallback={<DnaLoader />}>{children}</Suspense>
+			<Suspense
+				fallback={
+					<>
+						<Header />
+						<DnaLoader />
+					</>
+				}
+			>
+				{children}
+			</Suspense>
 		</AuthContext.Provider>
 	);
 }
