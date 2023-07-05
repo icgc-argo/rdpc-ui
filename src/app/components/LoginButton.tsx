@@ -18,16 +18,11 @@
  */
 'use client';
 
-import urljoin from 'url-join';
-
+import { EGO_LOGIN_URL } from '@/global/urls';
 import { GoogleLogin } from '@icgc-argo/uikit';
-import { getAppConfig } from '@/global/config';
 
 const LoginButton = () => {
-	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
-	const loginUrl = urljoin(EGO_API_ROOT, '/api/oauth/login/google', `?client_id=${EGO_CLIENT_ID}`);
-
-	return <GoogleLogin link={loginUrl} />;
+	return <GoogleLogin link={EGO_LOGIN_URL} />;
 };
 
 export default LoginButton;
