@@ -26,7 +26,7 @@ import { css, DnaLoader, useTheme } from '@icgc-argo/uikit';
 import { getAppConfig } from '@/global/config';
 import { storeToken, useAuthContext } from '@/global/utils/auth';
 
-export default async function createPage() {
+export default async function LoggingIn() {
 	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
 	const router = useRouter();
 	const theme = useTheme();

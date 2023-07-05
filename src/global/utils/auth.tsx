@@ -42,7 +42,7 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue>({
 	egoJwt: '',
-	setEgoJwt: () => {},
+	setEgoJwt: () => '',
 	loggingIn: false,
 	setLoggingIn: () => false,
 });
