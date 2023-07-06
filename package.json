@@ -11,8 +11,9 @@
     "test": "echo 'Add tests please :)'"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.1.1",
     "@icgc-argo/ego-token-utils": "^8.2.0",
-    "@icgc-argo/uikit": "^3.0.1",
+    "@icgc-argo/uikit": "file:../uikit/dist",
     "@types/url-join": "^4.0.1",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
@@ -20,15 +21,17 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-google-recaptcha": "^3.1.0",
+    "react-grid-system": "^8.1.9",
+    "react-hook-form": "^7.45.1",
     "react-query": "^3.39.3",
-    "url-join": "^5.0.0"
+    "url-join": "^5.0.0",
+    "zod": "^3.21.4"
   },
-  "peerDependencies": {    
+  "peerDependencies": {
+    "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0"
   },
   "devDependencies": {
-    "@emotion/react": "^11.11.0",
-    "@types/js-cookie": "^3.0.3",
     "@types/lodash": "^4.14.195",
     "@types/node": "20.2.3",
     "@types/react": "18.2.7",
