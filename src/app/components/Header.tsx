@@ -18,15 +18,46 @@
  */
 'use client';
 
-import { AppBar, css, DnaLoader, UserBadge } from '@icgc-argo/uikit';
-import Link from 'next/link';
+import {
+	AppBar,
+	css,
+	DnaLoader,
+	DropdownMenu,
+	FocusWrapper,
+	Link,
+	NavBarElement,
+	NavElement,
+	UserBadge,
+} from '@icgc-argo/uikit';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import argoLogo from '/public/argo-logo.svg';
-import { useAuthContext } from '@/global/utils/auth';
+import { logOut, useAuthContext } from '@/global/utils/auth';
 import LoginButton from './LoginButton';
 
 const Header = () => {
 	const { egoJwt, loggingIn } = useAuthContext();
+	const path = usePathname();
+	const onProfilePage = path === '/landing-page';
+
+	const profileNavDetails: Array<NavElement> = [
+		{
+			active: onProfilePage,
+			href: '/landing-page',
+			name: 'Profile & Token',
+			LinkComp: Link,
+		},
+		{
+			isLink: false,
+			onClick: () => {
+				logOut();
+			},
+			name: 'Logout',
+			active: false,
+			href: '/',
+			LinkComp: Link,
+		},
+	];
 
 	return (
 		<header>
@@ -40,15 +71,22 @@ const Header = () => {
 				{/** keep this div. header will have more items, will be "right-aligned" */}
 				<div>
 					{egoJwt ? (
-						<UserBadge
-							showGreeting={true}
-							firstName={'Test'}
-							lastName={'User'}
-							title={'DCC Member'}
-							css={css`
-								color: white;
-							`}
-						/>
+						<FocusWrapper>
+							<DropdownMenu>
+								{profileNavDetails.map((element, idx) => (
+									<NavBarElement key={`profileNavDetail_${idx}`} {...element} isDropdown={true} />
+								))}
+							</DropdownMenu>
+							<UserBadge
+								showGreeting={true}
+								firstName={'Test'}
+								lastName={'User'}
+								title={'DCC Member'}
+								css={css`
+									color: white;
+								`}
+							/>
+						</FocusWrapper>
 					) : loggingIn ? (
 						<DnaLoader />
 					) : (

@@ -25,7 +25,6 @@ import {
 	SetStateAction,
 	Suspense,
 	useContext,
-	useEffect,
 	useState,
 } from 'react';
 import Cookies from 'js-cookie';
