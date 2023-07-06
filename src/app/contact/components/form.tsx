@@ -17,6 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { getAppConfig } from '@/global/config';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
 	Button,
@@ -30,17 +31,11 @@ import {
 	Typography,
 	css,
 } from '@icgc-argo/uikit';
-
-import { getAppConfig } from '@/global/config';
-import { useEffect } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { Col, Row } from 'react-grid-system';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-/**
- *
- */
 export const CONTACT_CATEGORY_OPTIONS = [
 	{
 		content: 'Applying for Access to Controlled Data through DACO',
@@ -79,8 +74,6 @@ const Form = () => {
 		handleSubmit,
 		formState: { errors, isSubmitting },
 		control,
-		register,
-		getValues,
 	} = useForm<ContactFormSchemaType>({
 		resolver: zodResolver(ContactFormSchema),
 		defaultValues: {
@@ -91,11 +84,6 @@ const Form = () => {
 			messageDescription: '',
 			reCaptcha: '',
 		},
-	});
-
-	useEffect(() => {
-		console.log('use effect render', getValues());
-		console.log('errors', errors);
 	});
 
 	return (
