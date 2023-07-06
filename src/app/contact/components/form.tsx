@@ -306,7 +306,7 @@ const Form = () => {
 									control={control}
 									rules={{ required: true }}
 									render={({ field }) => {
-										/** @ts-ignore 3rd party recaptcha comp onChange event type is more closed than react-hook-form onChange */
+										/** @ts-expect-error 3rd party recaptcha comp onChange event type is more closed than react-hook-form onChange */
 										return <ReCAPTCHA sitekey={RECAPTCHA_SITE_KEY} {...field} />;
 									}}
 								/>
