@@ -31,7 +31,7 @@ import Cookies from 'js-cookie';
 import { usePathname } from 'next/navigation';
 import Header from '@/app/components/Header';
 import { DnaLoader } from '@icgc-argo/uikit';
-import { EGO_JWT_KEY } from '../constants';
+import { EGO_JWT_KEY, LOGIN_NONCE } from '../constants';
 
 type AuthContextValue = {
 	egoJwt: string;
@@ -51,10 +51,6 @@ export const getStoredToken = () => Cookies.get(EGO_JWT_KEY);
 
 export const storeToken = (egoToken: string) => {
 	Cookies.set(EGO_JWT_KEY, egoToken);
-};
-
-export const logOut = () => {
-	Cookies.remove(EGO_JWT_KEY);
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -83,3 +79,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 }
 
 export const useAuthContext = () => useContext(AuthContext);
+
+export const logOut = () => {
+	Cookies.remove(EGO_JWT_KEY);
+	Cookies.remove(LOGIN_NONCE);
+};

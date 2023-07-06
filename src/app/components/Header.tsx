@@ -18,9 +18,10 @@
  */
 'use client';
 
+import { useState } from 'react';
 import {
 	AppBar,
-	css,
+	AppBarMenuItem,
 	DnaLoader,
 	DropdownMenu,
 	FocusWrapper,
@@ -30,14 +31,18 @@ import {
 	UserBadge,
 } from '@icgc-argo/uikit';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import argoLogo from '/public/argo-logo.svg';
+import { css, useTheme } from '@/lib/emotion';
 import { logOut, useAuthContext } from '@/global/utils/auth';
 import LoginButton from './LoginButton';
 
 const Header = () => {
-	const { egoJwt, loggingIn } = useAuthContext();
+	const [isDropdownOpen, setDropdownOpen] = useState(false);
+	const { egoJwt, setEgoJwt, loggingIn } = useAuthContext();
+	const router = useRouter();
 	const path = usePathname();
+	const theme = useTheme();
 	const onProfilePage = path === '/landing-page';
 
 	const profileNavDetails: Array<NavElement> = [
@@ -49,15 +54,20 @@ const Header = () => {
 		},
 		{
 			isLink: false,
-			onClick: () => {
+			onClick: async () => {
+				setDropdownOpen(false);
 				logOut();
+				setEgoJwt('');
+				router.push('/');
 			},
 			name: 'Logout',
 			active: false,
-			href: '/',
+			href: '',
 			LinkComp: Link,
 		},
 	];
+
+	const activeBorder = `solid 3px ${theme.colors.accent1}`;
 
 	return (
 		<header>
@@ -70,28 +80,49 @@ const Header = () => {
 
 				{/** keep this div. header will have more items, will be "right-aligned" */}
 				<div>
-					{egoJwt ? (
-						<FocusWrapper>
-							<DropdownMenu>
-								{profileNavDetails.map((element, idx) => (
-									<NavBarElement key={`profileNavDetail_${idx}`} {...element} isDropdown={true} />
-								))}
-							</DropdownMenu>
-							<UserBadge
-								showGreeting={true}
-								firstName={'Test'}
-								lastName={'User'}
-								title={'DCC Member'}
-								css={css`
-									color: white;
-								`}
-							/>
-						</FocusWrapper>
-					) : loggingIn ? (
-						<DnaLoader />
-					) : (
-						<LoginButton />
-					)}
+					<AppBarMenuItem
+						active={onProfilePage}
+						css={css`
+							border-bottom: ${onProfilePage ? activeBorder : ''};
+						`}
+					>
+						{egoJwt ? (
+							<FocusWrapper
+								onClick={() => {
+									setDropdownOpen(!isDropdownOpen);
+								}}
+							>
+								{isDropdownOpen && (
+									<DropdownMenu>
+										{profileNavDetails.map((element, idx) => (
+											<NavBarElement
+												key={`profileNavDetail_${idx}`}
+												{...element}
+												isDropdown={true}
+											/>
+										))}
+									</DropdownMenu>
+								)}
+								<UserBadge
+									showGreeting={true}
+									firstName={'Test'}
+									lastName={'User'}
+									title={'DCC Member'}
+									className={onProfilePage ? 'active' : ''}
+									css={css`
+										color: ${onProfilePage ? theme.colors.accent1 : theme.colors.white};
+										&:hover {
+											color: ${theme.colors.accent1};
+										}
+									`}
+								/>
+							</FocusWrapper>
+						) : loggingIn ? (
+							<DnaLoader />
+						) : (
+							<LoginButton />
+						)}
+					</AppBarMenuItem>
 				</div>
 			</AppBar>
 		</header>
