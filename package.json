@@ -13,7 +13,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
     "@icgc-argo/ego-token-utils": "^8.2.0",
-    "@icgc-argo/uikit": "file:../uikit/dist",
+    "@icgc-argo/uikit": "3.0.1",
     "@types/url-join": "^4.0.1",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
