@@ -30,12 +30,13 @@ import {
 	Typography,
 	css,
 } from '@icgc-argo/uikit';
+
+import { getAppConfig } from '@/global/config';
 import { useEffect } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { Col, Row } from 'react-grid-system';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import ReCAPTCHA from 'react-google-recaptcha';
-import { getAppConfig } from '@/global/config';
 
 /**
  *
@@ -60,39 +61,41 @@ const ContactFormSchema = z.object({
 	firstName: z.string().min(1, { message: 'First name is a required field.' }),
 	lastName: z.string().min(1, { message: 'Last name is a required field.' }),
 	email: z.string().email({ message: 'Email is a required field.' }),
-	messageCategory: z.string(),
+	messageCategory: z.string().min(1, { message: 'Assistance Type is a required field.' }),
 	messageDescription: z.string().min(1, { message: 'Your message is a required field.' }),
-	//reCaptcha: z.string(),
+	reCaptcha: z.string().min(1, { message: 'Please complete the reCAPTCHA challenge.' }),
 });
 
 type ContactFormSchemaType = z.infer<typeof ContactFormSchema>;
 
-/**
- *
- * @param data
- */
 const submitForm: SubmitHandler<ContactFormSchemaType> = async (data) => {
 	console.log('[placeholder] submitting form...', data);
 };
 
-/**
- *
- * @returns
- */
 const Form = () => {
+	const { RECAPTCHA_SITE_KEY } = getAppConfig();
+
 	const {
-		register,
 		handleSubmit,
 		formState: { errors, isSubmitting },
-		watch,
 		control,
+		register,
 		getValues,
 	} = useForm<ContactFormSchemaType>({
 		resolver: zodResolver(ContactFormSchema),
+		defaultValues: {
+			firstName: '',
+			lastName: '',
+			email: '',
+			messageCategory: '',
+			messageDescription: '',
+			reCaptcha: '',
+		},
 	});
 
 	useEffect(() => {
-		console.log('use effect render', control);
+		console.log('use effect render', getValues());
+		console.log('errors', errors);
 	});
 
 	return (
@@ -145,7 +148,6 @@ const Form = () => {
 										<Controller
 											name="firstName"
 											control={control}
-											rules={{ required: true }}
 											render={({ field }) => (
 												<Input
 													css={css`
@@ -250,19 +252,29 @@ const Form = () => {
 						<Col>
 							<FormControl required={true} error={!!errors.messageCategory}>
 								<InputLabel htmlFor="messageCategory">What do you need assistance with?</InputLabel>
-								<Select
-									size="lg"
-									aria-label="What do you need assistance with"
-									id="assistance-type"
-									css={css`
-										margin-top: 6px;
-										margin-bottom: 16px;
-										svg {
-											box-sizing: content-box;
-										}
-									`}
-									options={CONTACT_CATEGORY_OPTIONS}
+
+								<Controller
+									name="messageCategory"
+									control={control}
+									rules={{ required: true }}
+									render={({ field }) => (
+										<Select
+											size="lg"
+											aria-label="What do you need assistance with"
+											id="assistance-type"
+											css={css`
+												margin-top: 6px;
+												margin-bottom: 16px;
+												svg {
+													box-sizing: content-box;
+												}
+											`}
+											options={CONTACT_CATEGORY_OPTIONS}
+											{...field}
+										/>
+									)}
 								/>
+
 								{errors.messageCategory && (
 									<FormHelperText>{errors.messageCategory?.message}</FormHelperText>
 								)}
