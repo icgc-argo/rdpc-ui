@@ -34,6 +34,8 @@ import { useEffect } from 'react';
 import { Col, Row } from 'react-grid-system';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { getAppConfig } from '@/global/config';
 
 /**
  *
@@ -293,6 +295,22 @@ const Form = () => {
 								{errors.messageDescription && (
 									<FormHelperText>{errors.messageDescription?.message}</FormHelperText>
 								)}
+							</FormControl>
+						</Col>
+					</Row>
+					<Row align="end">
+						<Col>
+							<FormControl required={true} error={!!errors.reCaptcha}>
+								<Controller
+									name="reCaptcha"
+									control={control}
+									rules={{ required: true }}
+									render={({ field }) => {
+										/** @ts-ignore 3rd party recaptcha comp onChange event type is more closed than react-hook-form onChange */
+										return <ReCAPTCHA sitekey={RECAPTCHA_SITE_KEY} {...field} />;
+									}}
+								/>
+								{errors.reCaptcha && <FormHelperText>{errors.reCaptcha?.message}</FormHelperText>}
 							</FormControl>
 						</Col>
 					</Row>
