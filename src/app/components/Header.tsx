@@ -31,23 +31,23 @@ import {
 	UserBadge,
 } from '@icgc-argo/uikit';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import argoLogo from '/public/argo-logo.svg';
 import { css, useTheme } from '@/lib/emotion';
-import { logOut, useAuthContext } from '@/global/utils/auth';
+import { useAuthContext } from '@/global/utils/auth';
 import LoginButton from './LoginButton';
 
 const Header = () => {
 	const [isDropdownOpen, setDropdownOpen] = useState(false);
-	const { egoJwt, setEgoJwt, loggingIn } = useAuthContext();
-	const router = useRouter();
+	const { egoJwt, authLoading, logOut } = useAuthContext();
 	const path = usePathname();
 	const theme = useTheme();
 	const onProfilePage = path === '/landing-page';
+	const profileActive = onProfilePage && !!egoJwt.length && !authLoading;
 
 	const profileNavDetails: Array<NavElement> = [
 		{
-			active: onProfilePage,
+			active: profileActive,
 			href: '/landing-page',
 			name: 'Profile & Token',
 			LinkComp: Link,
@@ -57,8 +57,6 @@ const Header = () => {
 			onClick: async () => {
 				setDropdownOpen(false);
 				logOut();
-				setEgoJwt('');
-				router.push('/');
 			},
 			name: 'Logout',
 			active: false,
@@ -81,9 +79,9 @@ const Header = () => {
 				{/** keep this div. header will have more items, will be "right-aligned" */}
 				<div>
 					<AppBarMenuItem
-						active={onProfilePage}
+						active={profileActive}
 						css={css`
-							border-bottom: ${onProfilePage ? activeBorder : ''};
+							border-bottom: ${profileActive ? activeBorder : ''};
 						`}
 					>
 						{egoJwt ? (
@@ -117,7 +115,7 @@ const Header = () => {
 									`}
 								/>
 							</FocusWrapper>
-						) : loggingIn ? (
+						) : authLoading ? (
 							<DnaLoader />
 						) : (
 							<LoginButton />

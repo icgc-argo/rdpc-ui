@@ -28,7 +28,7 @@ import {
 	useState,
 } from 'react';
 import Cookies from 'js-cookie';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Header from '@/app/components/Header';
 import { DnaLoader } from '@icgc-argo/uikit';
 import { EGO_JWT_KEY, LOGIN_NONCE } from '../constants';
@@ -36,15 +36,17 @@ import { EGO_JWT_KEY, LOGIN_NONCE } from '../constants';
 type AuthContextValue = {
 	egoJwt: string;
 	setEgoJwt: Dispatch<SetStateAction<string>>;
-	loggingIn: boolean;
-	setLoggingIn: Dispatch<SetStateAction<boolean>>;
+	authLoading: boolean;
+	setAuthLoading: Dispatch<SetStateAction<boolean>>;
+	logOut: Function;
 };
 
 const AuthContext = createContext<AuthContextValue>({
 	egoJwt: '',
 	setEgoJwt: () => '',
-	loggingIn: false,
-	setLoggingIn: () => false,
+	authLoading: false,
+	setAuthLoading: () => false,
+	logOut: () => {},
 });
 
 export const getStoredToken = () => Cookies.get(EGO_JWT_KEY);
@@ -56,11 +58,21 @@ export const storeToken = (egoToken: string) => {
 export function AuthProvider({ children }: { children: ReactNode }) {
 	const storedToken = getStoredToken();
 	const [egoJwt, setEgoJwt] = useState(storedToken || '');
+	const router = useRouter();
 	const path = usePathname();
 	const loginStateOnPageLoad = path === '/logging-in' && !egoJwt.length;
-	const [loggingIn, setLoggingIn] = useState(loginStateOnPageLoad);
+	const [authLoading, setAuthLoading] = useState(loginStateOnPageLoad);
 
-	const value: AuthContextValue = { egoJwt, setEgoJwt, loggingIn, setLoggingIn };
+	const logOut = () => {
+		setAuthLoading(true);
+		setEgoJwt('');
+		Cookies.remove(EGO_JWT_KEY);
+		Cookies.remove(LOGIN_NONCE);
+		router.push('/');
+		setAuthLoading(false);
+	};
+
+	const value: AuthContextValue = { egoJwt, setEgoJwt, authLoading, setAuthLoading, logOut };
 
 	return (
 		<AuthContext.Provider value={value}>
