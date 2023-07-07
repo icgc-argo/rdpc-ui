@@ -57,8 +57,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	const storedToken = getStoredToken();
 	const [egoJwt, setEgoJwt] = useState(storedToken || '');
 	const path = usePathname();
-	const initLoginState = path === '/logging-in' && !egoJwt.length ? true : false;
-	const [loggingIn, setLoggingIn] = useState(initLoginState);
+	const loginStateOnPageLoad = path === '/logging-in' && !egoJwt.length;
+	const [loggingIn, setLoggingIn] = useState(loginStateOnPageLoad);
 
 	const value: AuthContextValue = { egoJwt, setEgoJwt, loggingIn, setLoggingIn };
 
