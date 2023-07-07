@@ -91,8 +91,3 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 }
 
 export const useAuthContext = () => useContext(AuthContext);
-
-export const logOut = () => {
-	Cookies.remove(EGO_JWT_KEY);
-	Cookies.remove(LOGIN_NONCE);
-};
