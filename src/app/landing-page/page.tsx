@@ -19,11 +19,10 @@
 'use client';
 
 import { getAppConfig } from '@/global/config';
-import { logOut } from '@/global/auth';
+import { logOut } from '@/global/utils/auth';
 
 export default function LandingPage() {
 	const { EGO_CLIENT_ID } = getAppConfig();
-
 	return (
 		<main>
 			<div>
