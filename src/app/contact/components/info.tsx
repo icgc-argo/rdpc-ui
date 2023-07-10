@@ -31,6 +31,19 @@ import {
 import { Button, Link, Typography, css, useTheme } from '@icgc-argo/uikit';
 import { Col } from 'react-grid-system';
 
+const ulCss = css`
+	font-size: 14px;
+	padding-left: 18px;
+	line-height: 22px;
+`;
+
+const titleCss = css`
+	margin: 0;
+	font-weight: 600;
+	margin-bottom: 5px;
+	margin-top: 10px;
+`;
+
 const Info = () => {
 	const theme = useTheme();
 	return (
@@ -53,7 +66,7 @@ const Info = () => {
 			<Typography
 				variant="subtitle2"
 				css={css({
-					margin: '21px 0',
+					margin: '21px 0 16px 0',
 				})}
 			>
 				You may find the answer to your question in the following common topics:
@@ -68,16 +81,12 @@ const Info = () => {
 					margin-top: 10px;
 				`}
 			>
-				<div>
-					<Typography
-						css={css`
-							margin: 0;
-						`}
-						variant="sectionHeader"
-						color="secondary"
-						bold
-						as="div"
-					>
+				<div
+					css={css`
+						font-size: 14px;
+					`}
+				>
+					<Typography css={titleCss} variant="sectionHeader" color="secondary" as="div">
 						Accessing Controlled Data{' '}
 					</Typography>
 					You will need to{' '}
@@ -90,18 +99,10 @@ const Info = () => {
 					</Link>
 				</div>
 				<div>
-					<Typography
-						css={css`
-							margin: 0;
-						`}
-						variant="sectionHeader"
-						color="secondary"
-						bold
-						as="div"
-					>
+					<Typography css={titleCss} variant="sectionHeader" color="secondary" bold as="div">
 						Downloading Data
 					</Typography>
-					<ul>
+					<ul css={ulCss}>
 						<li>
 							<Link target="_blank" rel="noreferrer noopener" href={DOCS_DATA_DOWNLOAD_PAGE}>
 								How to download data
@@ -116,18 +117,10 @@ const Info = () => {
 					</ul>
 				</div>
 				<div>
-					<Typography
-						css={css`
-							margin: 0;
-						`}
-						variant="subtitle2"
-						color="secondary"
-						bold
-						as="div"
-					>
+					<Typography css={titleCss} variant="subtitle2" color="secondary" bold as="div">
 						Submitting Data
 					</Typography>
-					<ul>
+					<ul css={ulCss}>
 						<li>
 							<Link target="_blank" rel="noreferrer noopener" href={DOCS_SUBMISSION_OVERVIEW_PAGE}>
 								Get started:

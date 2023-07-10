@@ -28,6 +28,8 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { AuthProvider } from '@/global/utils/auth';
 import Header from './components/Header';
 import ThemeProvider from './components/ThemeProvider';
+import { css } from '@/lib/emotion';
+import Footer from './components/Footer';
 
 const queryClient = new QueryClient();
 
@@ -38,8 +40,17 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 				<ThemeProvider>
 					<QueryClientProvider client={queryClient}>
 						<AuthProvider>
-							<Header />
-							{children}
+							<div
+								css={css`
+									display: grid;
+									grid-template-rows: 58px 1fr 59px; /* header + content + footer*/
+									min-height: 100vh;
+								`}
+							>
+								<Header />
+								{children}
+								<Footer />
+							</div>
 						</AuthProvider>
 					</QueryClientProvider>
 				</ThemeProvider>
