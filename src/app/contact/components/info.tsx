@@ -81,11 +81,11 @@ const Info = () => {
 						Accessing Controlled Data{' '}
 					</Typography>
 					You will need to{' '}
-					<Link target="_blank" href={DACO_ROOT}>
+					<Link target="_blank" rel="noreferrer noopener" href={DACO_ROOT}>
 						apply to ICGC DACO
 					</Link>{' '}
 					in order to access controlled data. Visit our documentation for assistance with{' '}
-					<Link target="_blank" href={DOCS_DATA_ACCESS_PAGE}>
+					<Link target="_blank" rel="noreferrer noopener" href={DOCS_DATA_ACCESS_PAGE}>
 						applying for access to controlled data.
 					</Link>
 				</div>
@@ -103,7 +103,7 @@ const Info = () => {
 					</Typography>
 					<ul>
 						<li>
-							<Link target="_blank" href={DOCS_DATA_DOWNLOAD_PAGE}>
+							<Link target="_blank" rel="noreferrer noopener" href={DOCS_DATA_DOWNLOAD_PAGE}>
 								How to download data
 							</Link>{' '}
 							using the API Token and score-client
@@ -129,26 +129,34 @@ const Info = () => {
 					</Typography>
 					<ul>
 						<li>
-							<Link target="_blank" href={DOCS_SUBMISSION_OVERVIEW_PAGE}>
+							<Link target="_blank" rel="noreferrer noopener" href={DOCS_SUBMISSION_OVERVIEW_PAGE}>
 								Get started:
 							</Link>{' '}
 							a quick guide to data submission
 						</li>
 						<li>
 							How to{' '}
-							<Link target="_blank" href={DOCS_REGISTERING_SAMPLES_PAGE}>
+							<Link target="_blank" rel="noreferrer noopener" href={DOCS_REGISTERING_SAMPLES_PAGE}>
 								register samples
 							</Link>
 						</li>
 						<li>
 							How to{' '}
-							<Link target="_blank" href={DOCS_SUBMITTING_CLINICAL_DATA_PAGE}>
+							<Link
+								target="_blank"
+								rel="noreferrer noopener"
+								href={DOCS_SUBMITTING_CLINICAL_DATA_PAGE}
+							>
 								submit clinical data
 							</Link>
 						</li>
 						<li>
 							How to{' '}
-							<Link target="_blank" href={DOCS_SUBMITTING_MOLECULAR_DATA_PAGE}>
+							<Link
+								target="_blank"
+								rel="noreferrer noopener"
+								href={DOCS_SUBMITTING_MOLECULAR_DATA_PAGE}
+							>
 								submit molecular data
 							</Link>
 						</li>
@@ -157,7 +165,7 @@ const Info = () => {
 
 				<div>
 					<Button variant="secondary">
-						<Link underline={false} target="_blank" href={DOCS_URL_ROOT}>
+						<Link underline={false} target="_blank" rel="noreferrer noopener" href={DOCS_URL_ROOT}>
 							More Documentation
 						</Link>
 					</Button>
