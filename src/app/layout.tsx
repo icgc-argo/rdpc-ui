@@ -29,14 +29,12 @@ import { AuthProvider } from '@/global/utils/auth';
 import Header from './components/Header';
 import ThemeProvider from './components/ThemeProvider';
 
-const workSans = Work_Sans({ subsets: ['latin'] });
-
 const queryClient = new QueryClient();
 
 export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en">
-			<body className={workSans.className}>
+			<body>
 				<ThemeProvider>
 					<QueryClientProvider client={queryClient}>
 						<AuthProvider>
