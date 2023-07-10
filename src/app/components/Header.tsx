@@ -30,7 +30,11 @@ const Header = () => {
 
 	return (
 		<header>
-			<AppBar>
+			<AppBar
+				css={css`
+					border-bottom: none;
+				`}
+			>
 				<div css={css({ height: '30px', width: '208px', position: 'relative' })}>
 					<Link href="/">
 						<Image alt="ICGC ARGO" src={argoLogo} fill />
