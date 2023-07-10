@@ -50,7 +50,6 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
 
 					body {
 						line-height: 1.5;
-						-webkit-font-smoothing: antialiased;
 						font-family: ${workSans.style.fontFamily};
 					}
 
