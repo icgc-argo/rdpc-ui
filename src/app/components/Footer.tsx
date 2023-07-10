@@ -119,7 +119,7 @@ export default function Footer() {
 							margin-right: 22px;
 						`}
 					>
-						{links.map(({ displayName, href, target }, idx) => (
+						{links.map(({ displayName, href, target }, index) => (
 							<>
 								<Link
 									target={target}
@@ -131,7 +131,7 @@ export default function Footer() {
 								>
 									{displayName}
 								</Link>
-								{idx !== links.length - 1 && (
+								{index !== links.length - 1 && (
 									<Icon width="12px" height="12px" name="slash" fill="grey_1" />
 								)}
 							</>
