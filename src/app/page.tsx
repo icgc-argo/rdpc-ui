@@ -141,10 +141,10 @@ const ActionBox: ComponentType = () => (
 
 export default function Home() {
 	return (
-		<>
+		<main>
 			<Hero />
 			<ActionBox />
 			<OvertureBanner />
-		</>
+		</main>
 	);
 }
