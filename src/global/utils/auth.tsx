@@ -16,34 +16,71 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+'use client';
 
-import { createContext, Dispatch, ReactNode, SetStateAction, useState, useContext } from 'react';
+import {
+	createContext,
+	Dispatch,
+	ReactNode,
+	SetStateAction,
+	Suspense,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 import Cookies from 'js-cookie';
-import { EGO_JWT_KEY } from './constants';
+import { usePathname } from 'next/navigation';
+import Header from '@/app/components/Header';
+import { DnaLoader } from '@icgc-argo/uikit';
+import { EGO_JWT_KEY } from '../constants';
 
 type AuthContextValue = {
 	egoJwt: string;
 	setEgoJwt: Dispatch<SetStateAction<string>>;
+	loggingIn: boolean;
+	setLoggingIn: Dispatch<SetStateAction<boolean>>;
 };
 
 const AuthContext = createContext<AuthContextValue>({
 	egoJwt: '',
 	setEgoJwt: () => '',
+	loggingIn: false,
+	setLoggingIn: () => false,
 });
 
-export const useAuthContext = () => useContext(AuthContext);
+export const getStoredToken = () => Cookies.get(EGO_JWT_KEY);
 
-const removeToken = () => {
-	Cookies.remove(EGO_JWT_KEY);
+export const storeToken = (egoToken: string) => {
+	Cookies.set(EGO_JWT_KEY, egoToken);
 };
 
 export const logOut = () => {
-	removeToken();
+	Cookies.remove(EGO_JWT_KEY);
 };
 
-export default function AuthProvider({ children }: { children: ReactNode }) {
-	const storedToken = Cookies.get(EGO_JWT_KEY);
+export function AuthProvider({ children }: { children: ReactNode }) {
+	const storedToken = getStoredToken();
 	const [egoJwt, setEgoJwt] = useState(storedToken || '');
-	const authData = { egoJwt, setEgoJwt };
-	return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;
+	const path = usePathname();
+	const initLoginState = path === '/logging-in' && !egoJwt.length ? true : false;
+	const [loggingIn, setLoggingIn] = useState(initLoginState);
+
+	const value: AuthContextValue = { egoJwt, setEgoJwt, loggingIn, setLoggingIn };
+
+	return (
+		<AuthContext.Provider value={value}>
+			<Suspense
+				fallback={
+					<>
+						<Header />
+						<DnaLoader />
+					</>
+				}
+			>
+				{children}
+			</Suspense>
+		</AuthContext.Provider>
+	);
 }
+
+export const useAuthContext = () => useContext(AuthContext);
