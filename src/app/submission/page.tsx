@@ -16,19 +16,11 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 'use client';
 
 import { ReactNode } from 'react';
-import SideMenu from './components/Sidemenu';
-import TitleBar from './components/TitleBar';
-import ProgramList from './components/ProgramList';
 
-export default function SubmissionLayout({ children }: { children: ReactNode }) {
-	return (
-		<div>
-			<SideMenu children={undefined} />
-			<TitleBar children={undefined} />
-			<ProgramList children={undefined} />
-		</div>
-	);
+export default function Submission({ children }: { children: ReactNode }) {
+	return <div>Submission page</div>;
 }

@@ -19,16 +19,7 @@
 'use client';
 
 import { ReactNode } from 'react';
-import SideMenu from './components/Sidemenu';
-import TitleBar from './components/TitleBar';
-import ProgramList from './components/ProgramList';
 
-export default function SubmissionLayout({ children }: { children: ReactNode }) {
-	return (
-		<div>
-			<SideMenu children={undefined} />
-			<TitleBar children={undefined} />
-			<ProgramList children={undefined} />
-		</div>
-	);
+export default function ProgramList({ children }: { children: ReactNode }) {
+	return <div>ProgramList</div>;
 }
