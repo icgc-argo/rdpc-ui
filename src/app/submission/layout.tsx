@@ -17,32 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * React.Context, used by ThemeProvider, doesn't work server side so we're defaulting to client side rendering
- */
-'use client';
-
-import { AuthProvider } from '@/global/utils/auth';
 import { ReactNode } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import Header from './components/Header';
-import ThemeProvider from './components/ThemeProvider';
 
-const queryClient = new QueryClient();
-
-export default function RootLayout({ children }: { children: ReactNode }) {
-	return (
-		<html lang="en">
-			<body>
-				<ThemeProvider>
-					<QueryClientProvider client={queryClient}>
-						<AuthProvider>
-							<Header />
-							{children}
-						</AuthProvider>
-					</QueryClientProvider>
-				</ThemeProvider>
-			</body>
-		</html>
-	);
+export default function SubmissionLayout({ children }: { children: ReactNode }) {
+	return <div>Layout for submittions...</div>;
 }
