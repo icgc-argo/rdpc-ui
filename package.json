@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
+    "local-serve": "npm run build && cd dist && npx http-server .",
     "test": "echo 'Add tests please :)'"
   },
   "dependencies": {
