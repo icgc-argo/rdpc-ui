@@ -17,10 +17,28 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-type AppConfig = { ARGO_DOCS_URL_ROOT: string };
+import packageJSON from '../../package.json';
+
+type AppConfig = {
+	DOCS_URL_ROOT: string;
+	EGO_API_ROOT: string;
+	EGO_CLIENT_ID: string;
+	EGO_PUBLIC_KEY: string;
+	REGION: string;
+	UI_VERSION: string;
+	PLATFORM_UI_ROOT: string;
+	RECAPTCHA_SITE_KEY: string;
+};
 
 export const getAppConfig = (): AppConfig => {
 	return {
-		ARGO_DOCS_URL_ROOT: process.env.NEXT_PUBLIC_ARGO_DOCS_URL_ROOT || '',
+		DOCS_URL_ROOT: process.env.NEXT_PUBLIC_DOCS_URL_ROOT || 'https://docs.icgc-argo.org/',
+		EGO_API_ROOT: process.env.NEXT_PUBLIC_EGO_API_ROOT || 'http://localhost:8081',
+		EGO_CLIENT_ID: process.env.EGO_CLIENT_ID || 'rdpc-ui-local',
+		EGO_PUBLIC_KEY: process.env.EGO_PUBLIC_KEY || '',
+		UI_VERSION: packageJSON.version,
+		REGION: process.env.NEXT_PUBLIC_REGION || '',
+		PLATFORM_UI_ROOT: process.env.NEXT_PUBLIC_PLATFORM_UI_ROOT || '',
+		RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '',
 	};
 };
