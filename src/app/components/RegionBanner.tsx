@@ -17,44 +17,22 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * React.Context, used by ThemeProvider, doesn't work server side so we're defaulting to client side rendering
- */
-'use client';
+import { css } from '@icgc-argo/uikit';
 
-import { Work_Sans } from 'next/font/google';
-import { ReactNode } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { AuthProvider } from '@/global/utils/auth';
-import Header from './components/Header';
-import ThemeProvider from './components/ThemeProvider';
-import { css } from '@/lib/emotion';
-import Footer from './components/Footer';
+const RegionBanner = ({ region }: { region: string }) => (
+	<div
+		css={css({
+			borderRadius: '3px',
+			backgroundColor: '#0774d3',
+			padding: '4px 8px',
+			color: 'white',
+			fontSize: '24px',
+			display: 'flex',
+			alignItems: 'center',
+		})}
+	>
+		{region}
+	</div>
+);
 
-const queryClient = new QueryClient();
-
-export default function RootLayout({ children }: { children: ReactNode }) {
-	return (
-		<html lang="en">
-			<body>
-				<ThemeProvider>
-					<QueryClientProvider client={queryClient}>
-						<AuthProvider>
-							<div
-								css={css`
-									display: grid;
-									grid-template-rows: 58px 1fr 59px; /* header + content + footer*/
-									min-height: 100vh;
-								`}
-							>
-								<Header />
-								{children}
-								<Footer />
-							</div>
-						</AuthProvider>
-					</QueryClientProvider>
-				</ThemeProvider>
-			</body>
-		</html>
-	);
-}
+export default RegionBanner;

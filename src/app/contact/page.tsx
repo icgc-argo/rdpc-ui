@@ -16,53 +16,27 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+'use client';
 
-import { css, defaultTheme, ThemeProvider as UIKitThemeProvider, Global } from '@/lib/emotion';
+import { css, useTheme } from '@icgc-argo/uikit';
+import { Row } from 'react-grid-system';
+import Form from './components/form';
+import Info from './components/info';
 
-export default function ThemeProvider({ children }: { children: React.ReactNode }) {
+const Contact = () => {
+	const theme = useTheme();
 	return (
-		<>
-			<Global
-				styles={css`
-					*,
-					*::before,
-					*::after {
-						box-sizing: border-box;
-					}
-
-					* {
-						margin: 0;
-					}
-
-					body {
-						line-height: 1.5;
-						-webkit-font-smoothing: antialiased;
-					}
-
-					input,
-					button,
-					textarea,
-					select {
-						font: inherit;
-					}
-
-					p,
-					h1,
-					h2,
-					h3,
-					h4,
-					h5,
-					h6 {
-						overflow-wrap: break-word;
-					}
-
-					#root,
-					#__next {
-						isolation: isolate;
-					}
-				`}
-			/>
-			<UIKitThemeProvider theme={defaultTheme}>{children}</UIKitThemeProvider>
-		</>
+		<Row
+			nogutter
+			css={css`
+				height: 100%;
+				background: ${theme.colors.white};
+			`}
+		>
+			<Info />
+			<Form />
+		</Row>
 	);
-}
+};
+
+export default Contact;
