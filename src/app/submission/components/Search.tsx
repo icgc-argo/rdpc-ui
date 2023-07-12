@@ -19,38 +19,27 @@
 'use client';
 
 import { css } from '@/lib/emotion';
-import { useTheme } from '@emotion/react';
-import { ReactNode } from 'react';
-import ProgramList from './components/ProgramList';
-import SideMenu from './components/Sidemenu';
-import TitleBar from './components/TitleBar';
+import { Input, MenuItem } from '@icgc-argo/uikit';
 
-export default function SubmissionLayout({ children }: { children: ReactNode }) {
-	const theme = useTheme();
+export default function Search({ query, onChange }: { query: string; onChange: any }) {
 	return (
-		<div
-			css={css`
-				display: grid;
-				grid-template-columns: 248px 1fr;
-			`}
-		>
-			<SideMenu programs={[]} />
-			<div>
-				<TitleBar />
-				<div
-					id="content"
+		<MenuItem
+			level={1}
+			selected
+			contentAs="div"
+			content={
+				<Input
+					aria-label="programs search"
+					onChange={(e) => {
+						onChange(e.target.value);
+					}}
+					value={query}
 					css={css`
-						background: ${theme.colors.grey_4};
-						padding: 40px;
-
-						> div {
-							background: white;
-						}
+						flex: 1;
 					`}
-				>
-					<ProgramList children={undefined} />
-				</div>
-			</div>
-		</div>
+					preset="search"
+				/>
+			}
+		/>
 	);
 }
