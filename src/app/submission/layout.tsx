@@ -20,6 +20,7 @@
 
 import { css, useTheme } from '@/lib/emotion';
 import { ReactNode } from 'react';
+import ProgramList from './components/ProgramList';
 import SideMenu from './components/Sidemenu';
 import TitleBar from './components/TitleBar';
 
