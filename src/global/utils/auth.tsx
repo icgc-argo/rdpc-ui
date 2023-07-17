@@ -18,19 +18,19 @@
  */
 'use client';
 
+import Header from '@/app/components/Header';
+import { DnaLoader } from '@icgc-argo/uikit';
+import Cookies from 'js-cookie';
+import { usePathname, useRouter } from 'next/navigation';
 import {
-	createContext,
 	Dispatch,
 	ReactNode,
 	SetStateAction,
 	Suspense,
+	createContext,
 	useContext,
 	useState,
 } from 'react';
-import Cookies from 'js-cookie';
-import { usePathname, useRouter } from 'next/navigation';
-import Header from '@/app/components/Header';
-import { DnaLoader } from '@icgc-argo/uikit';
 import { EGO_JWT_KEY, LOGIN_NONCE } from '../constants';
 
 type AuthContextValue = {
@@ -38,7 +38,7 @@ type AuthContextValue = {
 	setEgoJwt: Dispatch<SetStateAction<string>>;
 	authLoading: boolean;
 	setAuthLoading: Dispatch<SetStateAction<boolean>>;
-	logOut: Function;
+	logOut: () => void;
 };
 
 const AuthContext = createContext<AuthContextValue>({
@@ -46,7 +46,7 @@ const AuthContext = createContext<AuthContextValue>({
 	setEgoJwt: () => '',
 	authLoading: false,
 	setAuthLoading: () => false,
-	logOut: () => {},
+	logOut: () => undefined,
 });
 
 export const getStoredToken = () => Cookies.get(EGO_JWT_KEY);
