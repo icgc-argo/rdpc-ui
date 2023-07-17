@@ -18,62 +18,15 @@
  */
 'use client';
 
-import { useState } from 'react';
-import {
-	AppBar,
-	AppBarMenuItem,
-	DnaLoader,
-	DropdownMenu,
-	FocusWrapper,
-	Link,
-	NavBarElement,
-	NavElement,
-	UserBadge,
-} from '@icgc-argo/uikit';
-import { Theme } from '@icgc-argo/uikit/ThemeProvider';
+import { useAuthContext } from '@/global/utils/auth';
+import { css, useTheme } from '@/lib/emotion';
+import { AppBar, AppBarMenuItem, DnaLoader, Link, NavElement } from '@icgc-argo/uikit';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import argoLogo from '/public/argo-logo.svg';
-import { css, useTheme } from '@/lib/emotion';
-import { useAuthContext } from '@/global/utils/auth';
+import { useState } from 'react';
 import LoginButton from './LoginButton';
-
-const ProfileMenu = ({
-	isDropdownOpen,
-	onProfilePage,
-	onClick,
-	profileNavDetails,
-	theme,
-}: {
-	isDropdownOpen: boolean;
-	onProfilePage: boolean;
-	onClick: () => void;
-	profileNavDetails: NavElement[];
-	theme: Theme;
-}) => (
-	<FocusWrapper onClick={onClick}>
-		{isDropdownOpen && (
-			<DropdownMenu>
-				{profileNavDetails.map((element, idx) => (
-					<NavBarElement key={`profileNavDetail_${idx}`} {...element} isDropdown={true} />
-				))}
-			</DropdownMenu>
-		)}
-		<UserBadge
-			showGreeting={true}
-			firstName={'Test'}
-			lastName={'User'}
-			title={'DCC Member'}
-			className={onProfilePage ? 'active' : ''}
-			css={css`
-				color: ${onProfilePage ? theme.colors.accent1 : theme.colors.white};
-				&:hover {
-					color: ${theme.colors.accent1};
-				}
-			`}
-		/>
-	</FocusWrapper>
-);
+import ProfileMenu from './ProfileMenu';
+import argoLogo from '/public/argo-logo.svg';
 
 const Header = () => {
 	const [isDropdownOpen, setDropdownOpen] = useState(false);
