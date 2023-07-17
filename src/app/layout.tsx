@@ -22,7 +22,6 @@
  */
 'use client';
 
-import { Work_Sans } from 'next/font/google';
 import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { AuthProvider } from '@/global/utils/auth';
