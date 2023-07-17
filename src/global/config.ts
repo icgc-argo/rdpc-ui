@@ -27,6 +27,7 @@ type AppConfig = {
 	REGION: string;
 	UI_VERSION: string;
 	PLATFORM_UI_ROOT: string;
+	RECAPTCHA_SITE_KEY: string;
 };
 
 export const getAppConfig = (): AppConfig => {
@@ -38,5 +39,6 @@ export const getAppConfig = (): AppConfig => {
 		UI_VERSION: packageJSON.version,
 		REGION: process.env.NEXT_PUBLIC_REGION || '',
 		PLATFORM_UI_ROOT: process.env.NEXT_PUBLIC_PLATFORM_UI_ROOT || '',
+		RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '',
 	};
 };

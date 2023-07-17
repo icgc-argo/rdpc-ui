@@ -29,7 +29,33 @@ export const ARGO_TERMS_PAGE = urljoin(ARGO_ROOT, '/page/1/terms-and-conditions'
 export const ARGO_PUBLICATION_PAGE = urljoin(ARGO_ROOT, '/page/77/e3-publication-policy');
 
 // Docs
+export const DOCS_DATA_ACCESS_PAGE = urljoin(DOCS_URL_ROOT, '/docs/data-access/daco/applying');
+export const DOCS_DATA_DOWNLOAD_PAGE = urljoin(DOCS_URL_ROOT, '/docs/data-access/data-download');
+export const DOCS_API_TOKEN_PAGE = urljoin(
+	DOCS_URL_ROOT,
+	'/docs/data-access/user-profile-and-api-token',
+);
+export const DOCS_SUBMISSION_OVERVIEW_PAGE = urljoin(
+	DOCS_URL_ROOT,
+	'/docs/submission/submission-overview',
+);
+export const DOCS_REGISTERING_SAMPLES_PAGE = urljoin(
+	DOCS_URL_ROOT,
+	'/docs/submission/registering-samples',
+);
+export const DOCS_SUBMITTING_CLINICAL_DATA_PAGE = urljoin(
+	DOCS_URL_ROOT,
+	'/docs/submission/submitting-clinical-data',
+);
+export const DOCS_SUBMITTING_MOLECULAR_DATA_PAGE = urljoin(
+	DOCS_URL_ROOT,
+	'/docs/submission/submitting-molecular-data',
+);
+
 export { DOCS_URL_ROOT };
+
+// Daco
+export const DACO_ROOT = 'https://daco.icgc-argo.org/';
 
 // Platform
 export { PLATFORM_UI_ROOT };
