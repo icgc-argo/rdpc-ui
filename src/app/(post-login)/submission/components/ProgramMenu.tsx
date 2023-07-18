@@ -18,6 +18,11 @@
  */
 'use client';
 
+import { MenuItem } from '@icgc-argo/uikit';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+
 export default function ProgramMenu({
 	programs,
 	searchQuery,
@@ -25,5 +30,44 @@ export default function ProgramMenu({
 	programs: { shortName: string }[];
 	searchQuery: string;
 }) {
-	return <div>ProgramMenu</div>;
+	const pathname = usePathname();
+	const [activeProgramIndex, setActiveProgramIndex] = useState(-1);
+
+	const filteredPrograms = programs.filter(
+		({ shortName }) => !searchQuery.length || shortName.search(new RegExp(searchQuery, 'i')) > -1,
+	);
+	//const currentViewingProgramIndex = filteredPrograms;
+	// 	.map(({ shortName }) => shortName)
+	// 	.indexOf(String(pageContext.query.shortName));
+	// const { activeItem: activeProgramIndex, toggleItem: toggleProgramIndex } = useToggledSelectState(
+	// 	currentViewingProgramIndex,
+	// );
+	return (
+		<>
+			<Link href="/submission">
+				<MenuItem
+					level={2}
+					content="All Programs"
+					onClick={() => setActiveProgramIndex(-1)}
+					selected={pathname === '/submission'}
+				/>
+			</Link>
+
+			{filteredPrograms.map((program, programIndex) => (
+				<MenuItem
+					level={2}
+					key={program.shortName}
+					content={program.shortName}
+					onClick={() => setActiveProgramIndex(programIndex)}
+					selected={programIndex === activeProgramIndex}
+				>
+					<MenuItem level={3}>{program.shortName}</MenuItem>
+					{/* <LinksToProgram
+						program={program}
+						isCurrentlyViewed={programIndex === currentViewingProgramIndex}
+					/> */}
+				</MenuItem>
+			))}
+		</>
+	);
 }

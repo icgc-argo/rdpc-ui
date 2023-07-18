@@ -18,6 +18,45 @@
  */
 'use client';
 
+import { css, useTheme } from '@/lib/emotion';
+import { Icon, MenuItem, SubMenu } from '@icgc-argo/uikit';
+import { useState } from 'react';
+import ProgramMenu from './ProgramMenu';
+import Search from './Search';
+
 export default function SideMenu({ programs }: { programs: any[] }) {
-	return <div>SideMenu</div>;
+	const theme = useTheme();
+	const [isOpen, setOpen] = useState<boolean>(true);
+	const [programNameSearch, setProgramNameSearch] = useState('');
+	// const getPathName
+	return (
+		<div
+			css={css`
+				z-index: 1;
+				background: ${theme.colors.white};
+				box-shadow: ${theme.shadows.pageElement};
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				transition-duration: 10s;
+				transition-property: width;
+				width: ${isOpen ? 'auto' : '0'};
+			`}
+		>
+			<SubMenu>
+				<MenuItem icon={<Icon name="programs" />} content={'My Programs'} selected>
+					<Search query={programNameSearch} onChange={setProgramNameSearch} />
+					<ProgramMenu programs={programs.slice(0, 10)} searchQuery={programNameSearch} />
+				</MenuItem>
+			</SubMenu>
+			<div
+				css={css`
+					margin: 40px 0;
+				`}
+				onClick={() => setOpen((isOpen) => !isOpen)}
+			>
+				Collapse {JSON.stringify(isOpen)}
+			</div>
+		</div>
+	);
 }
