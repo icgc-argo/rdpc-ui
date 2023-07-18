@@ -24,7 +24,7 @@ import SideMenu from './components/Sidemenu';
 import TitleBar from './components/TitleBar';
 import { TEMP_DATA } from './data.temp';
 
-export default function SubmissionLayout({ children }: { children: ReactNode }) {
+export default function AppLayout({ children }: { children: ReactNode }) {
 	const theme = useTheme();
 
 	return (
