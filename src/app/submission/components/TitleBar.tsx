@@ -57,7 +57,3 @@ export default function TitleBar() {
 		</div>
 	);
 }
-
-/**
- * Add alias to TS autocomplate/autoimport
- */

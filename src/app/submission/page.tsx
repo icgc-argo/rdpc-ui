@@ -20,7 +20,9 @@
 'use client';
 
 import { ReactNode } from 'react';
+import ProgramList from './components/ProgramList';
+import { TEMP_DATA } from './data.temp';
 
 export default function Submission({ children }: { children: ReactNode }) {
-	return <div>Submission page</div>;
+	return <ProgramList programs={TEMP_DATA} />;
 }

@@ -18,10 +18,8 @@
  */
 'use client';
 
-import { css } from '@/lib/emotion';
-import { useTheme } from '@emotion/react';
+import { css, useTheme } from '@/lib/emotion';
 import { ReactNode } from 'react';
-import ProgramList from './components/ProgramList';
 import SideMenu from './components/Sidemenu';
 import TitleBar from './components/TitleBar';
 
@@ -42,13 +40,14 @@ export default function SubmissionLayout({ children }: { children: ReactNode }) 
 					css={css`
 						background: ${theme.colors.grey_4};
 						padding: 40px;
+						height: 100%;
 
 						> div {
 							background: white;
 						}
 					`}
 				>
-					<ProgramList children={undefined} />
+					{children}
 				</div>
 			</div>
 		</div>

@@ -16,45 +16,10 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 'use client';
 
-import { useTheme } from '@/lib/emotion';
-import { Table, Typography, css } from '@icgc-argo/uikit';
-import { columns } from '../tableConfig';
-
-export default function ProgramList({ programs }: { programs: any[] }) {
-	const theme = useTheme();
-	const programsArraySize = programs.length;
-
-	return (
-		<div
-			css={css`
-				padding: 16px 15px 6px;
-			`}
-		>
-			<Typography
-				variant="label"
-				css={css`
-					color: ${theme.colors.grey};
-					min-height: 32px;
-					display: flex;
-					align-items: center;
-					margin-bottom: 8px;
-				`}
-			>
-				{programsArraySize.toLocaleString()} results
-			</Typography>
-			<Table
-				data={programs}
-				columns={columns}
-				withSideBorders
-				withRowBorder
-				withStripes
-				withHeaders
-				withPagination
-				showPageSizeOptions
-				loading={false}
-			/>
-		</div>
-	);
+import { ReactNode } from 'react';
+export default function Program({ children }: { children: ReactNode }) {
+	return <div>Program</div>;
 }
