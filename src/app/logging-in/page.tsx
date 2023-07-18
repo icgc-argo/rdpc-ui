@@ -22,15 +22,15 @@ import { useRouter } from 'next/navigation';
 import { useQuery } from 'react-query';
 import urlJoin from 'url-join';
 
-import { css, DnaLoader, useTheme } from '@icgc-argo/uikit';
 import { getAppConfig } from '@/global/config';
-import { storeToken, useAuthContext } from '@/global/utils/auth';
+import { useAuthContext } from '@/global/utils/auth';
+import { DnaLoader, css, useTheme } from '@icgc-argo/uikit';
 
 export default async function LoggingIn() {
 	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
 	const router = useRouter();
 	const theme = useTheme();
-	const { egoJwt, setEgoJwt, authLoading, setAuthLoading } = useAuthContext();
+	const { egoJwt, authLoading, setAuthLoading, logIn } = useAuthContext();
 	const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
 
 	if (egoJwt) router.push('/landing-page');
@@ -47,9 +47,7 @@ export default async function LoggingIn() {
 		})
 			.then(async (res) => {
 				const newToken = await res.text();
-				storeToken(newToken);
-				setEgoJwt(newToken);
-				setAuthLoading(false);
+				logIn(newToken);
 			})
 			.catch(console.error);
 	});

@@ -38,6 +38,7 @@ type AuthContextValue = {
 	setEgoJwt: Dispatch<SetStateAction<string>>;
 	authLoading: boolean;
 	setAuthLoading: Dispatch<SetStateAction<boolean>>;
+	logIn: (newToken: string) => void;
 	logOut: () => void;
 };
 
@@ -46,6 +47,7 @@ const AuthContext = createContext<AuthContextValue>({
 	setEgoJwt: () => '',
 	authLoading: false,
 	setAuthLoading: () => false,
+	logIn: () => undefined,
 	logOut: () => undefined,
 });
 
@@ -63,6 +65,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	const loginStateOnPageLoad = path === '/logging-in' && !egoJwt.length;
 	const [authLoading, setAuthLoading] = useState(loginStateOnPageLoad);
 
+	const logIn = (newToken: string) => {
+		storeToken(newToken);
+		setEgoJwt(newToken);
+		setAuthLoading(false);
+	};
+
 	const logOut = () => {
 		setAuthLoading(true);
 		setEgoJwt('');
@@ -72,7 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		setAuthLoading(false);
 	};
 
-	const value: AuthContextValue = { egoJwt, setEgoJwt, authLoading, setAuthLoading, logOut };
+	const value: AuthContextValue = { egoJwt, setEgoJwt, authLoading, setAuthLoading, logIn, logOut };
 
 	return (
 		<AuthContext.Provider value={value}>
