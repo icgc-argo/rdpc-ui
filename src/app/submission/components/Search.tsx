@@ -18,28 +18,6 @@
  */
 'use client';
 
-import { css } from '@/lib/emotion';
-import { Input, MenuItem } from '@icgc-argo/uikit';
-
 export default function Search({ query, onChange }: { query: string; onChange: any }) {
-	return (
-		<MenuItem
-			level={1}
-			selected
-			contentAs="div"
-			content={
-				<Input
-					aria-label="programs search"
-					onChange={(e) => {
-						onChange(e.target.value);
-					}}
-					value={query}
-					css={css`
-						flex: 1;
-					`}
-					preset="search"
-				/>
-			}
-		/>
-	);
+	return <div>Search</div>;
 }
