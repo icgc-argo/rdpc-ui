@@ -18,9 +18,6 @@
  */
 'use client';
 
-import { MenuItem } from '@icgc-argo/uikit';
-import Link from 'next/link';
-
 export default function ProgramMenu({
 	programs,
 	searchQuery,
@@ -28,39 +25,5 @@ export default function ProgramMenu({
 	programs: { shortName: string }[];
 	searchQuery: string;
 }) {
-	const filteredPrograms = programs.filter(
-		({ shortName }) => !searchQuery.length || shortName.search(new RegExp(searchQuery, 'i')) > -1,
-	);
-	//const currentViewingProgramIndex = filteredPrograms;
-	// 	.map(({ shortName }) => shortName)
-	// 	.indexOf(String(pageContext.query.shortName));
-	// const { activeItem: activeProgramIndex, toggleItem: toggleProgramIndex } = useToggledSelectState(
-	// 	currentViewingProgramIndex,
-	// );
-	return (
-		<>
-			<Link href={'PROGRAMS_LIST_PATH'}>
-				<MenuItem
-					level={2}
-					content={'All Programs'}
-					//selected={pageContext.pathname === PROGRAMS_LIST_PATH}
-				/>
-			</Link>
-
-			{filteredPrograms.map((program, programIndex) => (
-				<MenuItem
-					key={program.shortName}
-					content={program.shortName}
-					//onClick={() => toggleProgramIndex(programIndex)}
-					//selected={programIndex === activeProgramIndex}
-				>
-					{program.shortName}
-					{/* <LinksToProgram
-						program={program}
-						isCurrentlyViewed={programIndex === currentViewingProgramIndex}
-					/> */}
-				</MenuItem>
-			))}
-		</>
-	);
+	return <div>ProgramMenu</div>;
 }
