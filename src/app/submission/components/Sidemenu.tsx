@@ -46,18 +46,13 @@ export default function SideMenu({ programs }: { programs: any[] }) {
 				justify-content: space-between;
 			`}
 		>
-			{JSON.stringify(programNameSearch)}
-			<Search query={programNameSearch} onChange={setProgramNameSearch} />
-			<ProgramMenu
-				programs={[{ shortName: 'CIA-IE' }, { shortName: 'BAZ-IE' }]}
-				searchQuery={programNameSearch}
-			/>
 			<SubMenu>
-				<MenuItem icon={<Icon name="programs" />} content={'My Programs'} selected noChevron>
-					<div>SearchBar</div>
-					<MenuItem key={'ley'} content={'shortname'} selected noChevron>
-						MenuItem{' '}
-					</MenuItem>
+				<MenuItem icon={<Icon name="programs" />} content={'My Programs'} selected>
+					<Search query={programNameSearch} onChange={setProgramNameSearch} />
+					<ProgramMenu
+						programs={[{ shortName: 'CIA-IE' }, { shortName: 'BAZ-IE' }]}
+						searchQuery={programNameSearch}
+					/>
 				</MenuItem>
 			</SubMenu>
 		</div>
