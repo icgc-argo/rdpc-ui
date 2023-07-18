@@ -18,43 +18,6 @@
  */
 'use client';
 
-import { css, useTheme } from '@/lib/emotion';
-import { Icon, MenuItem, SubMenu } from '@icgc-argo/uikit';
-import { useState } from 'react';
-import ProgramMenu from './ProgramMenu';
-import Search from './Search';
-
-/**
- *
- * derive state don't hardcode
- * take programs and active whatever
- * network requests level above
- */
-
 export default function SideMenu({ programs }: { programs: any[] }) {
-	const theme = useTheme();
-	const [programNameSearch, setProgramNameSearch] = useState('');
-
-	return (
-		<div
-			css={css`
-				z-index: 1;
-				background: ${theme.colors.white};
-				box-shadow: ${theme.shadows.pageElement};
-				display: flex;
-				flex-direction: column;
-				justify-content: space-between;
-			`}
-		>
-			<SubMenu>
-				<MenuItem icon={<Icon name="programs" />} content={'My Programs'} selected>
-					<Search query={programNameSearch} onChange={setProgramNameSearch} />
-					<ProgramMenu
-						programs={[{ shortName: 'CIA-IE' }, { shortName: 'BAZ-IE' }]}
-						searchQuery={programNameSearch}
-					/>
-				</MenuItem>
-			</SubMenu>
-		</div>
-	);
+	return <div>SideMenu</div>;
 }
