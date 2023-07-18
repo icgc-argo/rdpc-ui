@@ -18,50 +18,25 @@
  */
 'use client';
 
-import { useAuthContext } from '@/global/utils/auth';
-import { AppBar, css, DnaLoader, UserBadge } from '@icgc-argo/uikit';
-import Image from 'next/image';
-import Link from 'next/link';
-import LoginButton from './LoginButton';
-import argoLogo from '/public/argo-logo.svg';
+import { css, useTheme } from '@icgc-argo/uikit';
+import { Row } from 'react-grid-system';
+import Form from './components/form';
+import Info from './components/info';
 
-const Header = () => {
-	const { egoJwt, loggingIn } = useAuthContext();
-
+const Contact = () => {
+	const theme = useTheme();
 	return (
-		<header>
-			<AppBar
-				css={css`
-					border-bottom: none;
-				`}
-			>
-				<div css={css({ height: '30px', width: '208px', position: 'relative' })}>
-					<Link href="/">
-						<Image alt="ICGC ARGO" src={argoLogo} fill />
-					</Link>
-				</div>
-
-				{/** keep this div. header will have more items, will be "right-aligned" */}
-				<div>
-					{egoJwt ? (
-						<UserBadge
-							showGreeting={true}
-							firstName={'Test'}
-							lastName={'User'}
-							title={'DCC Member'}
-							css={css`
-								color: white;
-							`}
-						/>
-					) : loggingIn ? (
-						<DnaLoader />
-					) : (
-						<LoginButton />
-					)}
-				</div>
-			</AppBar>
-		</header>
+		<Row
+			nogutter
+			css={css`
+				height: 100%;
+				background: ${theme.colors.white};
+			`}
+		>
+			<Info />
+			<Form />
+		</Row>
 	);
 };
 
-export default Header;
+export default Contact;

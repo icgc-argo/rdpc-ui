@@ -18,7 +18,21 @@
  */
 // 'use client';
 
-import { css, defaultTheme, ThemeProvider as UIKitThemeProvider, Global } from '@/lib/emotion';
+import { Global, ThemeProvider as UIKitThemeProvider, css, defaultTheme } from '@/lib/emotion';
+import { mapValues } from 'lodash';
+import { Work_Sans } from 'next/font/google';
+
+/**
+ * Load font using Next apis
+ * merge this font style with default theme typography
+ * apply complete theme to project using ThemeProvider
+ */
+const workSans = Work_Sans({ subsets: ['latin'] });
+const typography = mapValues(defaultTheme.typography, (typography) => ({
+	...typography,
+	fontFamily: workSans.style.fontFamily,
+}));
+const theme = { ...defaultTheme, typography };
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
 	return (
@@ -37,7 +51,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
 
 					body {
 						line-height: 1.5;
-						-webkit-font-smoothing: antialiased;
+						font-family: ${workSans.style.fontFamily};
 					}
 
 					input,
@@ -63,7 +77,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
 					}
 				`}
 			/>
-			<UIKitThemeProvider theme={defaultTheme}>{children}</UIKitThemeProvider>
+			<UIKitThemeProvider theme={theme}>{children}</UIKitThemeProvider>
 		</>
 	);
 }

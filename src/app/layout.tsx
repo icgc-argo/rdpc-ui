@@ -22,26 +22,34 @@
  */
 'use client';
 
-import { Work_Sans } from 'next/font/google';
+import { AuthProvider } from '@/global/utils/auth';
+import { css } from '@/lib/emotion';
 import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { AuthProvider } from '@/global/utils/auth';
+import Footer from './components/Footer';
 import Header from './components/Header';
 import ThemeProvider from './components/ThemeProvider';
-
-const workSans = Work_Sans({ subsets: ['latin'] });
 
 const queryClient = new QueryClient();
 
 export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en">
-			<body className={workSans.className}>
+			<body>
 				<ThemeProvider>
 					<QueryClientProvider client={queryClient}>
 						<AuthProvider>
-							<Header />
-							{children}
+							<div
+								css={css`
+									display: grid;
+									grid-template-rows: 58px 1fr 59px; /* header + content + footer*/
+									min-height: 100vh;
+								`}
+							>
+								<Header />
+								{children}
+								<Footer />
+							</div>
 						</AuthProvider>
 					</QueryClientProvider>
 				</ThemeProvider>

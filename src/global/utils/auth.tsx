@@ -18,6 +18,10 @@
  */
 'use client';
 
+import Header from '@/app/components/Header';
+import { DnaLoader } from '@icgc-argo/uikit';
+import Cookies from 'js-cookie';
+import { usePathname } from 'next/navigation';
 import {
 	createContext,
 	Dispatch,
@@ -28,10 +32,6 @@ import {
 	useEffect,
 	useState,
 } from 'react';
-import Cookies from 'js-cookie';
-import { usePathname } from 'next/navigation';
-import Header from '@/app/components/Header';
-import { DnaLoader } from '@icgc-argo/uikit';
 import { EGO_JWT_KEY } from '../constants';
 
 type AuthContextValue = {
