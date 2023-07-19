@@ -21,31 +21,35 @@
 import Header from '@/app/components/Header';
 import { DnaLoader } from '@icgc-argo/uikit';
 import Cookies from 'js-cookie';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
-	createContext,
 	Dispatch,
 	ReactNode,
 	SetStateAction,
 	Suspense,
+	createContext,
 	useContext,
 	useEffect,
 	useState,
 } from 'react';
-import { EGO_JWT_KEY } from '../constants';
+import { EGO_JWT_KEY, LOGIN_NONCE } from '../constants';
 
 type AuthContextValue = {
 	egoJwt: string;
 	setEgoJwt: Dispatch<SetStateAction<string>>;
-	loggingIn: boolean;
-	setLoggingIn: Dispatch<SetStateAction<boolean>>;
+	authLoading: boolean;
+	setAuthLoading: Dispatch<SetStateAction<boolean>>;
+	logIn: (newToken: string) => void;
+	logOut: () => void;
 };
 
 const AuthContext = createContext<AuthContextValue>({
 	egoJwt: '',
 	setEgoJwt: () => '',
-	loggingIn: false,
-	setLoggingIn: () => false,
+	authLoading: false,
+	setAuthLoading: () => false,
+	logIn: () => undefined,
+	logOut: () => undefined,
 });
 
 export const getStoredToken = () => Cookies.get(EGO_JWT_KEY);
@@ -63,9 +67,25 @@ const LOCAL_AUTH_URL = 'http://localhost:3000/auth';
 export function AuthProvider({ children }: { children: ReactNode }) {
 	const storedToken = getStoredToken();
 	const [egoJwt, setEgoJwt] = useState(storedToken || '');
+	const router = useRouter();
 	const path = usePathname();
-	const initLoginState = path === '/logging-in' || !egoJwt.length ? true : false;
-	const [loggingIn, setLoggingIn] = useState(initLoginState);
+	const loginStateOnPageLoad = path === '/logging-in' && !egoJwt.length;
+	const [authLoading, setAuthLoading] = useState(loginStateOnPageLoad);
+
+	const logIn = (newToken: string) => {
+		storeToken(newToken);
+		setEgoJwt(newToken);
+		setAuthLoading(false);
+	};
+
+	const logOut = () => {
+		setAuthLoading(true);
+		setEgoJwt('');
+		Cookies.remove(EGO_JWT_KEY);
+		Cookies.remove(LOGIN_NONCE);
+		router.push('/');
+		setAuthLoading(false);
+	};
 
 	useEffect(() => {
 		const getToken = async () => {
@@ -76,18 +96,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 			return authHeaders;
 		};
 
-		if (!egoJwt?.length && loggingIn) {
+		if (!egoJwt?.length && authLoading) {
 			getToken()
 				.then((serverToken) => {
 					const tokenResponse = serverToken?.length ? serverToken : '';
-					if (tokenResponse?.length) setEgoJwt(tokenResponse);
-					setLoggingIn(false);
+					if (tokenResponse?.length) logIn(tokenResponse);
 				})
 				.catch(console.error);
 		}
-	}, [egoJwt, loggingIn]);
+	}, [egoJwt, authLoading]);
 
-	const value: AuthContextValue = { egoJwt, setEgoJwt, loggingIn, setLoggingIn };
+	const value: AuthContextValue = { egoJwt, setEgoJwt, authLoading, setAuthLoading, logIn, logOut };
 
 	return (
 		<AuthContext.Provider value={value}>
