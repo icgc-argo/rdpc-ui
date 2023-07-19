@@ -19,22 +19,36 @@
 'use client';
 
 import { css, useTheme } from '@/lib/emotion';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import SideMenu from './components/Sidemenu';
 import TitleBar from './components/TitleBar';
-import { TEMP_DATA } from './data.temp';
+import TEMP_DATA from './data.temp';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
 	const theme = useTheme();
+	const programData = TEMP_DATA;
+	const [isSidebarActive, setSidebarActive] = useState<boolean>(true);
 
 	return (
 		<div
 			css={css`
 				display: grid;
-				grid-template-columns: 248px 1fr;
+				grid-template-columns: ${isSidebarActive ? '248px' : '20px'} 1fr;
 			`}
 		>
-			<SideMenu />
+			<div>
+				<button onClick={() => setSidebarActive((t) => !t)}>
+					Toggle Sidebar {JSON.stringify(isSidebarActive)}
+				</button>
+				<SideMenu programs={programData} isActive={isSidebarActive} />
+				<div
+					css={css`
+						width: 20px;
+					`}
+				>
+					{'<<'}
+				</div>
+			</div>
 			<div>
 				<TitleBar />
 				<div
@@ -46,6 +60,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 
 						> div {
 							background: white;
+							border-radius: 8px;
 						}
 					`}
 				>
