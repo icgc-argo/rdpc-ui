@@ -22,11 +22,10 @@ import { css, useTheme } from '@/lib/emotion';
 import { ReactNode } from 'react';
 import SideMenu from './components/Sidemenu';
 import TitleBar from './components/TitleBar';
-import TEMP_DATA from './data.temp';
 
 export default function SubmissionLayout({ children }: { children: ReactNode }) {
 	const theme = useTheme();
-	const programData = TEMP_DATA;
+
 	return (
 		<div
 			css={css`
@@ -34,7 +33,7 @@ export default function SubmissionLayout({ children }: { children: ReactNode }) 
 				grid-template-columns: 248px 1fr;
 			`}
 		>
-			<SideMenu programs={programData} />
+			<SideMenu />
 			<div>
 				<TitleBar />
 				<div
