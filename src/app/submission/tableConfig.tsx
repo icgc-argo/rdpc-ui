@@ -21,28 +21,14 @@ import { css } from '@/lib/emotion';
 import { ColumnDef, PercentageBar } from '@icgc-argo/uikit';
 import { get } from 'lodash';
 import Link from 'next/link';
-
-type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
-
-type ProgramsTableData = {
-	shortName: string;
-	name: string | null;
-	cancerTypes: Array<string>;
-	countries: Array<string> | null;
-	membershipType: ArgoMembershipKey | null;
-	genomicDonors: number | null;
-	submittedDonors: number;
-	commitmentDonors: number;
-	administrators: { firstName: string; lastName: string; email: string }[];
-	donorPercentage: number;
-};
+import { ArgoMembershipKey, ProgramsData } from './components/ProgramList';
 
 const MembershipDisplayName: { [key in ArgoMembershipKey]: string } = {
 	FULL: 'FULL',
 	ASSOCIATE: 'ASSOCIATE',
 };
 
-export const columns: ColumnDef<ProgramsTableData>[] = [
+export const columns: ColumnDef<ProgramsData>[] = [
 	{
 		header: 'Short Name',
 		accessorKey: 'shortName',

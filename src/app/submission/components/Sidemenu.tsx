@@ -18,6 +18,8 @@
  */
 'use client';
 
-export default function SideMenu({ programs }: { programs: any[] }) {
+import { ProgramsData } from './ProgramList';
+
+export default function SideMenu({ programs }: { programs: ProgramsData[] }) {
 	return <div>SideMenu</div>;
 }

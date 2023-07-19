@@ -20,8 +20,8 @@
 'use client';
 
 import ProgramList from './components/ProgramList';
-import { TEMP_DATA } from './data.temp';
+import TEMP_DATA from './data.temp';
 
 export default function Submission() {
-	return <ProgramList programs={TEMP_DATA} />;
+	return <ProgramList programs={TEMP_DATA as const} />;
 }
