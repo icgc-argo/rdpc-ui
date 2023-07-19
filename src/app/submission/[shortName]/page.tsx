@@ -19,7 +19,6 @@
 
 'use client';
 
-import { ReactNode } from 'react';
-export default function Program({ children }: { children: ReactNode }) {
+export default function Program() {
 	return <div>Program</div>;
 }
