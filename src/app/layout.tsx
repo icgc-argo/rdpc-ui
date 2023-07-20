@@ -23,12 +23,12 @@
 'use client';
 
 import { AuthProvider } from '@/global/utils/auth';
+import { css } from '@/lib/emotion';
 import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import Footer from './components/Footer';
 import Header from './components/Header';
 import ThemeProvider from './components/ThemeProvider';
-import { css } from '@/lib/emotion';
-import Footer from './components/Footer';
 
 const queryClient = new QueryClient();
 
