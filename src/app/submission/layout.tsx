@@ -16,44 +16,41 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-/**
- * React.Context, used by ThemeProvider, doesn't work server side so we're defaulting to client side rendering
- */
 'use client';
 
-import { AuthProvider } from '@/global/utils/auth';
+import { css, useTheme } from '@/lib/emotion';
 import { ReactNode } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import Header from './components/Header';
-import ThemeProvider from './components/ThemeProvider';
-import { css } from '@/lib/emotion';
-import Footer from './components/Footer';
+import SideMenu from './components/Sidemenu';
+import TitleBar from './components/TitleBar';
 
-const queryClient = new QueryClient();
+export default function SubmissionLayout({ children }: { children: ReactNode }) {
+	const theme = useTheme();
 
-export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
-		<html lang="en">
-			<body>
-				<ThemeProvider>
-					<QueryClientProvider client={queryClient}>
-						<AuthProvider>
-							<div
-								css={css`
-									display: grid;
-									grid-template-rows: 58px 1fr 59px; /* header + content + footer*/
-									min-height: 100vh;
-								`}
-							>
-								<Header />
-								{children}
-								<Footer />
-							</div>
-						</AuthProvider>
-					</QueryClientProvider>
-				</ThemeProvider>
-			</body>
-		</html>
+		<div
+			css={css`
+				display: grid;
+				grid-template-columns: 248px 1fr;
+			`}
+		>
+			<SideMenu />
+			<div>
+				<TitleBar />
+				<div
+					id="content"
+					css={css`
+						background: ${theme.colors.grey_4};
+						padding: 40px;
+						height: 100%;
+
+						> div {
+							background: white;
+						}
+					`}
+				>
+					{children}
+				</div>
+			</div>
+		</div>
 	);
 }

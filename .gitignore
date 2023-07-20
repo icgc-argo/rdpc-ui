@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# generic name for files that shouldn't be checked in (handy for mock data)
+*.temp*
