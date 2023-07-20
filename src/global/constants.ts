@@ -18,4 +18,3 @@
  */
 
 export const EGO_JWT_KEY = 'EGO_JWT';
-export const LOGIN_NONCE = 'LOGIN_NONCE';

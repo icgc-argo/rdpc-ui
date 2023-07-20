@@ -18,43 +18,15 @@
  */
 'use client';
 
-import { useAuthContext } from '@/global/utils/auth';
-import { css, useTheme } from '@/lib/emotion';
-import { AppBar, AppBarMenuItem, DnaLoader, Link, NavElement } from '@icgc-argo/uikit';
+import { AppBar, css, DnaLoader, UserBadge } from '@icgc-argo/uikit';
+import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
-import LoginButton from './LoginButton';
-import ProfileMenu from './ProfileMenu';
 import argoLogo from '/public/argo-logo.svg';
+import { useAuthContext } from '@/global/utils/auth';
+import LoginButton from './LoginButton';
 
 const Header = () => {
-	const [isDropdownOpen, setDropdownOpen] = useState(false);
-	const { egoJwt, authLoading, logOut } = useAuthContext();
-	const path = usePathname();
-	const theme = useTheme();
-	const onProfilePage = path === '/landing-page';
-	const profileActive = onProfilePage && !!egoJwt.length && !authLoading;
-
-	const profileNavDetails: Array<NavElement> = [
-		{
-			active: profileActive,
-			href: '/landing-page',
-			name: 'Profile & Token',
-			LinkComp: Link,
-		},
-		{
-			isLink: false,
-			onClick: () => {
-				setDropdownOpen(false);
-				logOut();
-			},
-			name: 'Logout',
-			active: false,
-			href: '',
-			LinkComp: Link,
-		},
-	];
+	const { egoJwt, loggingIn } = useAuthContext();
 
 	return (
 		<header>
@@ -71,28 +43,21 @@ const Header = () => {
 
 				{/** keep this div. header will have more items, will be "right-aligned" */}
 				<div>
-					<AppBarMenuItem
-						active={profileActive}
-						css={css`
-							border-bottom: ${profileActive ? `solid 3px ${theme.colors.accent1}` : ''};
-						`}
-					>
-						{egoJwt ? (
-							<ProfileMenu
-								isDropdownOpen={isDropdownOpen}
-								onProfilePage={onProfilePage}
-								onClick={() => {
-									setDropdownOpen(!isDropdownOpen);
-								}}
-								profileNavDetails={profileNavDetails}
-								theme={theme}
-							/>
-						) : authLoading ? (
-							<DnaLoader />
-						) : (
-							<LoginButton />
-						)}
-					</AppBarMenuItem>
+					{egoJwt ? (
+						<UserBadge
+							showGreeting={true}
+							firstName={'Test'}
+							lastName={'User'}
+							title={'DCC Member'}
+							css={css`
+								color: white;
+							`}
+						/>
+					) : loggingIn ? (
+						<DnaLoader />
+					) : (
+						<LoginButton />
+					)}
 				</div>
 			</AppBar>
 		</header>
