@@ -19,10 +19,30 @@
 'use client';
 
 import { css, useTheme } from '@/lib/emotion';
+import { Icon } from '@icgc-argo/uikit';
 import { ReactNode, useState } from 'react';
-import SideMenu from './components/Sidemenu';
+import SideMenu from './components/SideMenu';
 import TitleBar from './components/TitleBar';
 import TEMP_DATA from './data.temp';
+
+const SideMenuToggle = ({ onToggle }: { onToggle: any }) => (
+	<div
+		css={css`
+			width: 20px;
+			display: flex;
+		`}
+		onClick={onToggle}
+	>
+		<Icon name="chevron_right" />
+		<Icon
+			name="chevron_right"
+			css={css`
+				position: relative;
+				left: -3px;
+			`}
+		/>
+	</div>
+);
 
 export default function AppLayout({ children }: { children: ReactNode }) {
 	const theme = useTheme();
@@ -33,21 +53,12 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 		<div
 			css={css`
 				display: grid;
-				grid-template-columns: ${isSidebarActive ? '248px' : '20px'} 1fr;
+				grid-template-columns: ${isSidebarActive ? '248px' : '40px'} 1fr;
 			`}
 		>
 			<div>
-				<button onClick={() => setSidebarActive((t) => !t)}>
-					Toggle Sidebar {JSON.stringify(isSidebarActive)}
-				</button>
 				<SideMenu programs={programData} isActive={isSidebarActive} />
-				<div
-					css={css`
-						width: 20px;
-					`}
-				>
-					{'<<'}
-				</div>
+				<SideMenuToggle onToggle={() => setSidebarActive((t) => !t)} />
 			</div>
 			<div>
 				<TitleBar />
