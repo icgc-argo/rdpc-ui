@@ -22,20 +22,20 @@ import { useRouter } from 'next/navigation';
 import { useQuery } from 'react-query';
 import urlJoin from 'url-join';
 
+import { css, DnaLoader, useTheme } from '@icgc-argo/uikit';
 import { getAppConfig } from '@/global/config';
-import { useAuthContext } from '@/global/utils/auth';
-import { DnaLoader, css, useTheme } from '@icgc-argo/uikit';
+import { storeToken, useAuthContext } from '@/global/utils/auth';
 
 export default async function LoggingIn() {
 	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
 	const router = useRouter();
 	const theme = useTheme();
-	const { egoJwt, authLoading, setAuthLoading, logIn } = useAuthContext();
+	const { egoJwt, setEgoJwt, loggingIn, setLoggingIn } = useAuthContext();
 	const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
 
 	if (egoJwt) router.push('/landing-page');
 
-	if (!authLoading && !egoJwt) setAuthLoading(true);
+	if (!loggingIn && !egoJwt) setLoggingIn(true);
 
 	useQuery('egoJwt', () => {
 		fetch(egoLoginUrl, {
@@ -47,7 +47,9 @@ export default async function LoggingIn() {
 		})
 			.then(async (res) => {
 				const newToken = await res.text();
-				logIn(newToken);
+				storeToken(newToken);
+				setEgoJwt(newToken);
+				setLoggingIn(false);
 			})
 			.catch(console.error);
 	});

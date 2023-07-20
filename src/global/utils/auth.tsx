@@ -18,37 +18,34 @@
  */
 'use client';
 
-import Header from '@/app/components/Header';
-import { DnaLoader } from '@icgc-argo/uikit';
-import Cookies from 'js-cookie';
-import { usePathname, useRouter } from 'next/navigation';
 import {
+	createContext,
 	Dispatch,
 	ReactNode,
 	SetStateAction,
 	Suspense,
-	createContext,
 	useContext,
+	useEffect,
 	useState,
 } from 'react';
-import { EGO_JWT_KEY, LOGIN_NONCE } from '../constants';
+import Cookies from 'js-cookie';
+import { usePathname } from 'next/navigation';
+import Header from '@/app/components/Header';
+import { DnaLoader } from '@icgc-argo/uikit';
+import { EGO_JWT_KEY } from '../constants';
 
 type AuthContextValue = {
 	egoJwt: string;
 	setEgoJwt: Dispatch<SetStateAction<string>>;
-	authLoading: boolean;
-	setAuthLoading: Dispatch<SetStateAction<boolean>>;
-	logIn: (newToken: string) => void;
-	logOut: () => void;
+	loggingIn: boolean;
+	setLoggingIn: Dispatch<SetStateAction<boolean>>;
 };
 
 const AuthContext = createContext<AuthContextValue>({
 	egoJwt: '',
 	setEgoJwt: () => '',
-	authLoading: false,
-	setAuthLoading: () => false,
-	logIn: () => undefined,
-	logOut: () => undefined,
+	loggingIn: false,
+	setLoggingIn: () => false,
 });
 
 export const getStoredToken = () => Cookies.get(EGO_JWT_KEY);
@@ -57,30 +54,18 @@ export const storeToken = (egoToken: string) => {
 	Cookies.set(EGO_JWT_KEY, egoToken);
 };
 
+export const logOut = () => {
+	Cookies.remove(EGO_JWT_KEY);
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
 	const storedToken = getStoredToken();
 	const [egoJwt, setEgoJwt] = useState(storedToken || '');
-	const router = useRouter();
 	const path = usePathname();
-	const loginStateOnPageLoad = path === '/logging-in' && !egoJwt.length;
-	const [authLoading, setAuthLoading] = useState(loginStateOnPageLoad);
+	const initLoginState = path === '/logging-in' && !egoJwt.length ? true : false;
+	const [loggingIn, setLoggingIn] = useState(initLoginState);
 
-	const logIn = (newToken: string) => {
-		storeToken(newToken);
-		setEgoJwt(newToken);
-		setAuthLoading(false);
-	};
-
-	const logOut = () => {
-		setAuthLoading(true);
-		setEgoJwt('');
-		Cookies.remove(EGO_JWT_KEY);
-		Cookies.remove(LOGIN_NONCE);
-		router.push('/');
-		setAuthLoading(false);
-	};
-
-	const value: AuthContextValue = { egoJwt, setEgoJwt, authLoading, setAuthLoading, logIn, logOut };
+	const value: AuthContextValue = { egoJwt, setEgoJwt, loggingIn, setLoggingIn };
 
 	return (
 		<AuthContext.Provider value={value}>
