@@ -18,20 +18,39 @@
  */
 'use client';
 
-import { getAppConfig } from '@/global/config';
+import { css, useTheme } from '@/lib/emotion';
+import { ReactNode } from 'react';
+import SideMenu from './components/Sidemenu';
+import TitleBar from './components/TitleBar';
 
-export default function LandingPage() {
-	const { EGO_CLIENT_ID } = getAppConfig();
+export default function SubmissionLayout({ children }: { children: ReactNode }) {
+	const theme = useTheme();
 
 	return (
-		<main>
+		<div
+			css={css`
+				display: grid;
+				grid-template-columns: 248px 1fr;
+			`}
+		>
+			<SideMenu />
 			<div>
-				<p>
-					Get started by editing&nbsp;
-					<code>src/app/files/page.tsx</code>
-				</p>
+				<TitleBar />
+				<div
+					id="content"
+					css={css`
+						background: ${theme.colors.grey_4};
+						padding: 40px;
+						height: 100%;
+
+						> div {
+							background: white;
+						}
+					`}
+				>
+					{children}
+				</div>
 			</div>
-			<h1>Welcome! {EGO_CLIENT_ID}</h1>
-		</main>
+		</div>
 	);
 }

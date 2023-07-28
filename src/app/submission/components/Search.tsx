@@ -18,20 +18,6 @@
  */
 'use client';
 
-import { getAppConfig } from '@/global/config';
-
-export default function LandingPage() {
-	const { EGO_CLIENT_ID } = getAppConfig();
-
-	return (
-		<main>
-			<div>
-				<p>
-					Get started by editing&nbsp;
-					<code>src/app/files/page.tsx</code>
-				</p>
-			</div>
-			<h1>Welcome! {EGO_CLIENT_ID}</h1>
-		</main>
-	);
+export default function Search({ query, onChange }: { query: string; onChange: any }) {
+	return <div>Search</div>;
 }

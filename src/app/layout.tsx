@@ -22,10 +22,9 @@
  */
 'use client';
 
-import { Work_Sans } from 'next/font/google';
+import { AuthProvider } from '@/global/utils/auth';
 import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { AuthProvider } from '@/global/utils/auth';
 import Header from './components/Header';
 import ThemeProvider from './components/ThemeProvider';
 import { css } from '@/lib/emotion';
