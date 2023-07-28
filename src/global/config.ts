@@ -34,8 +34,8 @@ export const getAppConfig = (): AppConfig => {
 	return {
 		DOCS_URL_ROOT: process.env.NEXT_PUBLIC_DOCS_URL_ROOT || 'https://docs.icgc-argo.org/',
 		EGO_API_ROOT: process.env.NEXT_PUBLIC_EGO_API_ROOT || 'http://localhost:8081',
-		EGO_CLIENT_ID: process.env.EGO_CLIENT_ID || 'rdpc-ui-local',
-		EGO_PUBLIC_KEY: process.env.EGO_PUBLIC_KEY || '',
+		EGO_CLIENT_ID: process.env.NEXT_PUBLIC_EGO_CLIENT_ID || 'rdpc-ui-local',
+		EGO_PUBLIC_KEY: process.env.NEXT_PUBLIC_EGO_PUBLIC_KEY || '',
 		UI_VERSION: packageJSON.version,
 		REGION: process.env.NEXT_PUBLIC_REGION || '',
 		PLATFORM_UI_ROOT: process.env.NEXT_PUBLIC_PLATFORM_UI_ROOT || '',
