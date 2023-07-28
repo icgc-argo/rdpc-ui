@@ -18,20 +18,42 @@
  */
 'use client';
 
-import { getAppConfig } from '@/global/config';
+import { css } from '@/lib/emotion';
+import { TitleBar as TitleBarComp } from '@icgc-argo/uikit';
 
-export default function LandingPage() {
-	const { EGO_CLIENT_ID } = getAppConfig();
-
+export default function TitleBar() {
 	return (
-		<main>
-			<div>
-				<p>
-					Get started by editing&nbsp;
-					<code>src/app/files/page.tsx</code>
-				</p>
+		<div
+			css={css`
+				display: flex;
+				padding: 0 20px;
+			`}
+		>
+			<TitleBarComp
+				css={css`
+					margin-right: 10px;
+				`}
+			>
+				<>All Programs</>
+			</TitleBarComp>
+			<div
+				id="progress-bar"
+				css={css`
+					display: none;
+				`}
+			>
+				future work
 			</div>
-			<h1>Welcome! {EGO_CLIENT_ID}</h1>
-		</main>
+
+			<div
+				css={css`
+					margin-left: auto;
+					display: none;
+				`}
+				id="col-buttons"
+			>
+				future work
+			</div>
+		</div>
 	);
 }

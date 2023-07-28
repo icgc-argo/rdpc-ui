@@ -18,13 +18,12 @@
  */
 'use client';
 
-import { ComponentType } from 'react';
-import Image from 'next/image';
-import urlJoin from 'url-join';
-import { DataCallout, Link, Typography, overtureLogo } from '@icgc-argo/uikit';
 import { getAppConfig } from '@/global/config';
 import { css, useTheme } from '@/lib/emotion';
-import Footer from './components/Footer';
+import { DataCallout, Link, Typography, overtureLogo } from '@icgc-argo/uikit';
+import Image from 'next/image';
+import { ComponentType } from 'react';
+import urlJoin from 'url-join';
 import Hero from './components/Hero';
 
 const { DOCS_URL_ROOT } = getAppConfig();

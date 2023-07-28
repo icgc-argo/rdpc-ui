@@ -18,50 +18,58 @@
  */
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useQuery } from 'react-query';
-import urlJoin from 'url-join';
+import { useTheme } from '@/lib/emotion';
+import { Table, Typography, css } from '@icgc-argo/uikit';
+import { columns } from '../tableConfig';
 
-import { getAppConfig } from '@/global/config';
-import { useAuthContext } from '@/global/utils/auth';
-import { DnaLoader, css, useTheme } from '@icgc-argo/uikit';
+export type ProgramsData = {
+	shortName: string;
+	name: string | null;
+	cancerTypes: Array<string>;
+	countries: Array<string> | null;
+	membershipType: ArgoMembershipKey;
+	genomicDonors: number | null;
+	submittedDonors: number;
+	commitmentDonors: number;
+	administrators: { firstName: string; lastName: string; email: string }[];
+	donorPercentage: number;
+};
 
-export default async function LoggingIn() {
-	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
-	const router = useRouter();
+export type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
+
+export default function ProgramList({ programs }: { programs: ProgramsData[] }) {
 	const theme = useTheme();
-	const { egoJwt, authLoading, setAuthLoading, logIn } = useAuthContext();
-	const egoLoginUrl = urlJoin(EGO_API_ROOT, `/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`);
-
-	if (egoJwt) router.push('/landing-page');
-
-	if (!authLoading && !egoJwt) setAuthLoading(true);
-
-	useQuery('egoJwt', () => {
-		fetch(egoLoginUrl, {
-			credentials: 'include',
-			headers: { accept: '*/*' },
-			body: null,
-			method: 'GET',
-			mode: 'cors',
-		})
-			.then(async (res) => {
-				const newToken = await res.text();
-				logIn(newToken);
-			})
-			.catch(console.error);
-	});
+	const programsArraySize = programs.length;
 
 	return (
 		<div
 			css={css`
-				background-color: ${theme.colors.grey_4};
-				display: flex;
-				justify-content: center;
-				align-items: center;
+				padding: 16px 15px 6px;
 			`}
 		>
-			<DnaLoader />
+			<Typography
+				variant="label"
+				css={css`
+					color: ${theme.colors.grey};
+					min-height: 32px;
+					display: flex;
+					align-items: center;
+					margin-bottom: 8px;
+				`}
+			>
+				{programsArraySize.toLocaleString()} results
+			</Typography>
+			<Table
+				data={programs}
+				columns={columns}
+				withSideBorders
+				withRowBorder
+				withStripes
+				withHeaders
+				withPagination
+				showPageSizeOptions
+				loading={false}
+			/>
 		</div>
 	);
 }

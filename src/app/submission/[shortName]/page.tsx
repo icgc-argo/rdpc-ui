@@ -16,22 +16,9 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 'use client';
 
-import { getAppConfig } from '@/global/config';
-
-export default function LandingPage() {
-	const { EGO_CLIENT_ID } = getAppConfig();
-
-	return (
-		<main>
-			<div>
-				<p>
-					Get started by editing&nbsp;
-					<code>src/app/files/page.tsx</code>
-				</p>
-			</div>
-			<h1>Welcome! {EGO_CLIENT_ID}</h1>
-		</main>
-	);
+export default function Program() {
+	return <div>Program</div>;
 }

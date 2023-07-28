@@ -18,20 +18,45 @@
  */
 'use client';
 
-import { getAppConfig } from '@/global/config';
+import { css } from '@/lib/emotion';
+import { DropdownMenu, FocusWrapper, NavBarElement, NavElement, UserBadge } from '@icgc-argo/uikit';
+import { Theme } from '@icgc-argo/uikit/ThemeProvider';
 
-export default function LandingPage() {
-	const { EGO_CLIENT_ID } = getAppConfig();
+const ProfileMenu = ({
+	isDropdownOpen,
+	onProfilePage,
+	onClick,
+	profileNavDetails,
+	theme,
+}: {
+	isDropdownOpen: boolean;
+	onProfilePage: boolean;
+	onClick: () => void;
+	profileNavDetails: NavElement[];
+	theme: Theme;
+}) => (
+	<FocusWrapper onClick={onClick}>
+		{isDropdownOpen && (
+			<DropdownMenu>
+				{profileNavDetails.map((element, idx) => (
+					<NavBarElement key={`profileNavDetail_${idx}`} {...element} isDropdown={true} />
+				))}
+			</DropdownMenu>
+		)}
+		<UserBadge
+			showGreeting={true}
+			firstName={'Test'}
+			lastName={'User'}
+			title={'DCC Member'}
+			className={onProfilePage ? 'active' : ''}
+			css={css`
+				color: ${onProfilePage ? theme.colors.accent1 : theme.colors.white};
+				&:hover {
+					color: ${theme.colors.accent1};
+				}
+			`}
+		/>
+	</FocusWrapper>
+);
 
-	return (
-		<main>
-			<div>
-				<p>
-					Get started by editing&nbsp;
-					<code>src/app/files/page.tsx</code>
-				</p>
-			</div>
-			<h1>Welcome! {EGO_CLIENT_ID}</h1>
-		</main>
-	);
-}
+export default ProfileMenu;
