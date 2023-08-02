@@ -18,7 +18,9 @@
  */
 
 import { NextResponse } from 'next/server';
+import { headers } from 'next/headers';
 
 export async function GET() {
+	headers()
 	return NextResponse.json({ REGION: process.env.CIARAN_RUNTIME_REGION });
 }
