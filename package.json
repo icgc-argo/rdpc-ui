@@ -3,12 +3,14 @@
   "version": "0.3.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "CIARAN_RUNTIME_REGION=FRANCE next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "NEXT_PUBLIC_REGION=FRANE next start",
     "lint": "next lint",
     "prepare": "husky install",
-    "test": "echo 'Add tests please :)'"
+    "test": "echo 'Add tests please :)'",
+    "local-serve": "npm run build && cd dist && npx http-server ."
+
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
