@@ -17,19 +17,36 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * React.Context, used by ThemeProvider, doesn't work server side so we're defaulting to client side rendering
- */
-'use client';
+/** @jsxImportSource react */
+// ^ force default jsx runtime, @emotion/jsx doesn't play nice with server components
 
 import { ReactNode } from 'react';
 import App from './App';
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+async function getAppConfig() {
+	// cache: "no-store" ensures it's run server side
+	// fetch isn't actually doing anything except forcing server side render
+	// it's a "blocking" data call
+	// this is a server component so we have full access to process and can get vars from ehre
+	// url cannot be root - will cause infinite loop
+	try {
+		// TODO: this as env var
+		await fetch('http://localhost:3000/api', { cache: 'no-store' });
+		console.log('getconfig', process.env.TEST_RUNTIME_VAR);
+		return process.env.TEST_RUNTIME_VAR;
+	} catch (e) {
+		console.log('this is likely happening during "next build". catch it so it doesnt exit build');
+		console.error(e);
+	}
+}
+
+export default async function RootLayout({ children }: { children: ReactNode }) {
+	const appConfig = getAppConfig();
+	console.log('app config layout', appConfig);
 	return (
 		<html lang="en">
 			<body>
-				<App>{children}</App>
+				<App config={appConfig}>{children}</App>
 			</body>
 		</html>
 	);
