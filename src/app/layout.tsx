@@ -20,29 +20,32 @@
 /** @jsxImportSource react */
 // ^ force default jsx runtime, @emotion/jsx doesn't play nice with server components
 
+import { BUILD_TIME_VARIABLES } from '@/global/constants';
 import { ReactNode } from 'react';
 import App from './App';
 
 async function getAppConfig() {
 	// cache: "no-store" ensures it's run server side
-	// fetch isn't actually doing anything except forcing server side render
-	// it's a "blocking" data call
-	// this is a server component so we have full access to process and can get vars from ehre
 	// url cannot be root - will cause infinite loop
 	try {
-		// TODO: this as env var
-		await fetch('http://localhost:3000/api', { cache: 'no-store' });
-		console.log('getconfig', process.env.TEST_RUNTIME_VAR);
-		return process.env.TEST_RUNTIME_VAR;
+		const configResp = await fetch(BUILD_TIME_VARIABLES.RUNTIME_CONFIG_URL, {
+			cache: 'no-store',
+		});
+		return await configResp.json();
 	} catch (e) {
-		console.log('this is likely happening during "next build". catch it so it doesnt exit build');
-		console.error(e);
+		if (process.env.NEXT_IS_BUILDING === 'true') {
+			console.log(
+				"Failed to retrieve server runtime config. Colocated api route won't be available during build.",
+			);
+		} else {
+			console.error(e);
+		}
+		return {};
 	}
 }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-	const appConfig = getAppConfig();
-	console.log('app config layout', appConfig);
+	const appConfig = await getAppConfig();
 	return (
 		<html lang="en">
 			<body>

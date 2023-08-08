@@ -20,7 +20,15 @@
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 
+// only pass environment variables with this prefix to the client
+const PREFIX = 'PUBLIC_SERVER_RUNTIME';
+
 export async function GET() {
 	headers();
-	return NextResponse.json('im a silly route');
+
+	const publicRuntimeVars = Object.fromEntries(
+		Object.entries(process.env).filter(([key]) => key.startsWith(PREFIX)),
+	);
+
+	return NextResponse.json(publicRuntimeVars);
 }
