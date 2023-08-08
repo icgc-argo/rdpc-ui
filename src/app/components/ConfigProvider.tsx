@@ -20,17 +20,7 @@
 'use client';
 
 import { ReactNode, createContext, useContext } from 'react';
-
-type AppConfig = {
-	DOCS_URL_ROOT: string;
-	EGO_API_ROOT: string;
-	EGO_CLIENT_ID: string;
-	EGO_PUBLIC_KEY: string;
-	REGION: string;
-	UI_VERSION: string;
-	PLATFORM_UI_ROOT: string;
-	RECAPTCHA_SITE_KEY: string;
-};
+import { AppConfig } from '../api/config/config';
 
 const defaultContext = {
 	DOCS_URL_ROOT: '',
@@ -41,6 +31,9 @@ const defaultContext = {
 	REGION: '',
 	PLATFORM_UI_ROOT: '',
 	RECAPTCHA_SITE_KEY: '',
+	ARGO_ROOT: '',
+	EGO_LOGIN_URL: '',
+	DACO_ROOT: '',
 };
 
 const AppConfig = createContext<AppConfig>(defaultContext);
@@ -51,6 +44,5 @@ export const AppConfigProvider = ({ children, config }: { children: ReactNode; c
 
 export const useAppConfigContext = () => {
 	const currentContext = useContext(AppConfig);
-	//
 	return process.env.NEXT_IS_BUILDING === 'true' ? defaultContext : currentContext;
 };

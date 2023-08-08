@@ -17,9 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import urljoin from 'url-join';
 import packageJSON from '../../../../package.json';
 
-type AppConfig = {
+export type AppConfig = {
 	DOCS_URL_ROOT: string;
 	EGO_API_ROOT: string;
 	EGO_CLIENT_ID: string;
@@ -28,6 +29,9 @@ type AppConfig = {
 	UI_VERSION: string;
 	PLATFORM_UI_ROOT: string;
 	RECAPTCHA_SITE_KEY: string;
+	ARGO_ROOT: string;
+	EGO_LOGIN_URL: string;
+	DACO_ROOT: string;
 };
 
 /**
@@ -38,19 +42,24 @@ export const getAppConfig = (serverEnv: any): AppConfig => {
 	/**
 	 * keep explicit style of: Server || Client to prevent errors with Next inlining build variables
 	 */
+
+	const EGO_API_ROOT =
+		serverEnv.NEXT_PUBLIC_EGO_API_ROOT ||
+		process.env.NEXT_PUBLIC_EGO_API_ROOT ||
+		'http://localhost:8081';
+	const EGO_CLIENT_ID =
+		serverEnv.NEXT_PUBLIC_EGO_CLIENT_ID || process.env.NEXT_PUBLIC_EGO_CLIENT_ID || 'rdpc-ui-local';
+	const EGO_LOGIN_URL = urljoin(
+		EGO_API_ROOT,
+		'/api/oauth/login/google',
+		`?client_id=${EGO_CLIENT_ID}`,
+	);
+
 	const config = {
 		DOCS_URL_ROOT:
 			serverEnv.NEXT_PUBLIC_DOCS_URL_ROOT ||
 			process.env.NEXT_PUBLIC_DOCS_URL_ROOT ||
 			'https://docs.icgc-argo.org/',
-		EGO_API_ROOT:
-			serverEnv.NEXT_PUBLIC_EGO_API_ROOT ||
-			process.env.NEXT_PUBLIC_EGO_API_ROOT ||
-			'http://localhost:8081',
-		EGO_CLIENT_ID:
-			serverEnv.NEXT_PUBLIC_EGO_API_ROOT ||
-			process.env.NEXT_PUBLIC_EGO_CLIENT_ID ||
-			'rdpc-ui-local',
 		EGO_PUBLIC_KEY:
 			serverEnv.NEXT_PUBLIC_EGO_PUBLIC_KEY || process.env.NEXT_PUBLIC_EGO_PUBLIC_KEY || '',
 		UI_VERSION: packageJSON.version,
@@ -59,6 +68,12 @@ export const getAppConfig = (serverEnv: any): AppConfig => {
 			serverEnv.NEXT_PUBLIC_PLATFORM_UI_ROOT || process.env.NEXT_PUBLIC_PLATFORM_UI_ROOT || '',
 		RECAPTCHA_SITE_KEY:
 			serverEnv.RECAPTCHA_SITE_KEY || process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '',
+		ARGO_ROOT: serverEnv.ARGO_ROOT || process.env.ARGO_ROOT || 'https://www.icgc-argo.org',
+		EGO_API_ROOT,
+		EGO_CLIENT_ID,
+		EGO_LOGIN_URL,
+		DACO_ROOT: serverEnv.DACO_ROOT || process.env.DACO_ROOT || 'https://daco.icgc-argo.org/',
 	};
+
 	return config;
 };
