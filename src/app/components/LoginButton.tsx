@@ -18,10 +18,11 @@
  */
 'use client';
 
-import { EGO_LOGIN_URL } from '@/global/urls';
 import { GoogleLogin } from '@icgc-argo/uikit';
+import { useAppConfigContext } from './ConfigProvider';
 
 const LoginButton = () => {
+	const { EGO_LOGIN_URL } = useAppConfigContext();
 	return <GoogleLogin link={EGO_LOGIN_URL} />;
 };
 

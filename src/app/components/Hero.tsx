@@ -17,39 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { EGO_LOGIN_URL, PLATFORM_UI_ROOT } from '@/global/urls';
 import { BUTTON_SIZES, Button, Typography, css, useTheme } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import galaxyImage from '../../../public/assets/galaxy.png';
 import { useAppConfigContext } from './ConfigProvider';
 import RegionBanner from './RegionBanner';
 
-const BackLink = (
-	<div
-		css={css`
-			padding: 17px 0 0 17px;
-			> span,
-			a {
-				line-height: 28px;
-				color: white;
-				font-size: 12px;
-				font-weight: 600;
-			}
-		`}
-	>
-		<span>{`< `}</span>
-		<Link
-			href={PLATFORM_UI_ROOT}
-			css={css({
-				textDecoration: 'underline',
-			})}
-		>{`Back to ICGC ARGO`}</Link>
-	</div>
-);
-
 const Hero = () => {
 	const theme = useTheme();
-	const { REGION } = useAppConfigContext();
+	const { REGION, PLATFORM_UI_ROOT, EGO_LOGIN_URL } = useAppConfigContext();
 	return (
 		<div
 			css={css({
@@ -59,7 +35,26 @@ const Hero = () => {
 				width: '100%',
 			})}
 		>
-			{BackLink}
+			<div
+				css={css`
+					padding: 17px 0 0 17px;
+					> span,
+					a {
+						line-height: 28px;
+						color: white;
+						font-size: 12px;
+						font-weight: 600;
+					}
+				`}
+			>
+				<span>{`< `}</span>
+				<Link
+					href={PLATFORM_UI_ROOT}
+					css={css({
+						textDecoration: 'underline',
+					})}
+				>{`Back to ICGC ARGO`}</Link>
+			</div>{' '}
 			<div
 				css={css({
 					display: 'flex',
