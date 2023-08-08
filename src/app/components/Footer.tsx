@@ -17,16 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { getAppConfig } from '@/global/config';
 import * as urls from '@/global/urls';
 import { css, useTheme } from '@/lib/emotion';
 import { Icon, Link } from '@icgc-argo/uikit';
 import Image from 'next/image';
 import { Col, Row } from 'react-grid-system';
+import { useAppConfigContext } from './ConfigProvider';
 import rdpcLogo from '/public/assets/rdpc-logo.svg';
-
-const { UI_VERSION, REGION } = getAppConfig();
-const subtitle = `RDPC ${REGION} Clinical Data Submission Portal - ${UI_VERSION}`;
 
 const Logo = () => <Image src={rdpcLogo} alt="RDPC logo" />;
 
@@ -63,6 +60,8 @@ const links = [
 
 export default function Footer() {
 	const theme = useTheme();
+	const { UI_VERSION, REGION } = useAppConfigContext();
+	const subtitle = `RDPC ${REGION} Clinical Data Submission Portal - ${UI_VERSION}`;
 	return (
 		<footer
 			css={css`

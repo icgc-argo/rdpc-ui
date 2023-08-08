@@ -18,16 +18,15 @@
  */
 'use client';
 
+import { useAuthContext } from '@/global/utils/auth';
+import { DnaLoader, css, useTheme } from '@icgc-argo/uikit';
 import { useRouter } from 'next/navigation';
 import { useQuery } from 'react-query';
 import urlJoin from 'url-join';
-
-import { getAppConfig } from '@/global/config';
-import { useAuthContext } from '@/global/utils/auth';
-import { DnaLoader, css, useTheme } from '@icgc-argo/uikit';
+import { useAppConfigContext } from '../components/ConfigProvider';
 
 export default async function LoggingIn() {
-	const { EGO_API_ROOT, EGO_CLIENT_ID } = getAppConfig();
+	const { EGO_API_ROOT, EGO_CLIENT_ID } = useAppConfigContext();
 	const router = useRouter();
 	const theme = useTheme();
 	const { egoJwt, authLoading, setAuthLoading, logIn } = useAuthContext();

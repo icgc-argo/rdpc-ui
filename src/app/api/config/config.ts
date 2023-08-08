@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import packageJSON from '../../package.json';
+import packageJSON from '../../../../package.json';
 
 type AppConfig = {
 	DOCS_URL_ROOT: string;
@@ -30,15 +30,35 @@ type AppConfig = {
 	RECAPTCHA_SITE_KEY: string;
 };
 
-export const getAppConfig = (): AppConfig => {
-	return {
-		DOCS_URL_ROOT: process.env.NEXT_PUBLIC_DOCS_URL_ROOT || 'https://docs.icgc-argo.org/',
-		EGO_API_ROOT: process.env.NEXT_PUBLIC_EGO_API_ROOT || 'http://localhost:8081',
-		EGO_CLIENT_ID: process.env.NEXT_PUBLIC_EGO_CLIENT_ID || 'rdpc-ui-local',
-		EGO_PUBLIC_KEY: process.env.NEXT_PUBLIC_EGO_PUBLIC_KEY || '',
+/**
+ * returns app config env vars
+ * order of priority: server runtime > process.env build time > default
+ */
+export const getAppConfig = (serverEnv: any): AppConfig => {
+	/**
+	 * keep explicit style of: Server || Client to prevent errors with Next inlining build variables
+	 */
+	const config = {
+		DOCS_URL_ROOT:
+			serverEnv.NEXT_PUBLIC_DOCS_URL_ROOT ||
+			process.env.NEXT_PUBLIC_DOCS_URL_ROOT ||
+			'https://docs.icgc-argo.org/',
+		EGO_API_ROOT:
+			serverEnv.NEXT_PUBLIC_EGO_API_ROOT ||
+			process.env.NEXT_PUBLIC_EGO_API_ROOT ||
+			'http://localhost:8081',
+		EGO_CLIENT_ID:
+			serverEnv.NEXT_PUBLIC_EGO_API_ROOT ||
+			process.env.NEXT_PUBLIC_EGO_CLIENT_ID ||
+			'rdpc-ui-local',
+		EGO_PUBLIC_KEY:
+			serverEnv.NEXT_PUBLIC_EGO_PUBLIC_KEY || process.env.NEXT_PUBLIC_EGO_PUBLIC_KEY || '',
 		UI_VERSION: packageJSON.version,
-		REGION: process.env.NEXT_PUBLIC_REGION || '',
-		PLATFORM_UI_ROOT: process.env.NEXT_PUBLIC_PLATFORM_UI_ROOT || '',
-		RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '',
+		REGION: serverEnv.NEXT_PUBLIC_REGION || process.env.NEXT_PUBLIC_REGION || '',
+		PLATFORM_UI_ROOT:
+			serverEnv.NEXT_PUBLIC_PLATFORM_UI_ROOT || process.env.NEXT_PUBLIC_PLATFORM_UI_ROOT || '',
+		RECAPTCHA_SITE_KEY:
+			serverEnv.RECAPTCHA_SITE_KEY || process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '',
 	};
+	return config;
 };
