@@ -18,10 +18,10 @@
  */
 'use client';
 
-import { getAppConfig } from '@/global/config';
+import { useAppConfigContext } from '../components/ConfigProvider';
 
 export default function LandingPage() {
-	const { EGO_CLIENT_ID } = getAppConfig();
+	const { EGO_CLIENT_ID } = useAppConfigContext();
 
 	return (
 		<main>
