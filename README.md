@@ -20,6 +20,13 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 ## Env vars
 
+Hosting environments that use runtime variables need to be able to send public client env vars to the client.
+To do this we create an api route which provides a config `/src/app/api/config/config.ts`
+This creates a config object based on a priority of `server process vals` , then `client build time vals` and finally a hardcoded default.
+
+In our UI we provide values via a context provider `AppConfigProvider`. This means that accessing app config variables needs to be done in a "react way" - using context and hooks correctly. Importing from a regular function in a module does not work.
+
+Build time variables are inlined and "frozen" at build time. They are explained here:
 https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables
 
 ## Local dev

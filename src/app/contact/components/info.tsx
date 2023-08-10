@@ -17,19 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import {
-	DACO_ROOT,
-	DOCS_API_TOKEN_PAGE,
-	DOCS_DATA_ACCESS_PAGE,
-	DOCS_DATA_DOWNLOAD_PAGE,
-	DOCS_REGISTERING_SAMPLES_PAGE,
-	DOCS_SUBMISSION_OVERVIEW_PAGE,
-	DOCS_SUBMITTING_CLINICAL_DATA_PAGE,
-	DOCS_SUBMITTING_MOLECULAR_DATA_PAGE,
-	DOCS_URL_ROOT,
-} from '@/global/urls';
+import { useAppConfigContext } from '@/app/components/ConfigProvider';
 import { Button, Link, Typography, css, useTheme } from '@icgc-argo/uikit';
 import { Col } from 'react-grid-system';
+import urljoin from 'url-join';
 
 const ulCss = css`
 	font-size: 14px;
@@ -46,6 +37,30 @@ const titleCss = css`
 
 const Info = () => {
 	const theme = useTheme();
+	const { DOCS_URL_ROOT, DACO_ROOT } = useAppConfigContext();
+
+	const DOCS_DATA_ACCESS_PAGE = urljoin(DOCS_URL_ROOT, '/docs/data-access/daco/applying');
+	const DOCS_DATA_DOWNLOAD_PAGE = urljoin(DOCS_URL_ROOT, '/docs/data-access/data-download');
+	const DOCS_API_TOKEN_PAGE = urljoin(
+		DOCS_URL_ROOT,
+		'/docs/data-access/user-profile-and-api-token',
+	);
+	const DOCS_SUBMISSION_OVERVIEW_PAGE = urljoin(
+		DOCS_URL_ROOT,
+		'/docs/submission/submission-overview',
+	);
+	const DOCS_REGISTERING_SAMPLES_PAGE = urljoin(
+		DOCS_URL_ROOT,
+		'/docs/submission/registering-samples',
+	);
+	const DOCS_SUBMITTING_CLINICAL_DATA_PAGE = urljoin(
+		DOCS_URL_ROOT,
+		'/docs/submission/submitting-clinical-data',
+	);
+	const DOCS_SUBMITTING_MOLECULAR_DATA_PAGE = urljoin(
+		DOCS_URL_ROOT,
+		'/docs/submission/submitting-molecular-data',
+	);
 	return (
 		<Col
 			md={12}

@@ -16,29 +16,40 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+// all our context providers won't work server side, beacuse React.Context is client side
+'use client';
 
-import packageJSON from '../../package.json';
+import { AuthProvider } from '@/global/utils/auth';
+import { css } from '@/lib/emotion';
+import { ReactNode } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { AppConfigProvider } from './components/ConfigProvider';
+import Footer from './components/Footer';
+import Header from './components/Header';
+import ThemeProvider from './components/ThemeProvider';
 
-type AppConfig = {
-	DOCS_URL_ROOT: string;
-	EGO_API_ROOT: string;
-	EGO_CLIENT_ID: string;
-	EGO_PUBLIC_KEY: string;
-	REGION: string;
-	UI_VERSION: string;
-	PLATFORM_UI_ROOT: string;
-	RECAPTCHA_SITE_KEY: string;
-};
+const queryClient = new QueryClient();
 
-export const getAppConfig = (): AppConfig => {
-	return {
-		DOCS_URL_ROOT: process.env.NEXT_PUBLIC_DOCS_URL_ROOT || 'https://docs.icgc-argo.org/',
-		EGO_API_ROOT: process.env.NEXT_PUBLIC_EGO_API_ROOT || 'http://localhost:8081',
-		EGO_CLIENT_ID: process.env.NEXT_PUBLIC_EGO_CLIENT_ID || 'rdpc-ui-local',
-		EGO_PUBLIC_KEY: process.env.NEXT_PUBLIC_EGO_PUBLIC_KEY || '',
-		UI_VERSION: packageJSON.version,
-		REGION: process.env.NEXT_PUBLIC_REGION || '',
-		PLATFORM_UI_ROOT: process.env.NEXT_PUBLIC_PLATFORM_UI_ROOT || '',
-		RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '',
-	};
-};
+const App = ({ children, config }: { children: ReactNode; config: any }) => (
+	<ThemeProvider>
+		<QueryClientProvider client={queryClient}>
+			<AppConfigProvider config={config}>
+				<AuthProvider>
+					<div
+						css={css`
+							display: grid;
+							grid-template-rows: 58px 1fr 59px; /* header + content + footer*/
+							min-height: 100vh;
+						`}
+					>
+						<Header />
+						{children}
+						<Footer />
+					</div>
+				</AuthProvider>
+			</AppConfigProvider>
+		</QueryClientProvider>
+	</ThemeProvider>
+);
+
+export default App;
