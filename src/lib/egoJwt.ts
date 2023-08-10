@@ -21,9 +21,8 @@
 import memoize from 'lodash/memoize';
 
 import createEgoUtils from '@icgc-argo/ego-token-utils';
-import { getAppConfig } from '@/global/config';
 
-const TokenUtils = createEgoUtils(getAppConfig().EGO_PUBLIC_KEY);
+const TokenUtils = createEgoUtils('');
 
 export const decodeToken = memoize((egoJwt?: string) =>
 	egoJwt ? TokenUtils.decodeToken(egoJwt) : null,
