@@ -16,14 +16,14 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
 
-import { GoogleLogin } from '@icgc-argo/uikit';
-import { useAppConfigContext } from './ConfigProvider';
+import { headers } from 'next/headers';
+import { NextResponse } from 'next/server';
+import { getAppConfig } from './config';
 
-const LoginButton = () => {
-	const { EGO_LOGIN_URL } = useAppConfigContext();
-	return <GoogleLogin link={EGO_LOGIN_URL} />;
-};
+export async function GET() {
+	headers();
+	const appConfig = getAppConfig(process.env);
 
-export default LoginButton;
+	return NextResponse.json(appConfig);
+}
