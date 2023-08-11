@@ -18,12 +18,56 @@
  */
 'use client';
 
-import { GoogleLogin } from '@icgc-argo/uikit';
+import { css } from '@/lib/emotion';
+import { Button, Icon, useTheme } from '@icgc-argo/uikit';
 import { useAppConfigContext } from './ConfigProvider';
 
 const LoginButton = () => {
 	const { EGO_LOGIN_URL } = useAppConfigContext();
-	return <GoogleLogin link={EGO_LOGIN_URL} />;
+	const theme = useTheme();
+	return (
+		<div
+			css={css`
+				display: flex;
+				height: 100%;
+			`}
+		>
+			<a
+				id="link-login"
+				href={EGO_LOGIN_URL}
+				css={css`
+					align-self: center;
+					text-decoration: none;
+					padding: 0 16px;
+				`}
+			>
+				<Button
+					css={css`
+						padding: 8px 18px 8px 12px;
+						border: 1px solid ${theme.colors.grey_1};
+					`}
+				>
+					<span
+						css={css`
+							display: flex;
+							justify-content: center;
+							align-items: center;
+						`}
+					>
+						<Icon
+							name="google"
+							height="17px"
+							width="17px"
+							css={css`
+								margin-right: 5px;
+							`}
+						/>
+						Login
+					</span>
+				</Button>
+			</a>
+		</div>
+	);
 };
 
 export default LoginButton;

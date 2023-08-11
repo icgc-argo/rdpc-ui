@@ -19,13 +19,9 @@
 
 import { css, useTheme } from '@/lib/emotion';
 import { Icon, Link } from '@icgc-argo/uikit';
-import Image from 'next/image';
 import { Col, Row } from 'react-grid-system';
 import urljoin from 'url-join';
 import { useAppConfigContext } from './ConfigProvider';
-import rdpcLogo from '/public/assets/rdpc-logo.svg';
-
-const Logo = () => <Image src={rdpcLogo} alt="RDPC logo" />;
 
 const getNavLinks = (docsUrl: string, argoRootUrl: string) => {
 	const privacyUrl = urljoin(argoRootUrl, '/page/2/privacy');
@@ -128,7 +124,7 @@ export default function Footer() {
 						`}
 					>
 						{navLinks.map(({ displayName, href, target }, index) => (
-							<>
+							<div key={index}>
 								<Link
 									target={target}
 									href={href}
@@ -142,12 +138,8 @@ export default function Footer() {
 								{index !== navLinks.length - 1 && (
 									<Icon width="12px" height="12px" name="slash" fill="grey_1" />
 								)}
-							</>
+							</div>
 						))}
-					</div>
-
-					<div>
-						<Logo />
 					</div>
 				</Col>
 			</Row>
