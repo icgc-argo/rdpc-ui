@@ -71,10 +71,10 @@ const Hero = () => {
 				<Typography
 					variant="hero"
 					color="white"
-					bold={true}
 					css={css({
-						margin: '18px 50px 35px',
+						margin: '18px 0px 35px',
 						textAlign: 'center',
+						fontWeight: 600,
 					})}
 					as="h1"
 				>
