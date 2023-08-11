@@ -106,6 +106,7 @@ const Hero = () => {
 						size={BUTTON_SIZES.MD}
 						css={css`
 							font-size: 24px;
+							padding: 6px 36px 4px;
 						`}
 					>
 						LOGIN
