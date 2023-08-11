@@ -145,10 +145,6 @@ export default function Footer() {
 							</>
 						))}
 					</div>
-
-					<div>
-						<Logo />
-					</div>
 				</Col>
 			</Row>
 		</footer>
