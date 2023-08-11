@@ -91,9 +91,9 @@ const Hero = () => {
 					})}
 				>
 					The International Cancer Genome Consortium Accelerating Research in Genomic Oncology (ICGC
-					ARGO) aims to uniformly analyze specimens from 100,000 donors with high quality clinical
-					data in order to address outstanding questions that are vital to the quest to defeat
-					cancer.
+					ARGO) aims to{' '}
+					<b>uniformly analyze specimens from 100,000 donors with high quality clinical data</b> in
+					order to address outstanding questions that are vital to the quest to defeat cancer.
 				</Typography>
 
 				<Link
