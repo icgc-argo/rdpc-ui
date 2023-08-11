@@ -71,10 +71,10 @@ const Hero = () => {
 				<Typography
 					variant="hero"
 					color="white"
-					bold={true}
 					css={css({
-						margin: '18px 50px 35px',
+						margin: '18px 0px 35px',
 						textAlign: 'center',
+						fontWeight: 600,
 					})}
 					as="h1"
 				>
@@ -91,9 +91,9 @@ const Hero = () => {
 					})}
 				>
 					The International Cancer Genome Consortium Accelerating Research in Genomic Oncology (ICGC
-					ARGO) aims to uniformly analyze specimens from 100,000 donors with high quality clinical
-					data in order to address outstanding questions that are vital to the quest to defeat
-					cancer.
+					ARGO) aims to{' '}
+					<b>uniformly analyze specimens from 100,000 donors with high quality clinical data</b> in
+					order to address outstanding questions that are vital to the quest to defeat cancer.
 				</Typography>
 
 				<Link
@@ -106,6 +106,7 @@ const Hero = () => {
 						size={BUTTON_SIZES.MD}
 						css={css`
 							font-size: 24px;
+							padding: 6px 36px 4px;
 						`}
 					>
 						LOGIN
