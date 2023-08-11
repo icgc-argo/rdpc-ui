@@ -109,9 +109,9 @@ const ActionBox: ComponentType = () => {
 				</DataCallout>
 
 				<DataCallout
-					iconName="download"
-					iconFill="accent4_dark"
-					circleFill="accent4_3"
+					iconName="testtube"
+					iconFill="accent1_dimmed"
+					circleFill="accent1_3"
 					title="Data Submission Guide"
 					urlData={{
 						text: 'Data Submission Guide',
