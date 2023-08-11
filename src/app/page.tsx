@@ -56,8 +56,8 @@ const OvertureBanner: ComponentType = () => {
 					margin-left: 20px;
 				`}
 			>
-				The ARGO Data Platform is built with open-source products that you can incorporate into your
-				systems though{' '}
+				The ARGO RDPCs are built with open-source products that you can incorporate into your
+				systems through{' '}
 				<Link href="https://www.overture.bio/" target="_blank">
 					Overture.bio
 				</Link>
