@@ -19,39 +19,54 @@
 'use client';
 
 import { css } from '@/lib/emotion';
-import { Button, Icon } from '@icgc-argo/uikit';
+import { Button, Icon, useTheme } from '@icgc-argo/uikit';
 import { useAppConfigContext } from './ConfigProvider';
 
 const LoginButton = () => {
 	const { EGO_LOGIN_URL } = useAppConfigContext();
+	const theme = useTheme();
 	return (
-		<a
-			id="link-login"
-			href={EGO_LOGIN_URL}
+		<div
 			css={css`
-				align-self: center;
-				text-decoration: none;
-				padding: 0 16px;
+				display: flex;
+				height: 100%;
 			`}
 		>
-			<Button>
-				<span
+			<a
+				id="link-login"
+				href={EGO_LOGIN_URL}
+				css={css`
+					align-self: center;
+					text-decoration: none;
+					padding: 0 16px;
+				`}
+			>
+				<Button
 					css={css`
-						display: flex;
-						justify-content: center;
-						align-items: center;
+						padding: 8px 18px 8px 12px;
+						border: 1px solid ${theme.colors.grey_1};
 					`}
 				>
-					<Icon
-						name="google"
+					<span
 						css={css`
-							margin-right: 5px;
+							display: flex;
+							justify-content: center;
+							align-items: center;
 						`}
-					/>
-					Login
-				</span>
-			</Button>
-		</a>
+					>
+						<Icon
+							name="google"
+							height="17px"
+							width="17px"
+							css={css`
+								margin-right: 5px;
+							`}
+						/>
+						Login
+					</span>
+				</Button>
+			</a>
+		</div>
 	);
 };
 
