@@ -20,13 +20,13 @@
 'use client';
 
 import { ColumnDef } from '@icgc-argo/uikit';
-import Link from 'next/link';
 import { ArgoMembershipKey, ProgramData } from '../components/ProgramList';
 import Admins from './Admins';
 import CancerTypes from './CancerTypes';
 import Countries from './Countries';
 import DonorStatus from './DonorStatus';
 import TableHeader from './Header';
+import ShortName from './ShortName';
 
 const MembershipDisplayName: { [key in ArgoMembershipKey]: string } = {
 	FULL: 'FULL',
@@ -41,13 +41,7 @@ export const columns: ColumnDef<ProgramData>[] = [
 			row: {
 				original: { shortName },
 			},
-		}) => {
-			return (
-				<div>
-					<Link href={`submission/${shortName}`}>{shortName}</Link>
-				</div>
-			);
-		},
+		}) => <ShortName shortName={shortName} />,
 	},
 	{
 		header: () => <TableHeader>Program Name</TableHeader>,
@@ -75,20 +69,13 @@ export const columns: ColumnDef<ProgramData>[] = [
 	{
 		header: () => <TableHeader>Membership</TableHeader>,
 		accessorKey: 'membershipType',
-		cell: ({
-			row: {
-				original: { membershipType },
-			},
-		}) => {
-			return <div>{membershipType ? 'MembershipDisplayName[original.membershipType]' : ''}</div>;
-		},
 	},
 	{
 		header: () => <TableHeader>Administrators</TableHeader>,
 		accessorKey: 'administrators',
 		cell: ({
 			row: {
-				original: { administrators },
+				original: { admins: administrators },
 			},
 		}) => <Admins admins={administrators} />,
 	},
