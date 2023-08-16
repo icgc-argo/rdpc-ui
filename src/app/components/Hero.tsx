@@ -17,39 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { getAppConfig } from '@/global/config';
-import { EGO_LOGIN_URL, PLATFORM_UI_ROOT } from '@/global/urls';
 import { BUTTON_SIZES, Button, Typography, css, useTheme } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import galaxyImage from '../../../public/assets/galaxy.png';
+import { useAppConfigContext } from './ConfigProvider';
 import RegionBanner from './RegionBanner';
-
-const BackLink = (
-	<div
-		css={css`
-			padding: 17px 0 0 17px;
-			> span,
-			a {
-				line-height: 28px;
-				color: white;
-				font-size: 12px;
-				font-weight: 600;
-			}
-		`}
-	>
-		<span>{`< `}</span>
-		<Link
-			href={PLATFORM_UI_ROOT}
-			css={css({
-				textDecoration: 'underline',
-			})}
-		>{`Back to ICGC ARGO`}</Link>
-	</div>
-);
 
 const Hero = () => {
 	const theme = useTheme();
-	const { REGION } = getAppConfig();
+	const { REGION, PLATFORM_UI_ROOT, EGO_LOGIN_URL } = useAppConfigContext();
 	return (
 		<div
 			css={css({
@@ -59,7 +35,26 @@ const Hero = () => {
 				width: '100%',
 			})}
 		>
-			{BackLink}
+			<div
+				css={css`
+					padding: 17px 0 0 17px;
+					> span,
+					a {
+						line-height: 28px;
+						color: white;
+						font-size: 12px;
+						font-weight: 600;
+					}
+				`}
+			>
+				<span>{`< `}</span>
+				<Link
+					href={PLATFORM_UI_ROOT}
+					css={css({
+						textDecoration: 'underline',
+					})}
+				>{`Back to ICGC ARGO`}</Link>
+			</div>{' '}
 			<div
 				css={css({
 					display: 'flex',
@@ -76,10 +71,10 @@ const Hero = () => {
 				<Typography
 					variant="hero"
 					color="white"
-					bold={true}
 					css={css({
-						margin: '18px 50px 35px',
+						margin: '18px 0px 35px',
 						textAlign: 'center',
+						fontWeight: 600,
 					})}
 					as="h1"
 				>
@@ -96,9 +91,9 @@ const Hero = () => {
 					})}
 				>
 					The International Cancer Genome Consortium Accelerating Research in Genomic Oncology (ICGC
-					ARGO) aims to uniformly analyze specimens from 100,000 donors with high quality clinical
-					data in order to address outstanding questions that are vital to the quest to defeat
-					cancer.
+					ARGO) aims to{' '}
+					<b>uniformly analyze specimens from 100,000 donors with high quality clinical data</b> in
+					order to address outstanding questions that are vital to the quest to defeat cancer.
 				</Typography>
 
 				<Link
@@ -111,6 +106,7 @@ const Hero = () => {
 						size={BUTTON_SIZES.MD}
 						css={css`
 							font-size: 24px;
+							padding: 6px 36px 4px;
 						`}
 					>
 						LOGIN

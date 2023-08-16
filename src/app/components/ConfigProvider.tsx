@@ -16,19 +16,33 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-// 'use client';
 
-import memoize from 'lodash/memoize';
+'use client';
 
-import createEgoUtils from '@icgc-argo/ego-token-utils';
+import { ReactNode, createContext, useContext } from 'react';
+import { AppConfig } from '../api/config/config';
 
-const TokenUtils = createEgoUtils('');
+const defaultContext = {
+	DOCS_URL_ROOT: '',
+	EGO_API_ROOT: '',
+	EGO_CLIENT_ID: '',
+	EGO_PUBLIC_KEY: '',
+	UI_VERSION: '',
+	REGION: '',
+	PLATFORM_UI_ROOT: '',
+	RECAPTCHA_SITE_KEY: '',
+	ARGO_ROOT: '',
+	EGO_LOGIN_URL: '',
+	DACO_ROOT: '',
+};
 
-export const decodeToken = memoize((egoJwt?: string) =>
-	egoJwt ? TokenUtils.decodeToken(egoJwt) : null,
-);
+const AppConfig = createContext<AppConfig>(defaultContext);
 
-export const isValidJwt = (egoJwt: string) => !!egoJwt && TokenUtils.isValidJwt(egoJwt);
+export const AppConfigProvider = ({ children, config }: { children: ReactNode; config: any }) => {
+	return <AppConfig.Provider value={config}>{children}</AppConfig.Provider>;
+};
 
-export const getPermissionsFromToken: (egoJwt: string) => string[] = (egoJwt) =>
-	isValidJwt(egoJwt) ? TokenUtils.getPermissionsFromToken(egoJwt) : [];
+export const useAppConfigContext = () => {
+	const currentContext = useContext(AppConfig);
+	return process.env.NEXT_IS_BUILDING === 'true' ? defaultContext : currentContext;
+};

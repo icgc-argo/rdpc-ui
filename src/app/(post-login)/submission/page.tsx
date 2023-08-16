@@ -19,9 +19,9 @@
 
 'use client';
 
+import programs from '../../../../programs.temp.json';
 import ProgramList from './components/ProgramList';
-import programs from './data.temp';
 
 export default function Submission() {
-	return <ProgramList programs={programs} />;
+	return <ProgramList programs={programs.programs} />;
 }

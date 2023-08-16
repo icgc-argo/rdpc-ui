@@ -21,14 +21,14 @@ import { css } from '@/lib/emotion';
 import { ColumnDef, PercentageBar } from '@icgc-argo/uikit';
 import { get } from 'lodash';
 import Link from 'next/link';
-import { ArgoMembershipKey, ProgramData } from './components/ProgramList';
+import { ArgoMembershipKey, ProgramsData } from './components/ProgramList';
 
 const MembershipDisplayName: { [key in ArgoMembershipKey]: string } = {
 	FULL: 'FULL',
 	ASSOCIATE: 'ASSOCIATE',
 };
 
-export const columns: ColumnDef<ProgramData>[] = [
+export const columns: ColumnDef<ProgramsData>[] = [
 	{
 		header: 'Short Name',
 		accessorKey: 'shortName',

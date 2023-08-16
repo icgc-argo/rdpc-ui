@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { getAppConfig } from '@/global/config';
+import { useAppConfigContext } from '@/app/components/ConfigProvider';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
 	Button,
@@ -68,7 +68,7 @@ const submitForm: SubmitHandler<ContactFormSchemaType> = async (data) => {
 };
 
 const Form = () => {
-	const { RECAPTCHA_SITE_KEY } = getAppConfig();
+	const { RECAPTCHA_SITE_KEY } = useAppConfigContext();
 
 	const {
 		handleSubmit,

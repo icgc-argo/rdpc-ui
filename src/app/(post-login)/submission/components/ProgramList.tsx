@@ -22,22 +22,24 @@ import { useTheme } from '@/lib/emotion';
 import { Table, Typography, css } from '@icgc-argo/uikit';
 import { columns } from '../tableConfig';
 
-export type ProgramsData = {
-	shortName: string;
-	name: string | null;
-	cancerTypes: Array<string>;
-	countries: Array<string> | null;
-	membershipType: ArgoMembershipKey;
-	genomicDonors: number | null;
-	submittedDonors: number;
-	commitmentDonors: number;
-	administrators: { firstName: string; lastName: string; email: string }[];
-	donorPercentage: number;
-};
+// export type ProgramData = {
+// 	shortName: string;
+// 	name: string | null;
+// 	cancerTypes: Array<string>;
+// 	countries: Array<string> | null;
+// 	membershipType: ArgoMembershipKey;
+// 	genomicDonors: number | null;
+// 	submittedDonors: number;
+// 	commitmentDonors: number;
+// 	administrators: { firstName: string; lastName: string; email: string }[];
+// 	donorPercentage: number;
+// };
+
+export type ProgramData = any;
 
 export type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 
-export default function ProgramList({ programs }: { programs: ProgramsData[] }) {
+export default function ProgramList({ programs }: { programs: ProgramData[] }) {
 	const theme = useTheme();
 	const programsArraySize = programs.length;
 
