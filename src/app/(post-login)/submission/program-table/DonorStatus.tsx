@@ -16,41 +16,23 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
 
-import { css, useTheme } from '@/lib/emotion';
-import { ReactNode } from 'react';
-import SideMenu from './components/Sidemenu';
-import TitleBar from './components/TitleBar';
+import { css } from '@/lib/emotion';
+import { PercentageBar } from '@icgc-argo/uikit';
 
-export default function SubmissionLayout({ children }: { children: ReactNode }) {
-	const theme = useTheme();
+type DonorStatusProps = { submittedDonors: number; commitmentDonors: number };
 
-	return (
-		<div
+const DonorStatus = ({ submittedDonors, commitmentDonors }: DonorStatusProps) => (
+	<div>
+		<PercentageBar
+			nom={submittedDonors}
+			denom={commitmentDonors}
 			css={css`
-				display: grid;
-				grid-template-columns: 248px 1fr;
+				display: flex;
+				justify-content: flex-start;
 			`}
-		>
-			<SideMenu />
-			<div>
-				<TitleBar />
-				<div
-					id="content"
-					css={css`
-						background: ${theme.colors.grey_4};
-						padding: 40px;
-						height: 100%;
+		/>
+	</div>
+);
 
-						> div {
-							background: white;
-						}
-					`}
-				>
-					{children}
-				</div>
-			</div>
-		</div>
-	);
-}
+export default DonorStatus;

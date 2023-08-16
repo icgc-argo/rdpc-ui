@@ -18,9 +18,9 @@
  */
 'use client';
 
-import { useTheme } from '@/lib/emotion';
-import { Table, Typography, css } from '@icgc-argo/uikit';
-import { columns } from '../tableConfig';
+import { css, useTheme } from '@/lib/emotion';
+import { Table, Typography } from '@icgc-argo/uikit';
+import { columns } from '../program-table/config';
 
 // export type ProgramData = {
 // 	shortName: string;
@@ -51,8 +51,9 @@ export default function ProgramList({ programs }: { programs: ProgramData[] }) {
 		>
 			<Typography
 				variant="label"
+				color="grey"
+				component="div"
 				css={css`
-					color: ${theme.colors.grey};
 					min-height: 32px;
 					display: flex;
 					align-items: center;

@@ -21,7 +21,7 @@
 import { css } from '@/lib/emotion';
 import { TitleBar as TitleBarComp } from '@icgc-argo/uikit';
 
-export default function TitleBar() {
+const TitleBar = () => {
 	return (
 		<div
 			css={css`
@@ -56,4 +56,6 @@ export default function TitleBar() {
 			</div>
 		</div>
 	);
-}
+};
+
+export default TitleBar;

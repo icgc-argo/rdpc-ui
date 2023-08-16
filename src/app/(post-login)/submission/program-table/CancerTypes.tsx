@@ -16,8 +16,16 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
 
-export default function SideMenu() {
-	return <div>SideMenu</div>;
-}
+const CancerTypes = ({ types }: { types: string[] }) => (
+	<div>
+		{types.map((cancerType: any, i: number) => (
+			<div key={cancerType}>
+				{cancerType}
+				{i < types.length - 1 && ','}
+			</div>
+		))}
+	</div>
+);
+
+export default CancerTypes;

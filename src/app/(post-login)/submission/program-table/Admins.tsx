@@ -16,14 +16,25 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
 
-export default function ProgramMenu({
-	programs,
-	searchQuery,
-}: {
-	programs: { shortName: string }[];
-	searchQuery: string;
-}) {
-	return <div>ProgramMenu</div>;
-}
+import { css } from '@/lib/emotion';
+import Link from 'next/link';
+
+const Admins = ({ admins = [] }: { admins: string[] }) => {
+	const adminLinks = admins.map((admin: any, idx: number) => (
+		<Link
+			key={admin.email}
+			href={`mailto: ${admin.email}`}
+			css={css`
+				margin-right: 0.5em;
+			`}
+		>
+			{admin.firstName + ' ' + admin.lastName}
+			{idx != admins.length - 1 && ','}
+		</Link>
+	));
+
+	return <div>{adminLinks}</div>;
+};
+
+export default Admins;
