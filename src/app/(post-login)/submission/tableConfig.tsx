@@ -51,7 +51,7 @@ export const columns: ColumnDef<ProgramData>[] = [
 		accessorKey: 'cancerTypes',
 		cell: ({ row: { original } }) => (
 			<div>
-				{original.cancerTypes.map((cancerType, i) => (
+				{original.cancerTypes.map((cancerType: any, i: number) => (
 					<div key={cancerType}>
 						{cancerType}
 						{i < original.cancerTypes.length - 1 && ','}
@@ -67,7 +67,7 @@ export const columns: ColumnDef<ProgramData>[] = [
 			const list = original.countries || [];
 			return (
 				<div>
-					{list.map((country, i) => (
+					{list.map((country: any, i: number) => (
 						<div key={country}>
 							{country}
 							{i < list.length - 1 && ','}
@@ -80,15 +80,17 @@ export const columns: ColumnDef<ProgramData>[] = [
 	{
 		header: 'Membership',
 		accessorKey: 'membershipType',
-		cell: ({ row: { original } }) => (
-			<div>{original.membershipType ? MembershipDisplayName[original.membershipType] : ''}</div>
-		),
+		cell: ({ row: { original } }) => {
+			return (
+				<div>{original.membershipType ? 'MembershipDisplayName[original.membershipType]' : ''}</div>
+			);
+		},
 	},
 	{
 		header: 'Administrators',
 		accessorKey: 'administrators',
 		cell: ({ row: { original } }) => {
-			const adminLinks = get(original, 'administrators', []).map((admin, idx) => (
+			const adminLinks = get(original, 'administrators', []).map((admin: any, idx: number) => (
 				<Link
 					key={admin.email}
 					href={`mailto: ${admin.email}`}
