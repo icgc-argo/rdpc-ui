@@ -17,6 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+'use client';
+
 import { ColumnDef } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import { ArgoMembershipKey, ProgramData } from '../components/ProgramList';
