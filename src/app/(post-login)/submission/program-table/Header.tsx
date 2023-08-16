@@ -30,7 +30,6 @@ const TableHeader = ({ children }: { children: ReactNode }) => (
 			&:not(:last-of-type) {
 				border-right: 1px solid red;
 			}
-			padding: 2px 8px;
 			min-height: 28px;
 			text-align: left;
 			display: flex;
