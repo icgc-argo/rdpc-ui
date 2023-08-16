@@ -19,7 +19,7 @@
 'use client';
 
 import { css, useTheme } from '@/lib/emotion';
-import { Icon, MenuItem, SubMenu } from '@icgc-argo/uikit';
+import { Icon, MenuItem, SubMenu, UikitIconNames } from '@icgc-argo/uikit';
 import { useState } from 'react';
 import ProgramMenu from './ProgramMenu';
 import Search from './Search';
@@ -31,28 +31,59 @@ const SideMenuContent = ({ content }: { content: any[] }) => {
 		<SubMenu>
 			<MenuItem icon={<Icon name="programs" />} content={'My Programs'} selected>
 				<Search query={programNameSearch} onChange={setProgramNameSearch} />
-				<ProgramMenu programs={content.slice(0, 10)} searchQuery={programNameSearch} />
+				<ProgramMenu programs={content.slice(0, -1)} searchQuery={programNameSearch} />
 			</MenuItem>
 		</SubMenu>
 	);
 };
 
-const SideMenuToggle = ({ onToggle }: { onToggle: any }) => (
+const ToggleChevron = ({ css, name }: { css?: any; name: UikitIconNames }) => (
+	<Icon height="10px" fill="primary_2" css={css} name={name} />
+);
+
+const SideMenuToggle = ({ onToggle, open }: { onToggle: any; open: boolean }) => (
 	<div
 		css={css`
-			width: 20px;
+			height: 56px;
+			width: 100%;
 			display: flex;
+			justify-content: flex-end;
+			padding-right: ${open ? '22px' : '12px'};
+
+			&:hover {
+				cursor: pointer;
+			}
 		`}
 		onClick={onToggle}
 	>
-		<Icon name="chevron_right" />
-		<Icon
-			name="chevron_right"
+		<div
 			css={css`
-				position: relative;
-				left: -3px;
+				display: ${open ? 'block' : 'none'};
 			`}
-		/>
+		>
+			<ToggleChevron name="chevron_left" />
+			<ToggleChevron
+				name="chevron_left"
+				css={css`
+					position: relative;
+					left: -3px;
+				`}
+			/>
+		</div>
+		<div
+			css={css`
+				display: ${!open ? 'block' : 'none'};
+			`}
+		>
+			<ToggleChevron name="chevron_right" />
+			<ToggleChevron
+				name="chevron_right"
+				css={css`
+					position: relative;
+					left: -3px;
+				`}
+			/>
+		</div>
 	</div>
 );
 
@@ -63,18 +94,22 @@ const SideMenu = ({ content, onToggle, isActive }: SideMenuProps) => {
 	return (
 		<div
 			css={css`
-				z-index: 1;
 				display: flex;
 				flex-direction: column;
 				justify-content: space-between;
-				transition-duration: 10s;
-				transition-property: width;
-				box-shadow: ${theme.shadows.pageElement};
-				visibility: ${isActive ? 'visible' : 'hidden'};
+				width: ${isActive ? 'auto' : '40px'};
 			`}
 		>
-			<SideMenuContent content={content} />
-			<SideMenuToggle onToggle={onToggle} />
+			<div
+				css={css`
+					height: calc(100vh - 52px);
+					overflow-y: auto;
+					visibility: ${isActive ? 'visible' : 'hidden'};
+				`}
+			>
+				<SideMenuContent content={content} />
+			</div>
+			<SideMenuToggle onToggle={onToggle} open={isActive} />
 		</div>
 	);
 };
