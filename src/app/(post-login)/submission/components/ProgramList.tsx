@@ -65,6 +65,7 @@ export default function ProgramList({ programs }: { programs: ProgramData[] }) {
 			<Table
 				data={programs}
 				columns={columns}
+				pageCount={20}
 				withSideBorders
 				withRowBorder
 				withStripes
