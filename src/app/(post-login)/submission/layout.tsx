@@ -37,11 +37,18 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 				grid-template-columns: ${isSidebarActive ? '248px' : '40px'} 1fr;
 			`}
 		>
-			<SideMenu
-				content={programData.programs}
-				isActive={isSidebarActive}
-				onToggle={() => setSidebarActive((active) => !active)}
-			/>
+			<div
+				css={css`
+					z-index: 1;
+					box-shadow: ${theme.shadows.pageElement};
+				`}
+			>
+				<SideMenu
+					content={programData.programs}
+					isActive={isSidebarActive}
+					onToggle={() => setSidebarActive((active) => !active)}
+				/>
+			</div>
 			<div>
 				<TitleBar />
 				<div

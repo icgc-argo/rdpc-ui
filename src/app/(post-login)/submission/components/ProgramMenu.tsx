@@ -36,12 +36,7 @@ export default function ProgramMenu({
 	const filteredPrograms = programs.filter(
 		({ shortName }) => !searchQuery.length || shortName.search(new RegExp(searchQuery, 'i')) > -1,
 	);
-	//const currentViewingProgramIndex = filteredPrograms;
-	// 	.map(({ shortName }) => shortName)
-	// 	.indexOf(String(pageContext.query.shortName));
-	// const { activeItem: activeProgramIndex, toggleItem: toggleProgramIndex } = useToggledSelectState(
-	// 	currentViewingProgramIndex,
-	// );
+
 	return (
 		<>
 			<Link href="/submission">
@@ -62,10 +57,6 @@ export default function ProgramMenu({
 					selected={programIndex === activeProgramIndex}
 				>
 					<MenuItem level={3}>{program.shortName}</MenuItem>
-					{/* <LinksToProgram
-						program={program}
-						isCurrentlyViewed={programIndex === currentViewingProgramIndex}
-					/> */}
 				</MenuItem>
 			))}
 		</>
