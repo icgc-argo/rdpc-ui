@@ -18,14 +18,47 @@
  */
 'use client';
 
-import { css } from '@/lib/emotion';
+import { css, useTheme } from '@/lib/emotion';
 import { Icon, MenuItem, SubMenu } from '@icgc-argo/uikit';
 import { useState } from 'react';
 import ProgramMenu from './ProgramMenu';
 import Search from './Search';
 
-export default function SideMenu({ programs, isActive }: { programs: any[]; isActive: boolean }) {
+const SideMenuContent = ({ content }: { content: any[] }) => {
 	const [programNameSearch, setProgramNameSearch] = useState('');
+
+	return (
+		<SubMenu>
+			<MenuItem icon={<Icon name="programs" />} content={'My Programs'} selected>
+				<Search query={programNameSearch} onChange={setProgramNameSearch} />
+				<ProgramMenu programs={content.slice(0, 10)} searchQuery={programNameSearch} />
+			</MenuItem>
+		</SubMenu>
+	);
+};
+
+const SideMenuToggle = ({ onToggle }: { onToggle: any }) => (
+	<div
+		css={css`
+			width: 20px;
+			display: flex;
+		`}
+		onClick={onToggle}
+	>
+		<Icon name="chevron_right" />
+		<Icon
+			name="chevron_right"
+			css={css`
+				position: relative;
+				left: -3px;
+			`}
+		/>
+	</div>
+);
+
+type SideMenuProps = { content: any; onToggle: any; isActive: boolean };
+const SideMenu = ({ content, onToggle, isActive }: SideMenuProps) => {
+	const theme = useTheme();
 
 	return (
 		<div
@@ -36,15 +69,14 @@ export default function SideMenu({ programs, isActive }: { programs: any[]; isAc
 				justify-content: space-between;
 				transition-duration: 10s;
 				transition-property: width;
+				box-shadow: ${theme.shadows.pageElement};
 				visibility: ${isActive ? 'visible' : 'hidden'};
 			`}
 		>
-			<SubMenu>
-				<MenuItem icon={<Icon name="programs" />} content={'My Programs'} selected>
-					<Search query={programNameSearch} onChange={setProgramNameSearch} />
-					<ProgramMenu programs={programs.slice(0, 10)} searchQuery={programNameSearch} />
-				</MenuItem>
-			</SubMenu>
+			<SideMenuContent content={content} />
+			<SideMenuToggle onToggle={onToggle} />
 		</div>
 	);
-}
+};
+
+export default SideMenu;

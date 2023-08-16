@@ -19,31 +19,11 @@
 'use client';
 
 import { css, useTheme } from '@/lib/emotion';
-import { Icon } from '@icgc-argo/uikit';
 import { ReactNode, useState } from 'react';
 import SideMenu from './components/Sidemenu';
 import TitleBar from './components/TitleBar';
 
 import TEMP_DATA from '../../../../programs.temp.json';
-
-const SideMenuToggle = ({ onToggle }: { onToggle: any }) => (
-	<div
-		css={css`
-			width: 20px;
-			display: flex;
-		`}
-		onClick={onToggle}
-	>
-		<Icon name="chevron_right" />
-		<Icon
-			name="chevron_right"
-			css={css`
-				position: relative;
-				left: -3px;
-			`}
-		/>
-	</div>
-);
 
 export default function AppLayout({ children }: { children: ReactNode }) {
 	const theme = useTheme();
@@ -57,23 +37,23 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 				grid-template-columns: ${isSidebarActive ? '248px' : '40px'} 1fr;
 			`}
 		>
-			<div>
-				<SideMenu programs={programData.programs} isActive={isSidebarActive} />
-				<SideMenuToggle onToggle={() => setSidebarActive((t) => !t)} />
-			</div>
+			<SideMenu
+				content={programData.programs}
+				isActive={isSidebarActive}
+				onToggle={() => setSidebarActive((active) => !active)}
+			/>
 			<div>
 				<TitleBar />
 				<div
 					id="content"
 					css={css`
 						background: ${theme.colors.grey_4};
-						padding: 40px;
-						height: 100%;
+						padding: 25px 30px;
 
 						> div {
 							background: white;
 							border-radius: 8px;
-						}
+							border: 1px solid ${theme.colors.grey_1}
 					`}
 				>
 					{children}

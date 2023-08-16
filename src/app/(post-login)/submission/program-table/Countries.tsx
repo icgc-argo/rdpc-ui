@@ -17,10 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-'use client';
+const Countries = ({ countries }: { countries: string[] }) => (
+	<div>
+		{countries.map((country: any, i: number) => (
+			<div key={country}>
+				{country}
+				{i < countries.length - 1 && ','}
+			</div>
+		))}
+	</div>
+);
 
-import ProgramList from './components/ProgramList';
-
-export default function Submission() {
-	return <ProgramList programs={[]} />;
-}
+export default Countries;

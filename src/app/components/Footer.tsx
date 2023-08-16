@@ -60,7 +60,7 @@ const getNavLinks = (docsUrl: string, argoRootUrl: string) => {
 	];
 };
 
-export default function Footer() {
+const Footer = () => {
 	const theme = useTheme();
 	const { UI_VERSION, REGION, DOCS_URL_ROOT, ARGO_ROOT } = useAppConfigContext();
 
@@ -145,4 +145,6 @@ export default function Footer() {
 			</Row>
 		</footer>
 	);
-}
+};
+
+export default Footer;

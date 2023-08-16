@@ -17,11 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@/lib/emotion';
-import { ColumnDef, PercentageBar } from '@icgc-argo/uikit';
-import { get } from 'lodash';
+import { ColumnDef } from '@icgc-argo/uikit';
 import Link from 'next/link';
-import { ArgoMembershipKey, ProgramData } from './components/ProgramList';
+import { ArgoMembershipKey, ProgramData } from '../components/ProgramList';
+import Admins from './Admins';
+import CancerTypes from './CancerTypes';
+import Countries from './Countries';
+import DonorStatus from './DonorStatus';
+import TableHeader from './Header';
 
 const MembershipDisplayName: { [key in ArgoMembershipKey]: string } = {
 	FULL: 'FULL',
@@ -30,10 +33,13 @@ const MembershipDisplayName: { [key in ArgoMembershipKey]: string } = {
 
 export const columns: ColumnDef<ProgramData>[] = [
 	{
-		header: 'Short Name',
+		header: () => <TableHeader>Short Name</TableHeader>,
 		accessorKey: 'shortName',
-		cell: ({ row: { original } }) => {
-			const shortName = original.shortName;
+		cell: ({
+			row: {
+				original: { shortName },
+			},
+		}) => {
 			return (
 				<div>
 					<Link href={`submission/${shortName}`}>{shortName}</Link>
@@ -42,85 +48,56 @@ export const columns: ColumnDef<ProgramData>[] = [
 		},
 	},
 	{
-		header: 'Program Name',
+		header: () => <TableHeader>Program Name</TableHeader>,
 		accessorKey: 'name',
 		cell: ({ row: { original } }) => <div>{original.name}</div>,
 	},
 	{
-		header: 'Cancer Types',
+		header: () => <TableHeader>Cancer Types</TableHeader>,
 		accessorKey: 'cancerTypes',
-		cell: ({ row: { original } }) => (
-			<div>
-				{original.cancerTypes.map((cancerType: any, i: number) => (
-					<div key={cancerType}>
-						{cancerType}
-						{i < original.cancerTypes.length - 1 && ','}
-					</div>
-				))}
-			</div>
-		),
+		cell: ({
+			row: {
+				original: { cancerTypes },
+			},
+		}) => <CancerTypes types={cancerTypes} />,
 	},
 	{
-		header: 'Countries',
+		header: () => <TableHeader>Countries</TableHeader>,
 		accessorKey: 'countries',
-		cell: ({ row: { original } }) => {
-			const list = original.countries || [];
-			return (
-				<div>
-					{list.map((country: any, i: number) => (
-						<div key={country}>
-							{country}
-							{i < list.length - 1 && ','}
-						</div>
-					))}
-				</div>
-			);
-		},
+		cell: ({
+			row: {
+				original: { countries },
+			},
+		}) => <Countries countries={countries} />,
 	},
 	{
-		header: 'Membership',
+		header: () => <TableHeader>Membership</TableHeader>,
 		accessorKey: 'membershipType',
-		cell: ({ row: { original } }) => {
-			return (
-				<div>{original.membershipType ? 'MembershipDisplayName[original.membershipType]' : ''}</div>
-			);
+		cell: ({
+			row: {
+				original: { membershipType },
+			},
+		}) => {
+			return <div>{membershipType ? 'MembershipDisplayName[original.membershipType]' : ''}</div>;
 		},
 	},
 	{
-		header: 'Administrators',
+		header: () => <TableHeader>Administrators</TableHeader>,
 		accessorKey: 'administrators',
-		cell: ({ row: { original } }) => {
-			const adminLinks = get(original, 'administrators', []).map((admin: any, idx: number) => (
-				<Link
-					key={admin.email}
-					href={`mailto: ${admin.email}`}
-					css={css`
-						margin-right: 0.5em;
-					`}
-				>
-					{admin.firstName + ' ' + admin.lastName}
-					{idx != original.administrators.length - 1 && ','}
-				</Link>
-			));
-
-			return <div>{adminLinks}</div>;
-		},
+		cell: ({
+			row: {
+				original: { administrators },
+			},
+		}) => <Admins admins={administrators} />,
 	},
 	{
-		header: 'Donor Status',
+		header: () => <TableHeader>Donor Status</TableHeader>,
 		accessorKey: 'donorPercentage',
 		size: 200,
-		cell: ({ row: { original } }) => (
-			<div>
-				<PercentageBar
-					nom={original.submittedDonors}
-					denom={original.commitmentDonors}
-					css={css`
-						display: flex;
-						justify-content: flex-start;
-					`}
-				/>
-			</div>
-		),
+		cell: ({
+			row: {
+				original: { submittedDonors, commitmentDonors },
+			},
+		}) => <DonorStatus submittedDonors={submittedDonors} commitmentDonors={commitmentDonors} />,
 	},
 ];

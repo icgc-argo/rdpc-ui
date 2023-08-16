@@ -17,8 +17,27 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-'use client';
+import { css } from '@/lib/emotion';
+import { ReactNode } from 'react';
 
-export default function Program() {
-	return <div>Program</div>;
-}
+const TableHeader = ({ children }: { children: ReactNode }) => (
+	<th
+		css={css`
+			font-size: 11px;
+			font-weight: 600;
+			padding: 0;
+			&:not(:last-of-type) {
+				border-right: 1px solid red;
+			}
+			padding: 2px 8px;
+			min-height: 28px;
+			text-align: left;
+			display: flex;
+			align-items: center;
+			box-sizing: border-box;
+		`}
+	>
+		{children}
+	</th>
+);
+export default TableHeader;
