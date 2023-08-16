@@ -18,22 +18,45 @@
  */
 'use client';
 
-import { css } from '@/lib/emotion';
-import { PercentageBar } from '@icgc-argo/uikit';
+import { css, useTheme } from '@/lib/emotion';
+import { Typography } from '@icgc-argo/uikit';
 
 type DonorStatusProps = { submittedDonors: number; commitmentDonors: number };
 
-const DonorStatus = ({ submittedDonors, commitmentDonors }: DonorStatusProps) => (
-	<div>
-		<PercentageBar
-			nom={submittedDonors}
-			denom={commitmentDonors}
+const DonorStatus = ({ submittedDonors, commitmentDonors }: DonorStatusProps) => {
+	const theme = useTheme();
+	const numerator = submittedDonors < 0 ? 0 : submittedDonors;
+	const denominator = commitmentDonors;
+
+	return (
+		<div
 			css={css`
 				display: flex;
-				justify-content: flex-start;
+				flex-wrap: wrap;
 			`}
-		/>
-	</div>
-);
+		>
+			<Typography
+				variant="data"
+				component="div"
+				css={css`
+					margin-right: 15px;
+				`}
+			>
+				{numerator.toLocaleString()}
+				<span
+					css={css`
+						color: ${theme.colors.grey_2};
+					`}
+				>
+					{` `}/{` `}
+				</span>
+				{denominator.toLocaleString()}
+			</Typography>
+			<Typography variant="data" component="div">
+				({((numerator / denominator) * 100).toFixed(2)}%)
+			</Typography>
+		</div>
+	);
+};
 
 export default DonorStatus;
