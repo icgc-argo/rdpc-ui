@@ -21,9 +21,10 @@
 import { css, useTheme } from '@/lib/emotion';
 import { Icon } from '@icgc-argo/uikit';
 import { ReactNode, useState } from 'react';
-import SideMenu from './components/SideMenu';
+import SideMenu from './components/Sidemenu';
 import TitleBar from './components/TitleBar';
-import TEMP_DATA from './data.temp';
+
+import TEMP_DATA from '../../../../programs.temp.json';
 
 const SideMenuToggle = ({ onToggle }: { onToggle: any }) => (
 	<div
@@ -57,7 +58,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 			`}
 		>
 			<div>
-				<SideMenu programs={programData} isActive={isSidebarActive} />
+				<SideMenu programs={programData.programs} isActive={isSidebarActive} />
 				<SideMenuToggle onToggle={() => setSidebarActive((t) => !t)} />
 			</div>
 			<div>

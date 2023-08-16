@@ -17,52 +17,56 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { getAppConfig } from '@/global/config';
-import * as urls from '@/global/urls';
 import { css, useTheme } from '@/lib/emotion';
 import { Icon, Link } from '@icgc-argo/uikit';
-import Image from 'next/image';
 import { Col, Row } from 'react-grid-system';
-import rdpcLogo from '/public/assets/rdpc-logo.svg';
+import urljoin from 'url-join';
+import { useAppConfigContext } from './ConfigProvider';
 
-const { UI_VERSION, REGION } = getAppConfig();
-const subtitle = `RDPC ${REGION} Clinical Data Submission Portal - ${UI_VERSION}`;
+const getNavLinks = (docsUrl: string, argoRootUrl: string) => {
+	const privacyUrl = urljoin(argoRootUrl, '/page/2/privacy');
+	const termsUrl = urljoin(argoRootUrl, '/page/1/terms-and-conditions');
+	const publicationUrl = urljoin(argoRootUrl, '/page/77/e3-publication-policy');
 
-const Logo = () => <Image src={rdpcLogo} alt="RDPC logo" />;
-
-const links = [
-	{
-		displayName: 'Contact',
-		href: '/contact',
-	},
-	{
-		displayName: 'Documentation',
-		href: urls.DOCS_URL_ROOT,
-		target: '_blank',
-	},
-	{
-		displayName: 'The Team',
-		href: '',
-	},
-	{
-		displayName: 'Privacy Policy',
-		href: urls.ARGO_PRIVACY_PAGE,
-		target: '_blank',
-	},
-	{
-		displayName: 'Terms & Conditions',
-		href: urls.ARGO_TERMS_PAGE,
-		target: '_blank',
-	},
-	{
-		displayName: 'Publication Policy',
-		href: urls.ARGO_PUBLICATION_PAGE,
-		target: '_blank',
-	},
-];
+	return [
+		{
+			displayName: 'Contact',
+			href: '/contact',
+		},
+		{
+			displayName: 'Documentation',
+			href: docsUrl,
+			target: '_blank',
+		},
+		{
+			displayName: 'The Team',
+			href: '',
+		},
+		{
+			displayName: 'Privacy Policy',
+			href: privacyUrl,
+			target: '_blank',
+		},
+		{
+			displayName: 'Terms & Conditions',
+			href: termsUrl,
+			target: '_blank',
+		},
+		{
+			displayName: 'Publication Policy',
+			href: publicationUrl,
+			target: '_blank',
+		},
+	];
+};
 
 export default function Footer() {
 	const theme = useTheme();
+	const { UI_VERSION, REGION, DOCS_URL_ROOT, ARGO_ROOT } = useAppConfigContext();
+
+	const subtitle = `RDPC ${REGION} Clinical Data Submission Portal - ${UI_VERSION}`;
+	const navLinks = getNavLinks(DOCS_URL_ROOT, ARGO_ROOT);
+
 	return (
 		<footer
 			css={css`
@@ -119,8 +123,8 @@ export default function Footer() {
 							margin-right: 22px;
 						`}
 					>
-						{links.map(({ displayName, href, target }, index) => (
-							<>
+						{navLinks.map(({ displayName, href, target }, index) => (
+							<div key={index}>
 								<Link
 									target={target}
 									href={href}
@@ -131,15 +135,11 @@ export default function Footer() {
 								>
 									{displayName}
 								</Link>
-								{index !== links.length - 1 && (
+								{index !== navLinks.length - 1 && (
 									<Icon width="12px" height="12px" name="slash" fill="grey_1" />
 								)}
-							</>
+							</div>
 						))}
-					</div>
-
-					<div>
-						<Logo />
 					</div>
 				</Col>
 			</Row>

@@ -16,19 +16,8 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-// 'use client';
+'use client';
 
-import memoize from 'lodash/memoize';
-
-import createEgoUtils from '@icgc-argo/ego-token-utils';
-
-const TokenUtils = createEgoUtils('');
-
-export const decodeToken = memoize((egoJwt?: string) =>
-	egoJwt ? TokenUtils.decodeToken(egoJwt) : null,
-);
-
-export const isValidJwt = (egoJwt: string) => !!egoJwt && TokenUtils.isValidJwt(egoJwt);
-
-export const getPermissionsFromToken: (egoJwt: string) => string[] = (egoJwt) =>
-	isValidJwt(egoJwt) ? TokenUtils.getPermissionsFromToken(egoJwt) : [];
+export default function SideMenu() {
+	return <div>SideMenu</div>;
+}

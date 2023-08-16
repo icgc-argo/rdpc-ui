@@ -16,19 +16,14 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-// 'use client';
 
-import memoize from 'lodash/memoize';
+import { headers } from 'next/headers';
+import { NextResponse } from 'next/server';
+import { getAppConfig } from './config';
 
-import createEgoUtils from '@icgc-argo/ego-token-utils';
+export async function GET() {
+	headers();
+	const appConfig = getAppConfig(process.env);
 
-const TokenUtils = createEgoUtils('');
-
-export const decodeToken = memoize((egoJwt?: string) =>
-	egoJwt ? TokenUtils.decodeToken(egoJwt) : null,
-);
-
-export const isValidJwt = (egoJwt: string) => !!egoJwt && TokenUtils.isValidJwt(egoJwt);
-
-export const getPermissionsFromToken: (egoJwt: string) => string[] = (egoJwt) =>
-	isValidJwt(egoJwt) ? TokenUtils.getPermissionsFromToken(egoJwt) : [];
+	return NextResponse.json(appConfig);
+}

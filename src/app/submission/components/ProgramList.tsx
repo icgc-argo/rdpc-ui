@@ -18,56 +18,58 @@
  */
 'use client';
 
-import { css } from '@/lib/emotion';
-import { Button, Icon, useTheme } from '@icgc-argo/uikit';
-import { useAppConfigContext } from './ConfigProvider';
+import { useTheme } from '@/lib/emotion';
+import { Table, Typography, css } from '@icgc-argo/uikit';
+import { columns } from '../tableConfig';
 
-const LoginButton = () => {
-	const { EGO_LOGIN_URL } = useAppConfigContext();
+export type ProgramsData = {
+	shortName: string;
+	name: string | null;
+	cancerTypes: Array<string>;
+	countries: Array<string> | null;
+	membershipType: ArgoMembershipKey;
+	genomicDonors: number | null;
+	submittedDonors: number;
+	commitmentDonors: number;
+	administrators: { firstName: string; lastName: string; email: string }[];
+	donorPercentage: number;
+};
+
+export type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
+
+export default function ProgramList({ programs }: { programs: ProgramsData[] }) {
 	const theme = useTheme();
+	const programsArraySize = programs.length;
+
 	return (
 		<div
 			css={css`
-				display: flex;
-				height: 100%;
+				padding: 16px 15px 6px;
 			`}
 		>
-			<a
-				id="link-login"
-				href={EGO_LOGIN_URL}
+			<Typography
+				variant="label"
 				css={css`
-					align-self: center;
-					text-decoration: none;
-					padding: 0 16px;
+					color: ${theme.colors.grey};
+					min-height: 32px;
+					display: flex;
+					align-items: center;
+					margin-bottom: 8px;
 				`}
 			>
-				<Button
-					css={css`
-						padding: 8px 18px 8px 12px;
-						border: 1px solid ${theme.colors.grey_1};
-					`}
-				>
-					<span
-						css={css`
-							display: flex;
-							justify-content: center;
-							align-items: center;
-						`}
-					>
-						<Icon
-							name="google"
-							height="17px"
-							width="17px"
-							css={css`
-								margin-right: 5px;
-							`}
-						/>
-						Login
-					</span>
-				</Button>
-			</a>
+				{programsArraySize.toLocaleString()} results
+			</Typography>
+			<Table
+				data={programs}
+				columns={columns}
+				withSideBorders
+				withRowBorder
+				withStripes
+				withHeaders
+				withPagination
+				showPageSizeOptions
+				loading={false}
+			/>
 		</div>
 	);
-};
-
-export default LoginButton;
+}

@@ -17,42 +17,39 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * React.Context, used by ThemeProvider, doesn't work server side so we're defaulting to client side rendering
- */
-'use client';
+/** @jsxImportSource react */
+// ^ force default jsx runtime, @emotion/jsx doesn't play nice with server components
 
-import { AuthProvider } from '@/global/utils/auth';
-import { css } from '@/lib/emotion';
+import { BUILD_TIME_VARIABLES } from '@/global/constants';
 import { ReactNode } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import Footer from './components/Footer';
-import Header from './components/Header';
-import ThemeProvider from './components/ThemeProvider';
+import App from './App';
 
-const queryClient = new QueryClient();
+async function getAppConfig() {
+	// cache: "no-store" ensures it's run server side
+	// url cannot be root - will cause infinite loop
+	try {
+		const configResp = await fetch(BUILD_TIME_VARIABLES.RUNTIME_CONFIG_URL, {
+			cache: 'no-store',
+		});
+		return await configResp.json();
+	} catch (e) {
+		if (process.env.NEXT_IS_BUILDING === 'true') {
+			console.log(
+				"Failed to retrieve server runtime config. Colocated api route won't be available during build.",
+			);
+		} else {
+			console.error(e);
+		}
+		return {};
+	}
+}
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+	const appConfig = await getAppConfig();
 	return (
 		<html lang="en">
 			<body>
-				<ThemeProvider>
-					<QueryClientProvider client={queryClient}>
-						<AuthProvider>
-							<div
-								css={css`
-									display: grid;
-									grid-template-rows: 58px 1fr 59px; /* header + content + footer*/
-									min-height: 100vh;
-								`}
-							>
-								<Header />
-								{children}
-								<Footer />
-							</div>
-						</AuthProvider>
-					</QueryClientProvider>
-				</ThemeProvider>
+				<App config={appConfig}>{children}</App>
 			</body>
 		</html>
 	);

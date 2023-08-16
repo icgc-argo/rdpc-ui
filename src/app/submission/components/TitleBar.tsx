@@ -16,19 +16,44 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-// 'use client';
+'use client';
 
-import memoize from 'lodash/memoize';
+import { css } from '@/lib/emotion';
+import { TitleBar as TitleBarComp } from '@icgc-argo/uikit';
 
-import createEgoUtils from '@icgc-argo/ego-token-utils';
+export default function TitleBar() {
+	return (
+		<div
+			css={css`
+				display: flex;
+				padding: 0 20px;
+			`}
+		>
+			<TitleBarComp
+				css={css`
+					margin-right: 10px;
+				`}
+			>
+				<>All Programs</>
+			</TitleBarComp>
+			<div
+				id="progress-bar"
+				css={css`
+					display: none;
+				`}
+			>
+				future work
+			</div>
 
-const TokenUtils = createEgoUtils('');
-
-export const decodeToken = memoize((egoJwt?: string) =>
-	egoJwt ? TokenUtils.decodeToken(egoJwt) : null,
-);
-
-export const isValidJwt = (egoJwt: string) => !!egoJwt && TokenUtils.isValidJwt(egoJwt);
-
-export const getPermissionsFromToken: (egoJwt: string) => string[] = (egoJwt) =>
-	isValidJwt(egoJwt) ? TokenUtils.getPermissionsFromToken(egoJwt) : [];
+			<div
+				css={css`
+					margin-left: auto;
+					display: none;
+				`}
+				id="col-buttons"
+			>
+				future work
+			</div>
+		</div>
+	);
+}

@@ -16,19 +16,47 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-// 'use client';
+'use client';
 
-import memoize from 'lodash/memoize';
+import { css } from '@/lib/emotion';
+import { DropdownMenu, FocusWrapper, NavBarElement, NavElement, UserBadge } from '@icgc-argo/uikit';
+import { Theme } from '@icgc-argo/uikit/ThemeProvider';
 
-import createEgoUtils from '@icgc-argo/ego-token-utils';
-
-const TokenUtils = createEgoUtils('');
-
-export const decodeToken = memoize((egoJwt?: string) =>
-	egoJwt ? TokenUtils.decodeToken(egoJwt) : null,
+const ProfileMenu = ({
+	isDropdownOpen,
+	onProfilePage,
+	onClick,
+	profileNavDetails,
+	theme,
+}: {
+	isDropdownOpen: boolean;
+	onProfilePage: boolean;
+	onClick: () => void;
+	profileNavDetails: NavElement[];
+	theme: Theme;
+}) => (
+	<FocusWrapper onClick={onClick}>
+		{isDropdownOpen && (
+			<DropdownMenu>
+				{profileNavDetails.map((element, idx) => (
+					<NavBarElement key={`profileNavDetail_${idx}`} {...element} isDropdown={true} />
+				))}
+			</DropdownMenu>
+		)}
+		<UserBadge
+			showGreeting={true}
+			firstName={'Test'}
+			lastName={'User'}
+			title={'DCC Member'}
+			className={onProfilePage ? 'active' : ''}
+			css={css`
+				color: ${onProfilePage ? theme.colors.accent1 : theme.colors.white};
+				&:hover {
+					color: ${theme.colors.accent1};
+				}
+			`}
+		/>
+	</FocusWrapper>
 );
 
-export const isValidJwt = (egoJwt: string) => !!egoJwt && TokenUtils.isValidJwt(egoJwt);
-
-export const getPermissionsFromToken: (egoJwt: string) => string[] = (egoJwt) =>
-	isValidJwt(egoJwt) ? TokenUtils.getPermissionsFromToken(egoJwt) : [];
+export default ProfileMenu;

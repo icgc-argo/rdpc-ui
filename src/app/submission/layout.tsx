@@ -16,19 +16,41 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-// 'use client';
+'use client';
 
-import memoize from 'lodash/memoize';
+import { css, useTheme } from '@/lib/emotion';
+import { ReactNode } from 'react';
+import SideMenu from './components/Sidemenu';
+import TitleBar from './components/TitleBar';
 
-import createEgoUtils from '@icgc-argo/ego-token-utils';
+export default function SubmissionLayout({ children }: { children: ReactNode }) {
+	const theme = useTheme();
 
-const TokenUtils = createEgoUtils('');
+	return (
+		<div
+			css={css`
+				display: grid;
+				grid-template-columns: 248px 1fr;
+			`}
+		>
+			<SideMenu />
+			<div>
+				<TitleBar />
+				<div
+					id="content"
+					css={css`
+						background: ${theme.colors.grey_4};
+						padding: 40px;
+						height: 100%;
 
-export const decodeToken = memoize((egoJwt?: string) =>
-	egoJwt ? TokenUtils.decodeToken(egoJwt) : null,
-);
-
-export const isValidJwt = (egoJwt: string) => !!egoJwt && TokenUtils.isValidJwt(egoJwt);
-
-export const getPermissionsFromToken: (egoJwt: string) => string[] = (egoJwt) =>
-	isValidJwt(egoJwt) ? TokenUtils.getPermissionsFromToken(egoJwt) : [];
+						> div {
+							background: white;
+						}
+					`}
+				>
+					{children}
+				</div>
+			</div>
+		</div>
+	);
+}
