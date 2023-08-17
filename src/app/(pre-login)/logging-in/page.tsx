@@ -18,11 +18,11 @@
  */
 'use client';
 
+import { useAppConfigContext } from '@/app/components/ConfigProvider';
 import { useAuthContext } from '@/global/utils/auth';
 import { DnaLoader, css, useTheme } from '@icgc-argo/uikit';
 import { useRouter } from 'next/navigation';
 import { useQuery } from 'react-query';
-import { useAppConfigContext } from '../../components/ConfigProvider';
 
 export default async function LoggingIn() {
 	const { EGO_LOGIN_URL } = useAppConfigContext();

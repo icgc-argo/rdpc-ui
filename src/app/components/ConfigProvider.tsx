@@ -19,8 +19,8 @@
 
 'use client';
 
+import { AppConfig } from '@/app/api/config/config';
 import { ReactNode, createContext, useContext } from 'react';
-import { AppConfig } from '../api/config/config';
 
 const defaultContext = {
 	DOCS_URL_ROOT: '',
