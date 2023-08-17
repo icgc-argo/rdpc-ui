@@ -42,10 +42,11 @@ const ToggleChevron = ({ css, name }: { css?: Interpolation<Theme>; name: UikitI
 	<Icon height="10px" fill="primary_2" css={css} name={name} />
 );
 
+export const TOGGLE_HEIGHT_PX = 56;
 const SideMenuToggle = ({ onToggle, open }: { onToggle: () => void; open: boolean }) => (
 	<div
 		css={css`
-			height: 56px;
+			height: ${TOGGLE_HEIGHT_PX}px;
 			width: 100%;
 			display: flex;
 			justify-content: flex-end;
@@ -104,7 +105,7 @@ const SideMenu = ({ content, onToggle, isActive }: SideMenuProps) => {
 		>
 			<div
 				css={css`
-					height: calc(100vh - 52px);
+					height: calc(100vh - ${TOGGLE_HEIGHT_PX}px);
 					overflow-y: auto;
 					visibility: ${isActive ? 'visible' : 'hidden'};
 				`}

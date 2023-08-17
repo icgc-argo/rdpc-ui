@@ -18,14 +18,16 @@
  */
 'use client';
 
+import { HEADER_HEIGHT_PX } from '@/app/components/Header';
 import { css, useTheme } from '@/lib/emotion';
 import { ReactNode, useState } from 'react';
+import p from '../../../../programs.temp.json';
 import SideMenu from './components/Sidemenu';
 import TitleBar from './components/TitleBar';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
 	const theme = useTheme();
-	const programData: never[] = [];
+	const programData = p.programs;
 	const [isSidebarActive, setSidebarActive] = useState<boolean>(true);
 
 	return (
@@ -39,7 +41,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 		>
 			<div
 				css={css`
-					height: calc(100vh - 58px);
+					height: calc(100vh - ${HEADER_HEIGHT_PX}px);
 					z-index: 1;
 					box-shadow: ${theme.shadows.pageElement};
 				`}
