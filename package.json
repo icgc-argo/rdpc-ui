@@ -11,10 +11,12 @@
     "test": "echo 'Add tests please :)'"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.1",
     "@hookform/resolvers": "^3.1.1",
     "@icgc-argo/ego-token-utils": "^8.2.0",
     "@icgc-argo/uikit": "^3.0.1",
     "@types/url-join": "^4.0.1",
+    "graphql": "^16.8.0",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
     "next": "^13.4.12",
