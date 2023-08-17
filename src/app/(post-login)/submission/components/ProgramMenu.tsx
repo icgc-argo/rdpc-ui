@@ -18,6 +18,7 @@
  */
 'use client';
 
+import { css } from '@/lib/emotion';
 import { MenuItem } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -39,7 +40,12 @@ export default function ProgramMenu({
 
 	return (
 		<>
-			<Link href="/submission">
+			<Link
+				href="/submission"
+				css={css`
+					text-decoration: none !important;
+				`}
+			>
 				<MenuItem
 					level={2}
 					content="All Programs"
