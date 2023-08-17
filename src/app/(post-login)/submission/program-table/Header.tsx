@@ -24,7 +24,7 @@ import { ReactNode } from 'react';
 const TableHeader = ({ children }: { children: ReactNode }) => (
 	<div
 		css={css`
-			font-size: 11px;
+			font-size: 1.1rem;
 			font-weight: 600;
 			padding: 0;
 			&:not(:last-of-type) {
