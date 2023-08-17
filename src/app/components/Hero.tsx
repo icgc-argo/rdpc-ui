@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { BUTTON_SIZES, Button, Typography, css, useTheme } from '@icgc-argo/uikit';
+import { BUTTON_SIZES, Button, Icon, Typography, css, useTheme } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import galaxyImage from '../../../public/assets/galaxy.png';
 import { useAppConfigContext } from './ConfigProvider';
@@ -47,7 +47,17 @@ const Hero = () => {
 					}
 				`}
 			>
-				<span>{`< `}</span>
+				<Icon
+					name="chevron_left"
+					fill="white"
+					width="8px"
+					height="8px"
+					css={css`
+						position: relative;
+						top: 1px;
+						margin-right: 4px;
+					`}
+				/>
 				<Link
 					href={PLATFORM_UI_ROOT}
 					css={css({
