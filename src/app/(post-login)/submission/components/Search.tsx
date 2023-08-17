@@ -35,8 +35,8 @@ export default function Search({
 			content={
 				<Input
 					aria-label="programs search"
-					onChange={(event) => {
-						onChange(event.target.value);
+					onChange={(e) => {
+						onChange(e.target.value);
 					}}
 					value={query}
 					css={css`

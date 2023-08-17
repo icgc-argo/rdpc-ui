@@ -19,10 +19,76 @@
 'use client';
 
 import { css, useTheme } from '@/lib/emotion';
-import SideMenuContent from './Content';
-import SideMenuToggle, { TOGGLE_HEIGHT_PX } from './Toggle';
-import { SideMenuProps } from './types';
+import { Interpolation, Theme } from '@emotion/react';
+import { Icon, MenuItem, SubMenu, UikitIconNames } from '@icgc-argo/uikit';
+import { useState } from 'react';
+import ProgramMenu from './ProgramMenu';
+import Search from './Search';
 
+const SideMenuContent = ({ content }: { content: any[] }) => {
+	const [programNameSearch, setProgramNameSearch] = useState('');
+
+	return (
+		<SubMenu>
+			<MenuItem icon={<Icon name="programs" />} content={'My Programs'} selected>
+				<Search query={programNameSearch} onChange={setProgramNameSearch} />
+				<ProgramMenu programs={content.slice(0, -1)} searchQuery={programNameSearch} />
+			</MenuItem>
+		</SubMenu>
+	);
+};
+
+const ToggleChevron = ({ css, name }: { css?: Interpolation<Theme>; name: UikitIconNames }) => (
+	<Icon height="10px" fill="primary_2" css={css} name={name} />
+);
+
+const SideMenuToggle = ({ onToggle, open }: { onToggle: () => void; open: boolean }) => (
+	<div
+		css={css`
+			height: 56px;
+			width: 100%;
+			display: flex;
+			justify-content: flex-end;
+			padding-right: ${open ? '22px' : '12px'};
+
+			&:hover {
+				cursor: pointer;
+			}
+		`}
+		onClick={onToggle}
+	>
+		<div
+			css={css`
+				display: ${open ? 'block' : 'none'};
+			`}
+		>
+			<ToggleChevron name="chevron_left" />
+			<ToggleChevron
+				name="chevron_left"
+				css={css`
+					position: relative;
+					left: -3px;
+				`}
+			/>
+		</div>
+		<div
+			css={css`
+				display: ${!open ? 'block' : 'none'};
+			`}
+		>
+			<ToggleChevron name="chevron_right" />
+			<ToggleChevron
+				name="chevron_right"
+				css={css`
+					position: relative;
+					left: -3px;
+				`}
+			/>
+		</div>
+	</div>
+);
+
+type SideMenuProps = { content: any; onToggle: () => void; isActive: boolean };
 const SideMenu = ({ content, onToggle, isActive }: SideMenuProps) => {
 	const theme = useTheme();
 
@@ -38,7 +104,7 @@ const SideMenu = ({ content, onToggle, isActive }: SideMenuProps) => {
 		>
 			<div
 				css={css`
-					height: calc(100vh - ${TOGGLE_HEIGHT_PX}px);
+					height: calc(100vh - 52px);
 					overflow-y: auto;
 					visibility: ${isActive ? 'visible' : 'hidden'};
 				`}

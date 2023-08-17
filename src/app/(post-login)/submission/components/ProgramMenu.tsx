@@ -22,7 +22,7 @@ import { css } from '@/lib/emotion';
 import { MenuItem } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { MouseEventHandler, useState } from 'react';
+import { useState } from 'react';
 
 export default function ProgramMenu({
 	programs,
@@ -34,14 +34,9 @@ export default function ProgramMenu({
 	const pathname = usePathname();
 	const [activeProgramIndex, setActiveProgramIndex] = useState(-1);
 
-	const filteredPrograms = !searchQuery.length
-		? programs
-		: programs.filter(({ shortName }) => shortName.search(new RegExp(searchQuery, 'i')) > -1);
-
-	const setActiveProgram =
-		(index: number): MouseEventHandler =>
-		() =>
-			setActiveProgramIndex(index);
+	const filteredPrograms = programs.filter(
+		({ shortName }) => !searchQuery.length || shortName.search(new RegExp(searchQuery, 'i')) > -1,
+	);
 
 	return (
 		<>
@@ -54,7 +49,7 @@ export default function ProgramMenu({
 				<MenuItem
 					level={2}
 					content="All Programs"
-					onClick={setActiveProgram(-1)}
+					onClick={() => setActiveProgramIndex(-1)}
 					selected={pathname === '/submission'}
 				/>
 			</Link>
@@ -64,7 +59,7 @@ export default function ProgramMenu({
 					level={2}
 					key={program.shortName}
 					content={program.shortName}
-					onClick={setActiveProgram(programIndex)}
+					onClick={() => setActiveProgramIndex(programIndex)}
 					selected={programIndex === activeProgramIndex}
 				>
 					<MenuItem level={3}>{program.shortName}</MenuItem>

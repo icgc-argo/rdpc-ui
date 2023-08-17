@@ -20,9 +20,13 @@
 /** @jsxImportSource react */
 // ^ force default jsx runtime, @emotion/jsx doesn't play nice with server components
 
-import { BUILD_TIME_VARIABLES } from '@/global/constants';
+import { AuthProvider } from '@/global/utils/auth';
+import { css } from '@/lib/emotion';
 import { ReactNode } from 'react';
-import App from './App';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import Footer from './components/Footer';
+import Header from './components/Header';
+import ThemeProvider from './components/ThemeProvider';
 
 async function getAppConfig() {
 	// cache: "no-store" ensures it's run server side
