@@ -19,6 +19,7 @@
 
 import { css, useTheme } from '@/lib/emotion';
 import { Icon, Link } from '@icgc-argo/uikit';
+import { Fragment } from 'react';
 import { Col, Row } from 'react-grid-system';
 import urljoin from 'url-join';
 import { useAppConfigContext } from './ConfigProvider';
@@ -124,7 +125,8 @@ export default function Footer() {
 						`}
 					>
 						{navLinks.map(({ displayName, href, target }, index) => (
-							<div key={index}>
+							<Fragment key={index}>
+								{' '}
 								<Link
 									target={target}
 									href={href}
@@ -138,7 +140,7 @@ export default function Footer() {
 								{index !== navLinks.length - 1 && (
 									<Icon width="12px" height="12px" name="slash" fill="grey_1" />
 								)}
-							</div>
+							</Fragment>
 						))}
 					</div>
 				</Col>
