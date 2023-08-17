@@ -34,9 +34,9 @@ export default function ProgramMenu({
 	const pathname = usePathname();
 	const [activeProgramIndex, setActiveProgramIndex] = useState(-1);
 
-	const filteredPrograms = programs.filter(
-		({ shortName }) => !searchQuery.length || shortName.search(new RegExp(searchQuery, 'i')) > -1,
-	);
+	const filteredPrograms = !searchQuery.length
+		? programs
+		: programs.filter(({ shortName }) => shortName.search(new RegExp(searchQuery, 'i')) > -1);
 
 	return (
 		<>
