@@ -35,10 +35,13 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 			css={css`
 				display: grid;
 				grid-template-columns: ${isSidebarActive ? '248px' : '40px'} 1fr;
+				transition: 300ms;
+				background: ${theme.colors.grey_4};
 			`}
 		>
 			<div
 				css={css`
+					height: calc(100vh - 58px);
 					z-index: 1;
 					box-shadow: ${theme.shadows.pageElement};
 				`}
@@ -54,7 +57,6 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 				<div
 					id="content"
 					css={css`
-						background: ${theme.colors.grey_4};
 						padding: 25px 30px;
 
 						> div {

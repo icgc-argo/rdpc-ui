@@ -94,10 +94,11 @@ const SideMenu = ({ content, onToggle, isActive }: SideMenuProps) => {
 	return (
 		<div
 			css={css`
+				height: 100%;
 				display: flex;
 				flex-direction: column;
 				justify-content: space-between;
-				width: ${isActive ? 'auto' : '40px'};
+				background-color: ${theme.colors.white};
 			`}
 		>
 			<div
