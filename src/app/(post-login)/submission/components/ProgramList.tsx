@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { css, useTheme } from '@/lib/emotion';
+import { css } from '@/lib/emotion';
 import { Table, Typography } from '@icgc-argo/uikit';
 import { columns } from '../program-table/config';
 
@@ -40,7 +40,6 @@ export type ProgramData = any;
 export type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 
 export default function ProgramList({ programs }: { programs: ProgramData[] }) {
-	const theme = useTheme();
 	const programsArraySize = programs.length;
 
 	return (

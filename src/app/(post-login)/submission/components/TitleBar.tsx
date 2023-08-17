@@ -18,15 +18,17 @@
  */
 'use client';
 
-import { css } from '@/lib/emotion';
+import { css, useTheme } from '@/lib/emotion';
 import { TitleBar as TitleBarComp } from '@icgc-argo/uikit';
 
 const TitleBar = () => {
+	const theme = useTheme();
 	return (
 		<div
 			css={css`
 				display: flex;
 				padding: 0 20px;
+				background-color: ${theme.colors.white};
 			`}
 		>
 			<TitleBarComp
