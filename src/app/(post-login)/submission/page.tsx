@@ -17,12 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useQuery } from 'react-query';
+'use client';
+
+import { useQuery } from '@apollo/client';
 import ProgramList from './components/ProgramList';
 import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
 
 export default function Submission() {
-	const { data: { programs = [] } = {}, loading } = useQuery(PROGRAMS_LIST_QUERY);
+	//  @ts-ignore gql stuff do later
+	const { data: { programs = [] } = {}, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
 
 	// const programsWithAdmins = programs.map((program) => {
 	// 	const users = get(
@@ -35,5 +38,7 @@ export default function Submission() {
 	// 		...(programsWithUsers.length > 0 ? { administrators: filter(users, { role: 'ADMIN' }) } : {}),
 	// 	};
 	// });
+	if (loading) return <div> Loader.....</div>;
+	if (error) return <div>eerrors</div>;
 	return <ProgramList programs={programs.programs} />;
 }

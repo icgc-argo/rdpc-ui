@@ -1,3 +1,4 @@
+/* eslint-disable */
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -18,6 +19,7 @@ export type Scalars = {
 	Float: { input: number; output: number };
 	Date: { input: any; output: any };
 	DateTime: { input: any; output: any };
+	/** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
 	JSON: { input: any; output: any };
 	Upload: { input: any; output: any };
 };
