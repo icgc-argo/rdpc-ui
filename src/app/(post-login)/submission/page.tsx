@@ -19,8 +19,7 @@
 
 'use client';
 
-import p from '../../../../programs.temp.json';
 import ProgramList from './components/ProgramList';
 export default function Submission() {
-	return <ProgramList programs={p.programs} />;
+	return <ProgramList programs={[]} />;
 }

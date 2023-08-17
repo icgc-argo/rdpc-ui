@@ -21,13 +21,12 @@
 import { HEADER_HEIGHT_PX } from '@/app/components/Header';
 import { css, useTheme } from '@/lib/emotion';
 import { ReactNode, useState } from 'react';
-import p from '../../../../programs.temp.json';
 import SideMenu from './components/SideMenu/Menu';
 import TitleBar from './components/TitleBar';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
 	const theme = useTheme();
-	const programData = p.programs;
+	const programData: never[] = [];
 	const [isSidebarActive, setSidebarActive] = useState<boolean>(true);
 
 	return (
