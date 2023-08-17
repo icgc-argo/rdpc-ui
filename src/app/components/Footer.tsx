@@ -126,7 +126,6 @@ export default function Footer() {
 					>
 						{navLinks.map(({ displayName, href, target }, index) => (
 							<Fragment key={index}>
-								{' '}
 								<Link
 									target={target}
 									href={href}
