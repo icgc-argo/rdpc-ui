@@ -21,8 +21,14 @@
 import { Link as UIKitLink } from '@icgc-argo/uikit';
 import Link from 'next/link';
 
-const Admins = ({ admins = [] }: { admins: string[] }) => {
-	const adminLinks = admins.map((admin: any, idx: number) => (
+type Admin = {
+	email: string;
+	firstName: string;
+	lastName: string;
+};
+
+const Admins = ({ admins = [] }: { admins: Admin[] }) => {
+	const adminLinks = admins.map((admin, idx) => (
 		<Link
 			href={`mailto: ${admin.email}`}
 			key={admin.email}
