@@ -1,0 +1,92 @@
+{
+	"programs": [
+		{
+			"shortName": "KIMC-CA",
+			"name": "Kim Test",
+			"cancerTypes": ["Blood cancer"],
+			"countries": ["Cayman Islands"],
+			"admins": [
+				{
+					"email": "edmund.su@gmail.com",
+					"firstName": "Edmund",
+					"lastName": "Su",
+					"role": "ADMIN",
+					"__typename": "ProgramUser"
+				}
+			],
+			"membershipType": "FULL",
+			"genomicDonors": 2,
+			"submittedDonors": 4,
+			"commitmentDonors": 10,
+			"__typename": "Program"
+		},
+		{
+			"shortName": "ALEXIS-CA",
+			"name": "ALEXIS-CA",
+			"cancerTypes": ["Blood cancer"],
+			"countries": ["Aland Islands"],
+			"membershipType": "FULL",
+			"genomicDonors": 0,
+			"submittedDonors": 25,
+			"commitmentDonors": 76,
+			"__typename": "Program"
+		},
+		{
+			"shortName": "BASH-CA",
+			"name": "bashar",
+			"cancerTypes": ["Rectal cancer"],
+			"countries": ["Canada"],
+			"membershipType": "FULL",
+			"genomicDonors": 0,
+			"submittedDonors": 1,
+			"commitmentDonors": 100,
+			"__typename": "Program"
+		},
+
+		{
+			"shortName": "RDPCDEV-CA",
+			"name": "RDPCDEV-CA",
+			"cancerTypes": ["Biliary Tract cancer"],
+			"countries": ["Canada"],
+			"membershipType": "FULL",
+			"genomicDonors": 0,
+			"submittedDonors": 5,
+			"commitmentDonors": 10,
+			"__typename": "Program"
+		},
+
+		{
+			"shortName": "CYUNG-CA",
+			"name": "Test program",
+			"cancerTypes": ["Bone cancer"],
+			"countries": ["Canada"],
+			"membershipType": "FULL",
+			"genomicDonors": 0,
+			"submittedDonors": 0,
+			"commitmentDonors": 2000,
+			"__typename": "Program"
+		},
+		{
+			"shortName": "BHAVIK-CA",
+			"name": "BHAVIK-CA",
+			"cancerTypes": ["Brain cancer"],
+			"countries": ["Canada"],
+			"membershipType": "FULL",
+			"genomicDonors": 0,
+			"submittedDonors": 0,
+			"commitmentDonors": 10,
+			"__typename": "Program"
+		},
+		{
+			"shortName": "TEST-JP",
+			"name": "TEST JP",
+			"cancerTypes": ["Blood cancer"],
+			"countries": ["Japan"],
+			"membershipType": "FULL",
+			"genomicDonors": 0,
+			"submittedDonors": 0,
+			"commitmentDonors": 1232,
+			"__typename": "Program"
+		}
+	]
+}

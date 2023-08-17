@@ -19,7 +19,9 @@
 
 'use client';
 
+import mockData from '@/mockData.json';
 import ProgramList from './components/ProgramList';
+
 export default function Submission() {
-	return <ProgramList programs={[]} />;
+	return <ProgramList programs={mockData.programs} />;
 }
