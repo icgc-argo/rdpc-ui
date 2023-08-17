@@ -20,7 +20,7 @@
 
 const CancerTypes = ({ types }: { types: string[] }) => (
 	<div>
-		{types.map((cancerType: any, i: number) => (
+		{types.map((cancerType, i) => (
 			<div key={cancerType}>
 				{cancerType}
 				{i < types.length - 1 && ','}

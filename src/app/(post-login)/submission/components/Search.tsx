@@ -20,7 +20,13 @@
 
 import { Input, MenuItem, css } from '@icgc-argo/uikit';
 
-export default function Search({ query, onChange }: { query: string; onChange: any }) {
+export default function Search({
+	query,
+	onChange,
+}: {
+	query: string;
+	onChange: (s: string) => void;
+}) {
 	return (
 		<MenuItem
 			level={1}

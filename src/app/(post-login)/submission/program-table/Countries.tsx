@@ -20,7 +20,7 @@
 
 const Countries = ({ countries }: { countries: string[] }) => (
 	<div>
-		{countries.map((country: any, i: number) => (
+		{countries.map((country, i) => (
 			<div key={country}>
 				{country}
 				{i < countries.length - 1 && ','}

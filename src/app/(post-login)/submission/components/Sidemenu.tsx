@@ -19,6 +19,7 @@
 'use client';
 
 import { css, useTheme } from '@/lib/emotion';
+import { Interpolation, Theme } from '@emotion/react';
 import { Icon, MenuItem, SubMenu, UikitIconNames } from '@icgc-argo/uikit';
 import { useState } from 'react';
 import ProgramMenu from './ProgramMenu';
@@ -37,11 +38,11 @@ const SideMenuContent = ({ content }: { content: any[] }) => {
 	);
 };
 
-const ToggleChevron = ({ css, name }: { css?: any; name: UikitIconNames }) => (
+const ToggleChevron = ({ css, name }: { css?: Interpolation<Theme>; name: UikitIconNames }) => (
 	<Icon height="10px" fill="primary_2" css={css} name={name} />
 );
 
-const SideMenuToggle = ({ onToggle, open }: { onToggle: any; open: boolean }) => (
+const SideMenuToggle = ({ onToggle, open }: { onToggle: () => void; open: boolean }) => (
 	<div
 		css={css`
 			height: 56px;
@@ -87,7 +88,7 @@ const SideMenuToggle = ({ onToggle, open }: { onToggle: any; open: boolean }) =>
 	</div>
 );
 
-type SideMenuProps = { content: any; onToggle: any; isActive: boolean };
+type SideMenuProps = { content: any; onToggle: () => void; isActive: boolean };
 const SideMenu = ({ content, onToggle, isActive }: SideMenuProps) => {
 	const theme = useTheme();
 
