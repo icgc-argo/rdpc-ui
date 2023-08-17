@@ -23,11 +23,9 @@ import { ReactNode, useState } from 'react';
 import SideMenu from './components/Sidemenu';
 import TitleBar from './components/TitleBar';
 
-import TEMP_DATA from '../../../../programs.temp.json';
-
 export default function AppLayout({ children }: { children: ReactNode }) {
 	const theme = useTheme();
-	const programData = TEMP_DATA;
+	const programData: never[] = [];
 	const [isSidebarActive, setSidebarActive] = useState<boolean>(true);
 
 	return (
@@ -47,7 +45,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 				`}
 			>
 				<SideMenu
-					content={programData.programs}
+					content={programData}
 					isActive={isSidebarActive}
 					onToggle={() => setSidebarActive((active) => !active)}
 				/>
