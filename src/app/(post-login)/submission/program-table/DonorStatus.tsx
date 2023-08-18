@@ -18,58 +18,45 @@
  */
 'use client';
 
-import { useTheme } from '@/lib/emotion';
-import { Table, Typography, css } from '@icgc-argo/uikit';
-import { columns } from '../tableConfig';
+import { css, useTheme } from '@/lib/emotion';
+import { Typography } from '@icgc-argo/uikit';
 
-export type ProgramsData = {
-	shortName: string;
-	name: string | null;
-	cancerTypes: Array<string>;
-	countries: Array<string> | null;
-	membershipType: ArgoMembershipKey;
-	genomicDonors: number | null;
-	submittedDonors: number;
-	commitmentDonors: number;
-	administrators: { firstName: string; lastName: string; email: string }[];
-	donorPercentage: number;
-};
+type DonorStatusProps = { submittedDonors: number; commitmentDonors: number };
 
-export type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
-
-export default function ProgramList({ programs }: { programs: ProgramsData[] }) {
+const DonorStatus = ({ submittedDonors, commitmentDonors }: DonorStatusProps) => {
 	const theme = useTheme();
-	const programsArraySize = programs.length;
+	const numerator = submittedDonors < 0 ? 0 : submittedDonors;
+	const denominator = commitmentDonors;
 
 	return (
 		<div
 			css={css`
-				padding: 16px 15px 6px;
+				display: flex;
+				flex-wrap: wrap;
 			`}
 		>
 			<Typography
-				variant="label"
+				variant="data"
+				component="div"
 				css={css`
-					color: ${theme.colors.grey};
-					min-height: 32px;
-					display: flex;
-					align-items: center;
-					margin-bottom: 8px;
+					margin-right: 15px;
 				`}
 			>
-				{programsArraySize.toLocaleString()} results
+				{numerator.toLocaleString()}
+				<span
+					css={css`
+						color: ${theme.colors.grey_2};
+					`}
+				>
+					{` / `}
+				</span>
+				{denominator.toLocaleString()}
 			</Typography>
-			<Table
-				data={programs}
-				columns={columns}
-				withSideBorders
-				withRowBorder
-				withStripes
-				withHeaders
-				withPagination
-				showPageSizeOptions
-				loading={false}
-			/>
+			<Typography variant="data" component="div">
+				({((numerator / denominator) * 100).toFixed(2)}%)
+			</Typography>
 		</div>
 	);
-}
+};
+
+export default DonorStatus;

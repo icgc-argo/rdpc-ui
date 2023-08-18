@@ -17,32 +17,4 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-'use client';
-
-import { AppConfig } from '@/app/api/config/config';
-import { ReactNode, createContext, useContext } from 'react';
-
-const defaultContext = {
-	DOCS_URL_ROOT: '',
-	EGO_API_ROOT: '',
-	EGO_CLIENT_ID: '',
-	EGO_PUBLIC_KEY: '',
-	UI_VERSION: '',
-	REGION: '',
-	PLATFORM_UI_ROOT: '',
-	RECAPTCHA_SITE_KEY: '',
-	ARGO_ROOT: '',
-	EGO_LOGIN_URL: '',
-	DACO_ROOT: '',
-};
-
-const AppConfig = createContext<AppConfig>(defaultContext);
-
-export const AppConfigProvider = ({ children, config }: { children: ReactNode; config: any }) => {
-	return <AppConfig.Provider value={config}>{children}</AppConfig.Provider>;
-};
-
-export const useAppConfigContext = () => {
-	const currentContext = useContext(AppConfig);
-	return process.env.NEXT_IS_BUILDING === 'true' ? defaultContext : currentContext;
-};
+export type SideMenuProps = { content: any; onToggle: () => void; isActive: boolean };

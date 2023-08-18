@@ -16,11 +16,24 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 'use client';
 
-import ProgramList from './components/ProgramList';
+import { Icon, MenuItem, SubMenu } from '@icgc-argo/uikit';
+import { useState } from 'react';
+import ProgramMenu from '../ProgramMenu';
+import Search from '../Search';
 
-export default function Submission() {
-	return <ProgramList programs={[]} />;
-}
+const SideMenuContent = ({ content }: { content: any[] }) => {
+	const [programNameSearch, setProgramNameSearch] = useState('');
+
+	return (
+		<SubMenu>
+			<MenuItem icon={<Icon name="programs" />} content={'My Programs'} selected>
+				<Search query={programNameSearch} onChange={setProgramNameSearch} />
+				<ProgramMenu programs={content.slice(0, -1)} searchQuery={programNameSearch} />
+			</MenuItem>
+		</SubMenu>
+	);
+};
+
+export default SideMenuContent;

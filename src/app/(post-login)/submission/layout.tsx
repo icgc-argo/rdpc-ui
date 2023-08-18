@@ -18,47 +18,56 @@
  */
 'use client';
 
-import { useAuthContext } from '@/global/utils/auth';
-import { DnaLoader, css, useTheme } from '@icgc-argo/uikit';
-import { useRouter } from 'next/navigation';
-import { useQuery } from 'react-query';
-import { useAppConfigContext } from '../components/ConfigProvider';
+import { HEADER_HEIGHT_PX } from '@/app/components/Header';
+import { css, useTheme } from '@/lib/emotion';
+import mockData from '@/mockData.json';
+import { ReactNode, useState } from 'react';
+import SideMenu from './components/SideMenu/Menu';
+import TitleBar from './components/TitleBar';
 
-export default async function LoggingIn() {
-	const { EGO_LOGIN_URL } = useAppConfigContext();
-	const router = useRouter();
+export default function AppLayout({ children }: { children: ReactNode }) {
 	const theme = useTheme();
-	const { egoJwt, authLoading, setAuthLoading, logIn } = useAuthContext();
-
-	if (egoJwt) router.push('/landing-page');
-
-	if (!authLoading && !egoJwt) setAuthLoading(true);
-
-	useQuery('egoJwt', () => {
-		fetch(EGO_LOGIN_URL, {
-			credentials: 'include',
-			headers: { accept: '*/*' },
-			body: null,
-			method: 'GET',
-			mode: 'cors',
-		})
-			.then(async (res) => {
-				const newToken = await res.text();
-				logIn(newToken);
-			})
-			.catch(console.error);
-	});
+	const programData = mockData.programs;
+	const [isSidebarActive, setSidebarActive] = useState<boolean>(true);
 
 	return (
 		<div
 			css={css`
-				background-color: ${theme.colors.grey_4};
-				display: flex;
-				justify-content: center;
-				align-items: center;
+				display: grid;
+				grid-template-columns: ${isSidebarActive ? '248px' : '40px'} 1fr;
+				transition: 300ms;
+				background: ${theme.colors.grey_4};
 			`}
 		>
-			<DnaLoader />
+			<div
+				css={css`
+					height: calc(100vh - ${HEADER_HEIGHT_PX}px);
+					z-index: 1;
+					box-shadow: ${theme.shadows.pageElement};
+				`}
+			>
+				<SideMenu
+					content={programData}
+					isActive={isSidebarActive}
+					onToggle={() => setSidebarActive((active) => !active)}
+				/>
+			</div>
+			<div>
+				<TitleBar />
+				<div
+					id="content"
+					css={css`
+						padding: 25px 30px;
+
+						> div {
+							background: white;
+							border-radius: 8px;
+							border: 1px solid ${theme.colors.grey_1}
+					`}
+				>
+					{children}
+				</div>
+			</div>
 		</div>
 	);
 }

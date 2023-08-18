@@ -16,33 +16,38 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 'use client';
 
-import { AppConfig } from '@/app/api/config/config';
-import { ReactNode, createContext, useContext } from 'react';
+import { css, useTheme } from '@/lib/emotion';
+import SideMenuContent from './Content';
+import SideMenuToggle, { TOGGLE_HEIGHT_PX } from './Toggle';
+import { SideMenuProps } from './types';
 
-const defaultContext = {
-	DOCS_URL_ROOT: '',
-	EGO_API_ROOT: '',
-	EGO_CLIENT_ID: '',
-	EGO_PUBLIC_KEY: '',
-	UI_VERSION: '',
-	REGION: '',
-	PLATFORM_UI_ROOT: '',
-	RECAPTCHA_SITE_KEY: '',
-	ARGO_ROOT: '',
-	EGO_LOGIN_URL: '',
-	DACO_ROOT: '',
+const SideMenu = ({ content, onToggle, isActive }: SideMenuProps) => {
+	const theme = useTheme();
+
+	return (
+		<div
+			css={css`
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				background-color: ${theme.colors.white};
+			`}
+		>
+			<div
+				css={css`
+					height: calc(100vh - ${TOGGLE_HEIGHT_PX}px);
+					overflow-y: auto;
+					visibility: ${isActive ? 'visible' : 'hidden'};
+				`}
+			>
+				<SideMenuContent content={content} />
+			</div>
+			<SideMenuToggle onToggle={onToggle} open={isActive} />
+		</div>
+	);
 };
 
-const AppConfig = createContext<AppConfig>(defaultContext);
-
-export const AppConfigProvider = ({ children, config }: { children: ReactNode; config: any }) => {
-	return <AppConfig.Provider value={config}>{children}</AppConfig.Provider>;
-};
-
-export const useAppConfigContext = () => {
-	const currentContext = useContext(AppConfig);
-	return process.env.NEXT_IS_BUILDING === 'true' ? defaultContext : currentContext;
-};
+export default SideMenu;

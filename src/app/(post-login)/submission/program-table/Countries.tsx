@@ -18,12 +18,15 @@
  */
 'use client';
 
-export default function ProgramMenu({
-	programs,
-	searchQuery,
-}: {
-	programs: { shortName: string }[];
-	searchQuery: string;
-}) {
-	return <div>ProgramMenu</div>;
-}
+const Countries = ({ countries }: { countries: string[] }) => (
+	<div>
+		{countries.map((country, i) => (
+			<div key={country}>
+				{country}
+				{i < countries.length - 1 && ','}
+			</div>
+		))}
+	</div>
+);
+
+export default Countries;

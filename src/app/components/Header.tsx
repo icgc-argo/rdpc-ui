@@ -28,6 +28,8 @@ import LoginButton from './LoginButton';
 import ProfileMenu from './ProfileMenu';
 import argoLogo from '/public/argo-logo.svg';
 
+export const HEADER_HEIGHT_PX = '58';
+
 const Header = () => {
 	const [isDropdownOpen, setDropdownOpen] = useState(false);
 	const { egoJwt, authLoading, logOut } = useAuthContext();
@@ -64,7 +66,7 @@ const Header = () => {
 				flex-direction: row;
 				justify-content: space-between;
 				align-items: center;
-				min-height: 58px;
+				height: ${HEADER_HEIGHT_PX}px;
 				background-color: ${theme.colors.primary};
 				border-bottom: none;
 				position: sticky;

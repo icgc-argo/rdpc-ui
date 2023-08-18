@@ -16,33 +16,49 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 'use client';
 
-import { AppConfig } from '@/app/api/config/config';
-import { ReactNode, createContext, useContext } from 'react';
+import { useAppConfigContext } from '@/app/components/ConfigProvider';
+import { useAuthContext } from '@/global/utils/auth';
+import { DnaLoader, css, useTheme } from '@icgc-argo/uikit';
+import { useRouter } from 'next/navigation';
+import { useQuery } from 'react-query';
 
-const defaultContext = {
-	DOCS_URL_ROOT: '',
-	EGO_API_ROOT: '',
-	EGO_CLIENT_ID: '',
-	EGO_PUBLIC_KEY: '',
-	UI_VERSION: '',
-	REGION: '',
-	PLATFORM_UI_ROOT: '',
-	RECAPTCHA_SITE_KEY: '',
-	ARGO_ROOT: '',
-	EGO_LOGIN_URL: '',
-	DACO_ROOT: '',
-};
+export default async function LoggingIn() {
+	const { EGO_LOGIN_URL } = useAppConfigContext();
+	const router = useRouter();
+	const theme = useTheme();
+	const { egoJwt, authLoading, setAuthLoading, logIn } = useAuthContext();
 
-const AppConfig = createContext<AppConfig>(defaultContext);
+	if (egoJwt) router.push('/landing-page');
 
-export const AppConfigProvider = ({ children, config }: { children: ReactNode; config: any }) => {
-	return <AppConfig.Provider value={config}>{children}</AppConfig.Provider>;
-};
+	if (!authLoading && !egoJwt) setAuthLoading(true);
 
-export const useAppConfigContext = () => {
-	const currentContext = useContext(AppConfig);
-	return process.env.NEXT_IS_BUILDING === 'true' ? defaultContext : currentContext;
-};
+	useQuery('egoJwt', () => {
+		fetch(EGO_LOGIN_URL, {
+			credentials: 'include',
+			headers: { accept: '*/*' },
+			body: null,
+			method: 'GET',
+			mode: 'cors',
+		})
+			.then(async (res) => {
+				const newToken = await res.text();
+				logIn(newToken);
+			})
+			.catch(console.error);
+	});
+
+	return (
+		<div
+			css={css`
+				background-color: ${theme.colors.grey_4};
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			`}
+		>
+			<DnaLoader />
+		</div>
+	);
+}
