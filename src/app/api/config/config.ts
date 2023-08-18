@@ -67,7 +67,7 @@ export const getAppConfig = (serverEnv: any): AppConfig => {
 		PLATFORM_UI_ROOT:
 			serverEnv.NEXT_PUBLIC_PLATFORM_UI_ROOT || process.env.NEXT_PUBLIC_PLATFORM_UI_ROOT || '',
 		RECAPTCHA_SITE_KEY:
-			serverEnv.RECAPTCHA_SITE_KEY || process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '',
+			serverEnv.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '',
 		ARGO_ROOT: serverEnv.ARGO_ROOT || process.env.ARGO_ROOT || 'https://www.icgc-argo.org',
 		EGO_API_ROOT,
 		EGO_CLIENT_ID,
