@@ -21,33 +21,22 @@
 
 import { AuthProvider } from '@/global/utils/auth';
 import { css } from '@/lib/emotion';
-import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from '@apollo/client';
 import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { AppConfigProvider } from './components/ConfigProvider';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import ThemeProvider from './components/ThemeProvider';
+import { ApolloProvider } from './hooks/ApolloProvider';
 
 const queryClient = new QueryClient();
-
-// Apollo
-const link = createHttpLink({
-	uri: 'https://argo-gateway.dev.argo.cancercollaboratory.org/graphql',
-	credentials: 'include',
-});
-
-const apolloClient = new ApolloClient({
-	link,
-	cache: new InMemoryCache(),
-});
 
 const App = ({ children, config }: { children: ReactNode; config: any }) => (
 	<ThemeProvider>
 		<QueryClientProvider client={queryClient}>
 			<AppConfigProvider config={config}>
 				<AuthProvider>
-					<ApolloProvider client={apolloClient}>
+					<ApolloProvider>
 						<div
 							css={css`
 								display: grid;
