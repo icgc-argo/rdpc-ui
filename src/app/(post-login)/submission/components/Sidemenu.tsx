@@ -32,7 +32,7 @@ const SideMenuContent = ({ content }: { content: any[] }) => {
 		<SubMenu>
 			<MenuItem icon={<Icon name="programs" />} content={'My Programs'} selected>
 				<Search query={programNameSearch} onChange={setProgramNameSearch} />
-				<ProgramMenu programs={content.slice(0, -1)} searchQuery={programNameSearch} />
+				<ProgramMenu programs={content} searchQuery={programNameSearch} />
 			</MenuItem>
 		</SubMenu>
 	);

@@ -19,18 +19,19 @@
 
 import { gql } from '@apollo/client';
 
-const PROGRAMS_USERS_QUERY = gql`
-	query ProgramsUsers {
+const SIDEMENU_PROGRAMS = gql`
+	query SideMenu {
 		programs {
 			shortName
-			users {
-				email
-				firstName
-				lastName
-				role
-			}
+			name
+			cancerTypes
+			countries
+			membershipType
+			genomicDonors
+			submittedDonors
+			commitmentDonors
 		}
 	}
 `;
 
-export default PROGRAMS_USERS_QUERY;
+export default SIDEMENU_PROGRAMS;
