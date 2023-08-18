@@ -19,41 +19,46 @@
 'use client';
 
 import { css } from '@/lib/emotion';
-import { TitleBar as TitleBarComp } from '@icgc-argo/uikit';
+import { Table, Typography } from '@icgc-argo/uikit';
+import { columns } from '../program-table/config';
 
-export default function TitleBar() {
+export type ProgramData = any;
+export type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
+
+export default function ProgramList({ programs }: { programs: ProgramData[] }) {
+	const programsArraySize = programs.length;
+
 	return (
 		<div
 			css={css`
-				display: flex;
-				padding: 0 20px;
+				padding: 16px 15px 6px;
 			`}
 		>
-			<TitleBarComp
+			<Typography
+				variant="label"
+				color="grey"
+				component="div"
 				css={css`
-					margin-right: 10px;
+					min-height: 32px;
+					display: flex;
+					align-items: center;
+					margin-bottom: 8px;
 				`}
 			>
-				<>All Programs</>
-			</TitleBarComp>
-			<div
-				id="progress-bar"
-				css={css`
-					display: none;
-				`}
-			>
-				future work
-			</div>
-
-			<div
-				css={css`
-					margin-left: auto;
-					display: none;
-				`}
-				id="col-buttons"
-			>
-				future work
-			</div>
+				{programsArraySize.toLocaleString()} results
+			</Typography>
+			<Table
+				data={programs}
+				columns={columns}
+				pageCount={20}
+				withSideBorders
+				withRowBorder
+				withStripes
+				withHeaders
+				withPagination
+				showPageSizeOptions
+				loading={false}
+			/>
 		</div>
 	);
 }

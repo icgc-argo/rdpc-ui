@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { BUTTON_SIZES, Button, Typography, css, useTheme } from '@icgc-argo/uikit';
+import { BUTTON_SIZES, Button, Icon, Typography, css, useTheme } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import galaxyImage from '../../../public/assets/galaxy.png';
 import { useAppConfigContext } from './ConfigProvider';
@@ -47,7 +47,17 @@ const Hero = () => {
 					}
 				`}
 			>
-				<span>{`< `}</span>
+				<Icon
+					name="chevron_left"
+					fill="white"
+					width="8px"
+					height="8px"
+					css={css`
+						position: relative;
+						top: 1px;
+						margin-right: 4px;
+					`}
+				/>
 				<Link
 					href={PLATFORM_UI_ROOT}
 					css={css({
@@ -71,10 +81,10 @@ const Hero = () => {
 				<Typography
 					variant="hero"
 					color="white"
-					bold={true}
 					css={css({
-						margin: '18px 50px 35px',
+						margin: '18px 0px 35px',
 						textAlign: 'center',
+						fontWeight: 600,
 					})}
 					as="h1"
 				>
@@ -91,9 +101,9 @@ const Hero = () => {
 					})}
 				>
 					The International Cancer Genome Consortium Accelerating Research in Genomic Oncology (ICGC
-					ARGO) aims to uniformly analyze specimens from 100,000 donors with high quality clinical
-					data in order to address outstanding questions that are vital to the quest to defeat
-					cancer.
+					ARGO) aims to{' '}
+					<b>uniformly analyze specimens from 100,000 donors with high quality clinical data</b> in
+					order to address outstanding questions that are vital to the quest to defeat cancer.
 				</Typography>
 
 				<Link
@@ -106,6 +116,7 @@ const Hero = () => {
 						size={BUTTON_SIZES.MD}
 						css={css`
 							font-size: 24px;
+							padding: 6px 36px 4px;
 						`}
 					>
 						LOGIN

@@ -20,13 +20,15 @@
 
 import { useAuthContext } from '@/global/utils/auth';
 import { css, useTheme } from '@/lib/emotion';
-import { AppBar, AppBarMenuItem, DnaLoader, Link, NavElement } from '@icgc-argo/uikit';
+import { AppBarMenuItem, DnaLoader, Link, NavElement } from '@icgc-argo/uikit';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import LoginButton from './LoginButton';
 import ProfileMenu from './ProfileMenu';
 import argoLogo from '/public/argo-logo.svg';
+
+export const HEADER_HEIGHT_PX = '58';
 
 const Header = () => {
 	const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -57,44 +59,68 @@ const Header = () => {
 	];
 
 	return (
-		<header>
-			<AppBar
+		<header
+			css={css`
+				width: 100%;
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				height: ${HEADER_HEIGHT_PX}px;
+				background-color: ${theme.colors.primary};
+				border-bottom: none;
+				position: sticky;
+				top: 0px;
+				z-index: 2;
+			`}
+		>
+			<div
 				css={css`
-					border-bottom: none;
+					margin-left: 18px;
+					height: 30px;
+					width: 208px;
+					position: relative;
 				`}
 			>
-				<div css={css({ height: '30px', width: '208px', position: 'relative' })}>
-					<Link href="/">
-						<Image alt="ICGC ARGO" src={argoLogo} fill />
-					</Link>
-				</div>
+				<Link href="/">
+					<Image alt="ICGC ARGO" src={argoLogo} fill />
+				</Link>
+			</div>
 
-				{/** keep this div. header will have more items, will be "right-aligned" */}
-				<div>
+			{/** "right-aligned" **/}
+			<div
+				css={css`
+					display: flex;
+					height: 100%;
+					flex-direction: row;
+					& > div {
+						border-left: 1px solid ${theme.colors.grey};
+					}
+				`}
+			>
+				{authLoading ? (
+					<DnaLoader />
+				) : !egoJwt ? (
+					<LoginButton />
+				) : (
 					<AppBarMenuItem
 						active={profileActive}
 						css={css`
 							border-bottom: ${profileActive ? `solid 3px ${theme.colors.accent1}` : ''};
 						`}
 					>
-						{egoJwt ? (
-							<ProfileMenu
-								isDropdownOpen={isDropdownOpen}
-								onProfilePage={onProfilePage}
-								onClick={() => {
-									setDropdownOpen(!isDropdownOpen);
-								}}
-								profileNavDetails={profileNavDetails}
-								theme={theme}
-							/>
-						) : authLoading ? (
-							<DnaLoader />
-						) : (
-							<LoginButton />
-						)}
+						<ProfileMenu
+							isDropdownOpen={isDropdownOpen}
+							onProfilePage={onProfilePage}
+							onClick={() => {
+								setDropdownOpen(!isDropdownOpen);
+							}}
+							profileNavDetails={profileNavDetails}
+							theme={theme}
+						/>
 					</AppBarMenuItem>
-				</div>
-			</AppBar>
+				)}
+			</div>
 		</header>
 	);
 };

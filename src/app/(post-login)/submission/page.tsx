@@ -16,8 +16,12 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 'use client';
 
-export default function SideMenu() {
-	return <div>SideMenu</div>;
+import mockData from '@/mockData.json';
+import ProgramList from './components/ProgramList';
+
+export default function Submission() {
+	return <ProgramList programs={mockData.programs} />;
 }

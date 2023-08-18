@@ -18,39 +18,27 @@
  */
 'use client';
 
-import { css, useTheme } from '@/lib/emotion';
+import { css } from '@/lib/emotion';
 import { ReactNode } from 'react';
-import SideMenu from './components/Sidemenu';
-import TitleBar from './components/TitleBar';
 
-export default function SubmissionLayout({ children }: { children: ReactNode }) {
-	const theme = useTheme();
+const TableHeader = ({ children }: { children: ReactNode }) => (
+	<div
+		css={css`
+			font-size: 1.1rem;
+			font-weight: 600;
+			padding: 0;
+			&:not(:last-of-type) {
+				border-right: 1px solid red;
+			}
+			min-height: 28px;
+			text-align: left;
+			display: flex;
+			align-items: center;
+			box-sizing: border-box;
+		`}
+	>
+		{children}
+	</div>
+);
 
-	return (
-		<div
-			css={css`
-				display: grid;
-				grid-template-columns: 248px 1fr;
-			`}
-		>
-			<SideMenu />
-			<div>
-				<TitleBar />
-				<div
-					id="content"
-					css={css`
-						background: ${theme.colors.grey_4};
-						padding: 40px;
-						height: 100%;
-
-						> div {
-							background: white;
-						}
-					`}
-				>
-					{children}
-				</div>
-			</div>
-		</div>
-	);
-}
+export default TableHeader;

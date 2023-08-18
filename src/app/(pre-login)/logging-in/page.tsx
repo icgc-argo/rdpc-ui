@@ -18,56 +18,47 @@
  */
 'use client';
 
-import { css } from '@/lib/emotion';
-import { Button, Icon, useTheme } from '@icgc-argo/uikit';
-import { useAppConfigContext } from './ConfigProvider';
+import { useAppConfigContext } from '@/app/components/ConfigProvider';
+import { useAuthContext } from '@/global/utils/auth';
+import { DnaLoader, css, useTheme } from '@icgc-argo/uikit';
+import { useRouter } from 'next/navigation';
+import { useQuery } from 'react-query';
 
-const LoginButton = () => {
+export default async function LoggingIn() {
 	const { EGO_LOGIN_URL } = useAppConfigContext();
+	const router = useRouter();
 	const theme = useTheme();
+	const { egoJwt, authLoading, setAuthLoading, logIn } = useAuthContext();
+
+	if (egoJwt) router.push('/landing-page');
+
+	if (!authLoading && !egoJwt) setAuthLoading(true);
+
+	useQuery('egoJwt', () => {
+		fetch(EGO_LOGIN_URL, {
+			credentials: 'include',
+			headers: { accept: '*/*' },
+			body: null,
+			method: 'GET',
+			mode: 'cors',
+		})
+			.then(async (res) => {
+				const newToken = await res.text();
+				logIn(newToken);
+			})
+			.catch(console.error);
+	});
+
 	return (
 		<div
 			css={css`
+				background-color: ${theme.colors.grey_4};
 				display: flex;
-				height: 100%;
+				justify-content: center;
+				align-items: center;
 			`}
 		>
-			<a
-				id="link-login"
-				href={EGO_LOGIN_URL}
-				css={css`
-					align-self: center;
-					text-decoration: none;
-					padding: 0 16px;
-				`}
-			>
-				<Button
-					css={css`
-						padding: 8px 18px 8px 12px;
-						border: 1px solid ${theme.colors.grey_1};
-					`}
-				>
-					<span
-						css={css`
-							display: flex;
-							justify-content: center;
-							align-items: center;
-						`}
-					>
-						<Icon
-							name="google"
-							height="17px"
-							width="17px"
-							css={css`
-								margin-right: 5px;
-							`}
-						/>
-						Login
-					</span>
-				</Button>
-			</a>
+			<DnaLoader />
 		</div>
 	);
-};
-
-export default LoginButton;
+}

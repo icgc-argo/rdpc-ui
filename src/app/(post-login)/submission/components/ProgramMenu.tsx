@@ -19,55 +19,57 @@
 'use client';
 
 import { css } from '@/lib/emotion';
-import { Button, Icon, useTheme } from '@icgc-argo/uikit';
-import { useAppConfigContext } from './ConfigProvider';
+import { MenuItem } from '@icgc-argo/uikit';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { MouseEventHandler, useState } from 'react';
 
-const LoginButton = () => {
-	const { EGO_LOGIN_URL } = useAppConfigContext();
-	const theme = useTheme();
+export default function ProgramMenu({
+	programs,
+	searchQuery,
+}: {
+	programs: { shortName: string }[];
+	searchQuery: string;
+}) {
+	const pathname = usePathname();
+	const [activeProgramIndex, setActiveProgramIndex] = useState(-1);
+
+	const filteredPrograms = !searchQuery.length
+		? programs
+		: programs.filter(({ shortName }) => shortName.search(new RegExp(searchQuery, 'i')) > -1);
+
+	const setActiveProgram =
+		(index: number): MouseEventHandler =>
+		() =>
+			setActiveProgramIndex(index);
+
 	return (
-		<div
-			css={css`
-				display: flex;
-				height: 100%;
-			`}
-		>
-			<a
-				id="link-login"
-				href={EGO_LOGIN_URL}
+		<>
+			<Link
+				href="/submission"
 				css={css`
-					align-self: center;
-					text-decoration: none;
-					padding: 0 16px;
+					text-decoration: none !important;
 				`}
 			>
-				<Button
-					css={css`
-						padding: 8px 18px 8px 12px;
-						border: 1px solid ${theme.colors.grey_1};
-					`}
-				>
-					<span
-						css={css`
-							display: flex;
-							justify-content: center;
-							align-items: center;
-						`}
-					>
-						<Icon
-							name="google"
-							height="17px"
-							width="17px"
-							css={css`
-								margin-right: 5px;
-							`}
-						/>
-						Login
-					</span>
-				</Button>
-			</a>
-		</div>
-	);
-};
+				<MenuItem
+					level={2}
+					content="All Programs"
+					onClick={setActiveProgram(-1)}
+					selected={pathname === '/submission'}
+				/>
+			</Link>
 
-export default LoginButton;
+			{filteredPrograms.map((program, programIndex) => (
+				<MenuItem
+					level={2}
+					key={program.shortName}
+					content={program.shortName}
+					onClick={setActiveProgram(programIndex)}
+					selected={programIndex === activeProgramIndex}
+				>
+					<MenuItem level={3}>{program.shortName}</MenuItem>
+				</MenuItem>
+			))}
+		</>
+	);
+}

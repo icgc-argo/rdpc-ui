@@ -18,56 +18,46 @@
  */
 'use client';
 
-import { css } from '@/lib/emotion';
-import { Button, Icon, useTheme } from '@icgc-argo/uikit';
-import { useAppConfigContext } from './ConfigProvider';
+import { css, useTheme } from '@/lib/emotion';
+import { TitleBar as TitleBarComp } from '@icgc-argo/uikit';
 
-const LoginButton = () => {
-	const { EGO_LOGIN_URL } = useAppConfigContext();
+const TitleBar = () => {
 	const theme = useTheme();
 	return (
 		<div
 			css={css`
 				display: flex;
-				height: 100%;
+				padding: 0 20px;
+				background-color: ${theme.colors.white};
 			`}
 		>
-			<a
-				id="link-login"
-				href={EGO_LOGIN_URL}
+			<TitleBarComp
 				css={css`
-					align-self: center;
-					text-decoration: none;
-					padding: 0 16px;
+					margin-right: 10px;
 				`}
 			>
-				<Button
-					css={css`
-						padding: 8px 18px 8px 12px;
-						border: 1px solid ${theme.colors.grey_1};
-					`}
-				>
-					<span
-						css={css`
-							display: flex;
-							justify-content: center;
-							align-items: center;
-						`}
-					>
-						<Icon
-							name="google"
-							height="17px"
-							width="17px"
-							css={css`
-								margin-right: 5px;
-							`}
-						/>
-						Login
-					</span>
-				</Button>
-			</a>
+				<>All Programs</>
+			</TitleBarComp>
+			<div
+				id="progress-bar"
+				css={css`
+					display: none;
+				`}
+			>
+				future work
+			</div>
+
+			<div
+				css={css`
+					margin-left: auto;
+					display: none;
+				`}
+				id="col-buttons"
+			>
+				future work
+			</div>
 		</div>
 	);
 };
 
-export default LoginButton;
+export default TitleBar;

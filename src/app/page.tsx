@@ -56,8 +56,8 @@ const OvertureBanner: ComponentType = () => {
 					margin-left: 20px;
 				`}
 			>
-				The ARGO Data Platform is built with open-source products that you can incorporate into your
-				systems though{' '}
+				The ARGO RDPCs are built with open-source products that you can incorporate into your
+				systems through{' '}
 				<Link href="https://www.overture.bio/" target="_blank">
 					Overture.bio
 				</Link>
@@ -70,7 +70,7 @@ const OvertureBanner: ComponentType = () => {
 const ActionBox: ComponentType = () => {
 	const { DOCS_URL_ROOT } = useAppConfigContext();
 	return (
-		<div css={css({ container: 'callouts / inline-size' })}>
+		<div css={css({ container: 'callouts / inline-size', flex: 1 })}>
 			<div
 				css={css`
 					display: grid;
@@ -109,9 +109,9 @@ const ActionBox: ComponentType = () => {
 				</DataCallout>
 
 				<DataCallout
-					iconName="download"
-					iconFill="accent4_dark"
-					circleFill="accent4_3"
+					iconName="testtube"
+					iconFill="accent1_dimmed"
+					circleFill="accent1_3"
 					title="Data Submission Guide"
 					urlData={{
 						text: 'Data Submission Guide',
@@ -141,7 +141,12 @@ const ActionBox: ComponentType = () => {
 
 export default function Home() {
 	return (
-		<main>
+		<main
+			css={css`
+				display: flex;
+				flex-direction: column;
+			`}
+		>
 			<Hero />
 			<ActionBox />
 			<OvertureBanner />

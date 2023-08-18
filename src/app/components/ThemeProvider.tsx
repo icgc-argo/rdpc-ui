@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, defaultTheme, ThemeProvider as UIKitThemeProvider, Global } from '@/lib/emotion';
+import { Global, ThemeProvider as UIKitThemeProvider, css, defaultTheme } from '@/lib/emotion';
 import { mapValues } from 'lodash';
 import { Work_Sans } from 'next/font/google';
 
@@ -48,6 +48,10 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
 						margin: 0;
 					}
 
+					:root {
+						font-size: 62.5%;
+					}
+
 					body {
 						line-height: 1.5;
 						font-family: ${workSans.style.fontFamily};
@@ -73,6 +77,14 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
 					#root,
 					#__next {
 						isolation: isolate;
+					}
+
+					// react-table override
+					.rt-table-container {
+						.rt-th-wrapper,
+						.rt-td-wrapper {
+							font-family: inherit;
+						}
 					}
 				`}
 			/>
