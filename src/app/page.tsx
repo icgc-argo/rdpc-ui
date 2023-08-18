@@ -70,7 +70,7 @@ const OvertureBanner: ComponentType = () => {
 const ActionBox: ComponentType = () => {
 	const { DOCS_URL_ROOT } = useAppConfigContext();
 	return (
-		<div css={css({ container: 'callouts / inline-size' })}>
+		<div css={css({ container: 'callouts / inline-size', flex: 1 })}>
 			<div
 				css={css`
 					display: grid;
@@ -141,7 +141,12 @@ const ActionBox: ComponentType = () => {
 
 export default function Home() {
 	return (
-		<main>
+		<main
+			css={css`
+				display: flex;
+				flex-direction: column;
+			`}
+		>
 			<Hero />
 			<ActionBox />
 			<OvertureBanner />
