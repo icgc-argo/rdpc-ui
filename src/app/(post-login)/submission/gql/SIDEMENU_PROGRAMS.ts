@@ -23,13 +23,6 @@ const SIDEMENU_PROGRAMS = gql`
 	query SideMenu {
 		programs {
 			shortName
-			name
-			cancerTypes
-			countries
-			membershipType
-			genomicDonors
-			submittedDonors
-			commitmentDonors
 		}
 	}
 `;

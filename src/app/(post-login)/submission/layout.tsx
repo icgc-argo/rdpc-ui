@@ -18,15 +18,16 @@
  */
 'use client';
 
+import { HEADER_HEIGHT_PX } from '@/app/components/Header';
 import { css, useTheme } from '@/lib/emotion';
+import mockData from '@/mockData.json';
 import { ReactNode, useState } from 'react';
-import SideMenu from './components/SideMenu';
+import SideMenu from './components/SideMenu/Menu';
 import TitleBar from './components/TitleBar';
-import TEMP_DATA from './data.temp';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
 	const theme = useTheme();
-	const programData = TEMP_DATA;
+	const programData = mockData.programs;
 	const [isSidebarActive, setSidebarActive] = useState<boolean>(true);
 
 	return (
@@ -40,13 +41,13 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 		>
 			<div
 				css={css`
-					height: calc(100vh - 58px);
+					height: calc(100vh - ${HEADER_HEIGHT_PX}px);
 					z-index: 1;
 					box-shadow: ${theme.shadows.pageElement};
 				`}
 			>
 				<SideMenu
-					content={programData.programs}
+					content={programData}
 					isActive={isSidebarActive}
 					onToggle={() => setSidebarActive((active) => !active)}
 				/>

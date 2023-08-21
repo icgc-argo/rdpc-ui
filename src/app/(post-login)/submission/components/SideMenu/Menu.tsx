@@ -16,28 +16,38 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 'use client';
 
-import { useQuery } from '@apollo/client';
-import ProgramList from './components/ProgramList';
-import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
+import { css, useTheme } from '@/lib/emotion';
+import SideMenuContent from './Content';
+import SideMenuToggle, { TOGGLE_HEIGHT_PX } from './Toggle';
+import { SideMenuProps } from './types';
 
-export default function Submission() {
-	const { data: { programs = [] } = {}, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
-	console.log('Submission', programs);
-	// const programsWithAdmins = programs.map((program) => {
-	// 	const users = get(
-	// 		programsWithUsers.find((pp) => program.shortName == pp.shortName),
-	// 		'users',
-	// 		[],
-	// 	);
-	// 	return {
-	// 		...program,
-	// 		...(programsWithUsers.length > 0 ? { administrators: filter(users, { role: 'ADMIN' }) } : {}),
-	// 	};
-	// });
-	if (loading) return <div> Loader.....</div>;
-	if (error) return <div>eerrors</div>;
-	return <ProgramList programs={programs} />;
-}
+const SideMenu = ({ content, onToggle, isActive }: SideMenuProps) => {
+	const theme = useTheme();
+
+	return (
+		<div
+			css={css`
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				background-color: ${theme.colors.white};
+			`}
+		>
+			<div
+				css={css`
+					height: calc(100vh - ${TOGGLE_HEIGHT_PX}px);
+					overflow-y: auto;
+					visibility: ${isActive ? 'visible' : 'hidden'};
+				`}
+			>
+				<SideMenuContent content={content} />
+			</div>
+			<SideMenuToggle onToggle={onToggle} open={isActive} />
+		</div>
+	);
+};
+
+export default SideMenu;

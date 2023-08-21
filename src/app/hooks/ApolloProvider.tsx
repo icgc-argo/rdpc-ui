@@ -19,25 +19,26 @@
 
 'use client';
 
-import { useQuery } from '@apollo/client';
-import ProgramList from './components/ProgramList';
-import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
+import { useAuthContext } from '@/global/utils/auth';
+import { createApolloClient } from '@/lib/gql';
+import { ApolloProvider as DefaultApolloProvider } from '@apollo/client';
+import { ReactNode } from 'react';
+import { useAppConfigContext } from '../components/ConfigProvider';
 
-export default function Submission() {
-	const { data: { programs = [] } = {}, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
-	console.log('Submission', programs);
-	// const programsWithAdmins = programs.map((program) => {
-	// 	const users = get(
-	// 		programsWithUsers.find((pp) => program.shortName == pp.shortName),
-	// 		'users',
-	// 		[],
-	// 	);
-	// 	return {
-	// 		...program,
-	// 		...(programsWithUsers.length > 0 ? { administrators: filter(users, { role: 'ADMIN' }) } : {}),
-	// 	};
-	// });
-	if (loading) return <div> Loader.....</div>;
-	if (error) return <div>eerrors</div>;
-	return <ProgramList programs={programs} />;
-}
+export const ApolloProvider = ({ children }: { children: ReactNode }) => {
+	const auth = useAuthContext();
+	const envVar = useAppConfigContext();
+	const config = {
+		jwt: auth.egoJwt,
+		gateway: `${envVar.GATEWAY_API_ROOT}/graphql`,
+	};
+
+	console.log('auth', JSON.stringify(auth));
+	console.log('envVar', JSON.stringify(envVar));
+	console.log('config', JSON.stringify(config));
+
+	const apolloClient = createApolloClient(config); // TODO: use memo?
+	console.log('render: apollo provider');
+
+	return <DefaultApolloProvider client={apolloClient}>{children}</DefaultApolloProvider>;
+};

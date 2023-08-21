@@ -33,7 +33,7 @@ const MembershipDisplayName: { [key in ArgoMembershipKey]: string } = {
 	ASSOCIATE: 'ASSOCIATE',
 };
 
-export const columns: ColumnDef<ProgramsData>[] = [
+export const columns: ColumnDef<ProgramData>[] = [
 	{
 		header: () => <TableHeader>Short Name</TableHeader>,
 		accessorKey: 'shortName',

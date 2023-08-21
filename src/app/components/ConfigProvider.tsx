@@ -34,6 +34,7 @@ const defaultContext = {
 	ARGO_ROOT: '',
 	EGO_LOGIN_URL: '',
 	DACO_ROOT: '',
+	GATEWAY_API_ROOT: '',
 };
 
 const AppConfig = createContext<AppConfig>(defaultContext);

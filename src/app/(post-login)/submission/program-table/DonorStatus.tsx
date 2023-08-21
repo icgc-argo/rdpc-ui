@@ -48,7 +48,7 @@ const DonorStatus = ({ submittedDonors, commitmentDonors }: DonorStatusProps) =>
 						color: ${theme.colors.grey_2};
 					`}
 				>
-					{` `}/{` `}
+					{` / `}
 				</span>
 				{denominator.toLocaleString()}
 			</Typography>
