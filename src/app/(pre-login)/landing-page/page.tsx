@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { useAppConfigContext } from '@/app/components/ConfigProvider';
+import { useAppConfigContext } from '@/app/hooks/AppProvider';
 
 export default function LandingPage() {
 	const { EGO_CLIENT_ID } = useAppConfigContext();

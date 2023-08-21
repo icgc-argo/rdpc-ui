@@ -39,7 +39,7 @@ const defaultContext = {
 
 const AppConfig = createContext<AppConfig>(defaultContext);
 
-export const AppConfigProvider = ({ children, config }: { children: ReactNode; config: any }) => {
+export const AppProvider = ({ children, config }: { children: ReactNode; config: any }) => {
 	return <AppConfig.Provider value={config}>{children}</AppConfig.Provider>;
 };
 
