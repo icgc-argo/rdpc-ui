@@ -19,22 +19,22 @@
 // all our context providers won't work server side, beacuse React.Context is client side
 'use client';
 
+import { ApolloProvider } from '@/app/hooks/ApolloProvider';
+import { AppProvider } from '@/app/hooks/AppProvider';
 import { AuthProvider } from '@/global/utils/auth';
 import { css } from '@/lib/emotion';
 import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { AppConfigProvider } from './components/ConfigProvider';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import ThemeProvider from './components/ThemeProvider';
-import { ApolloProvider } from './hooks/ApolloProvider';
 
 const queryClient = new QueryClient();
 
 const App = ({ children, config }: { children: ReactNode; config: any }) => (
 	<ThemeProvider>
 		<QueryClientProvider client={queryClient}>
-			<AppConfigProvider>
+			<AppProvider>
 				<AuthProvider>
 					<ApolloProvider>
 						<div
@@ -50,7 +50,7 @@ const App = ({ children, config }: { children: ReactNode; config: any }) => (
 						</div>
 					</ApolloProvider>
 				</AuthProvider>
-			</AppConfigProvider>
+			</AppProvider>
 		</QueryClientProvider>
 	</ThemeProvider>
 );
