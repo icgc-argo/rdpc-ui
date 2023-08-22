@@ -32,9 +32,6 @@ export default function ProgramMenu({ searchQuery }: { searchQuery: string }) {
 	const { data, loading, error } = useQuery(SIDEMENU_PROGRAMS);
 	const [activeProgramIndex, setActiveProgramIndex] = useState(-1);
 
-	if (loading) return <Loader />;
-	if (error) notFound();
-
 	const pathname = usePathname();
 
 	const programs = data?.programs?.filter(notNull) || [];
@@ -47,6 +44,8 @@ export default function ProgramMenu({ searchQuery }: { searchQuery: string }) {
 		() =>
 			setActiveProgramIndex(index);
 
+	if (loading) return <Loader />;
+	if (error) notFound();
 	return (
 		<>
 			<Link

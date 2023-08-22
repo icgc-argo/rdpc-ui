@@ -29,10 +29,9 @@ import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
 export default function Submission() {
 	const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
 
-	if (loading) return <Loader />;
-	if (error) notFound();
-
 	const programs = data?.programs?.filter(notNull) || [];
 
+	if (loading) return <Loader />;
+	if (error) notFound();
 	return <ProgramList programs={programs} />;
 }

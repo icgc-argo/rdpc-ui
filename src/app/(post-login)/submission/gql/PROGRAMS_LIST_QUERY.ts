@@ -19,7 +19,7 @@
 
 import { gql } from '@/__generated__/gql';
 
-const PROGRAMS_LIST_QUERY = gql`
+const PROGRAMS_LIST_QUERY = gql(`
 	query ProgramsList {
 		programs {
 			shortName
@@ -38,6 +38,6 @@ const PROGRAMS_LIST_QUERY = gql`
 			}
 		}
 	}
-`;
+`);
 
 export default PROGRAMS_LIST_QUERY;
