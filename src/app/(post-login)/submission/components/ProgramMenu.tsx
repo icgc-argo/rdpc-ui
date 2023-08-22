@@ -28,6 +28,29 @@ import { notFound, usePathname } from 'next/navigation';
 import { MouseEventHandler, useState } from 'react';
 import SIDEMENU_PROGRAMS from '../gql/SIDEMENU_PROGRAMS';
 
+const StatusMenuItem = () => {
+	return (
+		<div
+			css={css`
+				display: flex;
+				justify-content: space-between;
+				width: 100%;
+				align-items: center;
+				padding-right: 15px;
+			`}
+		>
+			Register Samples
+			{/* {isSubmissionSystemDisabled ? (
+				<Icon name="lock" fill="accent3_dark" width="15px" />
+			) : clinicalRegistrationHasError ? (
+				<Icon name="exclamation" fill="error" width="15px" />
+			) : clinicalRegistrationInProgress ? (
+				<Icon name="ellipses" fill="warning" width="15px" />
+			) : null} */}
+		</div>
+	);
+};
+
 export default function ProgramMenu({ searchQuery }: { searchQuery: string }) {
 	const { data, loading, error } = useQuery(SIDEMENU_PROGRAMS);
 	const [activeProgramIndex, setActiveProgramIndex] = useState(-1);
@@ -70,7 +93,16 @@ export default function ProgramMenu({ searchQuery }: { searchQuery: string }) {
 					onClick={setActiveProgram(programIndex)}
 					selected={programIndex === activeProgramIndex}
 				>
-					<MenuItem level={3}>{shortName}</MenuItem>
+					<MenuItem level={3}>{program.shortName}</MenuItem>
+					<Link href={''}>
+						<MenuItem
+							level={3}
+							content={<StatusMenuItem />}
+							// selected={
+							// 	PROGRAM_SAMPLE_REGISTRATION_PATH === pageContext.pathname && props.isCurrentlyViewed
+							// }
+						/>
+					</Link>
 				</MenuItem>
 			))}
 		</>
