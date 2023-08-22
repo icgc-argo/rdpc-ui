@@ -17,21 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-'use client';
-
-import Loader from '@/app/components/Loader';
-import { notNull } from '@/global/utils/types';
-import { useQuery } from '@apollo/client';
-import { notFound } from 'next/navigation';
-import ProgramList from './components/ProgramList';
-import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
-
-export default function Submission() {
-	const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
-
-	const programs = data?.programs?.filter(notNull) || [];
-
-	if (loading) return <Loader />;
-	if (error) notFound();
-	return <ProgramList programs={programs} />;
+export function notNull<T>(value: T): value is NonNullable<T> {
+	return value != null;
 }

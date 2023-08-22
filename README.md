@@ -35,6 +35,10 @@ docker compose file for local development
 created an `.env` file based on `.env.schema`
 in `compose` folder, run `docker-compose up` command
 
+## Apollo GQL Typechecking
+
+Please recompile Apollo GQL when needed using the `npm run gql-compile` command
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

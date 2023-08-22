@@ -20,14 +20,13 @@
 
 import { HEADER_HEIGHT_PX } from '@/app/components/Header';
 import { css, useTheme } from '@/lib/emotion';
-import mockData from '@/mockData.json';
 import { ReactNode, useState } from 'react';
 import SideMenu from './components/SideMenu/Menu';
 import TitleBar from './components/TitleBar';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
 	const theme = useTheme();
-	const programData = mockData.programs;
+
 	const [isSidebarActive, setSidebarActive] = useState<boolean>(true);
 
 	return (
@@ -47,7 +46,6 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 				`}
 			>
 				<SideMenu
-					content={programData}
 					isActive={isSidebarActive}
 					onToggle={() => setSidebarActive((active) => !active)}
 				/>

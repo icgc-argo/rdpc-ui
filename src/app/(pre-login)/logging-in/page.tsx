@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { useAppConfigContext } from '@/app/components/ConfigProvider';
+import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useAuthContext } from '@/global/utils/auth';
 import { DnaLoader, css, useTheme } from '@icgc-argo/uikit';
 import { useRouter } from 'next/navigation';

@@ -32,6 +32,7 @@ export type AppConfig = {
 	ARGO_ROOT: string;
 	EGO_LOGIN_URL: string;
 	DACO_ROOT: string;
+	GATEWAY_API_ROOT: string;
 };
 
 /**
@@ -73,6 +74,7 @@ export const getAppConfig = (serverEnv: any): AppConfig => {
 		EGO_CLIENT_ID,
 		EGO_LOGIN_URL,
 		DACO_ROOT: serverEnv.DACO_ROOT || process.env.DACO_ROOT || 'https://daco.icgc-argo.org/',
+		GATEWAY_API_ROOT: serverEnv.GATEWAY_API_ROOT || process.env.NEXT_PUBLIC_GATEWAY_API_ROOT,
 	};
 
 	return config;

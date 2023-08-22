@@ -18,22 +18,23 @@
  */
 'use client';
 
+import Loader from '@/app/components/Loader';
+import { notNull } from '@/global/utils/types';
 import { css } from '@/lib/emotion';
+import { useQuery } from '@apollo/client';
 import { MenuItem } from '@icgc-argo/uikit';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { notFound, usePathname } from 'next/navigation';
 import { MouseEventHandler, useState } from 'react';
+import SIDEMENU_PROGRAMS from '../gql/SIDEMENU_PROGRAMS';
 
-export default function ProgramMenu({
-	programs,
-	searchQuery,
-}: {
-	programs: { shortName: string }[];
-	searchQuery: string;
-}) {
-	const pathname = usePathname();
+export default function ProgramMenu({ searchQuery }: { searchQuery: string }) {
+	const { data, loading, error } = useQuery(SIDEMENU_PROGRAMS);
 	const [activeProgramIndex, setActiveProgramIndex] = useState(-1);
 
+	const pathname = usePathname();
+
+	const programs = data?.programs?.filter(notNull) || [];
 	const filteredPrograms = !searchQuery.length
 		? programs
 		: programs.filter(({ shortName }) => shortName.search(new RegExp(searchQuery, 'i')) > -1);
@@ -43,6 +44,8 @@ export default function ProgramMenu({
 		() =>
 			setActiveProgramIndex(index);
 
+	if (loading) return <Loader />;
+	if (error) notFound();
 	return (
 		<>
 			<Link
@@ -59,15 +62,15 @@ export default function ProgramMenu({
 				/>
 			</Link>
 
-			{filteredPrograms.map((program, programIndex) => (
+			{filteredPrograms.map(({ shortName }, programIndex) => (
 				<MenuItem
 					level={2}
-					key={program.shortName}
-					content={program.shortName}
+					key={shortName}
+					content={shortName}
 					onClick={setActiveProgram(programIndex)}
 					selected={programIndex === activeProgramIndex}
 				>
-					<MenuItem level={3}>{program.shortName}</MenuItem>
+					<MenuItem level={3}>{shortName}</MenuItem>
 				</MenuItem>
 			))}
 		</>

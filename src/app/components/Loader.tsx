@@ -16,22 +16,23 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 'use client';
 
-import Loader from '@/app/components/Loader';
-import { notNull } from '@/global/utils/types';
-import { useQuery } from '@apollo/client';
-import { notFound } from 'next/navigation';
-import ProgramList from './components/ProgramList';
-import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
+import { css } from '@/lib/emotion';
+import { DnaLoader } from '@icgc-argo/uikit';
 
-export default function Submission() {
-	const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
+const Loader = () => (
+	<div
+		css={css`
+			width: 100%;
+			display: flex;
+			height: 100px;
+			align-items: center;
+			justify-content: center;
+		`}
+	>
+		<DnaLoader />
+	</div>
+);
 
-	const programs = data?.programs?.filter(notNull) || [];
-
-	if (loading) return <Loader />;
-	if (error) notFound();
-	return <ProgramList programs={programs} />;
-}
+export default Loader;

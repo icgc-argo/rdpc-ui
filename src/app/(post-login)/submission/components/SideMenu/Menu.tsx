@@ -23,7 +23,7 @@ import SideMenuContent from './Content';
 import SideMenuToggle, { TOGGLE_HEIGHT_PX } from './Toggle';
 import { SideMenuProps } from './types';
 
-const SideMenu = ({ content, onToggle, isActive }: SideMenuProps) => {
+const SideMenu = ({ onToggle, isActive }: SideMenuProps) => {
 	const theme = useTheme();
 
 	return (
@@ -43,7 +43,7 @@ const SideMenu = ({ content, onToggle, isActive }: SideMenuProps) => {
 					visibility: ${isActive ? 'visible' : 'hidden'};
 				`}
 			>
-				<SideMenuContent content={content} />
+				<SideMenuContent />
 			</div>
 			<SideMenuToggle onToggle={onToggle} open={isActive} />
 		</div>

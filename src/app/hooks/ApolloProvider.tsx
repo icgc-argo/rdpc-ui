@@ -19,30 +19,21 @@
 
 'use client';
 
-import { AppConfig } from '@/app/api/config/config';
-import { ReactNode, createContext, useContext } from 'react';
+import { useAuthContext } from '@/global/utils/auth';
+import { createApolloClient } from '@/lib/gql';
+import { ApolloProvider as DefaultApolloProvider } from '@apollo/client';
+import { ReactNode } from 'react';
+import { useAppConfigContext } from './AppProvider';
 
-const defaultContext = {
-	DOCS_URL_ROOT: '',
-	EGO_API_ROOT: '',
-	EGO_CLIENT_ID: '',
-	EGO_PUBLIC_KEY: '',
-	UI_VERSION: '',
-	REGION: '',
-	PLATFORM_UI_ROOT: '',
-	RECAPTCHA_SITE_KEY: '',
-	ARGO_ROOT: '',
-	EGO_LOGIN_URL: '',
-	DACO_ROOT: '',
-};
+export const ApolloProvider = ({ children }: { children: ReactNode }) => {
+	const auth = useAuthContext();
+	const { GATEWAY_API_ROOT } = useAppConfigContext();
+	const config = {
+		jwt: auth.egoJwt,
+		gateway: `${GATEWAY_API_ROOT}/graphql`,
+	};
 
-const AppConfig = createContext<AppConfig>(defaultContext);
+	const apolloClient = createApolloClient(config);
 
-export const AppConfigProvider = ({ children, config }: { children: ReactNode; config: any }) => {
-	return <AppConfig.Provider value={config}>{children}</AppConfig.Provider>;
-};
-
-export const useAppConfigContext = () => {
-	const currentContext = useContext(AppConfig);
-	return process.env.NEXT_IS_BUILDING === 'true' ? defaultContext : currentContext;
+	return <DefaultApolloProvider client={apolloClient}>{children}</DefaultApolloProvider>;
 };

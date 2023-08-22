@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,21 +17,27 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-'use client';
+import { gql } from '@/__generated__/gql';
 
-import Loader from '@/app/components/Loader';
-import { notNull } from '@/global/utils/types';
-import { useQuery } from '@apollo/client';
-import { notFound } from 'next/navigation';
-import ProgramList from './components/ProgramList';
-import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
+const PROGRAMS_LIST_QUERY = gql(`
+	query ProgramsList {
+		programs {
+			shortName
+			name
+			cancerTypes
+			countries
+			membershipType
+			genomicDonors
+			submittedDonors
+			commitmentDonors
+			users {
+				email
+				firstName
+				lastName
+				role
+			}
+		}
+	}
+`);
 
-export default function Submission() {
-	const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
-
-	const programs = data?.programs?.filter(notNull) || [];
-
-	if (loading) return <Loader />;
-	if (error) notFound();
-	return <ProgramList programs={programs} />;
-}
+export default PROGRAMS_LIST_QUERY;
