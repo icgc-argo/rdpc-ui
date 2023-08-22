@@ -20,16 +20,19 @@
 'use client';
 
 import Loader from '@/app/components/Loader';
+import { notNull } from '@/global/utils/types';
 import { useQuery } from '@apollo/client';
 import { notFound } from 'next/navigation';
 import ProgramList from './components/ProgramList';
 import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
 
 export default function Submission() {
-	const { data: { programs = [] } = {}, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
+	const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
 
 	if (loading) return <Loader />;
 	if (error) notFound();
+
+	const programs = data?.programs?.filter(notNull) || [];
 
 	return <ProgramList programs={programs} />;
 }

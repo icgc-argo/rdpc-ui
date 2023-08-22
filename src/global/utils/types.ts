@@ -17,8 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-'use client';
-
-export default function Program({ params }: { params: { shortName: string } }) {
-	return <div>Program: {params.shortName}</div>;
+export function notNull<T>(value: T): value is NonNullable<T> {
+	return value != null;
 }

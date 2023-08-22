@@ -18,6 +18,7 @@
     "@icgc-argo/ego-token-utils": "^8.2.0",
     "@icgc-argo/uikit": "^3.0.1",
     "@types/url-join": "^4.0.1",
+    "dotenv": "^16.3.1",
     "graphql": "^16.8.0",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
@@ -38,6 +39,7 @@
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.0",
     "@graphql-codegen/client-preset": "^4.1.0",
+    "@parcel/watcher": "^2.2.0",
     "@types/js-cookie": "^3.0.3",
     "@types/lodash": "^4.14.195",
     "@types/node": "20.2.3",

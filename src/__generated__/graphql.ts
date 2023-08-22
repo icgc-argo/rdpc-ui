@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -2413,3 +2414,103 @@ export type SetsNode = Node & {
 	type?: Maybe<Scalars['String']['output']>;
 	userId?: Maybe<Scalars['String']['output']>;
 };
+
+export type ProgramsListQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ProgramsListQuery = {
+	__typename?: 'Query';
+	programs?: Array<{
+		__typename?: 'Program';
+		shortName: string;
+		name?: string | null;
+		cancerTypes?: Array<string | null> | null;
+		countries?: Array<string | null> | null;
+		membershipType?: MembershipType | null;
+		genomicDonors?: number | null;
+		submittedDonors?: number | null;
+		commitmentDonors?: number | null;
+		users?: Array<{
+			__typename?: 'ProgramUser';
+			email: string;
+			firstName: string;
+			lastName: string;
+			role: UserRole;
+		} | null> | null;
+	} | null> | null;
+};
+
+export type SideMenuQueryVariables = Exact<{ [key: string]: never }>;
+
+export type SideMenuQuery = {
+	__typename?: 'Query';
+	programs?: Array<{ __typename?: 'Program'; shortName: string } | null> | null;
+};
+
+export const ProgramsListDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'ProgramsList' },
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'programs' },
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'shortName' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'cancerTypes' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'countries' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'membershipType' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'genomicDonors' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'submittedDonors' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'commitmentDonors' } },
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'users' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'email' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'role' } },
+										],
+									},
+								},
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<ProgramsListQuery, ProgramsListQueryVariables>;
+export const SideMenuDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'SideMenu' },
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'programs' },
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [{ kind: 'Field', name: { kind: 'Name', value: 'shortName' } }],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<SideMenuQuery, SideMenuQueryVariables>;
