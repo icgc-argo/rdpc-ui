@@ -18,6 +18,12 @@
  */
 'use client';
 
+import Instructions from '@/app/components/page/submission/program/registration/Instructions';
+
 export default function Register() {
-	return <div>register</div>;
+	return (
+		<div>
+			<Instructions />
+		</div>
+	);
 }
