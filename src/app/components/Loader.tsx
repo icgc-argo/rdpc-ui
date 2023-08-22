@@ -16,24 +16,23 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 'use client';
 
-import { useAuthContext } from '@/global/utils/auth';
-import { createApolloClient } from '@/lib/gql';
-import { ApolloProvider as DefaultApolloProvider } from '@apollo/client';
-import { ReactNode } from 'react';
-import { useAppConfigContext } from './AppProvider';
+import { css } from '@/lib/emotion';
+import { DnaLoader } from '@icgc-argo/uikit';
 
-export const ApolloProvider = ({ children }: { children: ReactNode }) => {
-	const auth = useAuthContext();
-	const { GATEWAY_API_ROOT } = useAppConfigContext();
-	const config = {
-		jwt: auth.egoJwt,
-		gateway: `${GATEWAY_API_ROOT}/graphql`,
-	};
+const Loader = () => (
+	<div
+		css={css`
+			width: 100%;
+			display: flex;
+			height: 100px;
+			align-items: center;
+			justify-content: center;
+		`}
+	>
+		<DnaLoader />
+	</div>
+);
 
-	const apolloClient = createApolloClient(config);
-
-	return <DefaultApolloProvider client={apolloClient}>{children}</DefaultApolloProvider>;
-};
+export default Loader;

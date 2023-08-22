@@ -19,25 +19,17 @@
 
 'use client';
 
+import Loader from '@/app/components/Loader';
 import { useQuery } from '@apollo/client';
+import { notFound } from 'next/navigation';
 import ProgramList from './components/ProgramList';
 import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
 
 export default function Submission() {
 	const { data: { programs = [] } = {}, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
-	console.log('Submission', programs);
-	// const programsWithAdmins = programs.map((program) => {
-	// 	const users = get(
-	// 		programsWithUsers.find((pp) => program.shortName == pp.shortName),
-	// 		'users',
-	// 		[],
-	// 	);
-	// 	return {
-	// 		...program,
-	// 		...(programsWithUsers.length > 0 ? { administrators: filter(users, { role: 'ADMIN' }) } : {}),
-	// 	};
-	// });
-	if (loading) return <div> Loader.....</div>;
-	if (error) return <div>eerrors</div>;
+
+	if (loading) return <Loader />;
+	if (error) notFound();
+
 	return <ProgramList programs={programs} />;
 }

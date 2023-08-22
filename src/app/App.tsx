@@ -34,7 +34,7 @@ const queryClient = new QueryClient();
 const App = ({ children, config }: { children: ReactNode; config: any }) => (
 	<ThemeProvider>
 		<QueryClientProvider client={queryClient}>
-			<AppProvider>
+			<AppProvider config={config}>
 				<AuthProvider>
 					<ApolloProvider>
 						<div

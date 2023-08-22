@@ -18,19 +18,18 @@
  */
 'use client';
 
+import Loader from '@/app/components/Loader';
 import { css } from '@/lib/emotion';
+import { useQuery } from '@apollo/client';
 import { MenuItem } from '@icgc-argo/uikit';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { notFound, usePathname } from 'next/navigation';
 import { MouseEventHandler, useState } from 'react';
+import SIDEMENU_PROGRAMS from '../gql/SIDEMENU_PROGRAMS';
 
-export default function ProgramMenu({
-	programs,
-	searchQuery,
-}: {
-	programs: { shortName: string }[];
-	searchQuery: string;
-}) {
+export default function ProgramMenu({ searchQuery }: { searchQuery: string }) {
+	const { data: { programs = [] } = {}, loading, error } = useQuery(SIDEMENU_PROGRAMS);
+
 	const pathname = usePathname();
 	const [activeProgramIndex, setActiveProgramIndex] = useState(-1);
 
@@ -42,6 +41,9 @@ export default function ProgramMenu({
 		(index: number): MouseEventHandler =>
 		() =>
 			setActiveProgramIndex(index);
+
+	if (loading) return <Loader />;
+	if (error) notFound();
 
 	return (
 		<>
