@@ -18,29 +18,29 @@
  */
 'use client';
 
-import { useAppConfigContext } from '@/app/components/ConfigProvider';
+import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useAuthContext } from '@/global/utils/auth';
 import { DnaLoader, css, useTheme } from '@icgc-argo/uikit';
 import { useRouter } from 'next/navigation';
 import { useQuery } from 'react-query';
 
 export default async function LoggingIn() {
-	const { EGO_LOGIN_URL } = useAppConfigContext();
+	const { EGO_API_ROOT, EGO_CLIENT_ID } = useAppConfigContext();
 	const router = useRouter();
 	const theme = useTheme();
 	const { egoJwt, authLoading, setAuthLoading, logIn } = useAuthContext();
+	const EGO_TOKEN_URL = `${EGO_API_ROOT}/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`;
 
 	if (egoJwt) router.push('/landing-page');
 
 	if (!authLoading && !egoJwt) setAuthLoading(true);
 
 	useQuery('egoJwt', () => {
-		fetch(EGO_LOGIN_URL, {
+		fetch(EGO_TOKEN_URL, {
 			credentials: 'include',
 			headers: { accept: '*/*' },
 			body: null,
 			method: 'GET',
-			mode: 'cors',
 		})
 			.then(async (res) => {
 				const newToken = await res.text();

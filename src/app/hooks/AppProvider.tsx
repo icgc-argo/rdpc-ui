@@ -19,19 +19,31 @@
 
 'use client';
 
-import Loader from '@/app/components/Loader';
-import { notNull } from '@/global/utils/types';
-import { useQuery } from '@apollo/client';
-import { notFound } from 'next/navigation';
-import ProgramList from './components/ProgramList';
-import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
+import { AppConfig } from '@/app/api/config/config';
+import { ReactNode, createContext, useContext } from 'react';
 
-export default function Submission() {
-	const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
+const defaultContext = {
+	DOCS_URL_ROOT: '',
+	EGO_API_ROOT: '',
+	EGO_CLIENT_ID: '',
+	EGO_PUBLIC_KEY: '',
+	UI_VERSION: '',
+	REGION: '',
+	PLATFORM_UI_ROOT: '',
+	RECAPTCHA_SITE_KEY: '',
+	ARGO_ROOT: '',
+	EGO_LOGIN_URL: '',
+	DACO_ROOT: '',
+	GATEWAY_API_ROOT: '',
+};
 
-	const programs = data?.programs?.filter(notNull) || [];
+const AppConfig = createContext<AppConfig>(defaultContext);
 
-	if (loading) return <Loader />;
-	if (error) notFound();
-	return <ProgramList programs={programs} />;
-}
+export const AppProvider = ({ children, config }: { children: ReactNode; config: any }) => {
+	return <AppConfig.Provider value={config}>{children}</AppConfig.Provider>;
+};
+
+export const useAppConfigContext = () => {
+	const currentContext = useContext(AppConfig);
+	return process.env.NEXT_IS_BUILDING === 'true' ? defaultContext : currentContext;
+};

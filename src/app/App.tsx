@@ -19,11 +19,12 @@
 // all our context providers won't work server side, beacuse React.Context is client side
 'use client';
 
+import { ApolloProvider } from '@/app/hooks/ApolloProvider';
+import { AppProvider } from '@/app/hooks/AppProvider';
 import { AuthProvider } from '@/global/utils/auth';
 import { css } from '@/lib/emotion';
 import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { AppConfigProvider } from './components/ConfigProvider';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import ThemeProvider from './components/ThemeProvider';
@@ -33,21 +34,23 @@ const queryClient = new QueryClient();
 const App = ({ children, config }: { children: ReactNode; config: any }) => (
 	<ThemeProvider>
 		<QueryClientProvider client={queryClient}>
-			<AppConfigProvider config={config}>
+			<AppProvider config={config}>
 				<AuthProvider>
-					<div
-						css={css`
-							display: grid;
-							grid-template-rows: 58px 1fr 59px; /* header + content + footer*/
-							min-height: 100vh;
-						`}
-					>
-						<Header />
-						{children}
-						<Footer />
-					</div>
+					<ApolloProvider>
+						<div
+							css={css`
+								display: grid;
+								grid-template-rows: 58px 1fr 59px; /* header + content + footer*/
+								min-height: 100vh;
+							`}
+						>
+							<Header />
+							{children}
+							<Footer />
+						</div>
+					</ApolloProvider>
 				</AuthProvider>
-			</AppConfigProvider>
+			</AppProvider>
 		</QueryClientProvider>
 	</ThemeProvider>
 );

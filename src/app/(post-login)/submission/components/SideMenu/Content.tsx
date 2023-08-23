@@ -23,14 +23,14 @@ import { useState } from 'react';
 import ProgramMenu from '../ProgramMenu';
 import Search from '../Search';
 
-const SideMenuContent = ({ content }: { content: any[] }) => {
+const SideMenuContent = () => {
 	const [programNameSearch, setProgramNameSearch] = useState('');
 
 	return (
 		<SubMenu>
 			<MenuItem icon={<Icon name="programs" />} content={'My Programs'} selected>
 				<Search query={programNameSearch} onChange={setProgramNameSearch} />
-				<ProgramMenu programs={content.slice(0, -1)} searchQuery={programNameSearch} />
+				<ProgramMenu searchQuery={programNameSearch} />
 			</MenuItem>
 		</SubMenu>
 	);

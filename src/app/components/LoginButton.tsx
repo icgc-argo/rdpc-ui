@@ -18,9 +18,9 @@
  */
 'use client';
 
+import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { css } from '@/lib/emotion';
 import { Button, Icon, useTheme } from '@icgc-argo/uikit';
-import { useAppConfigContext } from './ConfigProvider';
 
 const LoginButton = () => {
 	const { EGO_LOGIN_URL } = useAppConfigContext();

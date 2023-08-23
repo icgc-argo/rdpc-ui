@@ -17,4 +17,4 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export type SideMenuProps = { content: any; onToggle: () => void; isActive: boolean };
+export type SideMenuProps = { onToggle: () => void; isActive: boolean };

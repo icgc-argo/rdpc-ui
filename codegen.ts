@@ -17,21 +17,25 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-'use client';
+import { CodegenConfig } from '@graphql-codegen/cli';
+import dotenv from 'dotenv';
 
-import Loader from '@/app/components/Loader';
-import { notNull } from '@/global/utils/types';
-import { useQuery } from '@apollo/client';
-import { notFound } from 'next/navigation';
-import ProgramList from './components/ProgramList';
-import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
+// point to .env.local because .env in nextjs is a default committed file
+dotenv.config({ path: '.env.local' });
 
-export default function Submission() {
-	const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
+const gqlConfig: CodegenConfig = {
+	schema: `${process.env.NEXT_PUBLIC_GATEWAY_API_ROOT}/graphql`,
+	documents: ['src/**/gql/*.ts'],
+	generates: {
+		'./src/__generated__/': {
+			preset: 'client',
+			plugins: [],
+			presetConfig: {
+				gqlTagName: 'gql',
+			},
+		},
+	},
+	ignoreNoDocuments: true,
+};
 
-	const programs = data?.programs?.filter(notNull) || [];
-
-	if (loading) return <Loader />;
-	if (error) notFound();
-	return <ProgramList programs={programs} />;
-}
+export default gqlConfig;
