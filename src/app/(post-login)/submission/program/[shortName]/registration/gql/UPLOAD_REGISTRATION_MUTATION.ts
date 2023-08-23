@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -16,36 +16,13 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
 
-import Instructions from '@/app/components/page/submission/program/registration/Instructions';
-import { useMutation, useQuery } from '@apollo/client';
-import CLINICAL_SCHEMA_VERSION_QUERY from './gql/CLINICAL_SCHEMA_VERSION_QUERY';
-import UPLOAD_REGISTRATION_MUTATION from './gql/UPLOAD_REGISTRATION_MUTATION';
+import { gql } from '@apollo/client';
 
-export default function Register({ params: { shortName } }: { params: { shortName: string } }) {
-	const { data, loading, error } = useQuery(CLINICAL_SCHEMA_VERSION_QUERY);
+const UPLOAD_REGISTRATION_MUTATION = gql(`
+	mutation UploadRegistration($shortName: String!, $registrationFile: Upload!) {
+		uploadClinicalRegistration(shortName: $shortName, registrationFile: $registrationFile)
+	}
+`);
 
-	// upload file
-	const [uploadFile, { loading: isUploading }] = useMutation(UPLOAD_REGISTRATION_MUTATION, {
-		onError: () => {
-			//commonToaster.unknownError();
-			console.error();
-		},
-	});
-
-	const handleUpload = (file: File) =>
-		uploadFile({
-			variables: { shortName, registrationFile: file },
-		});
-
-	return (
-		<div>
-			<Instructions
-				dictionaryVersion={'11'}
-				handleUpload={handleUpload}
-				isUploading={isUploading}
-			/>
-		</div>
-	);
-}
+export default UPLOAD_REGISTRATION_MUTATION;
