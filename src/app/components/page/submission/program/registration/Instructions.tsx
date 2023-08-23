@@ -38,7 +38,17 @@ const boxButtonStyle = css`
 	margin-top: 10px;
 `;
 
-const Instructions = ({ dictionaryVersion = '' }: { dictionaryVersion: string }) => {
+const Instructions = ({
+	dictionaryVersion = '',
+	handleUpload,
+	isUploading,
+	flags,
+}: {
+	dictionaryVersion: string;
+	handleUpload: any;
+	isUploading: boolean;
+	flags: { uploadEnabled: boolean; registrationEnabled: boolean };
+}) => {
 	const { DOCS_URL_ROOT, GATEWAY_API_ROOT } = useAppConfigContext();
 	const dictionaryPageUrl = urlJoin(DOCS_URL_ROOT, '/dictionary');
 	const dictionaryVersionDisplay = `Data Dictionary v${dictionaryVersion}.`;
@@ -80,9 +90,11 @@ const Instructions = ({ dictionaryVersion = '' }: { dictionaryVersion: string })
 							isAsync
 							variant={BUTTON_VARIANTS.SECONDARY}
 							size={BUTTON_SIZES.SM}
-							onFilesSelect={function (files: FileList): void {
-								throw new Error('Function not implemented.');
+							isLoading={isUploading}
+							onFilesSelect={async (files) => {
+								if (files[0]) await handleUpload(files[0]);
 							}}
+							disabled={!flags.uploadEnabled}
 						>
 							<Icon name="upload" height="12px" /> Upload File
 						</FileSelectButton>
@@ -91,7 +103,12 @@ const Instructions = ({ dictionaryVersion = '' }: { dictionaryVersion: string })
 						<Typography variant="data" component="span">
 							2. When your sample list is valid and QC is complete, submit your registration.
 						</Typography>
-						<Button css={boxButtonStyle} variant={BUTTON_VARIANTS.PRIMARY} size={BUTTON_SIZES.SM}>
+						<Button
+							css={boxButtonStyle}
+							variant={BUTTON_VARIANTS.PRIMARY}
+							size={BUTTON_SIZES.SM}
+							disabled={!flags.registrationEnabled}
+						>
 							Register Samples
 						</Button>
 					</>,

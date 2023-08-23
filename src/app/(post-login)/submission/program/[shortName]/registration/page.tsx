@@ -39,12 +39,18 @@ export default function Register({ params: { shortName } }: { params: { shortNam
 			variables: { shortName, registrationFile: file },
 		});
 
+	const instructionFlags = {
+		uploadEnabled: true,
+		registrationEnabled: true,
+	};
+
 	return (
 		<div>
 			<Instructions
 				dictionaryVersion={'11'}
 				handleUpload={handleUpload}
 				isUploading={isUploading}
+				flags={instructionFlags}
 			/>
 		</div>
 	);
