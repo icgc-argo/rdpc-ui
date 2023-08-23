@@ -42,11 +42,13 @@ const Instructions = ({
 	dictionaryVersion = '',
 	handleUpload,
 	isUploading,
+	handleRegister,
 	flags,
 }: {
 	dictionaryVersion: string;
 	handleUpload: any;
 	isUploading: boolean;
+	handleRegister: any;
 	flags: { uploadEnabled: boolean; registrationEnabled: boolean };
 }) => {
 	const { DOCS_URL_ROOT, GATEWAY_API_ROOT } = useAppConfigContext();
@@ -108,6 +110,7 @@ const Instructions = ({
 							variant={BUTTON_VARIANTS.PRIMARY}
 							size={BUTTON_SIZES.SM}
 							disabled={!flags.registrationEnabled}
+							onClick={handleRegister}
 						>
 							Register Samples
 						</Button>
