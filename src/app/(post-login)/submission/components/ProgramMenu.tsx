@@ -93,8 +93,8 @@ export default function ProgramMenu({ searchQuery }: { searchQuery: string }) {
 					onClick={setActiveProgram(programIndex)}
 					selected={programIndex === activeProgramIndex}
 				>
-					<MenuItem level={3}>{program.shortName}</MenuItem>
-					<Link href={`/submission/program/${program.shortName}/registration`}>
+					<MenuItem level={3}>{shortName}</MenuItem>
+					<Link href={`/submission/program/${shortName}/registration`}>
 						<MenuItem
 							level={3}
 							content={<StatusMenuItem />}

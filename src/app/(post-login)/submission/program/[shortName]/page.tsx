@@ -19,6 +19,6 @@
 
 'use client';
 
-export default function Program({ params }: { params: { shortName: string } }) {
-	return <div>Program: {params.shortName}</div>;
+export default function Program({ params: { shortName } }: { params: { shortName: string } }) {
+	return <div>Program: {shortName}</div>;
 }

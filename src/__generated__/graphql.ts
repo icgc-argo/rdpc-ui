@@ -2446,6 +2446,13 @@ export type SideMenuQuery = {
 	programs?: Array<{ __typename?: 'Program'; shortName: string } | null> | null;
 };
 
+export type ClinicalSchemaVersionQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ClinicalSchemaVersionQuery = {
+	__typename?: 'Query';
+	clinicalSubmissionSchemaVersion: string;
+};
+
 export const ProgramsListDocument = {
 	kind: 'Document',
 	definitions: [
@@ -2514,3 +2521,19 @@ export const SideMenuDocument = {
 		},
 	],
 } as unknown as DocumentNode<SideMenuQuery, SideMenuQueryVariables>;
+export const ClinicalSchemaVersionDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'ClinicalSchemaVersion' },
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{ kind: 'Field', name: { kind: 'Name', value: 'clinicalSubmissionSchemaVersion' } },
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<ClinicalSchemaVersionQuery, ClinicalSchemaVersionQueryVariables>;

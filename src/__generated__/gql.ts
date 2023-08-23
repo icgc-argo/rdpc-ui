@@ -16,6 +16,8 @@ const documents = {
 	'\n\tquery ProgramsList {\n\t\tprograms {\n\t\t\tshortName\n\t\t\tname\n\t\t\tcancerTypes\n\t\t\tcountries\n\t\t\tmembershipType\n\t\t\tgenomicDonors\n\t\t\tsubmittedDonors\n\t\t\tcommitmentDonors\n\t\t\tusers {\n\t\t\t\temail\n\t\t\t\tfirstName\n\t\t\t\tlastName\n\t\t\t\trole\n\t\t\t}\n\t\t}\n\t}\n':
 		types.ProgramsListDocument,
 	'\n\tquery SideMenu {\n\t\tprograms {\n\t\t\tshortName\n\t\t}\n\t}\n': types.SideMenuDocument,
+	'\n\tquery ClinicalSchemaVersion {\n\t\tclinicalSubmissionSchemaVersion\n\t}\n':
+		types.ClinicalSchemaVersionDocument,
 };
 
 /**
@@ -44,6 +46,12 @@ export function gql(
 export function gql(
 	source: '\n\tquery SideMenu {\n\t\tprograms {\n\t\t\tshortName\n\t\t}\n\t}\n',
 ): (typeof documents)['\n\tquery SideMenu {\n\t\tprograms {\n\t\t\tshortName\n\t\t}\n\t}\n'];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+	source: '\n\tquery ClinicalSchemaVersion {\n\t\tclinicalSubmissionSchemaVersion\n\t}\n',
+): (typeof documents)['\n\tquery ClinicalSchemaVersion {\n\t\tclinicalSubmissionSchemaVersion\n\t}\n'];
 
 export function gql(source: string) {
 	return (documents as any)[source] ?? {};
