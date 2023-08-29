@@ -19,9 +19,9 @@
 'use client';
 
 import Instructions from '@/app/components/page/submission/program/registration/Instructions';
+import CLINICAL_SCHEMA_VERSION_QUERY from '@/app/gql/CLINICAL_SCHEMA_VERSION_QUERY';
+import UPLOAD_REGISTRATION_MUTATION from '@/app/gql/UPLOAD_REGISTRATION_MUTATION';
 import { useMutation, useQuery } from '@apollo/client';
-import CLINICAL_SCHEMA_VERSION_QUERY from './gql/CLINICAL_SCHEMA_VERSION_QUERY';
-import UPLOAD_REGISTRATION_MUTATION from './gql/UPLOAD_REGISTRATION_MUTATION';
 
 export default function Register({ params: { shortName } }: { params: { shortName: string } }) {
 	const { data, loading, error } = useQuery(CLINICAL_SCHEMA_VERSION_QUERY);

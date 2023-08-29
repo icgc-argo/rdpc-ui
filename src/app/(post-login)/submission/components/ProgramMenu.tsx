@@ -19,6 +19,7 @@
 'use client';
 
 import Loader from '@/app/components/Loader';
+import SIDEMENU_PROGRAMS from '@/app/gql/SIDEMENU_PROGRAMS';
 import { notNull } from '@/global/utils/types';
 import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
@@ -26,7 +27,6 @@ import { MenuItem } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import { notFound, usePathname } from 'next/navigation';
 import { MouseEventHandler, useState } from 'react';
-import SIDEMENU_PROGRAMS from '../gql/SIDEMENU_PROGRAMS';
 
 const StatusMenuItem = () => {
 	return (
