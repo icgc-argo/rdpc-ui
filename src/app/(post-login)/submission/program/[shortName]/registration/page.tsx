@@ -18,19 +18,21 @@
  */
 'use client';
 
+import ContentHeader from '@/app/components/Content/ContentHeader';
 import Instructions from '@/app/components/page/submission/program/registration/Instructions';
 import CLINICAL_SCHEMA_VERSION_QUERY from '@/app/gql/CLINICAL_SCHEMA_VERSION_QUERY';
 import UPLOAD_REGISTRATION_MUTATION from '@/app/gql/UPLOAD_REGISTRATION_MUTATION';
 import { useMutation, useQuery } from '@apollo/client';
+import { ContentBody } from '@icgc-argo/uikit';
 
 export default function Register({ params: { shortName } }: { params: { shortName: string } }) {
 	const { data, loading, error } = useQuery(CLINICAL_SCHEMA_VERSION_QUERY);
 
 	// upload file
 	const [uploadFile, { loading: isUploading }] = useMutation(UPLOAD_REGISTRATION_MUTATION, {
-		onError: () => {
+		onError: (e) => {
 			//commonToaster.unknownError();
-			console.error();
+			console.error(e);
 		},
 	});
 
@@ -49,14 +51,21 @@ export default function Register({ params: { shortName } }: { params: { shortNam
 	};
 
 	return (
-		<div>
-			<Instructions
-				dictionaryVersion={'11'}
-				handleUpload={handleUpload}
-				isUploading={isUploading}
-				handleRegister={handleRegister}
-				flags={instructionFlags}
+		<>
+			<ContentHeader
+				breadcrumb={['CIA-IE', 'Register Samples']}
+				progress={{ upload: 'pending', register: 'success' }}
+				helpUrl="www.google.ca"
 			/>
-		</div>
+			<ContentBody>
+				<Instructions
+					dictionaryVersion={'11'}
+					handleUpload={handleUpload}
+					isUploading={isUploading}
+					handleRegister={handleRegister}
+					flags={instructionFlags}
+				/>
+			</ContentBody>
+		</>
 	);
 }

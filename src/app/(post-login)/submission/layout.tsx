@@ -22,7 +22,6 @@ import { HEADER_HEIGHT_PX } from '@/app/components/Header';
 import { css, useTheme } from '@/lib/emotion';
 import { ReactNode, useState } from 'react';
 import SideMenu from './components/SideMenu/Menu';
-import TitleBar from './components/TitleBar';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
 	const theme = useTheme();
@@ -50,22 +49,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 					onToggle={() => setSidebarActive((active) => !active)}
 				/>
 			</div>
-			<div>
-				<TitleBar />
-				<div
-					id="content"
-					css={css`
-						padding: 25px 30px;
-
-						> div {
-							background: white;
-							border-radius: 8px;
-							border: 1px solid ${theme.colors.grey_1}
-					`}
-				>
-					{children}
-				</div>
-			</div>
+			<>{children}</>
 		</div>
 	);
 }
