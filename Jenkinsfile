@@ -5,6 +5,6 @@ pipelineRDPCRdpcUI(
     dockerRepo: "icgc-argo/rdpc-ui",
     gitRepo: "icgc-argo/rdpc-ui",
     testCommand: "npm ci && npm t",
-    helmRelease: "workflow-ui"
+    helmRelease: "rdpc-ui"
 )
 
