@@ -18,14 +18,67 @@
  */
 'use client';
 
+import { ClinicalRegistrationData } from '@/__generated__/graphql';
 import ContentHeader from '@/app/components/Content/ContentHeader';
 import ContentMain from '@/app/components/Content/ContentMain';
 import NoDataMessage from '@/app/components/NoData';
 import Instructions from '@/app/components/page/submission/program/registration/Instructions';
 import CLINICAL_SCHEMA_VERSION_QUERY from '@/app/gql/CLINICAL_SCHEMA_VERSION_QUERY';
 import UPLOAD_REGISTRATION_MUTATION from '@/app/gql/UPLOAD_REGISTRATION_MUTATION';
+import { css } from '@/lib/emotion';
 import { useMutation, useQuery } from '@apollo/client';
+import { BUTTON_SIZES, BUTTON_VARIANTS, Button, Typography } from '@icgc-argo/uikit';
+import { get } from 'lodash';
+import FileTable, { FileEntry } from './components/FileTable';
 
+const recordsToFileTable = (
+	records: ClinicalRegistrationData[],
+	newRows: Array<number>,
+): Array<FileEntry> =>
+	records.map((record) => {
+		const fields = get(record, 'fields', []);
+		const data = fields.reduce((acc, cur) => ({ ...acc, [cur.name]: cur.value }), {} as any);
+		return { ...data, row: record.row, isNew: newRows.includes(record.row) };
+	});
+
+const FilePreview = () => (
+	<>
+		<div
+			css={css`
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 8px;
+			`}
+		>
+			<Typography
+				css={css`
+					margin: 0;
+				`}
+				color="primary"
+				variant="subtitle2"
+				component="h2"
+			>
+				File Preview
+			</Typography>
+			<Button
+				id="button-register-clear-file"
+				variant={BUTTON_VARIANTS.TEXT}
+				size={BUTTON_SIZES.SM}
+				onClick={() => alert('click')}
+				disabled={false}
+			>
+				<Typography variant="data">Clear</Typography>
+			</Button>
+		</div>
+		<FileTable
+			//	records={recordsToFileTable(fileRecords, newRows)}
+			records={[]}
+			stats={undefined}
+			submissionInfo={{ fileName: '', createdAt: '', creator: '' }}
+		/>
+	</>
+);
 export default function Register({ params: { shortName } }: { params: { shortName: string } }) {
 	const { data, loading, error } = useQuery(CLINICAL_SCHEMA_VERSION_QUERY);
 
@@ -51,6 +104,8 @@ export default function Register({ params: { shortName } }: { params: { shortNam
 		registrationEnabled: true,
 	};
 
+	const state = false;
+
 	return (
 		<div>
 			<ContentHeader
@@ -67,6 +122,7 @@ export default function Register({ params: { shortName } }: { params: { shortNam
 					flags={instructionFlags}
 				/>
 				<NoDataMessage loading={loading} />
+				<FilePreview />
 			</ContentMain>
 		</div>
 	);

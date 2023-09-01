@@ -7,7 +7,7 @@ const ContentMain = ({ children }: { children: ReactNode }) => {
 		<div
 			id="content"
 			css={css`
-    padding: 25px 30px;
+		    padding: 25px 30px;
 
     > div {
         background: white;

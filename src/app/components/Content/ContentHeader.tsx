@@ -22,6 +22,7 @@ const ContentHeader: FunctionComponent<ContentHeaderProps> = ({
 			css={css`
 				display: flex;
 				height: 56px;
+				padding: 0 30px;
 				align-items: center;
 				background-color: ${theme.colors.white};
 			`}
