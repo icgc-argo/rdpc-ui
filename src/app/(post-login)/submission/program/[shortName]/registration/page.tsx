@@ -27,8 +27,9 @@ import ContentMain from "@/app/components/Content/ContentMain";
 import NoDataMessage from "@/app/components/NoData";
 import Instructions from "@/app/components/page/submission/program/registration/Instructions";
 import GET_REGISTRATION_QUERY from "@/app/gql/GET_REGISTRATION_QUERY";
+import UPLOAD_REGISTRATION_MUTATION from "@/app/gql/UPLOAD_REGISTRATION_MUTATION";
 import { css } from "@/lib/emotion";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import {
   BUTTON_SIZES,
   BUTTON_VARIANTS,
@@ -46,9 +47,11 @@ const recordsToFileTable = (
   records.map((record) => {
     const fields = get(record, "fields", []);
     const data = fields.reduce(
+      // @ts-expect-error
       (acc, cur) => ({ ...acc, [cur.name]: cur.value }),
       {} as any,
-    );
+    ); // @ts-expect-error
+
     return { ...data, row: record.row, isNew: newRows.includes(record.row) };
   });
 
@@ -105,21 +108,20 @@ export default function Register({
     variables: { shortName },
   });
 
-  // upload file
-  // const [uploadFile, { loading: isUploading }] = useMutation(
-  //   UPLOAD_REGISTRATION_MUTATION,
-  //   {
-  //     onError: (e) => {
-  //       //commonToaster.unknownError();
-  //       console.error(e);
-  //     },
-  //   }
-  // );
+  const [uploadFile, { loading: isUploading }] = useMutation(
+    UPLOAD_REGISTRATION_MUTATION,
+    {
+      onError: (e) => {
+        //commonToaster.unknownError();
+        console.error(e);
+      },
+    },
+  );
 
-  const handleUpload = (file: File) => alert("upload");
-  // uploadFile({
-  //   variables: { shortName, registrationFile: file },
-  // });
+  const handleUpload = (file: File) =>
+    uploadFile({
+      variables: { shortName, registrationFile: file },
+    });
 
   const handleRegister = () => {
     console.log("register");
@@ -147,7 +149,7 @@ export default function Register({
         <Instructions
           dictionaryVersion={"11"}
           handleUpload={handleUpload}
-          isUploading={false}
+          isUploading={isUploading}
           handleRegister={handleRegister}
           flags={instructionFlags}
         />

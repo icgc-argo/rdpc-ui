@@ -16,37 +16,37 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
+"use client";
 
-import { ApolloClient, ApolloLink, InMemoryCache, createHttpLink } from '@apollo/client';
-
-export { gql } from '@/__generated__/gql';
+import { ApolloClient, ApolloLink, InMemoryCache } from "@apollo/client";
+import { createUploadLink } from "apollo-upload-client";
+export { gql } from "@/__generated__/gql";
 
 type Config = {
-	gateway: string;
-	jwt: string;
+  gateway: string;
+  jwt: string;
 };
 export const createApolloClient = (config: Config) => {
-	const httpLink = createHttpLink({
-		uri: config.gateway,
-	});
+  const httpLink = createUploadLink({
+    uri: config.gateway,
+  });
 
-	const jwt = config.jwt;
+  const jwt = config.jwt;
 
-	const authLink = new ApolloLink((operation, forward) => {
-		operation.setContext(({ headers }: { headers: any }) => ({
-			headers: {
-				authorization: `Bearer ${jwt}`,
-				...headers,
-			},
-		}));
-		return forward(operation);
-	});
+  const authLink = new ApolloLink((operation, forward) => {
+    operation.setContext(({ headers }: { headers: any }) => ({
+      headers: {
+        authorization: `Bearer ${jwt}`,
+        ...headers,
+      },
+    }));
+    return forward(operation);
+  });
 
-	const additiveLink = ApolloLink.from([authLink, httpLink]);
+  const additiveLink = ApolloLink.from([authLink, httpLink]);
 
-	return new ApolloClient({
-		link: additiveLink,
-		cache: new InMemoryCache(),
-	});
+  return new ApolloClient({
+    link: additiveLink,
+    cache: new InMemoryCache(),
+  });
 };

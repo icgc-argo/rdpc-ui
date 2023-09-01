@@ -2526,6 +2526,69 @@ export type SideMenuQuery = {
   programs?: Array<{ __typename?: "Program"; shortName: string } | null> | null;
 };
 
+export type UploadRegistrationMutationVariables = Exact<{
+  shortName: Scalars["String"]["input"];
+  registrationFile: Scalars["Upload"]["input"];
+}>;
+
+export type UploadRegistrationMutation = {
+  __typename?: "Mutation";
+  uploadClinicalRegistration: {
+    __typename?: "ClinicalRegistrationData";
+    id?: string | null;
+    programShortName?: string | null;
+    creator?: string | null;
+    fileName?: string | null;
+    createdAt?: any | null;
+    records: Array<{
+      __typename?: "ClinicalRecord";
+      row: number;
+      fields: Array<{
+        __typename?: "ClinicalRecordField";
+        name: string;
+        value?: string | null;
+      }>;
+    } | null>;
+    errors: Array<{
+      __typename?: "ClinicalRegistrationError";
+      type: string;
+      message: string;
+      row: number;
+      field: string;
+      value: string;
+      sampleId?: string | null;
+      donorId: string;
+      specimenId?: string | null;
+    } | null>;
+    fileErrors?: Array<{
+      __typename?: "ClinicalFileError";
+      message: string;
+      fileNames: Array<string | null>;
+      code: string;
+    } | null> | null;
+    newDonors: {
+      __typename?: "ClinicalRegistrationStats";
+      count: number;
+      rows: Array<number | null>;
+    };
+    newSpecimens: {
+      __typename?: "ClinicalRegistrationStats";
+      count: number;
+      rows: Array<number | null>;
+    };
+    newSamples: {
+      __typename?: "ClinicalRegistrationStats";
+      count: number;
+      rows: Array<number | null>;
+    };
+    alreadyRegistered: {
+      __typename?: "ClinicalRegistrationStats";
+      count: number;
+      rows: Array<number | null>;
+    };
+  };
+};
+
 export const ClinicalSchemaVersionDocument = {
   kind: "Document",
   definitions: [
@@ -2815,3 +2878,204 @@ export const SideMenuDocument = {
     },
   ],
 } as unknown as DocumentNode<SideMenuQuery, SideMenuQueryVariables>;
+export const UploadRegistrationDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "UploadRegistration" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "shortName" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "registrationFile" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "Upload" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "uploadClinicalRegistration" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "shortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "shortName" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "registrationFile" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "registrationFile" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "creator" } },
+                { kind: "Field", name: { kind: "Name", value: "fileName" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "records" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "row" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "fields" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "errors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "type" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "row" } },
+                      { kind: "Field", name: { kind: "Name", value: "field" } },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "sampleId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "donorId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "specimenId" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "fileErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "fileNames" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "newDonors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "count" } },
+                      { kind: "Field", name: { kind: "Name", value: "rows" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "newSpecimens" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "count" } },
+                      { kind: "Field", name: { kind: "Name", value: "rows" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "newSamples" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "count" } },
+                      { kind: "Field", name: { kind: "Name", value: "rows" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "alreadyRegistered" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "count" } },
+                      { kind: "Field", name: { kind: "Name", value: "rows" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  UploadRegistrationMutation,
+  UploadRegistrationMutationVariables
+>;
