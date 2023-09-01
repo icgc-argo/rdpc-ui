@@ -1,15 +1,42 @@
-import { Progress, ProgressStatus } from '@icgc-argo/uikit';
-import { FunctionComponent } from 'react';
+import { Progress, ProgressStatus } from "@icgc-argo/uikit";
+import { FC } from "react";
 
-export type ProgressState = { upload: ProgressStatus; register: ProgressStatus };
+type ProgressBarProps = {
+  isSubmissionSystemDisabled: boolean;
+  hasClinicalRegistration: boolean;
+  hasErrors: boolean;
+};
 
-const ProgressBar: FunctionComponent<{ progressState: ProgressState }> = ({ progressState }) => {
-	return (
-		<Progress>
-			<Progress.Item state={progressState.upload} text="Upload" />
-			<Progress.Item state={progressState.register} text="Register" />
-		</Progress>
-	);
+const ProgressBar: FC<ProgressBarProps> = ({
+  isSubmissionSystemDisabled,
+  hasClinicalRegistration,
+  hasErrors,
+}) => {
+  const progressStates: {
+    upload: ProgressStatus;
+    register: ProgressStatus;
+  } = {
+    upload: isSubmissionSystemDisabled
+      ? "locked"
+      : hasClinicalRegistration
+      ? "success"
+      : hasErrors
+      ? "error"
+      : "disabled",
+    register: isSubmissionSystemDisabled
+      ? "locked"
+      : hasClinicalRegistration
+      ? "pending"
+      : hasErrors
+      ? "disabled"
+      : "disabled",
+  };
+  return (
+    <Progress>
+      <Progress.Item state={progressStates.upload} text="Upload" />
+      <Progress.Item state={progressStates.register} text="Register" />
+    </Progress>
+  );
 };
 
 export default ProgressBar;

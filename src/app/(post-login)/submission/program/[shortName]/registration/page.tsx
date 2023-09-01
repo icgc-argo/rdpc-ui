@@ -21,6 +21,7 @@
 import { ClinicalRegistrationData } from "@/__generated__/graphql";
 import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
+import ProgressBar from "@/app/components/Content/ProgressBar";
 import NoDataMessage from "@/app/components/NoData";
 import Instructions from "@/app/components/page/submission/program/registration/Instructions";
 import GET_REGISTRATION_QUERY from "@/app/gql/GET_REGISTRATION_QUERY";
@@ -136,13 +137,27 @@ export default function Register({
 
   const state = false;
 
+  //
+  const isSubmissionSystemDisabled = false;
+  const hasClinicalRegistration = !!(
+    clinicalRegistration && clinicalRegistration.records.length
+  );
+  const hasErrors = !!schemaOrValidationErrors.length;
+
   return (
     <div>
       <ContentHeader
         breadcrumb={["CIA-IE", "Register Samples"]}
-        progress={{ upload: "pending", register: "success" }}
         helpUrl="www.google.ca"
-      />
+      >
+        <ProgressBar
+          {...{
+            isSubmissionSystemDisabled,
+            hasClinicalRegistration,
+            hasErrors,
+          }}
+        />
+      </ContentHeader>
       <ContentMain>
         <Instructions
           dictionaryVersion={"11"}
