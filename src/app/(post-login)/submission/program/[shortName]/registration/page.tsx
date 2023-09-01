@@ -19,11 +19,12 @@
 'use client';
 
 import ContentHeader from '@/app/components/Content/ContentHeader';
+import ContentMain from '@/app/components/Content/ContentMain';
+import NoDataMessage from '@/app/components/NoData';
 import Instructions from '@/app/components/page/submission/program/registration/Instructions';
 import CLINICAL_SCHEMA_VERSION_QUERY from '@/app/gql/CLINICAL_SCHEMA_VERSION_QUERY';
 import UPLOAD_REGISTRATION_MUTATION from '@/app/gql/UPLOAD_REGISTRATION_MUTATION';
 import { useMutation, useQuery } from '@apollo/client';
-import { ContentBody } from '@icgc-argo/uikit';
 
 export default function Register({ params: { shortName } }: { params: { shortName: string } }) {
 	const { data, loading, error } = useQuery(CLINICAL_SCHEMA_VERSION_QUERY);
@@ -51,13 +52,13 @@ export default function Register({ params: { shortName } }: { params: { shortNam
 	};
 
 	return (
-		<>
+		<div>
 			<ContentHeader
 				breadcrumb={['CIA-IE', 'Register Samples']}
 				progress={{ upload: 'pending', register: 'success' }}
 				helpUrl="www.google.ca"
 			/>
-			<ContentBody>
+			<ContentMain>
 				<Instructions
 					dictionaryVersion={'11'}
 					handleUpload={handleUpload}
@@ -65,7 +66,8 @@ export default function Register({ params: { shortName } }: { params: { shortNam
 					handleRegister={handleRegister}
 					flags={instructionFlags}
 				/>
-			</ContentBody>
-		</>
+				<NoDataMessage loading={loading} />
+			</ContentMain>
+		</div>
 	);
 }
