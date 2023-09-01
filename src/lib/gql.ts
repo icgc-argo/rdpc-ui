@@ -48,5 +48,6 @@ export const createApolloClient = (config: Config) => {
   return new ApolloClient({
     link: additiveLink,
     cache: new InMemoryCache(),
+    connectToDevTools: true,
   });
 };

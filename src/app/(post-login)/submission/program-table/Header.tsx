@@ -16,29 +16,29 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
+"use client";
 
-import { css } from '@/lib/emotion';
-import { ReactNode } from 'react';
+import { css } from "@/lib/emotion";
+import { ReactNode } from "react";
 
-const TableHeader = ({ children }: { children: ReactNode }) => (
-	<div
-		css={css`
-			font-size: 1.1rem;
-			font-weight: 600;
-			padding: 0;
-			&:not(:last-of-type) {
-				border-right: 1px solid red;
-			}
-			min-height: 28px;
-			text-align: left;
-			display: flex;
-			align-items: center;
-			box-sizing: border-box;
-		`}
-	>
-		{children}
-	</div>
+export const TableHeader = ({ children }: { children: ReactNode }) => (
+  <div
+    css={css`
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 0;
+      &:not(:last-of-type) {
+        border-right: 1px solid red;
+      }
+      min-height: 28px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+    `}
+  >
+    {children}
+  </div>
 );
 
 export default TableHeader;

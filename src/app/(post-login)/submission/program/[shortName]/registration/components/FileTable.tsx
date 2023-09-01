@@ -28,17 +28,12 @@ import { toDisplayRowIndex } from "@/global/utils/clinical";
 import { ColumnDef, Icon, Table, css, useTheme } from "@icgc-argo/uikit";
 import memoize from "lodash/memoize";
 import omit from "lodash/omit";
-import { ComponentProps, createRef } from "react";
+import { ComponentProps, FC, createRef } from "react";
+import { FileTableData } from "../page";
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: "row",
   IS_NEW: "isNew",
-};
-
-export type FileEntry = {
-  row: string;
-  isNew: boolean;
-  [k: string]: string | number | boolean;
 };
 
 type FileStats = {
@@ -88,13 +83,14 @@ const getColumnWidth = memoize<(keyString: string) => number>((keyString) => {
   return Math.max(Math.min(maxWidth, targetWidth), minWidth);
 });
 
-const FileTable = (props: {
-  records: Array<FileEntry>;
+type FileTableProps = {
+  records: FileTableData[];
   stats?: FileStats;
   submissionInfo: ComponentProps<typeof SubmissionInfoArea>;
-}) => {
+};
+
+const FileTable: FC<FileTableProps> = ({ records, stats, submissionInfo }) => {
   const theme = useTheme();
-  const { records, stats, submissionInfo } = props;
 
   const filteredFirstRecord = omit(
     records[0],
@@ -105,14 +101,14 @@ const FileTable = (props: {
 
   const containerRef = createRef<HTMLDivElement>();
 
-  const columns: ColumnDef<FileEntry>[] = [
+  const columns: ColumnDef<FileTableData>[] = [
     {
+      header: "Line #",
       id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
       cell: ({ row: { original } }) => (
         <CellContentCenter>{toDisplayRowIndex(original.row)}</CellContentCenter>
       ),
-      header: "Line #",
-
+      accessorKey: "row",
       enableResizing: false,
       size: 70,
     },
@@ -123,24 +119,25 @@ const FileTable = (props: {
           <StarIcon fill={original.isNew ? "accent2" : "grey_1"} />
         </CellContentCenter>
       ),
+      accessorKey: "isNew",
       size: 48,
       header: () => (
-        <div
-          css={css`
-            display: flex;
-          `}
-        >
+        <>
           <StarIcon fill="grey_1" />
-        </div>
+        </>
       ),
     },
+
     ...Object.entries(filteredFirstRecord).map(([key]) => ({
       id: key,
       accessor: key,
-      Header: key,
+      cell: ({ row: { original } }) => original[key],
+      header: key,
       minWidth: getColumnWidth(key),
     })),
   ];
+
+  console.log("records", records, "cols", columns);
 
   return (
     <div
@@ -153,11 +150,7 @@ const FileTable = (props: {
         left={<StatsArea stats={stats} />}
         right={<SubmissionInfoArea {...submissionInfo} />}
       />
-      <Table
-        pageCount={Number.MAX_SAFE_INTEGER}
-        columns={columns}
-        data={records}
-      />
+      <Table columns={columns} data={records} withHeaders />
     </div>
   );
 };

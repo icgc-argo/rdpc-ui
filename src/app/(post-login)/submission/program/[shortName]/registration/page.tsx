@@ -35,13 +35,19 @@ import {
   Notification,
   Typography,
 } from "@icgc-argo/uikit";
-import { get } from "lodash";
-import FileTable, { FileEntry } from "./components/FileTable";
+import { get, union } from "lodash";
+import { FC, ReactNode } from "react";
+import FileTable from "./components/FileTable";
+
+export type FileTableData = ClinicalRegistrationData & {
+  row: number;
+  isNew: boolean;
+};
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],
   newRows: Array<number>,
-): Array<FileEntry> =>
+): FileTableData[] =>
   records.map((record) => {
     const fields = get(record, "fields", []);
     const data = fields.reduce(
@@ -53,43 +59,76 @@ const recordsToFileTable = (
     return { ...data, row: record.row, isNew: newRows.includes(record.row) };
   });
 
-const FilePreview = () => (
-  <>
+const FilePreview = ({
+  registration,
+}: {
+  registration: ClinicalRegistrationData;
+}) => {
+  const fileRecords = get(registration, "records", []);
+  console.log("file records", fileRecords);
+
+  const {
+    createdAt = "",
+    creator = "",
+    fileName = "",
+    alreadyRegistered: { count: alreadyRegisteredCount = 0 },
+    newDonors: { rows: newDonors },
+    newSamples: { rows: newSamples },
+    newSpecimens: { rows: newSpecimens },
+  } = registration;
+
+  const submissionInfo = { createdAt, creator, fileName };
+  const newRows = union(newDonors, newSamples, newSpecimens);
+  const stats = {
+    newCount: newRows.length,
+    existingCount: alreadyRegisteredCount,
+  };
+
+  const records = recordsToFileTable(fileRecords, newRows);
+
+  console.log("new rows", newRows);
+  console.log("stats", stats);
+  console.log("records", records);
+
+  return (
+    <FileTable
+      records={records}
+      stats={stats}
+      submissionInfo={submissionInfo}
+    />
+  );
+};
+
+type CardProps = { title: string; action?: ReactNode; children: ReactNode };
+const Card: FC<CardProps> = ({ title, action, children }) => (
+  <div
+    css={css`
+      padding: 9px;
+    `}
+  >
     <div
       css={css`
         display: flex;
+        flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 8px;
       `}
     >
       <Typography
         css={css`
-          margin: 0;
+          margin: 0 0 8px 0;
         `}
         color="primary"
         variant="subtitle2"
         component="h2"
       >
-        File Preview
+        {title}
       </Typography>
-      <Button
-        id="button-register-clear-file"
-        variant={BUTTON_VARIANTS.TEXT}
-        size={BUTTON_SIZES.SM}
-        onClick={() => alert("click")}
-        disabled={false}
-      >
-        <Typography variant="data">Clear</Typography>
-      </Button>
+      {action}
     </div>
-    <FileTable
-      //	records={recordsToFileTable(fileRecords, newRows)}
-      records={[]}
-      stats={undefined}
-      submissionInfo={{ fileName: "", createdAt: "", creator: "" }}
-    />
-  </>
+
+    {children}
+  </div>
 );
 
 export default function Register({
@@ -109,7 +148,6 @@ export default function Register({
   const clinicalRegistration = data?.clinicalRegistration;
   const schemaOrValidationErrors = get(clinicalRegistration, "errors", []);
   const fileErrors = get(clinicalRegistration, "fileErrors") || [];
-  const fileRecords = get(clinicalRegistration, "records", []);
 
   const [uploadFile, { loading: isUploading }] = useMutation(
     UPLOAD_REGISTRATION_MUTATION,
@@ -177,8 +215,23 @@ export default function Register({
             onInteraction={() => null}
           />
         ))}
-        {fileRecords.length ? (
-          <FilePreview />
+        {clinicalRegistration?.records.length ? (
+          <Card
+            title="File Preview"
+            action={
+              <Button
+                id="button-register-clear-file"
+                variant={BUTTON_VARIANTS.TEXT}
+                size={BUTTON_SIZES.SM}
+                onClick={() => alert("click")}
+                disabled={false}
+              >
+                <Typography variant="data">Clear</Typography>
+              </Button>
+            }
+          >
+            <FilePreview registration={clinicalRegistration} />
+          </Card>
         ) : schemaOrValidationErrors.length ? (
           <div>Error</div>
         ) : (
