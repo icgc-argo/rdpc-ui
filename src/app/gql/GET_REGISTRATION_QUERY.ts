@@ -17,12 +17,56 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// import { gql } from '@apollo/client';
+import { gql } from "@/__generated__/gql";
 
-// const UPLOAD_REGISTRATION_MUTATION = gql(`
-// 	mutation UploadRegistration($shortName: String!, $registrationFile: Upload!) {
-// 		uploadClinicalRegistration(shortName: $shortName, registrationFile: $registrationFile)
-// 	}
-// `);
+const GET_REGISTRATION_QUERY = gql(`
+  query GetRegistration($shortName: String!) {
+    clinicalRegistration(shortName: $shortName) {
+      id
+      programShortName
+      creator
+      fileName
+      createdAt
+      records {
+        row
+        fields {
+          name
+          value
+        }
+      }
+      errors {
+        type
+        message
+        row
+        field
+        value
+        sampleId
+        donorId
+        specimenId
+      }
+      fileErrors {
+        message
+        fileNames
+        code
+      }
+      newDonors {
+        count
+        rows
+      }
+      newSpecimens {
+        count
+        rows
+      }
+      newSamples {
+        count
+        rows
+      }
+      alreadyRegistered {
+        count
+        rows
+      }
+    }
+  }    
+`);
 
-// export default UPLOAD_REGISTRATION_MUTATION;
+export default GET_REGISTRATION_QUERY;
