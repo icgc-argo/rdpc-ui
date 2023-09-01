@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { ClinicalRegistrationData } from '@/__generated__/graphql';
+import { ClinicalFileError, ClinicalRegistrationData } from '@/__generated__/graphql';
 import ContentHeader from '@/app/components/Content/ContentHeader';
 import ContentMain from '@/app/components/Content/ContentMain';
 import NoDataMessage from '@/app/components/NoData';
@@ -27,7 +27,7 @@ import CLINICAL_SCHEMA_VERSION_QUERY from '@/app/gql/CLINICAL_SCHEMA_VERSION_QUE
 import UPLOAD_REGISTRATION_MUTATION from '@/app/gql/UPLOAD_REGISTRATION_MUTATION';
 import { css } from '@/lib/emotion';
 import { useMutation, useQuery } from '@apollo/client';
-import { BUTTON_SIZES, BUTTON_VARIANTS, Button, Typography } from '@icgc-argo/uikit';
+import { BUTTON_SIZES, BUTTON_VARIANTS, Button, Notification, Typography } from '@icgc-argo/uikit';
 import { get } from 'lodash';
 import FileTable, { FileEntry } from './components/FileTable';
 
@@ -106,6 +106,10 @@ export default function Register({ params: { shortName } }: { params: { shortNam
 
 	const state = false;
 
+	const fileErrors: ClinicalFileError[] = [
+		{ fileNames: ['input'], message: 'didt upload', code: 'code?' },
+	];
+
 	return (
 		<div>
 			<ContentHeader
@@ -121,6 +125,18 @@ export default function Register({ params: { shortName } }: { params: { shortNam
 					handleRegister={handleRegister}
 					flags={instructionFlags}
 				/>
+				{fileErrors.map(({ fileNames, message }, i) => (
+					<Notification
+						key={i}
+						size="SM"
+						variant="ERROR"
+						interactionType="CLOSE"
+						title={`File failed to upload: ${fileNames.join(', ')}`}
+						content={message}
+						onInteraction={() => null}
+					/>
+				))}
+
 				<NoDataMessage loading={loading} />
 				<FilePreview />
 			</ContentMain>
