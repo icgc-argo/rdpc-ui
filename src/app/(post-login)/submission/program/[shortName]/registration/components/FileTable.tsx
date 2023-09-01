@@ -18,143 +18,148 @@
  */
 
 import {
-	CellContentCenter,
-	DataTableStarIcon,
-	StatArea as StatAreaDisplay,
-	SubmissionInfoArea,
-	TableInfoHeaderContainer,
-} from '@/app/components/Table/common';
-import { toDisplayRowIndex } from '@/global/utils/clinical';
-import { ColumnDef, Icon, Table, css, useTheme } from '@icgc-argo/uikit';
-import memoize from 'lodash/memoize';
-import omit from 'lodash/omit';
-import { ComponentProps, createRef } from 'react';
+  CellContentCenter,
+  DataTableStarIcon,
+  StatArea as StatAreaDisplay,
+  SubmissionInfoArea,
+  TableInfoHeaderContainer,
+} from "@/app/components/Table/common";
+import { toDisplayRowIndex } from "@/global/utils/clinical";
+import { ColumnDef, Icon, Table, css, useTheme } from "@icgc-argo/uikit";
+import memoize from "lodash/memoize";
+import omit from "lodash/omit";
+import { ComponentProps, createRef } from "react";
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
-	ROW: 'row',
-	IS_NEW: 'isNew',
+  ROW: "row",
+  IS_NEW: "isNew",
 };
 
 export type FileEntry = {
-	row: string;
-	isNew: boolean;
-	[k: string]: string | number | boolean;
+  row: string;
+  isNew: boolean;
+  [k: string]: string | number | boolean;
 };
 
 type FileStats = {
-	newCount: number;
-	existingCount: number;
+  newCount: number;
+  existingCount: number;
 };
 
 const StarIcon = ({
-	fill,
-}: ComponentProps<typeof DataTableStarIcon> & { fill: 'accent2' | 'grey_1' }) => (
-	<DataTableStarIcon fill={fill} />
-);
+  fill,
+}: ComponentProps<typeof DataTableStarIcon> & {
+  fill: "accent2" | "grey_1";
+}) => <DataTableStarIcon fill={fill} />;
 
 const StatsArea = (props: { stats?: FileStats }) => {
-	const { stats } = props;
-	return (
-		<StatAreaDisplay.Container>
-			<StatAreaDisplay.Section>
-				{stats ? (stats.existingCount + stats.newCount).toLocaleString() : 0} Total
-			</StatAreaDisplay.Section>
-			<StatAreaDisplay.Section>
-				<Icon name="chevron_right" fill="grey_1" width="8px" />
-			</StatAreaDisplay.Section>
-			<StatAreaDisplay.Section>
-				<StatAreaDisplay.StatEntryContainer>
-					<StatAreaDisplay.StarIcon fill="accent2" />
-					{stats && stats.newCount.toLocaleString()} New
-				</StatAreaDisplay.StatEntryContainer>
-			</StatAreaDisplay.Section>
-			<StatAreaDisplay.Section>
-				<StatAreaDisplay.StatEntryContainer>
-					<StatAreaDisplay.StarIcon fill="grey_1" />
-					{stats && stats.existingCount.toLocaleString()} Already Registered
-				</StatAreaDisplay.StatEntryContainer>
-			</StatAreaDisplay.Section>
-		</StatAreaDisplay.Container>
-	);
+  const { stats } = props;
+  return (
+    <StatAreaDisplay.Container>
+      <StatAreaDisplay.Section>
+        {stats ? (stats.existingCount + stats.newCount).toLocaleString() : 0}{" "}
+        Total
+      </StatAreaDisplay.Section>
+      <StatAreaDisplay.Section>
+        <Icon name="chevron_right" fill="grey_1" width="8px" />
+      </StatAreaDisplay.Section>
+      <StatAreaDisplay.Section>
+        <StatAreaDisplay.StatEntryContainer>
+          <StatAreaDisplay.StarIcon fill="accent2" />
+          {stats && stats.newCount.toLocaleString()} New
+        </StatAreaDisplay.StatEntryContainer>
+      </StatAreaDisplay.Section>
+      <StatAreaDisplay.Section>
+        <StatAreaDisplay.StatEntryContainer>
+          <StatAreaDisplay.StarIcon fill="grey_1" />
+          {stats && stats.existingCount.toLocaleString()} Already Registered
+        </StatAreaDisplay.StatEntryContainer>
+      </StatAreaDisplay.Section>
+    </StatAreaDisplay.Container>
+  );
 };
 
 const getColumnWidth = memoize<(keyString: string) => number>((keyString) => {
-	const minWidth = 90;
-	const maxWidth = 230;
-	const spacePerChar = 9;
-	const margin = 25;
-	const targetWidth = keyString.length * spacePerChar + margin;
-	return Math.max(Math.min(maxWidth, targetWidth), minWidth);
+  const minWidth = 90;
+  const maxWidth = 230;
+  const spacePerChar = 9;
+  const margin = 25;
+  const targetWidth = keyString.length * spacePerChar + margin;
+  return Math.max(Math.min(maxWidth, targetWidth), minWidth);
 });
 
 const FileTable = (props: {
-	records: Array<FileEntry>;
-	stats?: FileStats;
-	submissionInfo: ComponentProps<typeof SubmissionInfoArea>;
+  records: Array<FileEntry>;
+  stats?: FileStats;
+  submissionInfo: ComponentProps<typeof SubmissionInfoArea>;
 }) => {
-	const theme = useTheme();
-	const { records, stats, submissionInfo } = props;
+  const theme = useTheme();
+  const { records, stats, submissionInfo } = props;
 
-	const filteredFirstRecord = omit(
-		records[0],
-		...Object.entries(REQUIRED_FILE_ENTRY_FIELDS).map(([_, value]) => {
-			return typeof value === 'string' ? value : '';
-		}),
-	);
+  const filteredFirstRecord = omit(
+    records[0],
+    ...Object.entries(REQUIRED_FILE_ENTRY_FIELDS).map(([_, value]) => {
+      return typeof value === "string" ? value : "";
+    }),
+  );
 
-	const containerRef = createRef<HTMLDivElement>();
+  const containerRef = createRef<HTMLDivElement>();
 
-	const columns: ColumnDef<FileEntry>[] = [
-		{
-			id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
-			cell: ({ row: { original } }) => (
-				<CellContentCenter>{toDisplayRowIndex(original.row)}</CellContentCenter>
-			),
-			header: 'Line #',
+  const columns: ColumnDef<FileEntry>[] = [
+    {
+      id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
+      cell: ({ row: { original } }) => (
+        <CellContentCenter>{toDisplayRowIndex(original.row)}</CellContentCenter>
+      ),
+      header: "Line #",
 
-			enableResizing: false,
-			size: 70,
-		},
-		{
-			id: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
-			cell: ({ row: { original } }) => (
-				<CellContentCenter>
-					<StarIcon fill={original.isNew ? 'accent2' : 'grey_1'} />
-				</CellContentCenter>
-			),
-			size: 48,
-			header: () => (
-				<div
-					css={css`
-						display: flex;
-					`}
-				>
-					<StarIcon fill="grey_1" />
-				</div>
-			),
-		},
-		...Object.entries(filteredFirstRecord).map(([key]) => ({
-			id: key,
-			accessor: key,
-			Header: key,
-			minWidth: getColumnWidth(key),
-		})),
-	];
+      enableResizing: false,
+      size: 70,
+    },
+    {
+      id: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
+      cell: ({ row: { original } }) => (
+        <CellContentCenter>
+          <StarIcon fill={original.isNew ? "accent2" : "grey_1"} />
+        </CellContentCenter>
+      ),
+      size: 48,
+      header: () => (
+        <div
+          css={css`
+            display: flex;
+          `}
+        >
+          <StarIcon fill="grey_1" />
+        </div>
+      ),
+    },
+    ...Object.entries(filteredFirstRecord).map(([key]) => ({
+      id: key,
+      accessor: key,
+      Header: key,
+      minWidth: getColumnWidth(key),
+    })),
+  ];
 
-	return (
-		<div
-			ref={containerRef}
-			css={css`
-				position: relative;
-			`}
-		>
-			<TableInfoHeaderContainer
-				left={<StatsArea stats={stats} />}
-				right={<SubmissionInfoArea {...submissionInfo} />}
-			/>
-			<Table pageCount={Number.MAX_SAFE_INTEGER} columns={columns} data={records} />
-		</div>
-	);
+  return (
+    <div
+      ref={containerRef}
+      css={css`
+        position: relative;
+      `}
+    >
+      <TableInfoHeaderContainer
+        left={<StatsArea stats={stats} />}
+        right={<SubmissionInfoArea {...submissionInfo} />}
+      />
+      <Table
+        pageCount={Number.MAX_SAFE_INTEGER}
+        columns={columns}
+        data={records}
+      />
+    </div>
+  );
 };
 
 export default FileTable;
