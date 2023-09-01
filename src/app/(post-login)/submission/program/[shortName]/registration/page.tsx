@@ -18,10 +18,7 @@
  */
 "use client";
 
-import {
-  ClinicalFileError,
-  ClinicalRegistrationData,
-} from "@/__generated__/graphql";
+import { ClinicalRegistrationData } from "@/__generated__/graphql";
 import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
 import NoDataMessage from "@/app/components/NoData";
@@ -99,6 +96,7 @@ export default function Register({
 }: {
   params: { shortName: string };
 }) {
+  console.log("shortname", shortName);
   const {
     data,
     loading,
@@ -107,6 +105,10 @@ export default function Register({
   } = useQuery(GET_REGISTRATION_QUERY, {
     variables: { shortName },
   });
+  const clinicalRegistration = data?.clinicalRegistration;
+  const schemaOrValidationErrors = get(clinicalRegistration, "errors", []);
+  const fileErrors = get(clinicalRegistration, "fileErrors") || [];
+  const fileRecords = get(clinicalRegistration, "records", []);
 
   const [uploadFile, { loading: isUploading }] = useMutation(
     UPLOAD_REGISTRATION_MUTATION,
@@ -134,10 +136,6 @@ export default function Register({
 
   const state = false;
 
-  const fileErrors: ClinicalFileError[] = [
-    { fileNames: ["input"], message: "didt upload", code: "code?" },
-  ];
-
   return (
     <div>
       <ContentHeader
@@ -153,20 +151,24 @@ export default function Register({
           handleRegister={handleRegister}
           flags={instructionFlags}
         />
-        {fileErrors.map(({ fileNames, message }, i) => (
+        {fileErrors.map((fileError, i) => (
           <Notification
             key={i}
             size="SM"
             variant="ERROR"
             interactionType="CLOSE"
-            title={`File failed to upload: ${fileNames.join(", ")}`}
-            content={message}
+            title={`File failed to upload: ${fileError?.fileNames.join(", ")}`}
+            content={fileError?.message}
             onInteraction={() => null}
           />
         ))}
-
-        <NoDataMessage loading={false} />
-        <FilePreview />
+        {fileRecords.length ? (
+          <FilePreview />
+        ) : schemaOrValidationErrors.length ? (
+          <div>Error</div>
+        ) : (
+          <NoDataMessage loading={false} />
+        )}
       </ContentMain>
     </div>
   );
