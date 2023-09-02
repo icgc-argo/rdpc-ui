@@ -24,6 +24,7 @@ import ContentMain from "@/app/components/Content/ContentMain";
 import ProgressBar from "@/app/components/Content/ProgressBar";
 import NoDataMessage from "@/app/components/NoData";
 import Instructions from "@/app/components/page/submission/program/registration/Instructions";
+import CLEAR_CLINICAL_REGISTRATION_MUTATION from "@/app/gql/CLEAR_CLINICAL_REGISTRATION_MUTATION";
 import GET_REGISTRATION_QUERY from "@/app/gql/GET_REGISTRATION_QUERY";
 import UPLOAD_REGISTRATION_MUTATION from "@/app/gql/UPLOAD_REGISTRATION_MUTATION";
 import { css } from "@/lib/emotion";
@@ -182,6 +183,34 @@ export default function Register({
   );
   const hasErrors = !!schemaOrValidationErrors.length;
 
+  // file preview clear
+  const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
+  const handleClearClick = async () => {
+    if (clinicalRegistration?.id == null) {
+      refetch();
+      return;
+    }
+
+    try {
+      await clearRegistration({
+        variables: {
+          shortName,
+          registrationId: get(clinicalRegistration, "id"),
+        },
+      });
+      await refetch();
+    } catch (err) {
+      await refetch();
+      // toaster.addToast({
+      //   variant: "ERROR",
+      //   title: "Something went wrong",
+      //   content:
+      //     "Uh oh! It looks like something went wrong. This page has been reloaded.",
+      // });
+      alert(err);
+    }
+  };
+
   return (
     <div>
       <ContentHeader
@@ -223,7 +252,7 @@ export default function Register({
                 id="button-register-clear-file"
                 variant={BUTTON_VARIANTS.TEXT}
                 size={BUTTON_SIZES.SM}
-                onClick={() => alert("click")}
+                onClick={handleClearClick}
                 disabled={false}
               >
                 <Typography variant="data">Clear</Typography>

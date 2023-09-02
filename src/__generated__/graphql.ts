@@ -2424,6 +2424,16 @@ export type SetsNode = Node & {
   userId?: Maybe<Scalars["String"]["output"]>;
 };
 
+export type ClearClinicalRegistrationMutationVariables = Exact<{
+  shortName: Scalars["String"]["input"];
+  registrationId: Scalars["String"]["input"];
+}>;
+
+export type ClearClinicalRegistrationMutation = {
+  __typename?: "Mutation";
+  clearClinicalRegistration: boolean;
+};
+
 export type ClinicalSchemaVersionQueryVariables = Exact<{
   [key: string]: never;
 }>;
@@ -2589,6 +2599,76 @@ export type UploadRegistrationMutation = {
   };
 };
 
+export const ClearClinicalRegistrationDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "ClearClinicalRegistration" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "shortName" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "registrationId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "clearClinicalRegistration" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "shortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "shortName" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "registrationId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "registrationId" },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ClearClinicalRegistrationMutation,
+  ClearClinicalRegistrationMutationVariables
+>;
 export const ClinicalSchemaVersionDocument = {
   kind: "Document",
   definitions: [

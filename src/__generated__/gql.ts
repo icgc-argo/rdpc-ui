@@ -13,6 +13,8 @@ import * as types from "./graphql";
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+  "\n  mutation ClearClinicalRegistration($shortName: String!, $registrationId: String!) {\n    clearClinicalRegistration(shortName: $shortName, registrationId: $registrationId)\n  }\n":
+    types.ClearClinicalRegistrationDocument,
   "\n\tquery ClinicalSchemaVersion {\n\t\tclinicalSubmissionSchemaVersion\n\t}\n":
     types.ClinicalSchemaVersionDocument,
   "\n  query GetRegistration($shortName: String!) {\n    clinicalRegistration(shortName: $shortName) {\n      id\n      programShortName\n      creator\n      fileName\n      createdAt\n      records {\n        row\n        fields {\n          name\n          value\n        }\n      }\n      errors {\n        type\n        message\n        row\n        field\n        value\n        sampleId\n        donorId\n        specimenId\n      }\n      fileErrors {\n        message\n        fileNames\n        code\n      }\n      newDonors {\n        count\n        rows\n      }\n      newSpecimens {\n        count\n        rows\n      }\n      newSamples {\n        count\n        rows\n      }\n      alreadyRegistered {\n        count\n        rows\n      }\n    }\n  }    \n":
@@ -39,6 +41,12 @@ const documents = {
  */
 export function gql(source: string): unknown;
 
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "\n  mutation ClearClinicalRegistration($shortName: String!, $registrationId: String!) {\n    clearClinicalRegistration(shortName: $shortName, registrationId: $registrationId)\n  }\n",
+): (typeof documents)["\n  mutation ClearClinicalRegistration($shortName: String!, $registrationId: String!) {\n    clearClinicalRegistration(shortName: $shortName, registrationId: $registrationId)\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
