@@ -157,6 +157,7 @@ export default function Register({
         //commonToaster.unknownError();
         console.error(e);
       },
+      refetchQueries: [GET_REGISTRATION_QUERY, "GetRegistration"],
     },
   );
 
