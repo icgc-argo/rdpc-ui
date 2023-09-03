@@ -37,8 +37,9 @@ import {
   Typography,
 } from "@icgc-argo/uikit";
 import { get, union } from "lodash";
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useState } from "react";
 import FileTable from "./components/FileTable";
+import RegisterSamplesModal from "./components/RegisterSampleModal";
 
 export type FileTableData = ClinicalRegistrationData & {
   row: number;
@@ -150,6 +151,8 @@ export default function Register({
   const schemaOrValidationErrors = get(clinicalRegistration, "errors", []);
   const fileErrors = get(clinicalRegistration, "fileErrors") || [];
 
+  const [showModal, setShowModal] = useState(false);
+
   const [uploadFile, { loading: isUploading }] = useMutation(
     UPLOAD_REGISTRATION_MUTATION,
     {
@@ -213,61 +216,69 @@ export default function Register({
   };
 
   return (
-    <div>
-      <ContentHeader
-        breadcrumb={["CIA-IE", "Register Samples"]}
-        helpUrl="www.google.ca"
-      >
-        <ProgressBar
-          {...{
-            isSubmissionSystemDisabled,
-            hasClinicalRegistration,
-            hasErrors,
-          }}
-        />
-      </ContentHeader>
-      <ContentMain>
-        <Instructions
-          dictionaryVersion={"11"}
-          handleUpload={handleUpload}
-          isUploading={isUploading}
-          handleRegister={handleRegister}
-          flags={instructionFlags}
-        />
-        {fileErrors.map((fileError, i) => (
-          <Notification
-            key={i}
-            size="SM"
-            variant="ERROR"
-            interactionType="CLOSE"
-            title={`File failed to upload: ${fileError?.fileNames.join(", ")}`}
-            content={fileError?.message}
-            onInteraction={() => null}
+    <>
+      <div>
+        <ContentHeader
+          breadcrumb={["CIA-IE", "Register Samples"]}
+          helpUrl="www.google.ca"
+        >
+          <button onClick={() => setShowModal((s) => !s)}>toggle modal</button>
+          <ProgressBar
+            {...{
+              isSubmissionSystemDisabled,
+              hasClinicalRegistration,
+              hasErrors,
+            }}
           />
-        ))}
-        {clinicalRegistration?.records.length ? (
-          <Card
-            title="File Preview"
-            action={
-              <Button
-                id="button-register-clear-file"
-                variant={BUTTON_VARIANTS.TEXT}
-                size={BUTTON_SIZES.SM}
-                onClick={handleClearClick}
-                disabled={false}
-              >
-                <Typography variant="data">Clear</Typography>
-              </Button>
-            }
-          >
-            <FilePreview registration={clinicalRegistration} />
-          </Card>
-        ) : schemaOrValidationErrors.length ? (
-          <div>Error</div>
-        ) : (
-          <NoDataMessage loading={false} />
-        )}
-      </ContentMain>
-    </div>
+        </ContentHeader>
+        <ContentMain>
+          <Instructions
+            dictionaryVersion={"11"}
+            handleUpload={handleUpload}
+            isUploading={isUploading}
+            handleRegister={handleRegister}
+            flags={instructionFlags}
+          />
+          {fileErrors.map((fileError, i) => (
+            <Notification
+              key={i}
+              size="SM"
+              variant="ERROR"
+              interactionType="CLOSE"
+              title={`File failed to upload: ${fileError?.fileNames.join(
+                ", ",
+              )}`}
+              content={fileError?.message}
+              onInteraction={() => null}
+            />
+          ))}
+          {clinicalRegistration?.records.length ? (
+            <Card
+              title="File Preview"
+              action={
+                <Button
+                  id="button-register-clear-file"
+                  variant={BUTTON_VARIANTS.TEXT}
+                  size={BUTTON_SIZES.SM}
+                  onClick={handleClearClick}
+                  disabled={false}
+                >
+                  <Typography variant="data">Clear</Typography>
+                </Button>
+              }
+            >
+              <FilePreview registration={clinicalRegistration} />
+            </Card>
+          ) : schemaOrValidationErrors.length ? (
+            <div>Error</div>
+          ) : (
+            <NoDataMessage loading={false} />
+          )}
+        </ContentMain>
+      </div>
+
+      {/** Modals */}
+      {true && <RegisterSamplesModal />}
+    </>
   );
 }
