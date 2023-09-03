@@ -151,7 +151,7 @@ export default function Register({
   const schemaOrValidationErrors = get(clinicalRegistration, "errors", []);
   const fileErrors = get(clinicalRegistration, "fileErrors") || [];
 
-  const [showModal, setShowModal] = useState(false);
+  const [showRegisterModal, setShowModal] = useState(false);
 
   const [uploadFile, { loading: isUploading }] = useMutation(
     UPLOAD_REGISTRATION_MUTATION,
@@ -171,6 +171,7 @@ export default function Register({
 
   const handleRegister = () => {
     console.log("register");
+    setShowModal((state) => !state);
   };
 
   const instructionFlags = {
@@ -278,7 +279,7 @@ export default function Register({
       </div>
 
       {/** Modals */}
-      {true && <RegisterSamplesModal />}
+      {showRegisterModal && <RegisterSamplesModal />}
     </>
   );
 }
