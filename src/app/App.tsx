@@ -29,6 +29,7 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { modalPortalRef } from "./components/Modal";
 import ThemeProvider from "./components/ThemeProvider";
+import ToastProvider from "./hooks/ToastProvider";
 
 const queryClient = new QueryClient();
 
@@ -50,18 +51,20 @@ const App = ({ children, config }: { children: ReactNode; config: any }) => (
       <AppProvider config={config}>
         <AuthProvider>
           <ApolloProvider>
-            <ModalPortalParent />
-            <div
-              css={css`
-                display: grid;
-                grid-template-rows: 58px 1fr 59px; /* header + content + footer*/
-                min-height: 100vh;
-              `}
-            >
-              <Header />
-              {children}
-              <Footer />
-            </div>
+            <ToastProvider>
+              <ModalPortalParent />
+              <div
+                css={css`
+                  display: grid;
+                  grid-template-rows: 58px 1fr 59px; /* header + content + footer*/
+                  min-height: 100vh;
+                `}
+              >
+                <Header />
+                {children}
+                <Footer />
+              </div>
+            </ToastProvider>
           </ApolloProvider>
         </AuthProvider>
       </AppProvider>

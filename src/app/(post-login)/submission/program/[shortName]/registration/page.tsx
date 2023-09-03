@@ -27,6 +27,7 @@ import Instructions from "@/app/components/page/submission/program/registration/
 import CLEAR_CLINICAL_REGISTRATION_MUTATION from "@/app/gql/CLEAR_CLINICAL_REGISTRATION_MUTATION";
 import GET_REGISTRATION_QUERY from "@/app/gql/GET_REGISTRATION_QUERY";
 import UPLOAD_REGISTRATION_MUTATION from "@/app/gql/UPLOAD_REGISTRATION_MUTATION";
+import { useToaster } from "@/app/hooks/ToastProvider";
 import { css } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
 import {
@@ -206,14 +207,19 @@ export default function Register({
       await refetch();
     } catch (err) {
       await refetch();
-      // toaster.addToast({
-      //   variant: "ERROR",
-      //   title: "Something went wrong",
-      //   content:
-      //     "Uh oh! It looks like something went wrong. This page has been reloaded.",
-      // });
-      alert(err);
+      toaster.addToast({
+        variant: "ERROR",
+        title: "Something went wrong",
+        content:
+          "Uh oh! It looks like something went wrong. This page has been reloaded.",
+      });
     }
+  };
+  console.log("render");
+  const toaster = useToaster();
+
+  const handleRegisterCancelClick = () => {
+    setShowModal(false);
   };
 
   return (
@@ -223,7 +229,17 @@ export default function Register({
           breadcrumb={["CIA-IE", "Register Samples"]}
           helpUrl="www.google.ca"
         >
-          <button onClick={() => setShowModal((s) => !s)}>toggle modal</button>
+          <button
+            onClick={() =>
+              toaster.addToast({
+                interactionType: "CLOSE",
+                title: "d",
+                content: "eys",
+              })
+            }
+          >
+            toggle modal
+          </button>
           <ProgressBar
             {...{
               isSubmissionSystemDisabled,
@@ -279,7 +295,9 @@ export default function Register({
       </div>
 
       {/** Modals */}
-      {showRegisterModal && <RegisterSamplesModal />}
+      {showRegisterModal && (
+        <RegisterSamplesModal onCancelClick={handleRegisterCancelClick} />
+      )}
     </>
   );
 }

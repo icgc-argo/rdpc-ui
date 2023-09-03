@@ -18,18 +18,21 @@
  */
 
 import ModalPortal from "@/app/components/Modal";
-import { Modal } from "@icgc-argo/uikit";
+import { useToaster } from "@/app/hooks/ToastProvider";
+import { sleep } from "@/global/utils";
+import { Link, Modal, TOAST_VARIANTS, Typography } from "@icgc-argo/uikit";
+import { get } from "lodash";
+import { Router } from "next/router";
 
 export default function RegisterSamplesModal({
   onCancelClick: handleCancelClick,
   shortName,
   registrationId,
 }: {
-  onCancelClick?: () => void;
-  shortName?: string;
-  registrationId?: string;
+  onCancelClick: () => void;
+  shortName: string;
+  registrationId: string;
 }) {
-  const handleActionClick = () => null;
   // const [commitRegistration] = useMutation(
   //   COMMIT_CLINICAL_REGISTRATION_MUTATION,
   //   {
@@ -49,52 +52,52 @@ export default function RegisterSamplesModal({
 
   // const { setGlobalLoading } = useGlobalLoader();
 
-  // const toaster = useToaster();
+  const toaster = useToaster();
 
-  // const handleActionClick = async () => {
-  //   handleCancelClick();
+  const handleActionClick = async () => {
+    handleCancelClick();
 
-  //   setGlobalLoading(true);
-  //   await sleep();
+    //setGlobalLoading(true);
+    await sleep();
 
-  //   await commitRegistration()
-  //     .then(async ({ data, errors }) => {
-  //       await sleep();
+    await commitRegistration()
+      .then(async ({ data, errors }) => {
+        await sleep();
 
-  //       const num = get(data, "commitClinicalRegistration.length", 0);
-  //       Router.push(
-  //         PROGRAM_DASHBOARD_PATH,
-  //         PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, shortName),
-  //       );
+        const num = get(data, "commitClinicalRegistration.length", 0);
+        Router.push(
+          PROGRAM_DASHBOARD_PATH,
+          PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, shortName),
+        );
 
-  //       toaster.addToast({
-  //         interactionType: "CLOSE",
-  //         title: `${num.toLocaleString()} new registered ${pluralize(
-  //           "sample",
-  //           num,
-  //         )}`,
-  //         variant: TOAST_VARIANTS.SUCCESS,
-  //         content: (
-  //           <Typography>
-  //             You will see the updates on your dashboard shortly. If you have
-  //             any changes to this registered sample data, please{" "}
-  //             <NextLink href={CONTACT_PAGE_PATH}>
-  //               <Link>contact the DCC.</Link>
-  //             </NextLink>
-  //           </Typography>
-  //         ),
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       toaster.addToast({
-  //         interactionType: "CLOSE",
-  //         title: "",
-  //         variant: TOAST_VARIANTS.ERROR,
-  //         content: error.toString(),
-  //       });
-  //     });
-  //   setGlobalLoading(false);
-  // };
+        toaster.addToast({
+          interactionType: "CLOSE",
+          title: `${num.toLocaleString()} new registered ${pluralize(
+            "sample",
+            num,
+          )}`,
+          variant: TOAST_VARIANTS.SUCCESS,
+          content: (
+            <Typography>
+              You will see the updates on your dashboard shortly. If you have
+              any changes to this registered sample data, please{" "}
+              <NextLink href={CONTACT_PAGE_PATH}>
+                <Link>contact the DCC.</Link>
+              </NextLink>
+            </Typography>
+          ),
+        });
+      })
+      .catch((error) => {
+        toaster.addToast({
+          interactionType: "CLOSE",
+          title: "",
+          variant: TOAST_VARIANTS.ERROR,
+          content: error.toString(),
+        });
+      });
+    //setGlobalLoading(false);
+  };
 
   return (
     <ModalPortal>
