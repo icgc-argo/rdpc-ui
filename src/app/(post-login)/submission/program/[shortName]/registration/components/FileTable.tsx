@@ -27,7 +27,6 @@ import {
 import { toDisplayRowIndex } from "@/global/utils/clinical";
 import { ColumnDef, Icon, Table, css, useTheme } from "@icgc-argo/uikit";
 import memoize from "lodash/memoize";
-import omit from "lodash/omit";
 import { ComponentProps, FC, createRef } from "react";
 import { FileTableData } from "../page";
 
@@ -92,14 +91,20 @@ type FileTableProps = {
 const FileTable: FC<FileTableProps> = ({ records, stats, submissionInfo }) => {
   const theme = useTheme();
 
-  const filteredFirstRecord = omit(
-    records[0],
-    ...Object.entries(REQUIRED_FILE_ENTRY_FIELDS).map(([_, value]) => {
-      return typeof value === "string" ? value : "";
-    }),
-  );
-
   const containerRef = createRef<HTMLDivElement>();
+
+  const r = records[0];
+  const additionalFields = Object.values(REQUIRED_FILE_ENTRY_FIELDS);
+  const remainingKeys = Object.keys(r) as Array<keyof FileTableData>;
+  const originalCols: ColumnDef<FileTableData>[] = remainingKeys
+    .filter((key) => !additionalFields.includes(key))
+    .map((key) => ({
+      id: key,
+      accessor: key,
+      cell: ({ row: { original } }) => original[key],
+      header: key,
+      minWidth: getColumnWidth(key),
+    }));
 
   const columns: ColumnDef<FileTableData>[] = [
     {
@@ -128,14 +133,10 @@ const FileTable: FC<FileTableProps> = ({ records, stats, submissionInfo }) => {
       ),
     },
 
-    ...Object.entries(filteredFirstRecord).map(([key]) => ({
-      id: key,
-      accessor: key,
-      cell: ({ row: { original } }) => original[key],
-      header: key,
-      minWidth: getColumnWidth(key),
-    })),
+    ...originalCols,
   ];
+
+  console.log("r", r);
 
   console.log("records", records, "cols", columns);
 
