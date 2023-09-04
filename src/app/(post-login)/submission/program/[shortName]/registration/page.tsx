@@ -18,7 +18,6 @@
  */
 "use client";
 
-import { ClinicalRegistrationData } from "@/__generated__/graphql";
 import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
 import ProgressBar from "@/app/components/Content/ProgressBar";
@@ -37,70 +36,10 @@ import {
   Notification,
   Typography,
 } from "@icgc-argo/uikit";
-import { get, union } from "lodash";
+import { get } from "lodash";
 import { FC, ReactNode, useState } from "react";
-import FileTable from "./components/FileTable";
+import FilePreview from "./components/FilePreview";
 import RegisterSamplesModal from "./components/RegisterSampleModal";
-
-export type FileTableData = ClinicalRegistrationData & {
-  row: number;
-  isNew: boolean;
-};
-
-const recordsToFileTable = (
-  records: ClinicalRegistrationData[],
-  newRows: Array<number>,
-): FileTableData[] =>
-  records.map((record) => {
-    const fields = get(record, "fields", []);
-    const data = fields.reduce(
-      // @ts-expect-error
-      (acc, cur) => ({ ...acc, [cur.name]: cur.value }),
-      {} as any,
-    ); // @ts-expect-error
-
-    return { ...data, row: record.row, isNew: newRows.includes(record.row) };
-  });
-
-const FilePreview = ({
-  registration,
-}: {
-  registration: ClinicalRegistrationData;
-}) => {
-  const fileRecords = get(registration, "records", []);
-  console.log("file records", fileRecords);
-
-  const {
-    createdAt = "",
-    creator = "",
-    fileName = "",
-    alreadyRegistered: { count: alreadyRegisteredCount = 0 },
-    newDonors: { rows: newDonors },
-    newSamples: { rows: newSamples },
-    newSpecimens: { rows: newSpecimens },
-  } = registration;
-
-  const submissionInfo = { createdAt, creator, fileName };
-  const newRows = union(newDonors, newSamples, newSpecimens);
-  const stats = {
-    newCount: newRows.length,
-    existingCount: alreadyRegisteredCount,
-  };
-
-  const records = recordsToFileTable(fileRecords, newRows);
-
-  console.log("new rows", newRows);
-  console.log("stats", stats);
-  console.log("records", records);
-
-  return (
-    <FileTable
-      records={records}
-      stats={stats}
-      submissionInfo={submissionInfo}
-    />
-  );
-};
 
 type CardProps = { title: string; action?: ReactNode; children: ReactNode };
 const Card: FC<CardProps> = ({ title, action, children }) => (
