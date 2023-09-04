@@ -2443,6 +2443,16 @@ export type ClinicalSchemaVersionQuery = {
   clinicalSubmissionSchemaVersion: string;
 };
 
+export type CommitClinicalRegistrationMutationVariables = Exact<{
+  shortName: Scalars["String"]["input"];
+  registrationId: Scalars["String"]["input"];
+}>;
+
+export type CommitClinicalRegistrationMutation = {
+  __typename?: "Mutation";
+  commitClinicalRegistration: Array<string | null>;
+};
+
 export type GetRegistrationQueryVariables = Exact<{
   shortName: Scalars["String"]["input"];
 }>;
@@ -2690,6 +2700,76 @@ export const ClinicalSchemaVersionDocument = {
 } as unknown as DocumentNode<
   ClinicalSchemaVersionQuery,
   ClinicalSchemaVersionQueryVariables
+>;
+export const CommitClinicalRegistrationDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CommitClinicalRegistration" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "shortName" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "registrationId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "commitClinicalRegistration" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "shortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "shortName" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "registrationId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "registrationId" },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CommitClinicalRegistrationMutation,
+  CommitClinicalRegistrationMutationVariables
 >;
 export const GetRegistrationDocument = {
   kind: "Document",

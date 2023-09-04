@@ -18,11 +18,21 @@
  */
 
 import ModalPortal from "@/app/components/Modal";
+import COMMIT_CLINICAL_REGISTRATION_MUTATION from "@/app/gql/COMMIT_CLINICAL_REGISTRATION_MUTATION";
+import GET_REGISTRATION_QUERY from "@/app/gql/GET_REGISTRATION_QUERY";
 import { useToaster } from "@/app/hooks/ToastProvider";
 import { sleep } from "@/global/utils";
-import { Link, Modal, TOAST_VARIANTS, Typography } from "@icgc-argo/uikit";
+import { useMutation } from "@apollo/client";
+import {
+  Modal,
+  TOAST_VARIANTS,
+  Typography,
+  Link as UIKitLink,
+} from "@icgc-argo/uikit";
 import { get } from "lodash";
+import Link from "next/link";
 import { Router } from "next/router";
+import pluralize from "pluralize";
 
 export default function RegisterSamplesModal({
   onCancelClick: handleCancelClick,
@@ -33,22 +43,22 @@ export default function RegisterSamplesModal({
   shortName: string;
   registrationId: string;
 }) {
-  // const [commitRegistration] = useMutation(
-  //   COMMIT_CLINICAL_REGISTRATION_MUTATION,
-  //   {
-  //     variables: {
-  //       shortName,
-  //       registrationId,
-  //     },
-  //     // update side menu status
-  //     refetchQueries: [
-  //       {
-  //         query: GET_REGISTRATION_QUERY,
-  //         variables: { shortName },
-  //       },
-  //     ],
-  //   },
-  // );
+  const [commitRegistration] = useMutation(
+    COMMIT_CLINICAL_REGISTRATION_MUTATION,
+    {
+      variables: {
+        shortName,
+        registrationId,
+      },
+      // update side menu status
+      refetchQueries: [
+        {
+          query: GET_REGISTRATION_QUERY,
+          variables: { shortName },
+        },
+      ],
+    },
+  );
 
   // const { setGlobalLoading } = useGlobalLoader();
 
@@ -81,9 +91,9 @@ export default function RegisterSamplesModal({
             <Typography>
               You will see the updates on your dashboard shortly. If you have
               any changes to this registered sample data, please{" "}
-              <NextLink href={CONTACT_PAGE_PATH}>
-                <Link>contact the DCC.</Link>
-              </NextLink>
+              <Link href={CONTACT_PAGE_PATH} passHref legacyBehavior>
+                <UIKitLink>contact the DCC.</UIKitLink>
+              </Link>
             </Typography>
           ),
         });
