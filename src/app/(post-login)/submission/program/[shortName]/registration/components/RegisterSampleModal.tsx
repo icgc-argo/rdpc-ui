@@ -21,6 +21,11 @@ import ModalPortal from "@/app/components/Modal";
 import COMMIT_CLINICAL_REGISTRATION_MUTATION from "@/app/gql/COMMIT_CLINICAL_REGISTRATION_MUTATION";
 import GET_REGISTRATION_QUERY from "@/app/gql/GET_REGISTRATION_QUERY";
 import { useToaster } from "@/app/hooks/ToastProvider";
+import {
+  CONTACT_PAGE_PATH,
+  PROGRAM_DASHBOARD_PATH,
+  PROGRAM_SHORT_NAME_PATH,
+} from "@/global/constants";
 import { sleep } from "@/global/utils";
 import { useMutation } from "@apollo/client";
 import {
@@ -31,7 +36,7 @@ import {
 } from "@icgc-argo/uikit";
 import { get } from "lodash";
 import Link from "next/link";
-import { Router } from "next/router";
+import { useRouter } from "next/navigation";
 import pluralize from "pluralize";
 
 export default function RegisterSamplesModal({
@@ -63,6 +68,7 @@ export default function RegisterSamplesModal({
   // const { setGlobalLoading } = useGlobalLoader();
 
   const toaster = useToaster();
+  const router = useRouter();
 
   const handleActionClick = async () => {
     handleCancelClick();
@@ -75,7 +81,7 @@ export default function RegisterSamplesModal({
         await sleep();
 
         const num = get(data, "commitClinicalRegistration.length", 0);
-        Router.push(
+        router.push(
           PROGRAM_DASHBOARD_PATH,
           PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, shortName),
         );

@@ -189,6 +189,8 @@ export default function Register({
   );
   const hasErrors = !!schemaOrValidationErrors.length;
 
+  const registrationId = get(clinicalRegistration, "id");
+
   // file preview clear
   const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
   const handleClearClick = async () => {
@@ -201,7 +203,7 @@ export default function Register({
       await clearRegistration({
         variables: {
           shortName,
-          registrationId: get(clinicalRegistration, "id"),
+          registrationId,
         },
       });
       await refetch();
@@ -215,7 +217,7 @@ export default function Register({
       });
     }
   };
-  console.log("render");
+
   const toaster = useToaster();
 
   const handleRegisterCancelClick = () => {
@@ -296,7 +298,10 @@ export default function Register({
 
       {/** Modals */}
       {showRegisterModal && (
-        <RegisterSamplesModal onCancelClick={handleRegisterCancelClick} />
+        <RegisterSamplesModal
+          onCancelClick={handleRegisterCancelClick}
+          {...{ shortName, registrationId }}
+        />
       )}
     </>
   );
