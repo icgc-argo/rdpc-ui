@@ -73,20 +73,27 @@ const getDefaultColumns = (
   ];
 };
 
-const onDownloadClick = () => {
-  exportToTsv(errors, {
-    exclude: union(tsvExcludeCols, ["__typename" as keyof Error]),
-    order: columnConfig.map((entry) => entry.accessor),
-    fileName: `${level}_report.tsv`,
-    headerDisplays: columnConfig.reduce<{}>(
-      (acc, { accessor, Header }) => ({
-        ...acc,
-        [accessor]: Header as string,
-      }),
-      {},
-    ),
-  });
+type DownloadHandlerProps = {
+  errors: ClinicalRegistrationError[];
+  excludeCols: string[];
+  level: string;
+  columnConfig: any;
 };
+const createDownloadHandler =
+  ({ errors, excludeCols, columnConfig, level }: DownloadHandlerProps) =>
+  () =>
+    exportToTsv(errors, {
+      exclude: union(excludeCols, ["__typename"]),
+      order: columnConfig.map((entry) => entry.accessor),
+      fileName: `${level}_report.tsv`,
+      headerDisplays: columnConfig.reduce<{}>(
+        (acc, { accessor, Header }) => ({
+          ...acc,
+          [accessor]: Header as string,
+        }),
+        {},
+      ),
+    });
 
 type UploadErrorProps = {
   level: NotificationVariant;
@@ -102,10 +109,8 @@ const UploadError: FC<UploadErrorProps> = ({
   errors,
   subtitle,
   onClearClick,
-  tsvExcludeCols = [],
 }) => {
   const theme = useTheme();
-  const onDownloadClick = () => null;
 
   const formattedErrors = errors.map(toDisplayError);
 
@@ -115,6 +120,13 @@ const UploadError: FC<UploadErrorProps> = ({
   const columnConfig = getDefaultColumns(variantText);
 
   const containerRef = createRef<HTMLDivElement>();
+
+  const downloadHandler = createDownloadHandler({
+    columnConfig,
+    errors,
+    excludeCols: ["type", "specimenId", "sampleId"],
+    level: variantText,
+  });
 
   return (
     <div
@@ -141,7 +153,7 @@ const UploadError: FC<UploadErrorProps> = ({
                 display: flex;
               `}
             >
-              <Button variant="secondary" size="sm" onClick={onDownloadClick}>
+              <Button variant="secondary" size="sm" onClick={downloadHandler}>
                 <span
                   css={css`
                     display: flex;

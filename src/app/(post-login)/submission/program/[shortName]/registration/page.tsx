@@ -247,7 +247,6 @@ export default function Register({
               subtitle={
                 "Your file cannot be processed. Please correct the following errors and reupload your file."
               }
-              tsvExcludeCols={["type", "specimenId", "sampleId"]}
             />
           ) : (
             <NoDataMessage loading={false} />
