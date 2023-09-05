@@ -18,6 +18,7 @@
  */
 "use client";
 
+import Card from "@/app/components/Card";
 import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
 import ProgressBar from "@/app/components/Content/ProgressBar";
@@ -28,7 +29,6 @@ import GET_REGISTRATION_QUERY from "@/app/gql/GET_REGISTRATION_QUERY";
 import UPLOAD_REGISTRATION_MUTATION from "@/app/gql/UPLOAD_REGISTRATION_MUTATION";
 import { useToaster } from "@/app/hooks/ToastProvider";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
-import { css } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   BUTTON_SIZES,
@@ -39,42 +39,10 @@ import {
   Typography,
 } from "@icgc-argo/uikit";
 import { get } from "lodash";
-import { FC, ReactNode, useState } from "react";
+import { useState } from "react";
 import FilePreview from "./components/FilePreview";
 import RegisterSamplesModal from "./components/RegisterSampleModal";
 import UploadError from "./components/UploadError";
-
-type CardProps = { title: string; action?: ReactNode; children: ReactNode };
-const Card: FC<CardProps> = ({ title, action, children }) => (
-  <div
-    css={css`
-      padding: 9px;
-    `}
-  >
-    <div
-      css={css`
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-      `}
-    >
-      <Typography
-        css={css`
-          margin: 0 0 8px 0;
-        `}
-        color="primary"
-        variant="subtitle2"
-        component="h2"
-      >
-        {title}
-      </Typography>
-      {action}
-    </div>
-
-    {children}
-  </div>
-);
 
 export default function Register({
   params: { shortName },
@@ -90,14 +58,13 @@ export default function Register({
   } = useQuery(GET_REGISTRATION_QUERY, {
     variables: { shortName },
   });
-
   const toaster = useToaster();
+
+  const [showRegisterModal, setShowModal] = useState(false);
 
   const clinicalRegistration = data?.clinicalRegistration;
   const schemaOrValidationErrors = get(clinicalRegistration, "errors", []);
   const fileErrors = get(clinicalRegistration, "fileErrors") || [];
-
-  const [showRegisterModal, setShowModal] = useState(false);
 
   const [uploadFile, { loading: isUploading }] = useMutation(
     UPLOAD_REGISTRATION_MUTATION,
@@ -117,7 +84,6 @@ export default function Register({
     });
 
   const handleRegister = () => {
-    console.log("register");
     setShowModal((state) => !state);
   };
 
@@ -129,8 +95,6 @@ export default function Register({
     registrationEnabled:
       !isSubmissionSystemDisabled && !!get(clinicalRegistration, "id"),
   };
-
-  const state = false;
 
   //
   const hasClinicalRegistration = !!(
@@ -209,7 +173,7 @@ export default function Register({
               onInteraction={() => null}
             />
           ))}
-          {false && clinicalRegistration?.records.length ? (
+          {clinicalRegistration?.records.length ? (
             <Card
               title="File Preview"
               action={
@@ -226,7 +190,7 @@ export default function Register({
             >
               <FilePreview registration={clinicalRegistration} />
             </Card>
-          ) : true || schemaOrValidationErrors.length ? (
+          ) : schemaOrValidationErrors.length ? (
             <UploadError
               level={NOTIFICATION_VARIANTS.ERROR}
               onClearClick={handleClearClick}
