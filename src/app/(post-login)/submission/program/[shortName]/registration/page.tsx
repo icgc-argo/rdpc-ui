@@ -28,6 +28,7 @@ import GET_REGISTRATION_QUERY from "@/app/gql/GET_REGISTRATION_QUERY";
 import UPLOAD_REGISTRATION_MUTATION from "@/app/gql/UPLOAD_REGISTRATION_MUTATION";
 import { useToaster } from "@/app/hooks/ToastProvider";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
+import { toDisplayError } from "@/global/utils";
 import { css } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
 import {
@@ -41,6 +42,7 @@ import { get } from "lodash";
 import { FC, ReactNode, useState } from "react";
 import FilePreview from "./components/FilePreview";
 import RegisterSamplesModal from "./components/RegisterSampleModal";
+import UploadError from "./components/UploadError";
 
 type CardProps = { title: string; action?: ReactNode; children: ReactNode };
 const Card: FC<CardProps> = ({ title, action, children }) => (
@@ -88,6 +90,9 @@ export default function Register({
   } = useQuery(GET_REGISTRATION_QUERY, {
     variables: { shortName },
   });
+
+  const toaster = useToaster();
+
   const clinicalRegistration = data?.clinicalRegistration;
   const schemaOrValidationErrors = get(clinicalRegistration, "errors", []);
   const fileErrors = get(clinicalRegistration, "fileErrors") || [];
@@ -101,7 +106,6 @@ export default function Register({
         //commonToaster.unknownError();
         console.error(e);
       },
-      refetchQueries: [GET_REGISTRATION_QUERY, "GetRegistration"],
     },
   );
 
@@ -162,11 +166,11 @@ export default function Register({
     }
   };
 
-  const toaster = useToaster();
-
   const handleRegisterCancelClick = () => {
     setShowModal(false);
   };
+
+  console.log("schema val error", schemaOrValidationErrors);
 
   return (
     <>
@@ -222,7 +226,19 @@ export default function Register({
               <FilePreview registration={clinicalRegistration} />
             </Card>
           ) : schemaOrValidationErrors.length ? (
-            <div>Error</div>
+            <div>
+              <UploadError
+                level={NOTIFICATION_VARIANTS.ERROR}
+                onClearClick={handleClearClick}
+                title={`${schemaOrValidationErrors.length.toLocaleString()} error(s) found in uploaded file`}
+                errors={schemaOrValidationErrors.map(toDisplayError)}
+                subtitle={
+                  "Your file cannot be processed. Please correct the following errors and reupload your file."
+                }
+                columnConfig={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
+                tsvExcludeCols={["type", "specimenId", "sampleId"]}
+              />
+            </div>
           ) : (
             <NoDataMessage loading={false} />
           )}
