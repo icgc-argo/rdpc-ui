@@ -175,17 +175,6 @@ export default function Register({
           breadcrumb={["CIA-IE", "Register Samples"]}
           helpUrl="www.google.ca"
         >
-          <button
-            onClick={() =>
-              toaster.addToast({
-                interactionType: "CLOSE",
-                title: "d",
-                content: "eys",
-              })
-            }
-          >
-            toggle modal
-          </button>
           <ProgressBar
             {...{
               isSubmissionSystemDisabled,
