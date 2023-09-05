@@ -2468,59 +2468,8 @@ export type GetRegistrationQueryVariables = Exact<{
 
 export type GetRegistrationQuery = {
   __typename?: "Query";
-  clinicalRegistration: {
-    __typename?: "ClinicalRegistrationData";
-    id?: string | null;
-    programShortName?: string | null;
-    creator?: string | null;
-    fileName?: string | null;
-    createdAt?: any | null;
-    records: Array<{
-      __typename?: "ClinicalRecord";
-      row: number;
-      fields: Array<{
-        __typename?: "ClinicalRecordField";
-        name: string;
-        value?: string | null;
-      }>;
-    } | null>;
-    errors: Array<{
-      __typename?: "ClinicalRegistrationError";
-      type: string;
-      message: string;
-      row: number;
-      field: string;
-      value: string;
-      sampleId?: string | null;
-      donorId: string;
-      specimenId?: string | null;
-    } | null>;
-    fileErrors?: Array<{
-      __typename?: "ClinicalFileError";
-      message: string;
-      fileNames: Array<string | null>;
-      code: string;
-    } | null> | null;
-    newDonors: {
-      __typename?: "ClinicalRegistrationStats";
-      count: number;
-      rows: Array<number | null>;
-    };
-    newSpecimens: {
-      __typename?: "ClinicalRegistrationStats";
-      count: number;
-      rows: Array<number | null>;
-    };
-    newSamples: {
-      __typename?: "ClinicalRegistrationStats";
-      count: number;
-      rows: Array<number | null>;
-    };
-    alreadyRegistered: {
-      __typename?: "ClinicalRegistrationStats";
-      count: number;
-      rows: Array<number | null>;
-    };
+  clinicalRegistration: { __typename?: "ClinicalRegistrationData" } & {
+    " $fragmentRefs"?: { RegistrationFragment: RegistrationFragment };
   };
 };
 
@@ -2548,6 +2497,61 @@ export type ProgramsListQuery = {
   } | null> | null;
 };
 
+export type RegistrationFragment = {
+  __typename?: "ClinicalRegistrationData";
+  id?: string | null;
+  programShortName?: string | null;
+  creator?: string | null;
+  fileName?: string | null;
+  createdAt?: any | null;
+  records: Array<{
+    __typename?: "ClinicalRecord";
+    row: number;
+    fields: Array<{
+      __typename?: "ClinicalRecordField";
+      name: string;
+      value?: string | null;
+    }>;
+  } | null>;
+  errors: Array<{
+    __typename?: "ClinicalRegistrationError";
+    type: string;
+    message: string;
+    row: number;
+    field: string;
+    value: string;
+    sampleId?: string | null;
+    donorId: string;
+    specimenId?: string | null;
+  } | null>;
+  fileErrors?: Array<{
+    __typename?: "ClinicalFileError";
+    message: string;
+    fileNames: Array<string | null>;
+    code: string;
+  } | null> | null;
+  newDonors: {
+    __typename?: "ClinicalRegistrationStats";
+    count: number;
+    rows: Array<number | null>;
+  };
+  newSpecimens: {
+    __typename?: "ClinicalRegistrationStats";
+    count: number;
+    rows: Array<number | null>;
+  };
+  newSamples: {
+    __typename?: "ClinicalRegistrationStats";
+    count: number;
+    rows: Array<number | null>;
+  };
+  alreadyRegistered: {
+    __typename?: "ClinicalRegistrationStats";
+    count: number;
+    rows: Array<number | null>;
+  };
+} & { " $fragmentName"?: "RegistrationFragment" };
+
 export type SideMenuQueryVariables = Exact<{ [key: string]: never }>;
 
 export type SideMenuQuery = {
@@ -2562,62 +2566,128 @@ export type UploadRegistrationMutationVariables = Exact<{
 
 export type UploadRegistrationMutation = {
   __typename?: "Mutation";
-  uploadClinicalRegistration: {
-    __typename?: "ClinicalRegistrationData";
-    id?: string | null;
-    programShortName?: string | null;
-    creator?: string | null;
-    fileName?: string | null;
-    createdAt?: any | null;
-    records: Array<{
-      __typename?: "ClinicalRecord";
-      row: number;
-      fields: Array<{
-        __typename?: "ClinicalRecordField";
-        name: string;
-        value?: string | null;
-      }>;
-    } | null>;
-    errors: Array<{
-      __typename?: "ClinicalRegistrationError";
-      type: string;
-      message: string;
-      row: number;
-      field: string;
-      value: string;
-      sampleId?: string | null;
-      donorId: string;
-      specimenId?: string | null;
-    } | null>;
-    fileErrors?: Array<{
-      __typename?: "ClinicalFileError";
-      message: string;
-      fileNames: Array<string | null>;
-      code: string;
-    } | null> | null;
-    newDonors: {
-      __typename?: "ClinicalRegistrationStats";
-      count: number;
-      rows: Array<number | null>;
-    };
-    newSpecimens: {
-      __typename?: "ClinicalRegistrationStats";
-      count: number;
-      rows: Array<number | null>;
-    };
-    newSamples: {
-      __typename?: "ClinicalRegistrationStats";
-      count: number;
-      rows: Array<number | null>;
-    };
-    alreadyRegistered: {
-      __typename?: "ClinicalRegistrationStats";
-      count: number;
-      rows: Array<number | null>;
-    };
+  uploadClinicalRegistration: { __typename?: "ClinicalRegistrationData" } & {
+    " $fragmentRefs"?: { RegistrationFragment: RegistrationFragment };
   };
 };
 
+export const RegistrationFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "Registration" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "ClinicalRegistrationData" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "programShortName" } },
+          { kind: "Field", name: { kind: "Name", value: "creator" } },
+          { kind: "Field", name: { kind: "Name", value: "fileName" } },
+          { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "records" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "row" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "fields" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "errors" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "type" } },
+                { kind: "Field", name: { kind: "Name", value: "message" } },
+                { kind: "Field", name: { kind: "Name", value: "row" } },
+                { kind: "Field", name: { kind: "Name", value: "field" } },
+                { kind: "Field", name: { kind: "Name", value: "value" } },
+                { kind: "Field", name: { kind: "Name", value: "sampleId" } },
+                { kind: "Field", name: { kind: "Name", value: "donorId" } },
+                { kind: "Field", name: { kind: "Name", value: "specimenId" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "fileErrors" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "message" } },
+                { kind: "Field", name: { kind: "Name", value: "fileNames" } },
+                { kind: "Field", name: { kind: "Name", value: "code" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "newDonors" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+                { kind: "Field", name: { kind: "Name", value: "rows" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "newSpecimens" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+                { kind: "Field", name: { kind: "Name", value: "rows" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "newSamples" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+                { kind: "Field", name: { kind: "Name", value: "rows" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "alreadyRegistered" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+                { kind: "Field", name: { kind: "Name", value: "rows" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<RegistrationFragment, unknown>;
 export const ClearClinicalRegistrationDocument = {
   kind: "Document",
   definitions: [
@@ -2844,132 +2914,122 @@ export const GetRegistrationDocument = {
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
                 {
-                  kind: "Field",
-                  name: { kind: "Name", value: "programShortName" },
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "Registration" },
                 },
-                { kind: "Field", name: { kind: "Name", value: "creator" } },
-                { kind: "Field", name: { kind: "Name", value: "fileName" } },
-                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "Registration" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "ClinicalRegistrationData" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "programShortName" } },
+          { kind: "Field", name: { kind: "Name", value: "creator" } },
+          { kind: "Field", name: { kind: "Name", value: "fileName" } },
+          { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "records" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "row" } },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "records" },
+                  name: { kind: "Name", value: "fields" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "row" } },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "fields" },
-                        selectionSet: {
-                          kind: "SelectionSet",
-                          selections: [
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "name" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "value" },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "errors" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "type" } },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "message" },
-                      },
-                      { kind: "Field", name: { kind: "Name", value: "row" } },
-                      { kind: "Field", name: { kind: "Name", value: "field" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
                       { kind: "Field", name: { kind: "Name", value: "value" } },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "sampleId" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "donorId" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "specimenId" },
-                      },
                     ],
                   },
                 },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "fileErrors" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "message" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "fileNames" },
-                      },
-                      { kind: "Field", name: { kind: "Name", value: "code" } },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "newDonors" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "count" } },
-                      { kind: "Field", name: { kind: "Name", value: "rows" } },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "newSpecimens" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "count" } },
-                      { kind: "Field", name: { kind: "Name", value: "rows" } },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "newSamples" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "count" } },
-                      { kind: "Field", name: { kind: "Name", value: "rows" } },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "alreadyRegistered" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "count" } },
-                      { kind: "Field", name: { kind: "Name", value: "rows" } },
-                    ],
-                  },
-                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "errors" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "type" } },
+                { kind: "Field", name: { kind: "Name", value: "message" } },
+                { kind: "Field", name: { kind: "Name", value: "row" } },
+                { kind: "Field", name: { kind: "Name", value: "field" } },
+                { kind: "Field", name: { kind: "Name", value: "value" } },
+                { kind: "Field", name: { kind: "Name", value: "sampleId" } },
+                { kind: "Field", name: { kind: "Name", value: "donorId" } },
+                { kind: "Field", name: { kind: "Name", value: "specimenId" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "fileErrors" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "message" } },
+                { kind: "Field", name: { kind: "Name", value: "fileNames" } },
+                { kind: "Field", name: { kind: "Name", value: "code" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "newDonors" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+                { kind: "Field", name: { kind: "Name", value: "rows" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "newSpecimens" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+                { kind: "Field", name: { kind: "Name", value: "rows" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "newSamples" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+                { kind: "Field", name: { kind: "Name", value: "rows" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "alreadyRegistered" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+                { kind: "Field", name: { kind: "Name", value: "rows" } },
               ],
             },
           },
@@ -3133,132 +3193,122 @@ export const UploadRegistrationDocument = {
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
                 {
-                  kind: "Field",
-                  name: { kind: "Name", value: "programShortName" },
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "Registration" },
                 },
-                { kind: "Field", name: { kind: "Name", value: "creator" } },
-                { kind: "Field", name: { kind: "Name", value: "fileName" } },
-                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "Registration" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "ClinicalRegistrationData" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "programShortName" } },
+          { kind: "Field", name: { kind: "Name", value: "creator" } },
+          { kind: "Field", name: { kind: "Name", value: "fileName" } },
+          { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "records" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "row" } },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "records" },
+                  name: { kind: "Name", value: "fields" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "row" } },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "fields" },
-                        selectionSet: {
-                          kind: "SelectionSet",
-                          selections: [
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "name" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "value" },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "errors" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "type" } },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "message" },
-                      },
-                      { kind: "Field", name: { kind: "Name", value: "row" } },
-                      { kind: "Field", name: { kind: "Name", value: "field" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
                       { kind: "Field", name: { kind: "Name", value: "value" } },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "sampleId" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "donorId" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "specimenId" },
-                      },
                     ],
                   },
                 },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "fileErrors" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "message" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "fileNames" },
-                      },
-                      { kind: "Field", name: { kind: "Name", value: "code" } },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "newDonors" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "count" } },
-                      { kind: "Field", name: { kind: "Name", value: "rows" } },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "newSpecimens" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "count" } },
-                      { kind: "Field", name: { kind: "Name", value: "rows" } },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "newSamples" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "count" } },
-                      { kind: "Field", name: { kind: "Name", value: "rows" } },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "alreadyRegistered" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "count" } },
-                      { kind: "Field", name: { kind: "Name", value: "rows" } },
-                    ],
-                  },
-                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "errors" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "type" } },
+                { kind: "Field", name: { kind: "Name", value: "message" } },
+                { kind: "Field", name: { kind: "Name", value: "row" } },
+                { kind: "Field", name: { kind: "Name", value: "field" } },
+                { kind: "Field", name: { kind: "Name", value: "value" } },
+                { kind: "Field", name: { kind: "Name", value: "sampleId" } },
+                { kind: "Field", name: { kind: "Name", value: "donorId" } },
+                { kind: "Field", name: { kind: "Name", value: "specimenId" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "fileErrors" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "message" } },
+                { kind: "Field", name: { kind: "Name", value: "fileNames" } },
+                { kind: "Field", name: { kind: "Name", value: "code" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "newDonors" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+                { kind: "Field", name: { kind: "Name", value: "rows" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "newSpecimens" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+                { kind: "Field", name: { kind: "Name", value: "rows" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "newSamples" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+                { kind: "Field", name: { kind: "Name", value: "rows" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "alreadyRegistered" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+                { kind: "Field", name: { kind: "Name", value: "rows" } },
               ],
             },
           },

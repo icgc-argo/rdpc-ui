@@ -18,55 +18,18 @@
  */
 
 import { gql } from "@apollo/client";
+import REGISTRATION_FRAGMENT from "./REGISTRATION_FRAGMENT";
 
-const UPLOAD_REGISTRATION_MUTATION = gql(`
-	mutation UploadRegistration($shortName: String!, $registrationFile: Upload!) {
-		uploadClinicalRegistration(shortName: $shortName, registrationFile: $registrationFile) {
-			id
-      programShortName
-      creator
-      fileName
-      createdAt
-      records {
-        row
-        fields {
-          name
-          value
-        }
-      }
-      errors {
-        type
-        message
-        row
-        field
-        value
-        sampleId
-        donorId
-        specimenId
-      }
-      fileErrors {
-        message
-        fileNames
-        code
-      }
-      newDonors {
-        count
-        rows
-      }
-      newSpecimens {
-        count
-        rows
-      }
-      newSamples {
-        count
-        rows
-      }
-      alreadyRegistered {
-        count
-        rows
-      }
-		}
-	}
-`);
+const UPLOAD_REGISTRATION_MUTATION = gql`
+  ${REGISTRATION_FRAGMENT}
+  mutation UploadRegistration($shortName: String!, $registrationFile: Upload!) {
+    uploadClinicalRegistration(
+      shortName: $shortName
+      registrationFile: $registrationFile
+    ) {
+      ...Registration
+    }
+  }
+`;
 
 export default UPLOAD_REGISTRATION_MUTATION;

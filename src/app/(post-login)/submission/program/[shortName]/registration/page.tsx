@@ -28,13 +28,13 @@ import GET_REGISTRATION_QUERY from "@/app/gql/GET_REGISTRATION_QUERY";
 import UPLOAD_REGISTRATION_MUTATION from "@/app/gql/UPLOAD_REGISTRATION_MUTATION";
 import { useToaster } from "@/app/hooks/ToastProvider";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
-import { toDisplayError } from "@/global/utils";
 import { css } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   BUTTON_SIZES,
   BUTTON_VARIANTS,
   Button,
+  NOTIFICATION_VARIANTS,
   Notification,
   Typography,
 } from "@icgc-argo/uikit";
@@ -101,6 +101,7 @@ export default function Register({
 
   const [uploadFile, { loading: isUploading }] = useMutation(
     UPLOAD_REGISTRATION_MUTATION,
+
     {
       onError: (e) => {
         //commonToaster.unknownError();
@@ -170,7 +171,7 @@ export default function Register({
     setShowModal(false);
   };
 
-  console.log("schema val error", schemaOrValidationErrors);
+  console.log("CLINICAL RECORSD", clinicalRegistration);
 
   return (
     <>
@@ -208,7 +209,7 @@ export default function Register({
               onInteraction={() => null}
             />
           ))}
-          {clinicalRegistration?.records.length ? (
+          {false && clinicalRegistration?.records.length ? (
             <Card
               title="File Preview"
               action={
@@ -225,20 +226,29 @@ export default function Register({
             >
               <FilePreview registration={clinicalRegistration} />
             </Card>
-          ) : schemaOrValidationErrors.length ? (
-            <div>
-              <UploadError
-                level={NOTIFICATION_VARIANTS.ERROR}
-                onClearClick={handleClearClick}
-                title={`${schemaOrValidationErrors.length.toLocaleString()} error(s) found in uploaded file`}
-                errors={schemaOrValidationErrors.map(toDisplayError)}
-                subtitle={
-                  "Your file cannot be processed. Please correct the following errors and reupload your file."
-                }
-                columnConfig={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
-                tsvExcludeCols={["type", "specimenId", "sampleId"]}
-              />
-            </div>
+          ) : true || schemaOrValidationErrors.length ? (
+            <UploadError
+              level={NOTIFICATION_VARIANTS.ERROR}
+              onClearClick={handleClearClick}
+              title={`${schemaOrValidationErrors.length.toLocaleString()} error(s) found in uploaded file`}
+              errors={[
+                {
+                  type: "INVALID_PROGRAM_ID",
+                  message:
+                    "Program ID does not match. Please include the correct Program ID.",
+                  row: 0,
+                  field: "program_id",
+                  value: "CIA-IE",
+                  sampleId: "sample_0",
+                  donorId: "DO-1",
+                  specimenId: "SP1-1",
+                },
+              ]}
+              subtitle={
+                "Your file cannot be processed. Please correct the following errors and reupload your file."
+              }
+              tsvExcludeCols={["type", "specimenId", "sampleId"]}
+            />
           ) : (
             <NoDataMessage loading={false} />
           )}

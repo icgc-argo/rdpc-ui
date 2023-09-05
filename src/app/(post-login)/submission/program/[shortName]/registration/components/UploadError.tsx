@@ -17,10 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { exportToTsv } from "@/global/utils";
-import { css } from "@/lib/emotion";
+import { ClinicalRegistrationError } from "@/__generated__/graphql";
+import TableHeader from "@/app/(post-login)/submission/program-table/Header";
+import { exportToTsv, toDisplayError } from "@/global/utils";
+import { css, useTheme } from "@/lib/emotion";
 import {
   Button,
+  ColumnDef,
   Icon,
   NOTIFICATION_VARIANTS,
   Notification,
@@ -28,107 +31,155 @@ import {
   Table,
 } from "@icgc-argo/uikit";
 import union from "lodash/union";
-import { ComponentProps, ReactNode, createRef } from "react";
+import { ComponentProps, FC, ReactNode, createRef } from "react";
 
-const UploadError = <Error extends { [k: string]: any }>({
+const getDefaultColumns = (
+  variantText: string,
+): ColumnDef<{
+  type: string;
+  row: number;
+  field: string;
+  value: string;
+  message: string;
+  sampleId: string;
+  donorId: string;
+  specimenId: string;
+}>[] => {
+  return [
+    {
+      accessorKey: "row",
+      header: () => <TableHeader>Line #</TableHeader>,
+      maxSize: 70,
+    },
+    {
+      accessorKey: "donorId",
+      header: () => <TableHeader> Submitter Donor ID</TableHeader>,
+      maxSize: 160,
+    },
+    {
+      accessorKey: "field",
+      header: () => <TableHeader>{`Field with ${variantText}`}</TableHeader>,
+      maxSize: 200,
+    },
+    {
+      accessorKey: "value",
+      header: () => <TableHeader>{`${variantText} Value`}</TableHeader>,
+      maxSize: 130,
+    },
+    {
+      accessorKey: "message",
+      header: () => <TableHeader>{`${variantText} Description`}</TableHeader>,
+    },
+  ];
+};
+
+const onDownloadClick = () => {
+  exportToTsv(errors, {
+    exclude: union(tsvExcludeCols, ["__typename" as keyof Error]),
+    order: columnConfig.map((entry) => entry.accessor),
+    fileName: `${level}_report.tsv`,
+    headerDisplays: columnConfig.reduce<{}>(
+      (acc, { accessor, Header }) => ({
+        ...acc,
+        [accessor]: Header as string,
+      }),
+      {},
+    ),
+  });
+};
+
+type UploadErrorProps = {
+  level: NotificationVariant;
+  title: string;
+  subtitle: ReactNode;
+  errors: Array<ClinicalRegistrationError>;
+  onClearClick?: ComponentProps<typeof Button>["onClick"];
+  tsvExcludeCols?: Array<keyof Error>;
+};
+const UploadError: FC<UploadErrorProps> = ({
   level,
   title,
   errors,
   subtitle,
-  columnConfig,
   onClearClick,
   tsvExcludeCols = [],
-  tableProps,
-}: {
-  level: NotificationVariant;
-  title: string;
-  subtitle: ReactNode;
-  columnConfig: Array<
-    TableColumnConfig<Error> & {
-      accessor: keyof Error | string;
-    }
-  >;
-  errors: Array<Error>;
-  onClearClick?: ComponentProps<typeof Button>["onClick"];
-  tsvExcludeCols?: Array<keyof Error>;
-  tableProps?: Partial<TableProps>;
 }) => {
-  const onDownloadClick = () => {
-    exportToTsv(errors, {
-      exclude: union(tsvExcludeCols, ["__typename" as keyof Error]),
-      order: columnConfig.map((entry) => entry.accessor),
-      fileName: `${level}_report.tsv`,
-      headerDisplays: columnConfig.reduce<{}>(
-        (acc, { accessor, Header }) => ({
-          ...acc,
-          [accessor]: Header as string,
-        }),
-        {},
-      ),
-    });
-  };
+  const theme = useTheme();
+  const onDownloadClick = () => null;
+
+  const formattedErrors = errors.map(toDisplayError);
 
   const variantText =
     level === NOTIFICATION_VARIANTS.ERROR ? "Error" : "Warning";
 
+  const columnConfig = getDefaultColumns(variantText);
+
+  const containerRef = createRef<HTMLDivElement>();
+
   return (
-    <Notification
-      variant={level}
-      interactionType="NONE"
-      title={
-        <div
-          css={css`
-            display: flex;
-            justify-content: space-between;
-          `}
-        >
-          {title}
+    <div
+      css={css`
+        borderRadius: 8px;
+        boxShadow:  0 2px 4px 0 ${theme.colors.grey_2}
+        border: solid 1px ${theme.colors.error_2};
+        background-color: ${theme.colors.error_4};
+      `}
+    >
+      <Notification
+        variant={level}
+        interactionType="NONE"
+        title={
           <div
             css={css`
               display: flex;
+              justify-content: space-between;
             `}
           >
-            <Button variant="secondary" size="sm" onClick={onDownloadClick}>
-              <span
-                css={css`
-                  display: flex;
-                  align-items: center;
-                `}
-              >
-                <Icon
-                  name="download"
-                  fill="accent2_dark"
-                  height="12px"
+            {title}
+            <div
+              css={css`
+                display: flex;
+              `}
+            >
+              <Button variant="secondary" size="sm" onClick={onDownloadClick}>
+                <span
                   css={css`
-                    marginright: 5px;
+                    display: flex;
+                    align-items: center;
                   `}
-                />
-                {level === NOTIFICATION_VARIANTS.ERROR ? `Error` : `Warning`}{" "}
-                Report
-              </span>
-            </Button>
-            {!!onClearClick && (
-              <Button
-                isAsync
-                id="button-clear-selected-file-upload"
-                variant="text"
-                size="sm"
-                onClick={onClearClick}
-              >
-                Clear
+                >
+                  <Icon
+                    name="download"
+                    fill="accent2_dark"
+                    height="12px"
+                    css={css`
+                      marginright: 5px;
+                    `}
+                  />
+                  {`${variantText} `}
+                  Report
+                </span>
               </Button>
-            )}
+              {!!onClearClick && (
+                <Button
+                  isAsync
+                  id="button-clear-selected-file-upload"
+                  variant="text"
+                  size="sm"
+                  onClick={onClearClick}
+                >
+                  Clear
+                </Button>
+              )}
+            </div>
           </div>
-        </div>
-      }
-      contentProps={{
-        css: css`
-          overflow: hidden;
-        `,
-      }}
-      content={(() => {
-        const containerRef = createRef<HTMLDivElement>();
-        return (
+        }
+        contentProps={{
+          css: css`
+            overflow: hidden;
+          `,
+        }}
+        content={
           <div
             ref={containerRef}
             css={css`
@@ -139,22 +190,23 @@ const UploadError = <Error extends { [k: string]: any }>({
             <div>{subtitle}</div>
             <Table
               parentRef={containerRef}
-              NoDataComponent={() => null}
-              columns={columnConfig.map((col) => ({
-                ...col,
-                style: {
-                  whiteSpace: "pre-line",
-                  ...(col.style || {}),
-                },
-              }))}
-              data={errors}
-              showPagination
-              {...tableProps}
+              columns={columnConfig}
+              // columns={columnConfig.map((col) => ({
+              //   ...col,
+              //   style: {
+              //     whiteSpace: "pre-line",
+              //     ...(col.style || {}),
+              //   },
+              // }))}
+              data={formattedErrors}
+              withPagination
+              showPageSizeOptions
+              withHeaders
             />
           </div>
-        );
-      })()}
-    />
+        }
+      />
+    </div>
   );
 };
 

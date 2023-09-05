@@ -20,13 +20,32 @@
 
 import { ApolloClient, ApolloLink, InMemoryCache } from "@apollo/client";
 import { createUploadLink } from "apollo-upload-client";
+import { useMemo } from "react";
 export { gql } from "@/__generated__/gql";
+
+const createInMemoryCache = () =>
+  new InMemoryCache({
+    typePolicies: {
+      // define cache IDs. default is item.id
+      Program: {
+        keyFields: ["shortName"],
+      },
+      ClinicalRegistrationData: {
+        keyFields: ["programShortName"],
+      },
+      ClinicalSubmissionData: {
+        keyFields: ["programShortName"],
+      },
+    },
+  });
 
 type Config = {
   gateway: string;
   jwt: string;
 };
 export const createApolloClient = (config: Config) => {
+  const clientSideCache = useMemo(() => createInMemoryCache(), []);
+
   const httpLink = createUploadLink({
     uri: config.gateway,
   });
@@ -47,7 +66,7 @@ export const createApolloClient = (config: Config) => {
 
   return new ApolloClient({
     link: additiveLink,
-    cache: new InMemoryCache(),
+    cache: clientSideCache,
     connectToDevTools: true,
   });
 };
