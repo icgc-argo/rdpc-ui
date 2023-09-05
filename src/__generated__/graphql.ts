@@ -2443,6 +2443,15 @@ export type ClinicalSchemaVersionQuery = {
   clinicalSubmissionSchemaVersion: string;
 };
 
+export type ClinicalSubmissionSystemDisabledQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type ClinicalSubmissionSystemDisabledQuery = {
+  __typename?: "Query";
+  clinicalSubmissionSystemDisabled: boolean;
+};
+
 export type CommitClinicalRegistrationMutationVariables = Exact<{
   shortName: Scalars["String"]["input"];
   registrationId: Scalars["String"]["input"];
@@ -2700,6 +2709,28 @@ export const ClinicalSchemaVersionDocument = {
 } as unknown as DocumentNode<
   ClinicalSchemaVersionQuery,
   ClinicalSchemaVersionQueryVariables
+>;
+export const ClinicalSubmissionSystemDisabledDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "ClinicalSubmissionSystemDisabled" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "clinicalSubmissionSystemDisabled" },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ClinicalSubmissionSystemDisabledQuery,
+  ClinicalSubmissionSystemDisabledQueryVariables
 >;
 export const CommitClinicalRegistrationDocument = {
   kind: "Document",

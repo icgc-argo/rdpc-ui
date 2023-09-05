@@ -27,6 +27,7 @@ import CLEAR_CLINICAL_REGISTRATION_MUTATION from "@/app/gql/CLEAR_CLINICAL_REGIS
 import GET_REGISTRATION_QUERY from "@/app/gql/GET_REGISTRATION_QUERY";
 import UPLOAD_REGISTRATION_MUTATION from "@/app/gql/UPLOAD_REGISTRATION_MUTATION";
 import { useToaster } from "@/app/hooks/ToastProvider";
+import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import { css } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
 import {
@@ -104,6 +105,7 @@ export default function Register({
     },
   );
 
+  // this needs error handling TODO
   const handleUpload = (file: File) =>
     uploadFile({
       variables: { shortName, registrationFile: file },
@@ -114,21 +116,24 @@ export default function Register({
     setShowModal((state) => !state);
   };
 
+  const { isDisabled: isSubmissionSystemDisabled } =
+    useSubmissionSystemStatus();
+
   const instructionFlags = {
-    uploadEnabled: true,
-    registrationEnabled: true,
+    uploadEnabled: !isSubmissionSystemDisabled,
+    registrationEnabled:
+      !isSubmissionSystemDisabled && !!get(clinicalRegistration, "id"),
   };
 
   const state = false;
 
   //
-  const isSubmissionSystemDisabled = false;
   const hasClinicalRegistration = !!(
     clinicalRegistration && clinicalRegistration.records.length
   );
   const hasErrors = !!schemaOrValidationErrors.length;
 
-  const registrationId = get(clinicalRegistration, "id");
+  const registrationId = get(clinicalRegistration, "id", "");
 
   // file preview clear
   const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
