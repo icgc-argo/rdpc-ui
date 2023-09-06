@@ -39,6 +39,14 @@ const boxButtonStyle = css`
   margin-top: 10px;
 `;
 
+const instructionBoxButtonIconStyle = css`
+  margin-right: 5px;
+`;
+const instructionBoxButtonContentStyle = css`
+  display: flex;
+  align-items: center;
+`;
+
 const Instructions = ({
   dictionaryVersion = "",
   handleUpload,
@@ -84,8 +92,15 @@ const Instructions = ({
               css={boxButtonStyle}
               onClick={downloadFileTemplate}
             >
-              <Icon name="download" fill="accent2_dark" height="12px" /> File
-              Template
+              <span css={instructionBoxButtonContentStyle}>
+                <Icon
+                  name="download"
+                  fill="accent2_dark"
+                  height="12px"
+                  css={instructionBoxButtonIconStyle}
+                />{" "}
+                File Template
+              </span>
             </Button>
           </>,
           <>
@@ -103,7 +118,15 @@ const Instructions = ({
               }}
               disabled={!flags.uploadEnabled}
             >
-              <Icon name="upload" height="12px" /> Upload File
+              <span css={instructionBoxButtonContentStyle}>
+                <Icon
+                  name="upload"
+                  height="12px"
+                  fill={flags.uploadEnabled ? "accent2_dark" : "white"}
+                  css={instructionBoxButtonIconStyle}
+                />{" "}
+                Upload File
+              </span>
             </FileSelectButton>
           </>,
           <>
