@@ -25,6 +25,7 @@ import ProgressBar from "@/app/components/Content/ProgressBar";
 import NoDataMessage from "@/app/components/NoData";
 import Instructions from "@/app/components/page/submission/program/registration/Instructions";
 import CLEAR_CLINICAL_REGISTRATION_MUTATION from "@/app/gql/CLEAR_CLINICAL_REGISTRATION_MUTATION";
+import CLINICAL_SCHEMA_VERSION_QUERY from "@/app/gql/CLINICAL_SCHEMA_VERSION_QUERY";
 import GET_REGISTRATION_QUERY from "@/app/gql/GET_REGISTRATION_QUERY";
 import UPLOAD_REGISTRATION_MUTATION from "@/app/gql/UPLOAD_REGISTRATION_MUTATION";
 import { useAppConfigContext } from "@/app/hooks/AppProvider";
@@ -52,7 +53,6 @@ export default function Register({
 }: {
   params: { shortName: string };
 }) {
-  console.log("shortname", shortName);
   const {
     data,
     loading,
@@ -61,22 +61,49 @@ export default function Register({
   } = useQuery(GET_REGISTRATION_QUERY, {
     variables: { shortName },
   });
+
+  // get dictionary version
+  const latestDictionaryResponse = useQuery(CLINICAL_SCHEMA_VERSION_QUERY);
+  const { loading: isLoadingDictVersion, data: dictData } =
+    latestDictionaryResponse;
+  const dictionaryVersion =
+    (!isLoadingDictVersion && dictData?.clinicalSubmissionSchemaVersion) || "";
+
+  // toasters
   const toaster = useToaster();
   const commonToaster = useCommonToasters();
 
+  // docs url
   const { DOCS_URL_ROOT } = useAppConfigContext();
-
   const helpUrl = urlJoin(
     DOCS_URL_ROOT,
     "/docs/submission/registering-samples",
   );
 
+  // modal state
   const [showRegisterModal, setShowModal] = useState(false);
 
+  // pull out some clinical registration data
   const clinicalRegistration = data?.clinicalRegistration;
   const schemaOrValidationErrors = get(clinicalRegistration, "errors", []);
   const fileErrors = get(clinicalRegistration, "fileErrors") || [];
 
+  const { isDisabled: isSubmissionSystemDisabled } =
+    useSubmissionSystemStatus();
+
+  const instructionFlags = {
+    uploadEnabled: !isSubmissionSystemDisabled,
+    registrationEnabled:
+      !isSubmissionSystemDisabled && !!get(clinicalRegistration, "id"),
+  };
+
+  const hasClinicalRegistration = !!(
+    clinicalRegistration && clinicalRegistration.records.length
+  );
+  const hasErrors = !!schemaOrValidationErrors.length;
+  const registrationId = get(clinicalRegistration, "id", "");
+
+  // handlers
   const [uploadFile, { loading: isUploading }] = useMutation(
     UPLOAD_REGISTRATION_MUTATION,
 
@@ -95,22 +122,6 @@ export default function Register({
   const handleRegister = () => {
     setShowModal((state) => !state);
   };
-
-  const { isDisabled: isSubmissionSystemDisabled } =
-    useSubmissionSystemStatus();
-
-  const instructionFlags = {
-    uploadEnabled: !isSubmissionSystemDisabled,
-    registrationEnabled:
-      !isSubmissionSystemDisabled && !!get(clinicalRegistration, "id"),
-  };
-
-  const hasClinicalRegistration = !!(
-    clinicalRegistration && clinicalRegistration.records.length
-  );
-  const hasErrors = !!schemaOrValidationErrors.length;
-
-  const registrationId = get(clinicalRegistration, "id", "");
 
   // file preview clear
   const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
@@ -162,7 +173,7 @@ export default function Register({
         </ContentHeader>
         <ContentMain>
           <Instructions
-            dictionaryVersion={"11"}
+            dictionaryVersion={dictionaryVersion}
             handleUpload={handleUpload}
             isUploading={isUploading}
             handleRegister={handleRegister}
