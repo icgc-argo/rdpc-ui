@@ -7,17 +7,22 @@ const ContentMain = ({ children }: { children: ReactNode }) => {
     <div
       id="content"
       css={css`
-		  display: flex;
-			flex-direction: column;
-			row-gap: 30px;  
-			padding: 25px 30px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+        padding: 25px 30px;
 
+        > div {
+          background: white;
+          border-radius: 8px;
+          border: 1px solid ${theme.colors.grey_1};
 
-    > div {
-        background: white;
-        border-radius: 8px;
-        border: 1px solid ${theme.colors.grey_1}
-`}
+          &.error {
+            border: 1px solid ${theme.colors.error_2};
+            background-color: ${theme.colors.error_4};
+          }
+        }
+      `}
     >
       {children}
     </div>

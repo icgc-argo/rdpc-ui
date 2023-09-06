@@ -32,18 +32,20 @@ import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import { useToaster } from "@/app/hooks/ToastProvider";
 import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
+import { useTheme } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   BUTTON_SIZES,
   BUTTON_VARIANTS,
   Button,
   NOTIFICATION_VARIANTS,
-  Notification,
+  NotificationInteraction,
   Typography,
 } from "@icgc-argo/uikit";
 import { get } from "lodash";
 import { useState } from "react";
 import urlJoin from "url-join";
+import FileError from "./components/FileError";
 import FilePreview from "./components/FilePreview";
 import RegisterSamplesModal from "./components/RegisterSampleModal";
 import UploadError from "./components/UploadError";
@@ -53,6 +55,9 @@ export default function Register({
 }: {
   params: { shortName: string };
 }) {
+  const theme = useTheme();
+
+  // get data
   const {
     data,
     loading,
@@ -154,6 +159,22 @@ export default function Register({
     setShowModal(false);
   };
 
+  const onFileErrorClose =
+    (index: number) =>
+    ({ type }: { type: NotificationInteraction }) => {
+      if (type === "CLOSE") {
+        updateClinicalRegistrationQuery((previous) => ({
+          ...previous,
+          clinicalRegistration: {
+            ...previous.clinicalRegistration,
+            fileErrors: previous?.clinicalRegistration?.fileErrors?.filter(
+              (_, i) => i !== index,
+            ),
+          },
+        }));
+      }
+    };
+
   console.log("CLINICAL RECORSD", clinicalRegistration);
 
   return (
@@ -179,18 +200,8 @@ export default function Register({
             handleRegister={handleRegister}
             flags={instructionFlags}
           />
-          {fileErrors.map((fileError, i) => (
-            <Notification
-              key={i}
-              size="SM"
-              variant="ERROR"
-              interactionType="CLOSE"
-              title={`File failed to upload: ${fileError?.fileNames.join(
-                ", ",
-              )}`}
-              content={fileError?.message}
-              onInteraction={() => null}
-            />
+          {fileErrors.map((fileError, index) => (
+            <FileError {...{ fileError, index, onClose: onFileErrorClose }} />
           ))}
           {clinicalRegistration?.records.length ? (
             <Card
