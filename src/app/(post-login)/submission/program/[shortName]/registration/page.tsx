@@ -29,6 +29,7 @@ import GET_REGISTRATION_QUERY from "@/app/gql/GET_REGISTRATION_QUERY";
 import UPLOAD_REGISTRATION_MUTATION from "@/app/gql/UPLOAD_REGISTRATION_MUTATION";
 import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import { useToaster } from "@/app/hooks/ToastProvider";
+import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import { useMutation, useQuery } from "@apollo/client";
 import {
@@ -61,6 +62,8 @@ export default function Register({
     variables: { shortName },
   });
   const toaster = useToaster();
+  const commonToaster = useCommonToasters();
+
   const { DOCS_URL_ROOT } = useAppConfigContext();
 
   const helpUrl = urlJoin(
@@ -79,7 +82,7 @@ export default function Register({
 
     {
       onError: (e) => {
-        //commonToaster.unknownError();
+        commonToaster.unknownError();
         console.error(e);
       },
     },

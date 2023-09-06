@@ -20,6 +20,7 @@
 import ModalPortal from "@/app/components/Modal";
 import COMMIT_CLINICAL_REGISTRATION_MUTATION from "@/app/gql/COMMIT_CLINICAL_REGISTRATION_MUTATION";
 import GET_REGISTRATION_QUERY from "@/app/gql/GET_REGISTRATION_QUERY";
+import useGlobalLoader from "@/app/hooks/GlobalLoaderProvider";
 import { useToaster } from "@/app/hooks/ToastProvider";
 import {
   CONTACT_PAGE_PATH,
@@ -65,7 +66,7 @@ export default function RegisterSamplesModal({
     },
   );
 
-  // const { setGlobalLoading } = useGlobalLoader();
+  const { setGlobalLoading } = useGlobalLoader();
 
   const toaster = useToaster();
   const router = useRouter();
@@ -73,7 +74,7 @@ export default function RegisterSamplesModal({
   const handleActionClick = async () => {
     handleCancelClick();
 
-    //setGlobalLoading(true);
+    setGlobalLoading(true);
     await sleep();
 
     await commitRegistration()
@@ -82,7 +83,6 @@ export default function RegisterSamplesModal({
 
         const num = get(data, "commitClinicalRegistration.length", 0);
         router.push(
-          PROGRAM_DASHBOARD_PATH,
           PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, shortName),
         );
 
@@ -112,7 +112,7 @@ export default function RegisterSamplesModal({
           content: error.toString(),
         });
       });
-    //setGlobalLoading(false);
+    setGlobalLoading(false);
   };
 
   return (
