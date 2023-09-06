@@ -27,6 +27,7 @@ import Instructions from "@/app/components/page/submission/program/registration/
 import CLEAR_CLINICAL_REGISTRATION_MUTATION from "@/app/gql/CLEAR_CLINICAL_REGISTRATION_MUTATION";
 import GET_REGISTRATION_QUERY from "@/app/gql/GET_REGISTRATION_QUERY";
 import UPLOAD_REGISTRATION_MUTATION from "@/app/gql/UPLOAD_REGISTRATION_MUTATION";
+import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import { useToaster } from "@/app/hooks/ToastProvider";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import { useMutation, useQuery } from "@apollo/client";
@@ -40,6 +41,7 @@ import {
 } from "@icgc-argo/uikit";
 import { get } from "lodash";
 import { useState } from "react";
+import urlJoin from "url-join";
 import FilePreview from "./components/FilePreview";
 import RegisterSamplesModal from "./components/RegisterSampleModal";
 import UploadError from "./components/UploadError";
@@ -59,6 +61,12 @@ export default function Register({
     variables: { shortName },
   });
   const toaster = useToaster();
+  const { DOCS_URL_ROOT } = useAppConfigContext();
+
+  const helpUrl = urlJoin(
+    DOCS_URL_ROOT,
+    "/docs/submission/registering-samples",
+  );
 
   const [showRegisterModal, setShowModal] = useState(false);
 
@@ -141,8 +149,8 @@ export default function Register({
     <>
       <div>
         <ContentHeader
-          breadcrumb={["CIA-IE", "Register Samples"]}
-          helpUrl="www.google.ca"
+          breadcrumb={[shortName, "Register Samples"]}
+          helpUrl={helpUrl}
         >
           <ProgressBar
             {...{
