@@ -206,19 +206,7 @@ export default function Register({
               level={NOTIFICATION_VARIANTS.ERROR}
               onClearClick={handleClearClick}
               title={`${schemaOrValidationErrors.length.toLocaleString()} error(s) found in uploaded file`}
-              errors={[
-                {
-                  type: "INVALID_PROGRAM_ID",
-                  message:
-                    "Program ID does not match. Please include the correct Program ID.",
-                  row: 0,
-                  field: "program_id",
-                  value: "CIA-IE",
-                  sampleId: "sample_0",
-                  donorId: "DO-1",
-                  specimenId: "SP1-1",
-                },
-              ]}
+              errors={schemaOrValidationErrors}
               subtitle={
                 "Your file cannot be processed. Please correct the following errors and reupload your file."
               }
