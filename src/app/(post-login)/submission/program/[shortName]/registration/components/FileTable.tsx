@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -25,7 +25,7 @@ import {
   TableInfoHeaderContainer,
 } from "@/app/components/Table/common";
 import { toDisplayRowIndex } from "@/global/utils/clinical";
-import { ColumnDef, Icon, Table, css, useTheme } from "@icgc-argo/uikit";
+import { ColumnDef, Icon, Table, css } from "@icgc-argo/uikit";
 import memoize from "lodash/memoize";
 import { ComponentProps, FC, createRef } from "react";
 import { FileTableData } from "../page";
@@ -89,8 +89,6 @@ type FileTableProps = {
 };
 
 const FileTable: FC<FileTableProps> = ({ records, stats, submissionInfo }) => {
-  const theme = useTheme();
-
   const containerRef = createRef<HTMLDivElement>();
 
   const r = records[0];
@@ -103,7 +101,7 @@ const FileTable: FC<FileTableProps> = ({ records, stats, submissionInfo }) => {
       accessor: key,
       cell: ({ row: { original } }) => original[key],
       header: key,
-      minWidth: getColumnWidth(key),
+      minSize: getColumnWidth(key),
     }));
 
   const columns: ColumnDef<FileTableData>[] = [
@@ -111,11 +109,18 @@ const FileTable: FC<FileTableProps> = ({ records, stats, submissionInfo }) => {
       header: "Line #",
       id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
       cell: ({ row: { original } }) => (
-        <CellContentCenter>{toDisplayRowIndex(original.row)}</CellContentCenter>
+        <div
+          css={css`
+            width: 50px;
+          `}
+        >
+          <CellContentCenter>
+            {toDisplayRowIndex(original.row)}
+          </CellContentCenter>
+        </div>
       ),
       accessorKey: "row",
-      enableResizing: false,
-      size: 70,
+      minSize: 64,
     },
     {
       id: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
@@ -125,7 +130,6 @@ const FileTable: FC<FileTableProps> = ({ records, stats, submissionInfo }) => {
         </CellContentCenter>
       ),
       accessorKey: "isNew",
-      size: 48,
       header: () => (
         <>
           <StarIcon fill="grey_1" />
@@ -135,10 +139,6 @@ const FileTable: FC<FileTableProps> = ({ records, stats, submissionInfo }) => {
 
     ...originalCols,
   ];
-
-  console.log("r", r);
-
-  console.log("records", records, "cols", columns);
 
   return (
     <div
