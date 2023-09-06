@@ -21,7 +21,7 @@ const documents = {
     types.ClinicalSubmissionSystemDisabledDocument,
   "\n  mutation CommitClinicalRegistration(\n    $shortName: String!\n    $registrationId: String!\n  ) {\n    commitClinicalRegistration(\n      shortName: $shortName\n      registrationId: $registrationId\n    )\n  }\n":
     types.CommitClinicalRegistrationDocument,
-  "\n  \n  query GetRegistration($shortName: String!) {\n    clinicalRegistration(shortName: $shortName) {\n      ...Registration\n    }\n  }\n":
+  "\n  query GetRegistration($shortName: String!) {\n    clinicalRegistration(shortName: $shortName) {\n      id\n      programShortName\n      creator\n      fileName\n      createdAt\n      records {\n        row\n        fields {\n          name\n          value\n        }\n      }\n      errors {\n        type\n        message\n        row\n        field\n        value\n        sampleId\n        donorId\n        specimenId\n      }\n      fileErrors {\n        message\n        fileNames\n        code\n      }\n      newDonors {\n        count\n        rows\n      }\n      newSpecimens {\n        count\n        rows\n      }\n      newSamples {\n        count\n        rows\n      }\n      alreadyRegistered {\n        count\n        rows\n      }\n    }\n  }\n":
     types.GetRegistrationDocument,
   "\n\tquery ProgramsList {\n\t\tprograms {\n\t\t\tshortName\n\t\t\tname\n\t\t\tcancerTypes\n\t\t\tcountries\n\t\t\tmembershipType\n\t\t\tgenomicDonors\n\t\t\tsubmittedDonors\n\t\t\tcommitmentDonors\n\t\t\tusers {\n\t\t\t\temail\n\t\t\t\tfirstName\n\t\t\t\tlastName\n\t\t\t\trole\n\t\t\t}\n\t\t}\n\t}\n":
     types.ProgramsListDocument,
@@ -29,7 +29,7 @@ const documents = {
     types.RegistrationFragmentDoc,
   "\n\tquery SideMenu {\n\t\tprograms {\n\t\t\tshortName\n\t\t}\n\t}\n":
     types.SideMenuDocument,
-  "\n  \n  mutation UploadRegistration($shortName: String!, $registrationFile: Upload!) {\n    uploadClinicalRegistration(\n      shortName: $shortName\n      registrationFile: $registrationFile\n    ) {\n      ...Registration\n    }\n  }\n":
+  "\n  mutation UploadRegistration($shortName: String!, $registrationFile: Upload!) {\n    uploadClinicalRegistration(\n      shortName: $shortName\n      registrationFile: $registrationFile\n    ) {\n      id\n    programShortName\n    creator\n    fileName\n    createdAt\n    records {\n      row\n      fields {\n        name\n        value\n      }\n    }\n    errors {\n      type\n      message\n      row\n      field\n      value\n      sampleId\n      donorId\n      specimenId\n    }\n    fileErrors {\n      message\n      fileNames\n      code\n    }\n    newDonors {\n      count\n      rows\n    }\n    newSpecimens {\n      count\n      rows\n    }\n    newSamples {\n      count\n      rows\n    }\n    alreadyRegistered {\n      count\n      rows\n    }\n    }\n  }\n":
     types.UploadRegistrationDocument,
 };
 
@@ -75,8 +75,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: "\n  \n  query GetRegistration($shortName: String!) {\n    clinicalRegistration(shortName: $shortName) {\n      ...Registration\n    }\n  }\n",
-): (typeof documents)["\n  \n  query GetRegistration($shortName: String!) {\n    clinicalRegistration(shortName: $shortName) {\n      ...Registration\n    }\n  }\n"];
+  source: "\n  query GetRegistration($shortName: String!) {\n    clinicalRegistration(shortName: $shortName) {\n      id\n      programShortName\n      creator\n      fileName\n      createdAt\n      records {\n        row\n        fields {\n          name\n          value\n        }\n      }\n      errors {\n        type\n        message\n        row\n        field\n        value\n        sampleId\n        donorId\n        specimenId\n      }\n      fileErrors {\n        message\n        fileNames\n        code\n      }\n      newDonors {\n        count\n        rows\n      }\n      newSpecimens {\n        count\n        rows\n      }\n      newSamples {\n        count\n        rows\n      }\n      alreadyRegistered {\n        count\n        rows\n      }\n    }\n  }\n",
+): (typeof documents)["\n  query GetRegistration($shortName: String!) {\n    clinicalRegistration(shortName: $shortName) {\n      id\n      programShortName\n      creator\n      fileName\n      createdAt\n      records {\n        row\n        fields {\n          name\n          value\n        }\n      }\n      errors {\n        type\n        message\n        row\n        field\n        value\n        sampleId\n        donorId\n        specimenId\n      }\n      fileErrors {\n        message\n        fileNames\n        code\n      }\n      newDonors {\n        count\n        rows\n      }\n      newSpecimens {\n        count\n        rows\n      }\n      newSamples {\n        count\n        rows\n      }\n      alreadyRegistered {\n        count\n        rows\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -99,8 +99,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: "\n  \n  mutation UploadRegistration($shortName: String!, $registrationFile: Upload!) {\n    uploadClinicalRegistration(\n      shortName: $shortName\n      registrationFile: $registrationFile\n    ) {\n      ...Registration\n    }\n  }\n",
-): (typeof documents)["\n  \n  mutation UploadRegistration($shortName: String!, $registrationFile: Upload!) {\n    uploadClinicalRegistration(\n      shortName: $shortName\n      registrationFile: $registrationFile\n    ) {\n      ...Registration\n    }\n  }\n"];
+  source: "\n  mutation UploadRegistration($shortName: String!, $registrationFile: Upload!) {\n    uploadClinicalRegistration(\n      shortName: $shortName\n      registrationFile: $registrationFile\n    ) {\n      id\n    programShortName\n    creator\n    fileName\n    createdAt\n    records {\n      row\n      fields {\n        name\n        value\n      }\n    }\n    errors {\n      type\n      message\n      row\n      field\n      value\n      sampleId\n      donorId\n      specimenId\n    }\n    fileErrors {\n      message\n      fileNames\n      code\n    }\n    newDonors {\n      count\n      rows\n    }\n    newSpecimens {\n      count\n      rows\n    }\n    newSamples {\n      count\n      rows\n    }\n    alreadyRegistered {\n      count\n      rows\n    }\n    }\n  }\n",
+): (typeof documents)["\n  mutation UploadRegistration($shortName: String!, $registrationFile: Upload!) {\n    uploadClinicalRegistration(\n      shortName: $shortName\n      registrationFile: $registrationFile\n    ) {\n      id\n    programShortName\n    creator\n    fileName\n    createdAt\n    records {\n      row\n      fields {\n        name\n        value\n      }\n    }\n    errors {\n      type\n      message\n      row\n      field\n      value\n      sampleId\n      donorId\n      specimenId\n    }\n    fileErrors {\n      message\n      fileNames\n      code\n    }\n    newDonors {\n      count\n      rows\n    }\n    newSpecimens {\n      count\n      rows\n    }\n    newSamples {\n      count\n      rows\n    }\n    alreadyRegistered {\n      count\n      rows\n    }\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

@@ -83,12 +83,10 @@ export default function Register({
     {
       onError: (e) => {
         commonToaster.unknownError();
-        console.error(e);
       },
     },
   );
 
-  // this needs error handling TODO
   const handleUpload = (file: File) =>
     uploadFile({
       variables: { shortName, registrationFile: file },
@@ -107,7 +105,6 @@ export default function Register({
       !isSubmissionSystemDisabled && !!get(clinicalRegistration, "id"),
   };
 
-  //
   const hasClinicalRegistration = !!(
     clinicalRegistration && clinicalRegistration.records.length
   );

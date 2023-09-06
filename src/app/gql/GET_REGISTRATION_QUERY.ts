@@ -17,16 +17,56 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from "@apollo/client";
-import REGISTRATION_FRAGMENT from "./REGISTRATION_FRAGMENT";
+import { gql } from "@/__generated__/gql";
 
-const GET_REGISTRATION_QUERY = gql`
-  ${REGISTRATION_FRAGMENT}
+const GET_REGISTRATION_QUERY = gql(`
   query GetRegistration($shortName: String!) {
     clinicalRegistration(shortName: $shortName) {
-      ...Registration
+      id
+      programShortName
+      creator
+      fileName
+      createdAt
+      records {
+        row
+        fields {
+          name
+          value
+        }
+      }
+      errors {
+        type
+        message
+        row
+        field
+        value
+        sampleId
+        donorId
+        specimenId
+      }
+      fileErrors {
+        message
+        fileNames
+        code
+      }
+      newDonors {
+        count
+        rows
+      }
+      newSpecimens {
+        count
+        rows
+      }
+      newSamples {
+        count
+        rows
+      }
+      alreadyRegistered {
+        count
+        rows
+      }
     }
   }
-`;
+`);
 
 export default GET_REGISTRATION_QUERY;
