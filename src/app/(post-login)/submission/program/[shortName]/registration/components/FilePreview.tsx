@@ -16,7 +16,10 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { ClinicalRegistrationData } from "@/__generated__/graphql";
+import {
+  ClinicalRecord,
+  ClinicalRegistrationData,
+} from "@/__generated__/graphql";
 import { get, union } from "lodash";
 import FileTable from "./FileTable";
 
@@ -26,15 +29,20 @@ export type FileTableData = ClinicalRegistrationData & {
 };
 
 const recordsToFileTable = (
-  records: ClinicalRegistrationData[],
+  records: ClinicalRecord[],
   newRows: Array<number>,
 ): FileTableData[] =>
   records.map((record) => {
-    const fields = get(record, "fields", []);
+    const fields = get(record, "fields") || [];
     const data = fields.reduce(
-      (acc, cur) => ({ ...acc, [cur.name]: cur.value }),
+      (acc, cur) => ({
+        ...acc,
+        [cur.name]: cur.value,
+      }),
       {} as any,
     );
+
+    console.log("records", records, "data", data);
 
     return { ...data, row: record.row, isNew: newRows.includes(record.row) };
   });
