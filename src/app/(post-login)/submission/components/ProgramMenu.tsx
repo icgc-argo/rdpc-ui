@@ -24,7 +24,7 @@ import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus
 import { notNull } from "@/global/utils/types";
 import { css } from "@/lib/emotion";
 import { useQuery } from "@apollo/client";
-import { Icon, MenuItem } from "@icgc-argo/uikit";
+import { MenuItem } from "@icgc-argo/uikit";
 import Link from "next/link";
 import { notFound, usePathname } from "next/navigation";
 import { MouseEventHandler, useState } from "react";
@@ -43,13 +43,13 @@ const StatusMenuItem = () => {
       `}
     >
       Register Samples
-      {isSubmissionSystemDisabled ? (
+      {/* {isSubmissionSystemDisabled ? (
         <Icon name="lock" fill="accent3_dark" width="15px" />
       ) : clinicalRegistrationHasError ? (
         <Icon name="exclamation" fill="error" width="15px" />
       ) : clinicalRegistrationInProgress ? (
         <Icon name="ellipses" fill="warning" width="15px" />
-      ) : null}
+      ) : null} */}
     </div>
   );
 };

@@ -32,10 +32,9 @@ const recordsToFileTable = (
   records.map((record) => {
     const fields = get(record, "fields", []);
     const data = fields.reduce(
-      // @ts-expect-error
       (acc, cur) => ({ ...acc, [cur.name]: cur.value }),
       {} as any,
-    ); // @ts-expect-error
+    );
 
     return { ...data, row: record.row, isNew: newRows.includes(record.row) };
   });

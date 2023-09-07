@@ -27,7 +27,7 @@ import {
   ToastStack,
 } from "@icgc-argo/uikit";
 import omit from "lodash/omit";
-import { ReactNode, createContext, useContext, useState } from "react";
+import { FC, ReactNode, createContext, useContext, useState } from "react";
 
 type ToastEventPayload = { type: NotificationInteractionEvent; event: any };
 type ToastConfig = {
@@ -97,7 +97,7 @@ type Toaster = ReturnType<typeof useToastState>;
 export const ToasterContext = createContext<Toaster>();
 export const useToaster = () => useContext<Toaster>(ToasterContext);
 
-const ToastProvider = ({ children }) => {
+const ToastProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const toaster = useToastState();
   return (
     <ToasterContext.Provider value={toaster}>

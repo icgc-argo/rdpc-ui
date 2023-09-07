@@ -68,7 +68,9 @@ export const exportToTsv = <Data extends { [k: string]: string | number }>(
   const dataRows: string[][] = data.map((entry) =>
     filteredKeys.map((key) => String(entry[key])),
   );
-  const headerRow = filteredKeys.map((key) => headerDisplays[key]);
+  const headerRow = filteredKeys.map(
+    (key) => headerDisplays && headerDisplays[key],
+  );
   const tsvString = [headerRow, ...dataRows]
     .map((row) => row.join("\t"))
     .join("\n");

@@ -55,9 +55,9 @@ const Instructions = ({
   flags,
 }: {
   dictionaryVersion: string;
-  handleUpload: any;
+  handleUpload: (f: File) => void;
   isUploading: boolean;
-  handleRegister: any;
+  handleRegister: () => void;
   flags: { uploadEnabled: boolean; registrationEnabled: boolean };
 }) => {
   const { DOCS_URL_ROOT, GATEWAY_API_ROOT } = useAppConfigContext();
