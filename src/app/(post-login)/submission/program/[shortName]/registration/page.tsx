@@ -32,7 +32,7 @@ import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import { useToaster } from "@/app/hooks/ToastProvider";
 import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
-import { css, useTheme } from "@/lib/emotion";
+import { css } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   BUTTON_SIZES,
@@ -55,12 +55,9 @@ export default function Register({
 }: {
   params: { shortName: string };
 }) {
-  const theme = useTheme();
-
   // get data
   const {
     data,
-    loading,
     refetch,
     updateQuery: updateClinicalRegistrationQuery,
   } = useQuery(GET_REGISTRATION_QUERY, {

@@ -2603,11 +2603,27 @@ export type RegistrationFragment = {
   };
 } & { " $fragmentName"?: "RegistrationFragment" };
 
-export type SideMenuQueryVariables = Exact<{ [key: string]: never }>;
+export type SideMenuQueryVariables = Exact<{
+  shortName: Scalars["String"]["input"];
+}>;
 
 export type SideMenuQuery = {
   __typename?: "Query";
   programs?: Array<{ __typename?: "Program"; shortName: string } | null> | null;
+  clinicalRegistration: {
+    __typename?: "ClinicalRegistrationData";
+    programShortName?: string | null;
+    fileName?: string | null;
+    fileErrors?: Array<{
+      __typename?: "ClinicalFileError";
+      message: string;
+      code: string;
+    } | null> | null;
+    errors: Array<{
+      __typename?: "ClinicalRegistrationError";
+      type: string;
+    } | null>;
+  };
 };
 
 export type UploadRegistrationMutationVariables = Exact<{
@@ -3223,6 +3239,22 @@ export const SideMenuDocument = {
       kind: "OperationDefinition",
       operation: "query",
       name: { kind: "Name", value: "SideMenu" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "shortName" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
       selectionSet: {
         kind: "SelectionSet",
         selections: [
@@ -3233,6 +3265,54 @@ export const SideMenuDocument = {
               kind: "SelectionSet",
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "shortName" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "clinicalRegistration" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "shortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "shortName" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "fileErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "fileName" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "errors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "type" } },
+                    ],
+                  },
+                },
               ],
             },
           },

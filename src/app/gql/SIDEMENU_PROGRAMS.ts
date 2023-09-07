@@ -20,9 +20,20 @@
 import { gql } from "@/__generated__/gql";
 
 const SIDEMENU_PROGRAMS = gql(`
-	query SideMenu {
+	query SideMenu($shortName: String!) {
 		programs {
 			shortName
+		}
+    clinicalRegistration(shortName: $shortName) {
+      programShortName
+      fileErrors {
+        message
+        code
+      }
+      fileName
+      errors {
+        type
+      }
 		}
 	}
 `);

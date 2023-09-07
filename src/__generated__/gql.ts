@@ -29,7 +29,7 @@ const documents = {
     types.ProgramsListDocument,
   "\n  fragment Registration on ClinicalRegistrationData {\n    id\n    programShortName\n    creator\n    fileName\n    createdAt\n    records {\n      row\n      fields {\n        name\n        value\n      }\n    }\n    errors {\n      type\n      message\n      row\n      field\n      value\n      sampleId\n      donorId\n      specimenId\n    }\n    fileErrors {\n      message\n      fileNames\n      code\n    }\n    newDonors {\n      count\n      rows\n    }\n    newSpecimens {\n      count\n      rows\n    }\n    newSamples {\n      count\n      rows\n    }\n    alreadyRegistered {\n      count\n      rows\n    }\n  }\n":
     types.RegistrationFragmentDoc,
-  "\n\tquery SideMenu {\n\t\tprograms {\n\t\t\tshortName\n\t\t}\n\t}\n":
+  "\n\tquery SideMenu($shortName: String!) {\n\t\tprograms {\n\t\t\tshortName\n\t\t}\n    clinicalRegistration(shortName: $shortName) {\n      programShortName\n      fileErrors {\n        message\n        code\n      }\n      fileName\n      errors {\n        type\n      }\n\t\t}\n\t}\n":
     types.SideMenuDocument,
   "\n  mutation UploadRegistration($shortName: String!, $registrationFile: Upload!) {\n    uploadClinicalRegistration(\n      shortName: $shortName\n      registrationFile: $registrationFile\n    ) {\n      id\n    programShortName\n    creator\n    fileName\n    createdAt\n    records {\n      row\n      fields {\n        name\n        value\n      }\n    }\n    errors {\n      type\n      message\n      row\n      field\n      value\n      sampleId\n      donorId\n      specimenId\n    }\n    fileErrors {\n      message\n      fileNames\n      code\n    }\n    newDonors {\n      count\n      rows\n    }\n    newSpecimens {\n      count\n      rows\n    }\n    newSamples {\n      count\n      rows\n    }\n    alreadyRegistered {\n      count\n      rows\n    }\n    }\n  }\n":
     types.UploadRegistrationDocument,
@@ -101,8 +101,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: "\n\tquery SideMenu {\n\t\tprograms {\n\t\t\tshortName\n\t\t}\n\t}\n",
-): (typeof documents)["\n\tquery SideMenu {\n\t\tprograms {\n\t\t\tshortName\n\t\t}\n\t}\n"];
+  source: "\n\tquery SideMenu($shortName: String!) {\n\t\tprograms {\n\t\t\tshortName\n\t\t}\n    clinicalRegistration(shortName: $shortName) {\n      programShortName\n      fileErrors {\n        message\n        code\n      }\n      fileName\n      errors {\n        type\n      }\n\t\t}\n\t}\n",
+): (typeof documents)["\n\tquery SideMenu($shortName: String!) {\n\t\tprograms {\n\t\t\tshortName\n\t\t}\n    clinicalRegistration(shortName: $shortName) {\n      programShortName\n      fileErrors {\n        message\n        code\n      }\n      fileName\n      errors {\n        type\n      }\n\t\t}\n\t}\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
