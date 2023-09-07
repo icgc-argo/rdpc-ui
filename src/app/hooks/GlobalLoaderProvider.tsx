@@ -24,7 +24,8 @@ import {
 } from "@/app/components/Modal";
 import { DnaLoader, Modal, css } from "@icgc-argo/uikit";
 import {
-  PropsWithChildren,
+  FC,
+  ReactNode,
   createContext,
   createRef,
   useContext,
@@ -59,6 +60,7 @@ const GlobalLoaderView = ({
   const ref = loaderPortalRef.current;
   const fadeIn = 400;
   const fadeOut = 600;
+
   return ref
     ? ReactDOM.createPortal(
         <CSSTransition
@@ -97,17 +99,12 @@ const GlobalLoadingContext = createContext({
   setGlobalLoading: (isGlobalLoading: IsGlobalLoading) => {},
 });
 
-const useGlobalLoader = () => useContext(GlobalLoadingContext);
+export const useGlobalLoader = () => useContext(GlobalLoadingContext);
 
-export const GlobalLoaderProvider = ({
+export const GlobalLoaderProvider: FC<{ children: ReactNode }> = ({
   children,
-  startWithGlobalLoader,
-}: PropsWithChildren<{
-  startWithGlobalLoader: IsGlobalLoading;
-}>) => {
-  const [isGlobalLoading, setGlobalLoading] = useState(
-    startWithGlobalLoader || GLOBAL_LOADING_DEFAULT,
-  );
+}) => {
+  const [isGlobalLoading, setGlobalLoading] = useState(GLOBAL_LOADING_DEFAULT);
 
   return (
     <GlobalLoadingContext.Provider
@@ -119,4 +116,4 @@ export const GlobalLoaderProvider = ({
   );
 };
 
-export default useGlobalLoader;
+export default GlobalLoaderProvider;

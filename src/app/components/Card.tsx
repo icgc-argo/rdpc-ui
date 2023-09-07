@@ -36,29 +36,29 @@ const Card: FC<CardProps> = ({ title, action, fill = false, children }) => (
       padding: 9px;
     `}
   >
-    {title ||
-      (action && (
-        <div
+    {(title || action) && (
+      <div
+        css={css`
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 2px;
+        `}
+      >
+        <Typography
           css={css`
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
+            margin: 0 0 8px 0;
           `}
+          color="primary"
+          variant="subtitle2"
+          component="h2"
         >
-          <Typography
-            css={css`
-              margin: 0 0 8px 0;
-            `}
-            color="primary"
-            variant="subtitle2"
-            component="h2"
-          >
-            {title}
-          </Typography>
-          {action}
-        </div>
-      ))}
+          {title}
+        </Typography>
+        {action}
+      </div>
+    )}
 
     {children}
   </div>
