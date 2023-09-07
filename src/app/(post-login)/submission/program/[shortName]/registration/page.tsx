@@ -32,7 +32,7 @@ import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import { useToaster } from "@/app/hooks/ToastProvider";
 import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
-import { useTheme } from "@/lib/emotion";
+import { css, useTheme } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   BUTTON_SIZES,
@@ -179,7 +179,12 @@ export default function Register({
 
   return (
     <>
-      <div>
+      <div
+        css={css`
+          display: flex;
+          flex-direction: column;
+        `}
+      >
         <ContentHeader
           breadcrumb={[shortName, "Register Samples"]}
           helpUrl={helpUrl}
@@ -205,6 +210,7 @@ export default function Register({
           ))}
           {clinicalRegistration?.records.length ? (
             <Card
+              fill
               title="File Preview"
               action={
                 <Button
@@ -231,7 +237,9 @@ export default function Register({
               }
             />
           ) : (
-            <NoDataMessage loading={false} />
+            <Card fill>
+              <NoDataMessage loading={false} />
+            </Card>
           )}
         </ContentMain>
       </div>

@@ -20,33 +20,45 @@ import { css } from "@/lib/emotion";
 import { Typography } from "@icgc-argo/uikit";
 import { FC, ReactNode } from "react";
 
-type CardProps = { title: string; action?: ReactNode; children: ReactNode };
-const Card: FC<CardProps> = ({ title, action, children }) => (
+type CardProps = {
+  title?: string;
+  action?: ReactNode;
+  fill?: boolean;
+  children: ReactNode;
+};
+const Card: FC<CardProps> = ({ title, action, fill = false, children }) => (
   <div
     css={css`
+      ${fill &&
+      css`
+        flex: 1 0 auto;
+      `}
       padding: 9px;
     `}
   >
-    <div
-      css={css`
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-      `}
-    >
-      <Typography
-        css={css`
-          margin: 0 0 8px 0;
-        `}
-        color="primary"
-        variant="subtitle2"
-        component="h2"
-      >
-        {title}
-      </Typography>
-      {action}
-    </div>
+    {title ||
+      (action && (
+        <div
+          css={css`
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+          `}
+        >
+          <Typography
+            css={css`
+              margin: 0 0 8px 0;
+            `}
+            color="primary"
+            variant="subtitle2"
+            component="h2"
+          >
+            {title}
+          </Typography>
+          {action}
+        </div>
+      ))}
 
     {children}
   </div>

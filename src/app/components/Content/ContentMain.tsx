@@ -26,6 +26,7 @@ const ContentMain = ({ children }: { children: ReactNode }) => {
       id="content"
       css={css`
         display: flex;
+        flex: 1 0 auto;
         flex-direction: column;
         row-gap: 20px;
         padding: 25px 30px;
