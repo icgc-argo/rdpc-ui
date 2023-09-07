@@ -19,6 +19,7 @@
 import {
   ClinicalRecord,
   ClinicalRegistrationData,
+  Maybe,
 } from "@/__generated__/graphql";
 import { get, union } from "lodash";
 import FileTable from "./FileTable";
@@ -29,7 +30,7 @@ export type FileTableData = ClinicalRegistrationData & {
 };
 
 const recordsToFileTable = (
-  records: ClinicalRecord[],
+  records: Maybe<ClinicalRecord>[],
   newRows: Array<number>,
 ): FileTableData[] =>
   records.map((record) => {
@@ -42,9 +43,11 @@ const recordsToFileTable = (
       {} as any,
     );
 
-    console.log("records", records, "data", data);
-
-    return { ...data, row: record.row, isNew: newRows.includes(record.row) };
+    return {
+      ...data,
+      row: record?.row,
+      isNew: newRows.includes(record?.row || -1),
+    };
   });
 
 const FilePreview = ({
@@ -52,7 +55,7 @@ const FilePreview = ({
 }: {
   registration: ClinicalRegistrationData;
 }) => {
-  const fileRecords = get(registration, "records", []);
+  const fileRecords = get(registration, "records");
 
   const {
     createdAt = "",
@@ -65,7 +68,7 @@ const FilePreview = ({
   } = registration;
 
   const submissionInfo = { createdAt, creator, fileName };
-  const newRows = union(newDonors, newSamples, newSpecimens);
+  const newRows = union(newDonors, newSamples, newSpecimens) as number[];
   const stats = {
     newCount: newRows.length,
     existingCount: alreadyRegisteredCount,
@@ -77,7 +80,13 @@ const FilePreview = ({
     <FileTable
       records={records}
       stats={stats}
-      submissionInfo={submissionInfo}
+      submissionInfo={
+        submissionInfo as {
+          createdAt: string;
+          creator: string;
+          fileName: string;
+        }
+      }
     />
   );
 };
