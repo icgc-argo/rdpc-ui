@@ -16,37 +16,56 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
+"use client";
 
-import { ApolloClient, ApolloLink, InMemoryCache, createHttpLink } from '@apollo/client';
+import { ApolloClient, ApolloLink, InMemoryCache } from "@apollo/client";
+import { createUploadLink } from "apollo-upload-client";
+export { gql } from "@/__generated__/gql";
 
-export { gql } from '@/__generated__/gql';
+const createInMemoryCache = () =>
+  new InMemoryCache({
+    typePolicies: {
+      // define cache IDs. default is item.id
+      Program: {
+        keyFields: ["shortName"],
+      },
+      ClinicalRegistrationData: {
+        keyFields: ["programShortName"],
+      },
+      ClinicalSubmissionData: {
+        keyFields: ["programShortName"],
+      },
+    },
+  });
 
 type Config = {
-	gateway: string;
-	jwt: string;
+  gateway: string;
+  jwt: string;
 };
 export const createApolloClient = (config: Config) => {
-	const httpLink = createHttpLink({
-		uri: config.gateway,
-	});
+  const clientSideCache = createInMemoryCache();
 
-	const jwt = config.jwt;
+  const httpLink = createUploadLink({
+    uri: config.gateway,
+  });
 
-	const authLink = new ApolloLink((operation, forward) => {
-		operation.setContext(({ headers }: { headers: any }) => ({
-			headers: {
-				authorization: `Bearer ${jwt}`,
-				...headers,
-			},
-		}));
-		return forward(operation);
-	});
+  const jwt = config.jwt;
 
-	const additiveLink = ApolloLink.from([authLink, httpLink]);
+  const authLink = new ApolloLink((operation, forward) => {
+    operation.setContext(({ headers }: { headers: any }) => ({
+      headers: {
+        authorization: `Bearer ${jwt}`,
+        ...headers,
+      },
+    }));
+    return forward(operation);
+  });
 
-	return new ApolloClient({
-		link: additiveLink,
-		cache: new InMemoryCache(),
-	});
+  const additiveLink = ApolloLink.from([authLink, httpLink]);
+
+  return new ApolloClient({
+    link: additiveLink,
+    cache: clientSideCache,
+    connectToDevTools: true,
+  });
 };

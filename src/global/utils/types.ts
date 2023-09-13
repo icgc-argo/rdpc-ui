@@ -18,5 +18,8 @@
  */
 
 export function notNull<T>(value: T): value is NonNullable<T> {
-	return value != null;
+  return value != null;
 }
+
+// dev helper type to expand tooltip types
+export type Clean<T> = T extends infer U ? { [K in keyof U]: U[K] } : never;

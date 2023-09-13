@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,14 +17,35 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export const EGO_JWT_KEY = "EGO_JWT";
-export const LOGIN_NONCE = "LOGIN_NONCE";
+import { styled } from "@icgc-argo/uikit";
+import { PropsWithChildren } from "react";
 
-export const BUILD_TIME_VARIABLES = {
-  RUNTIME_CONFIG_URL: process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL || "",
+type FadingDivProps = {
+  enterAnimationLength?: number;
+  exitAnimationLength?: number;
 };
 
-export const CONTACT_PAGE_PATH = "/contact";
-export const SUBMISSION_PATH = `/submission`;
-export const PROGRAM_SHORT_NAME_PATH = `[shortName]`;
-export const PROGRAM_DASHBOARD_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/dashboard`;
+export const FadingDiv = styled("div")<PropsWithChildren<FadingDivProps>>`
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0px;
+  z-index: 9000;
+
+  &.on-enter {
+    opacity: 0.5;
+  }
+  &.on-enter-active {
+    opacity: 1;
+    transition: opacity
+      ${(props: FadingDivProps) => props.enterAnimationLength || 500}ms;
+  }
+  &.on-exit {
+    opacity: 1;
+    transition: opacity
+      ${(props: FadingDivProps) => props.enterAnimationLength || 500}ms;
+  }
+  &.on-exit-active {
+    opacity: 0;
+  }
+`;

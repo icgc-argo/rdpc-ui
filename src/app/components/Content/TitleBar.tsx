@@ -16,15 +16,48 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+"use client";
 
-export const EGO_JWT_KEY = "EGO_JWT";
-export const LOGIN_NONCE = "LOGIN_NONCE";
+import { css, useTheme } from "@/lib/emotion";
+import { TitleBar as TitleBarComp } from "@icgc-argo/uikit";
 
-export const BUILD_TIME_VARIABLES = {
-  RUNTIME_CONFIG_URL: process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL || "",
+const TitleBar = () => {
+  const theme = useTheme();
+  return (
+    <div
+      css={css`
+        display: flex;
+        padding: 0 20px;
+        background-color: ${theme.colors.white};
+      `}
+    >
+      <TitleBarComp
+        css={css`
+          margin-right: 10px;
+        `}
+      >
+        <>All Programs</>
+      </TitleBarComp>
+      <div
+        id="progress-bar"
+        css={css`
+          display: none;
+        `}
+      >
+        future work
+      </div>
+
+      <div
+        css={css`
+          margin-left: auto;
+          display: none;
+        `}
+        id="col-buttons"
+      >
+        future work
+      </div>
+    </div>
+  );
 };
 
-export const CONTACT_PAGE_PATH = "/contact";
-export const SUBMISSION_PATH = `/submission`;
-export const PROGRAM_SHORT_NAME_PATH = `[shortName]`;
-export const PROGRAM_DASHBOARD_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/dashboard`;
+export default TitleBar;

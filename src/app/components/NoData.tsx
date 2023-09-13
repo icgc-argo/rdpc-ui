@@ -17,14 +17,36 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export const EGO_JWT_KEY = "EGO_JWT";
-export const LOGIN_NONCE = "LOGIN_NONCE";
+import { ContentPlaceholder, css, DnaLoader } from "@icgc-argo/uikit";
+import Image from "next/image";
+import beakersImage from "../../../public/assets/beakers.svg";
 
-export const BUILD_TIME_VARIABLES = {
-  RUNTIME_CONFIG_URL: process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL || "",
-};
-
-export const CONTACT_PAGE_PATH = "/contact";
-export const SUBMISSION_PATH = `/submission`;
-export const PROGRAM_SHORT_NAME_PATH = `[shortName]`;
-export const PROGRAM_DASHBOARD_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/dashboard`;
+export default function NoDataMessage(props: { loading: boolean }) {
+  return (
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      `}
+    >
+      {props.loading ? (
+        <DnaLoader />
+      ) : (
+        <ContentPlaceholder
+          title="You do not have any registration data uploaded."
+          subtitle="Follow the instructions above to get started."
+        >
+          <Image
+            alt="Chemistry beakers"
+            src={beakersImage}
+            layout="fixed"
+            width={167}
+            height={151}
+          />
+        </ContentPlaceholder>
+      )}
+    </div>
+  );
+}
