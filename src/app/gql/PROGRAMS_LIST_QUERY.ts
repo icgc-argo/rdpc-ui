@@ -17,14 +17,27 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export const EGO_JWT_KEY = "EGO_JWT";
-export const LOGIN_NONCE = "LOGIN_NONCE";
+import { gql } from "@/__generated__/gql";
 
-export const BUILD_TIME_VARIABLES = {
-  RUNTIME_CONFIG_URL: process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL || "",
-};
+const PROGRAMS_LIST_QUERY = gql(`
+	query ProgramsList {
+		programs {
+			shortName
+			name
+			cancerTypes
+			countries
+			membershipType
+			genomicDonors
+			submittedDonors
+			commitmentDonors
+			users {
+				email
+				firstName
+				lastName
+				role
+			}
+		}
+	}
+`);
 
-export const CONTACT_PAGE_PATH = "/contact";
-export const SUBMISSION_PATH = `/submission`;
-export const PROGRAM_SHORT_NAME_PATH = `[shortName]`;
-export const PROGRAM_DASHBOARD_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/dashboard`;
+export default PROGRAMS_LIST_QUERY;

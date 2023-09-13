@@ -16,63 +16,99 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
+"use client";
 
-import Loader from '@/app/components/Loader';
-import { notNull } from '@/global/utils/types';
-import { css } from '@/lib/emotion';
-import { useQuery } from '@apollo/client';
-import { MenuItem } from '@icgc-argo/uikit';
-import Link from 'next/link';
-import { notFound, usePathname } from 'next/navigation';
-import { MouseEventHandler, useState } from 'react';
-import SIDEMENU_PROGRAMS from '../gql/SIDEMENU_PROGRAMS';
+import Loader from "@/app/components/Loader";
+import SIDEMENU_PROGRAMS from "@/app/gql/SIDEMENU_PROGRAMS";
+import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
+import { notNull } from "@/global/utils/types";
+import { css } from "@/lib/emotion";
+import { useQuery } from "@apollo/client";
+import { MenuItem } from "@icgc-argo/uikit";
+import Link from "next/link";
+import { notFound, usePathname } from "next/navigation";
+import { MouseEventHandler, useState } from "react";
+
+const StatusMenuItem = () => {
+  const { isDisabled: isSubmissionSystemDisabled } =
+    useSubmissionSystemStatus();
+  return (
+    <div
+      css={css`
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        align-items: center;
+        padding-right: 15px;
+      `}
+    >
+      Register Samples
+      {/* {isSubmissionSystemDisabled ? (
+        <Icon name="lock" fill="accent3_dark" width="15px" />
+      ) : clinicalRegistrationHasError ? (
+        <Icon name="exclamation" fill="error" width="15px" />
+      ) : clinicalRegistrationInProgress ? (
+        <Icon name="ellipses" fill="warning" width="15px" />
+      ) : null} */}
+    </div>
+  );
+};
 
 export default function ProgramMenu({ searchQuery }: { searchQuery: string }) {
-	const { data, loading, error } = useQuery(SIDEMENU_PROGRAMS);
-	const [activeProgramIndex, setActiveProgramIndex] = useState(-1);
+  const { data, loading, error } = useQuery(SIDEMENU_PROGRAMS, {
+    variables: {
+      shortName: "cia-ca",
+    },
+  });
 
-	const pathname = usePathname();
+  const [activeProgramIndex, setActiveProgramIndex] = useState(-1);
 
-	const programs = data?.programs?.filter(notNull) || [];
-	const filteredPrograms = !searchQuery.length
-		? programs
-		: programs.filter(({ shortName }) => shortName.search(new RegExp(searchQuery, 'i')) > -1);
+  const pathname = usePathname();
 
-	const setActiveProgram =
-		(index: number): MouseEventHandler =>
-		() =>
-			setActiveProgramIndex(index);
+  const programs = data?.programs?.filter(notNull) || [];
+  const filteredPrograms = !searchQuery.length
+    ? programs
+    : programs.filter(
+        ({ shortName }) => shortName.search(new RegExp(searchQuery, "i")) > -1,
+      );
 
-	if (loading) return <Loader />;
-	if (error) notFound();
-	return (
-		<>
-			<Link
-				href="/submission"
-				css={css`
-					text-decoration: none !important;
-				`}
-			>
-				<MenuItem
-					level={2}
-					content="All Programs"
-					onClick={setActiveProgram(-1)}
-					selected={pathname === '/submission'}
-				/>
-			</Link>
+  const setActiveProgram =
+    (index: number): MouseEventHandler =>
+    () =>
+      setActiveProgramIndex(index);
 
-			{filteredPrograms.map(({ shortName }, programIndex) => (
-				<MenuItem
-					level={2}
-					key={shortName}
-					content={shortName}
-					onClick={setActiveProgram(programIndex)}
-					selected={programIndex === activeProgramIndex}
-				>
-					<MenuItem level={3}>{shortName}</MenuItem>
-				</MenuItem>
-			))}
-		</>
-	);
+  if (loading) return <Loader />;
+  if (error) notFound();
+  return (
+    <>
+      <Link
+        href="/submission"
+        css={css`
+          text-decoration: none !important;
+        `}
+      >
+        <MenuItem
+          level={2}
+          content="All Programs"
+          onClick={setActiveProgram(-1)}
+          selected={pathname === "/submission"}
+        />
+      </Link>
+
+      {filteredPrograms.map(({ shortName }, programIndex) => (
+        <MenuItem
+          level={2}
+          key={shortName}
+          content={shortName}
+          onClick={setActiveProgram(programIndex)}
+          selected={programIndex === activeProgramIndex}
+        >
+          <MenuItem level={3}>{shortName}</MenuItem>
+          <Link href={`/submission/program/${shortName}/registration`}>
+            <MenuItem level={3} content={<StatusMenuItem />} />
+          </Link>
+        </MenuItem>
+      ))}
+    </>
+  );
 }

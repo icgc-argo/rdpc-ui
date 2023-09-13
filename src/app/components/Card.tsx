@@ -16,15 +16,52 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import { css } from "@/lib/emotion";
+import { Typography } from "@icgc-argo/uikit";
+import { FC, ReactNode } from "react";
 
-export const EGO_JWT_KEY = "EGO_JWT";
-export const LOGIN_NONCE = "LOGIN_NONCE";
-
-export const BUILD_TIME_VARIABLES = {
-  RUNTIME_CONFIG_URL: process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL || "",
+type CardProps = {
+  title?: string;
+  action?: ReactNode;
+  fill?: boolean;
+  children: ReactNode;
 };
+const Card: FC<CardProps> = ({ title, action, fill = false, children }) => (
+  <div
+    css={css`
+      ${fill &&
+      css`
+        flex: 1 0 auto;
+      `}
+      padding: 9px;
+    `}
+  >
+    {(title || action) && (
+      <div
+        css={css`
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 2px;
+        `}
+      >
+        <Typography
+          css={css`
+            margin: 0 0 8px 0;
+          `}
+          color="primary"
+          variant="subtitle2"
+          component="h2"
+        >
+          {title}
+        </Typography>
+        {action}
+      </div>
+    )}
 
-export const CONTACT_PAGE_PATH = "/contact";
-export const SUBMISSION_PATH = `/submission`;
-export const PROGRAM_SHORT_NAME_PATH = `[shortName]`;
-export const PROGRAM_DASHBOARD_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/dashboard`;
+    {children}
+  </div>
+);
+
+export default Card;

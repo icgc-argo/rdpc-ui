@@ -16,48 +16,55 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
 
-import { css, useTheme } from '@/lib/emotion';
-import { TitleBar as TitleBarComp } from '@icgc-argo/uikit';
+import { gql } from "@apollo/client";
 
-const TitleBar = () => {
-	const theme = useTheme();
-	return (
-		<div
-			css={css`
-				display: flex;
-				padding: 0 20px;
-				background-color: ${theme.colors.white};
-			`}
-		>
-			<TitleBarComp
-				css={css`
-					margin-right: 10px;
-				`}
-			>
-				<>All Programs</>
-			</TitleBarComp>
-			<div
-				id="progress-bar"
-				css={css`
-					display: none;
-				`}
-			>
-				future work
-			</div>
+const REGISTRATION_FRAGMENT = gql`
+  fragment Registration on ClinicalRegistrationData {
+    id
+    programShortName
+    creator
+    fileName
+    createdAt
+    records {
+      row
+      fields {
+        name
+        value
+      }
+    }
+    errors {
+      type
+      message
+      row
+      field
+      value
+      sampleId
+      donorId
+      specimenId
+    }
+    fileErrors {
+      message
+      fileNames
+      code
+    }
+    newDonors {
+      count
+      rows
+    }
+    newSpecimens {
+      count
+      rows
+    }
+    newSamples {
+      count
+      rows
+    }
+    alreadyRegistered {
+      count
+      rows
+    }
+  }
+`;
 
-			<div
-				css={css`
-					margin-left: auto;
-					display: none;
-				`}
-				id="col-buttons"
-			>
-				future work
-			</div>
-		</div>
-	);
-};
-
-export default TitleBar;
+export default REGISTRATION_FRAGMENT;
