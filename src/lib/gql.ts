@@ -20,7 +20,6 @@
 
 import { ApolloClient, ApolloLink, InMemoryCache } from "@apollo/client";
 import { createUploadLink } from "apollo-upload-client";
-import { useMemo } from "react";
 export { gql } from "@/__generated__/gql";
 
 const createInMemoryCache = () =>
@@ -44,7 +43,7 @@ type Config = {
   jwt: string;
 };
 export const createApolloClient = (config: Config) => {
-  const clientSideCache = useMemo(() => createInMemoryCache(), []);
+  const clientSideCache = createInMemoryCache();
 
   const httpLink = createUploadLink({
     uri: config.gateway,

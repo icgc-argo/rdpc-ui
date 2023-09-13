@@ -18,7 +18,7 @@
  */
 import { orderBy, uniq } from "lodash";
 
-export const sleep = (time: number = 2000) =>
+export const sleep = (time = 2000) =>
   new Promise<void>((resolve) => {
     setTimeout(() => {
       resolve();

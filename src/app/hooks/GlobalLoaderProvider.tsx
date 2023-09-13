@@ -96,6 +96,7 @@ const GlobalLoaderView = ({
 
 const GlobalLoadingContext = createContext({
   isGlobalLoading: GLOBAL_LOADING_DEFAULT,
+  // eslint-disable-next-line
   setGlobalLoading: (isGlobalLoading: IsGlobalLoading) => {},
 });
 

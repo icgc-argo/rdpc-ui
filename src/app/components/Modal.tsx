@@ -46,7 +46,7 @@ const useMounted = () => {
   return mounted;
 };
 
-const ModalPortal = ({ children }: PropsWithChildren<{}>) => {
+const ModalPortal = ({ children }: PropsWithChildren) => {
   const ref = modalPortalRef.current;
   const mounted = useMounted();
   return ref

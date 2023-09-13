@@ -93,7 +93,7 @@ export const useToastState = () => {
 };
 type Toaster = ReturnType<typeof useToastState>;
 
-// @ts-ignore It's ok ts, we will make sure there's always a context
+// @ts-expect-error  (ported directly from platform-ui) It's ok ts, we will make sure there's always a context
 export const ToasterContext = createContext<Toaster>();
 export const useToaster = () => useContext<Toaster>(ToasterContext);
 

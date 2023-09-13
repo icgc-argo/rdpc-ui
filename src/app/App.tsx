@@ -48,6 +48,7 @@ const PortalParent = forwardRef<HTMLDivElement>((_, ref) => (
     `}
   />
 ));
+PortalParent.displayName = "PortalParent";
 
 const ModalPortalParent = () => <PortalParent ref={modalPortalRef} />;
 const GlobalLoaderParent = () => <PortalParent ref={loaderPortalRef} />;
