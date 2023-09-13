@@ -25,7 +25,7 @@ export const sleep = (time: number = 2000) =>
     }, time);
   });
 
-export const exportToTsv = <Data extends { [k: string]: string | number }>(
+export const exportToTsv = <Data extends { [k: string]: any }>(
   data: Array<Data>,
   options: {
     exclude?: Array<keyof Data>;

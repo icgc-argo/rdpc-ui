@@ -20,7 +20,7 @@
 import { displayDateAndTime, formatFileName } from "@/global/utils/clinical";
 import { css, styled, useTheme } from "@/lib/emotion";
 import { Icon, Outline, ThemeColorNames, Typography } from "@icgc-argo/uikit";
-import { ComponentType, HtmlHTMLAttributes, ReactNode } from "react";
+import { ComponentType, FC, HtmlHTMLAttributes, ReactNode } from "react";
 import { Col, Row } from "react-grid-system";
 
 export const CellContentCenter = styled("div")`
@@ -37,21 +37,16 @@ export const DataTableStarIcon = (props: {
   outline?: Outline;
 }) => <Icon name="star" width="16px" height="16px" {...props} />;
 
+type StatAreaContainer = FC<{ className?: string; children?: ReactNode }>;
 export const StatArea: {
-  Container: ComponentType<{ className?: string; children?: ReactNode }>;
+  Container: StatAreaContainer;
   Section: ComponentType<
-    HtmlHTMLAttributes<HTMLDivElement> & {
-      faded?: boolean;
-      children?: ReactNode;
-    }
+    HtmlHTMLAttributes<HTMLDivElement> & { faded?: boolean }
   >;
   StatEntryContainer: ComponentType<HtmlHTMLAttributes<HTMLDivElement>>;
   StarIcon: typeof DataTableStarIcon;
 } = (() => {
-  const Container: ComponentType<{
-    className?: string;
-    children: ReactNode;
-  }> = ({ children, className }) => (
+  const Container: StatAreaContainer = ({ children, className }) => (
     <Typography
       variant="data"
       component="div"

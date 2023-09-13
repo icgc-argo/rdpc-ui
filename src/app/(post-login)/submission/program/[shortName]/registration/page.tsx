@@ -32,6 +32,7 @@ import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import { useToaster } from "@/app/hooks/ToastProvider";
 import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
+import { notNull } from "@/global/utils";
 import { css } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
 import {
@@ -55,7 +56,6 @@ export default function Register({
 }: {
   params: { shortName: string };
 }) {
-  // get data
   const {
     data,
     refetch,
@@ -103,7 +103,7 @@ export default function Register({
     clinicalRegistration && clinicalRegistration.records.length
   );
   const hasErrors = !!schemaOrValidationErrors.length;
-  const registrationId = get(clinicalRegistration, "id", "");
+  const registrationId = get(clinicalRegistration, "id", "") || "";
 
   // handlers
   const [uploadFile, { loading: isUploading }] = useMutation(
@@ -200,8 +200,16 @@ export default function Register({
             handleRegister={handleRegister}
             flags={instructionFlags}
           />
-          {fileErrors.map((fileError, index) => (
-            <FileError {...{ fileError, index, onClose: onFileErrorClose }} />
+          {fileErrors.filter(notNull).map((fileError, index) => (
+            <FileError
+              fileError={{
+                message: fileError.message,
+                fileNames: fileError.fileNames.filter(notNull),
+              }}
+              index={index}
+              onClose={onFileErrorClose}
+              key={index}
+            />
           ))}
           {clinicalRegistration?.records.length ? (
             <Card

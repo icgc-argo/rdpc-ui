@@ -16,7 +16,7 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { css, useTheme } from "@/lib/emotion";
+import { css } from "@/lib/emotion";
 import {
   Notification,
   NotificationInteraction,
@@ -38,7 +38,6 @@ type FileErrorProps = {
   }) => void;
 };
 const FileError: FC<FileErrorProps> = ({ fileError, index, onClose }) => {
-  const theme = useTheme();
   return (
     <div
       className="error"
@@ -55,7 +54,7 @@ const FileError: FC<FileErrorProps> = ({ fileError, index, onClose }) => {
         variant="ERROR"
         interactionType="CLOSE"
         title={`File failed to upload: ${fileError?.fileNames.join(", ")}`}
-        content={fileError?.message}
+        content={fileError.message}
         onInteraction={onClose(index)}
       />
     </div>

@@ -37,7 +37,7 @@ import ThemeProvider from "./components/ThemeProvider";
 const queryClient = new QueryClient();
 
 // div to render portals into
-const PortalParent = forwardRef((_, ref) => (
+const PortalParent = forwardRef<HTMLDivElement>((_, ref) => (
   <div
     ref={ref}
     css={css`

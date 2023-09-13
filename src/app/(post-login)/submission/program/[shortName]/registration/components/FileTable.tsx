@@ -28,7 +28,7 @@ import { toDisplayRowIndex } from "@/global/utils/clinical";
 import { ColumnDef, Icon, Table, css } from "@icgc-argo/uikit";
 import memoize from "lodash/memoize";
 import { ComponentProps, FC, createRef } from "react";
-import { FileTableData } from "../page";
+import { FileTableData } from "./FilePreview";
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: "row",

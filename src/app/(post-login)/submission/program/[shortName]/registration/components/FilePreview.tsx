@@ -19,6 +19,7 @@
 import {
   ClinicalRecord,
   ClinicalRegistrationData,
+  GetRegistrationQuery,
   Maybe,
 } from "@/__generated__/graphql";
 import { get, union } from "lodash";
@@ -53,7 +54,7 @@ const recordsToFileTable = (
 const FilePreview = ({
   registration,
 }: {
-  registration: ClinicalRegistrationData;
+  registration: GetRegistrationQuery["clinicalRegistration"];
 }) => {
   const fileRecords = get(registration, "records");
 

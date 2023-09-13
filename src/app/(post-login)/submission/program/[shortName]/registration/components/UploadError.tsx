@@ -17,9 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ClinicalRegistrationError } from "@/__generated__/graphql";
+import {
+  ClinicalRegistrationError,
+  GetRegistrationQuery,
+} from "@/__generated__/graphql";
 import TableHeader from "@/app/(post-login)/submission/program-table/Header";
-import { exportToTsv, toDisplayError } from "@/global/utils";
+import { exportToTsv, notNull, toDisplayError } from "@/global/utils";
 import { css, useTheme } from "@/lib/emotion";
 import {
   Button,
@@ -33,18 +36,24 @@ import {
 import union from "lodash/union";
 import { ComponentProps, FC, ReactNode, createRef } from "react";
 
-const getDefaultColumns = (
-  variantText: string,
-): ColumnDef<{
+type UploadColumn = {
   type: string;
   row: number;
   field: string;
   value: string;
   message: string;
-  sampleId: string;
+  sampleId?: string | null;
   donorId: string;
-  specimenId: string;
-}>[] => {
+  specimenId?: string | null;
+};
+
+type Cols = Array<
+  ColumnDef<UploadColumn> & {
+    accessorKey: keyof ClinicalRegistrationError;
+  }
+>;
+
+const getDefaultColumns = (variantText: string): Cols => {
   return [
     {
       accessorKey: "row",
@@ -74,32 +83,36 @@ const getDefaultColumns = (
 };
 
 type DownloadHandlerProps = {
-  errors: ClinicalRegistrationError[];
-  excludeCols: string[];
+  errors: ClinicalDataErrors;
+  excludeCols: Array<keyof ClinicalRegistrationError>;
   level: string;
-  columnConfig: any;
+  columnConfig: Cols;
 };
 const createDownloadHandler =
   ({ errors, excludeCols, columnConfig, level }: DownloadHandlerProps) =>
-  () =>
-    exportToTsv(errors, {
+  () => {
+    const filteredErrors = errors.filter(notNull);
+    return exportToTsv(filteredErrors, {
       exclude: union(excludeCols, ["__typename"]),
-      order: columnConfig.map((entry) => entry.accessor),
+      order: columnConfig.map((entry) => entry.accessorKey),
       fileName: `${level}_report.tsv`,
-      headerDisplays: columnConfig.reduce<{}>(
-        (acc, { accessor, Header }) => ({
+      headerDisplays: columnConfig.reduce(
+        (acc, { accessorKey, header }) => ({
           ...acc,
-          [accessor]: Header as string,
+          [accessorKey]: header,
         }),
         {},
       ),
     });
+  };
 
+type ClinicalDataErrors =
+  GetRegistrationQuery["clinicalRegistration"]["errors"];
 type UploadErrorProps = {
   level: NotificationVariant;
   title: string;
   subtitle: ReactNode;
-  errors: Array<ClinicalRegistrationError>;
+  errors: ClinicalDataErrors;
   onClearClick?: ComponentProps<typeof Button>["onClick"];
   tsvExcludeCols?: Array<keyof Error>;
 };
@@ -112,7 +125,10 @@ const UploadError: FC<UploadErrorProps> = ({
 }) => {
   const theme = useTheme();
 
-  const formattedErrors = errors.map(toDisplayError);
+  const formattedErrors = errors.filter(notNull).map((error) => {
+    if (!notNull(error.sampleId)) error.sampleId = "";
+    return toDisplayError(error);
+  });
 
   const variantText =
     level === NOTIFICATION_VARIANTS.ERROR ? "Error" : "Warning";
@@ -201,15 +217,7 @@ const UploadError: FC<UploadErrorProps> = ({
           >
             <div>{subtitle}</div>
             <Table
-              parentRef={containerRef}
               columns={columnConfig}
-              // columns={columnConfig.map((col) => ({
-              //   ...col,
-              //   style: {
-              //     whiteSpace: "pre-line",
-              //     ...(col.style || {}),
-              //   },
-              // }))}
               data={formattedErrors}
               withPagination
               showPageSizeOptions
