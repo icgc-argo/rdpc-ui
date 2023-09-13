@@ -75,7 +75,9 @@ export const getAppConfig = (serverEnv: any): AppConfig => {
 		EGO_LOGIN_URL,
 		DACO_ROOT: serverEnv.DACO_ROOT || process.env.DACO_ROOT || 'https://daco.icgc-argo.org/',
 		GATEWAY_API_ROOT:
-			serverEnv.NEXT_PUBLIC_GATEWAY_API_ROOT || process.env.NEXT_PUBLIC_GATEWAY_API_ROOT,
+			serverEnv.NEXT_PUBLIC_GATEWAY_API_ROOT ||
+			process.env.NEXT_PUBLIC_GATEWAY_API_ROOT ||
+			'https://argo-gateway.dev.argo.cancercollaboratory.org',
 	};
 
 	return config;
