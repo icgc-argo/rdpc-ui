@@ -18,6 +18,7 @@
  */
 "use client";
 
+import Instructions from "@/app/(post-login)/submission/program/[shortName]/registration/components/Instructions";
 import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
 import CLINICAL_SUBMISSION_QUERY from "@/app/gql/CLINICAL_SUBMISSION_QUERY";
