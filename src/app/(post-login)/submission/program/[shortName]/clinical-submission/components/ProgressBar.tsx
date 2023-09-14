@@ -18,44 +18,86 @@
  */
 "use client";
 
+import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import { Progress, ProgressStatus } from "@icgc-argo/uikit";
 import { FC } from "react";
 
 type ProgressBarProps = {
-  isSubmissionSystemDisabled: boolean;
-  hasClinicalRegistration: boolean;
-  hasErrors: boolean;
+  clinicalSubmissions: any;
 };
 
-const ProgressBar: FC<ProgressBarProps> = ({
-  isSubmissionSystemDisabled,
-  hasClinicalRegistration,
-  hasErrors,
-}) => {
+const ProgressBar: FC<ProgressBarProps> = ({ clinicalSubmissions }) => {
+  const { isDisabled: isSubmissionSystemDisabled } =
+    useSubmissionSystemStatus();
+
+  const allDataErrors = clinicalSubmissions.clinicalEntities.reduce<
+    Array<
+      ClinicalSubmissionError & {
+        fileName: string;
+      }
+    >
+  >(
+    (acc, entity) => [
+      ...acc,
+      ...entity.dataErrors.map((err) => ({
+        ...err,
+        fileName: entity.batchName,
+      })),
+    ],
+    [],
+  );
+
+  const hasDataError = !!allDataErrors.length;
+  const hasSchemaError =
+    !!clinicalSubmissions.clinicalEntities.length &&
+    clinicalSubmissions.clinicalEntities.some(
+      ({ schemaErrors }) => !!schemaErrors.length,
+    );
+  const hasSomeEntity = clinicalSubmissions.clinicalEntities.some(
+    ({ records }) => !!records.length,
+  );
+  const hasSchemaErrorsAfterMigration =
+    clinicalSubmissions.state === "INVALID_BY_MIGRATION";
+  const isReadyForValidation =
+    hasSomeEntity && !hasSchemaError && !hasSchemaErrorsAfterMigration;
+  const isReadyForSignoff =
+    isReadyForValidation && clinicalSubmissions.state === "VALID";
+  const isPendingApproval = clinicalSubmissions.state === "PENDING_APPROVAL";
+
   const progressStates: {
     upload: ProgressStatus;
-    register: ProgressStatus;
+    validate: ProgressStatus;
+    signOff: ProgressStatus;
   } = {
     upload: isSubmissionSystemDisabled
       ? "locked"
-      : hasClinicalRegistration
+      : isReadyForValidation
       ? "success"
-      : hasErrors
+      : hasSchemaError || hasSchemaErrorsAfterMigration
       ? "error"
       : "disabled",
-    register: isSubmissionSystemDisabled
+    validate: isSubmissionSystemDisabled
       ? "locked"
-      : hasClinicalRegistration
+      : isReadyForSignoff || isPendingApproval
+      ? "success"
+      : isReadyForValidation
+      ? hasDataError
+        ? "error"
+        : "pending"
+      : "disabled",
+    signOff: isSubmissionSystemDisabled
+      ? "locked"
+      : isReadyForSignoff
       ? "pending"
-      : hasErrors
-      ? "disabled"
+      : isPendingApproval
+      ? "success"
       : "disabled",
   };
   return (
     <Progress>
       <Progress.Item state={progressStates.upload} text="Upload" />
-      <Progress.Item state={progressStates.register} text="Validate" />
-      <Progress.Item state={progressStates.register} text="Sign Off" />
+      <Progress.Item state={progressStates.validate} text="Validate" />
+      <Progress.Item state={progressStates.signOff} text="Sign Off" />
     </Progress>
   );
 };
