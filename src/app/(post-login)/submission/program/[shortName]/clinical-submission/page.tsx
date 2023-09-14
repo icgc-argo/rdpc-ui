@@ -18,13 +18,13 @@
  */
 "use client";
 
-import Instructions from "@/app/(post-login)/submission/program/[shortName]/registration/components/Instructions";
+import ProgressBar from "@/app/(post-login)/submission/program/[shortName]/registration/components/ProgressBar";
 import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
-import ProgressBar from "@/app/components/Content/ProgressBar";
 import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import { css } from "@/lib/emotion";
 import urlJoin from "url-join";
+import Instructions from "./components/Instructions";
 
 const ClinicalSubmission = ({
   params: { shortName },

@@ -19,10 +19,10 @@
 "use client";
 
 import Instructions from "@/app/(post-login)/submission/program/[shortName]/registration/components/Instructions";
+import ProgressBar from "@/app/(post-login)/submission/program/[shortName]/registration/components/ProgressBar";
 import Card from "@/app/components/Card";
 import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
-import ProgressBar from "@/app/components/Content/ProgressBar";
 import NoDataMessage from "@/app/components/NoData";
 import CLEAR_CLINICAL_REGISTRATION_MUTATION from "@/app/gql/CLEAR_CLINICAL_REGISTRATION_MUTATION";
 import CLINICAL_SCHEMA_VERSION_QUERY from "@/app/gql/CLINICAL_SCHEMA_VERSION_QUERY";
