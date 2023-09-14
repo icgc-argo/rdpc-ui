@@ -18,7 +18,6 @@
  */
 "use client";
 
-import ProgressBar from "@/app/(post-login)/submission/program/[shortName]/registration/components/ProgressBar";
 import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
 import CLINICAL_SUBMISSION_QUERY from "@/app/gql/CLINICAL_SUBMISSION_QUERY";
