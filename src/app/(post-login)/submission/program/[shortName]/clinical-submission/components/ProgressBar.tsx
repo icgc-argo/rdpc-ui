@@ -20,6 +20,7 @@
 
 import { ClinicalSubmissionData } from "@/__generated__/graphql";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
+import { notNull } from "@/global/utils";
 import { Progress, ProgressStatus } from "@icgc-argo/uikit";
 import { FC } from "react";
 
@@ -28,39 +29,25 @@ type ProgressBarProps = {
 };
 
 const ProgressBar: FC<ProgressBarProps> = ({ clinicalSubmissions }) => {
+  if (clinicalSubmissions === undefined) {
+    return null;
+  }
+
   const { isDisabled: isSubmissionSystemDisabled } =
     useSubmissionSystemStatus();
 
-  const state = clinicalSubmissions.state;
+  const state = clinicalSubmissions.state ? clinicalSubmissions.state : null;
   const clinicalEntities =
-    clinicalSubmissions.clinicalEntities === null
-      ? []
-      : clinicalSubmissions.clinicalEntities;
+    clinicalSubmissions.clinicalEntities?.filter(notNull) || [];
 
-  const allDataErrors = clinicalEntities.reduce<
-    Array<
-      ClinicalSubmissionError & {
-        fileName: string;
-      }
-    >
-  >(
-    (acc, entity) => [
-      ...acc,
-      ...entity.dataErrors.map((err) => ({
-        ...err,
-        fileName: entity.batchName,
-      })),
-    ],
-    [],
+  const hasDataError = clinicalEntities.some(
+    (entity) => entity.dataErrors?.length,
   );
+  const hasSchemaError = clinicalEntities.some(
+    ({ schemaErrors }) => schemaErrors.length,
+  );
+  const hasSomeEntity = clinicalEntities.some(({ records }) => records.length);
 
-  const hasDataError = !!allDataErrors.length;
-  const hasSchemaError =
-    !!clinicalEntities.length &&
-    clinicalEntities.some(({ schemaErrors }) => !!schemaErrors.length);
-  const hasSomeEntity = clinicalEntities.some(
-    ({ records }) => !!records.length,
-  );
   const hasSchemaErrorsAfterMigration = state === "INVALID_BY_MIGRATION";
   const isReadyForValidation =
     hasSomeEntity && !hasSchemaError && !hasSchemaErrorsAfterMigration;
