@@ -18,10 +18,10 @@
  */
 "use client";
 
+import Instructions from "@/app/(post-login)/submission/program/[shortName]/registration/components/Instructions";
 import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
 import ProgressBar from "@/app/components/Content/ProgressBar";
-import Instructions from "@/app/components/page/submission/program/registration/Instructions";
 import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import { css } from "@/lib/emotion";
 import urlJoin from "url-join";
