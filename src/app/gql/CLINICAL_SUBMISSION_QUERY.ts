@@ -17,16 +17,70 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from "@apollo/client";
-import CLINICAL_SUBMISSION_FRAGMENT from "./CLINICAL_SUBMISSION_FRAGMENT";
+import { gql } from "@/__generated__/gql";
 
-const CLINICAL_SUBMISSION_QUERY = gql`
-  ${CLINICAL_SUBMISSION_FRAGMENT}
-  query ClinicalSubmission($programShortName: String!) {
-    clinicalSubmissions(programShortName: $programShortName) {
-      ...ClinicalSubmissionFragment
+const CLINICAL_SUBMISSION_QUERY = gql(`
+  query ClinicalSubmission($shortName: String!) {
+    clinicalSubmissions(programShortName: $shortName) {
+      programShortName
+      state
+      version
+      updatedAt
+      updatedBy
+      clinicalEntities {
+        clinicalType
+        batchName
+        creator
+        createdAt
+        stats {
+          noUpdate
+          new
+          updated
+          errorsFound
+        }
+        records {
+          row
+          fields {
+            name
+            value
+          }
+        }
+        dataUpdates {
+          row
+          field
+          newValue
+          oldValue
+          donorId
+        }
+        dataWarnings {
+          message
+          row
+          field
+          value
+          donorId
+        }
+        dataErrors {
+          message
+          row
+          field
+          value
+          donorId
+        }
+        schemaErrors {
+          message
+          row
+          field
+          value
+          donorId
+        }
+      }
+      fileErrors {
+        message
+        fileNames
+        code
+      }
     }
   }
-`;
+`);
 
 export default CLINICAL_SUBMISSION_QUERY;

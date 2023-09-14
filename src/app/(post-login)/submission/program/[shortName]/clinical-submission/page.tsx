@@ -20,8 +20,10 @@
 
 import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
+import CLINICAL_SUBMISSION_QUERY from "@/app/gql/CLINICAL_SUBMISSION_QUERY";
 import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import { css } from "@/lib/emotion";
+import { useQuery } from "@apollo/client";
 import urlJoin from "url-join";
 import Instructions from "./components/Instructions";
 import ProgressBar from "./components/ProgressBar";
@@ -38,6 +40,14 @@ const ClinicalSubmission = ({
     "/docs/submission/submitting-clinical-data",
   );
 
+  const { data } = useQuery(CLINICAL_SUBMISSION_QUERY, {
+    variables: {
+      shortName,
+    },
+  });
+
+  console.log("gql query", data);
+
   return (
     <>
       <div
@@ -50,7 +60,7 @@ const ClinicalSubmission = ({
           breadcrumb={[shortName, "Submit Clinical Data"]}
           helpUrl={helpUrl}
         >
-          <ProgressBar />
+          <ProgressBar clinicalSubmissions={data} />
         </ContentHeader>
         <ContentMain>
           <Instructions />

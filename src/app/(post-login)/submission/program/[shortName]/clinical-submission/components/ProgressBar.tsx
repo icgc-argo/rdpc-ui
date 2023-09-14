@@ -18,19 +18,26 @@
  */
 "use client";
 
+import { ClinicalSubmissionData } from "@/__generated__/graphql";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import { Progress, ProgressStatus } from "@icgc-argo/uikit";
 import { FC } from "react";
 
 type ProgressBarProps = {
-  clinicalSubmissions: any;
+  clinicalSubmissions: ClinicalSubmissionData;
 };
 
 const ProgressBar: FC<ProgressBarProps> = ({ clinicalSubmissions }) => {
   const { isDisabled: isSubmissionSystemDisabled } =
     useSubmissionSystemStatus();
 
-  const allDataErrors = clinicalSubmissions.clinicalEntities.reduce<
+  const state = clinicalSubmissions.state;
+  const clinicalEntities =
+    clinicalSubmissions.clinicalEntities === null
+      ? []
+      : clinicalSubmissions.clinicalEntities;
+
+  const allDataErrors = clinicalEntities.reduce<
     Array<
       ClinicalSubmissionError & {
         fileName: string;
@@ -49,20 +56,16 @@ const ProgressBar: FC<ProgressBarProps> = ({ clinicalSubmissions }) => {
 
   const hasDataError = !!allDataErrors.length;
   const hasSchemaError =
-    !!clinicalSubmissions.clinicalEntities.length &&
-    clinicalSubmissions.clinicalEntities.some(
-      ({ schemaErrors }) => !!schemaErrors.length,
-    );
-  const hasSomeEntity = clinicalSubmissions.clinicalEntities.some(
+    !!clinicalEntities.length &&
+    clinicalEntities.some(({ schemaErrors }) => !!schemaErrors.length);
+  const hasSomeEntity = clinicalEntities.some(
     ({ records }) => !!records.length,
   );
-  const hasSchemaErrorsAfterMigration =
-    clinicalSubmissions.state === "INVALID_BY_MIGRATION";
+  const hasSchemaErrorsAfterMigration = state === "INVALID_BY_MIGRATION";
   const isReadyForValidation =
     hasSomeEntity && !hasSchemaError && !hasSchemaErrorsAfterMigration;
-  const isReadyForSignoff =
-    isReadyForValidation && clinicalSubmissions.state === "VALID";
-  const isPendingApproval = clinicalSubmissions.state === "PENDING_APPROVAL";
+  const isReadyForSignoff = isReadyForValidation && state === "VALID";
+  const isPendingApproval = state === "PENDING_APPROVAL";
 
   const progressStates: {
     upload: ProgressStatus;
