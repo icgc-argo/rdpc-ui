@@ -18,46 +18,46 @@
  */
 "use client";
 
-import ContentHeader from "@/app/components/Content/ContentHeader";
-import ContentMain from "@/app/components/Content/ContentMain";
-import { useAppConfigContext } from "@/app/hooks/AppProvider";
-import { css } from "@/lib/emotion";
-import urlJoin from "url-join";
-import Instructions from "./components/Instructions";
-import ProgressBar from "./components/ProgressBar";
+import { Progress, ProgressStatus } from "@icgc-argo/uikit";
+import { FC } from "react";
 
-const ClinicalSubmission = ({
-  params: { shortName },
-}: {
-  params: { shortName: string };
+type ProgressBarProps = {
+  isSubmissionSystemDisabled: boolean;
+  hasClinicalRegistration: boolean;
+  hasErrors: boolean;
+};
+
+const ProgressBar: FC<ProgressBarProps> = ({
+  isSubmissionSystemDisabled,
+  hasClinicalRegistration,
+  hasErrors,
 }) => {
-  // docs url
-  const { DOCS_URL_ROOT } = useAppConfigContext();
-  const helpUrl = urlJoin(
-    DOCS_URL_ROOT,
-    "/docs/submission/submitting-clinical-data",
-  );
-
+  const progressStates: {
+    upload: ProgressStatus;
+    register: ProgressStatus;
+  } = {
+    upload: isSubmissionSystemDisabled
+      ? "locked"
+      : hasClinicalRegistration
+      ? "success"
+      : hasErrors
+      ? "error"
+      : "disabled",
+    register: isSubmissionSystemDisabled
+      ? "locked"
+      : hasClinicalRegistration
+      ? "pending"
+      : hasErrors
+      ? "disabled"
+      : "disabled",
+  };
   return (
-    <>
-      <div
-        css={css`
-          display: flex;
-          flex-direction: column;
-        `}
-      >
-        <ContentHeader
-          breadcrumb={[shortName, "Submit Clinical Data"]}
-          helpUrl={helpUrl}
-        >
-          <ProgressBar />
-        </ContentHeader>
-        <ContentMain>
-          <Instructions />
-        </ContentMain>
-      </div>
-    </>
+    <Progress>
+      <Progress.Item state={progressStates.upload} text="Upload" />
+      <Progress.Item state={progressStates.register} text="Validate" />
+      <Progress.Item state={progressStates.register} text="Sign Off" />
+    </Progress>
   );
 };
 
-export default ClinicalSubmission;
+export default ProgressBar;
