@@ -18,41 +18,47 @@
  */
 "use client";
 
-import { ClinicalSubmissionData } from "@/__generated__/graphql";
+import { ClinicalSubmissionQuery } from "@/__generated__/graphql";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
-import { notNull } from "@/global/utils";
 import { Progress, ProgressStatus } from "@icgc-argo/uikit";
+import { isEmpty } from "lodash";
 import { FC } from "react";
 
 type ProgressBarProps = {
-  clinicalSubmissions: ClinicalSubmissionData;
+  clinicalEntities:
+    | ClinicalSubmissionQuery["clinicalSubmissions"]["clinicalEntities"]
+    | undefined;
+  clinicalState:
+    | ClinicalSubmissionQuery["clinicalSubmissions"]["state"]
+    | undefined;
 };
 
-const ProgressBar: FC<ProgressBarProps> = ({ clinicalSubmissions }) => {
-  if (clinicalSubmissions === undefined) {
+const ProgressBar: FC<ProgressBarProps> = ({
+  clinicalEntities,
+  clinicalState,
+}) => {
+  const { isDisabled: isSubmissionSystemDisabled } =
+    useSubmissionSystemStatus();
+  if (!clinicalState || !clinicalEntities || isEmpty(clinicalEntities)) {
     return null;
   }
 
-  const { isDisabled: isSubmissionSystemDisabled } =
-    useSubmissionSystemStatus();
-
-  const state = clinicalSubmissions.state ? clinicalSubmissions.state : null;
-  const clinicalEntities =
-    clinicalSubmissions.clinicalEntities?.filter(notNull) || [];
-
   const hasDataError = clinicalEntities.some(
-    (entity) => entity.dataErrors?.length,
+    (entity) => entity?.dataErrors?.length,
   );
   const hasSchemaError = clinicalEntities.some(
-    ({ schemaErrors }) => schemaErrors.length,
+    (entity) => entity?.schemaErrors.length,
   );
-  const hasSomeEntity = clinicalEntities.some(({ records }) => records.length);
+  const hasSomeEntity = clinicalEntities.some(
+    (entity) => entity?.records.length,
+  );
 
-  const hasSchemaErrorsAfterMigration = state === "INVALID_BY_MIGRATION";
+  const hasSchemaErrorsAfterMigration =
+    clinicalState === "INVALID_BY_MIGRATION";
   const isReadyForValidation =
     hasSomeEntity && !hasSchemaError && !hasSchemaErrorsAfterMigration;
-  const isReadyForSignoff = isReadyForValidation && state === "VALID";
-  const isPendingApproval = state === "PENDING_APPROVAL";
+  const isReadyForSignoff = isReadyForValidation && clinicalState === "VALID";
+  const isPendingApproval = clinicalState === "PENDING_APPROVAL";
 
   const progressStates: {
     upload: ProgressStatus;
