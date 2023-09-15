@@ -125,6 +125,18 @@ const ClinicalSubmission = ({
             <SubmissionSummaryTable
               clinicalEntities={data.clinicalSubmissions.clinicalEntities}
             />
+
+            <FilesNavigator
+              submissionState={data.clinicalSubmissions.state}
+              clearDataError={handleClearSchemaError}
+              fileStates={fileNavigatorFiles}
+              selectedClinicalEntityType={
+                selectedClinicalEntityType || tabFromData
+              }
+              onFileSelect={setSelectedClinicalEntityType}
+              submissionVersion={data.clinicalSubmissions.version}
+              programShortName={programShortName}
+            />
           </ContentMain>
         </div>
       </>
