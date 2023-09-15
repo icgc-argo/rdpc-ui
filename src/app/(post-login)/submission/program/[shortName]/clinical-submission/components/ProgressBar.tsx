@@ -23,9 +23,7 @@ import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus
 import { Progress, ProgressStatus } from "@icgc-argo/uikit";
 import { isEmpty } from "lodash";
 import { FC } from "react";
-
-type ClinicalEntities =
-  ClinicalSubmissionQuery["clinicalSubmissions"]["clinicalEntities"];
+import { ClinicalEntities } from "../types";
 
 type ProgressBarProps = {
   clinicalEntities: ClinicalEntities | undefined;
