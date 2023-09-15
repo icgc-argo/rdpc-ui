@@ -25,6 +25,7 @@ import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import { notNull } from "@/global/utils";
 import { css } from "@/lib/emotion";
 import { useQuery } from "@apollo/client";
+import { Button } from "@icgc-argo/uikit";
 import urlJoin from "url-join";
 import Instructions from "./components/Instructions";
 import ProgressBar from "./components/ProgressBar";
@@ -57,10 +58,12 @@ const ClinicalSubmission = ({
   const isReadyForValidation = true;
   const hasDataError = false;
   const isValidated = true;
+  const submissionVersion = "111";
 
   const handleSubmissionFilesUpload = () => null;
   const handleSubmissionValidation = () => null;
   const handleSignOff = () => null;
+  const handleSubmissionClear = () => null;
 
   return (
     <>
@@ -74,10 +77,28 @@ const ClinicalSubmission = ({
           breadcrumb={[shortName, "Submit Clinical Data"]}
           helpUrl={helpUrl}
         >
-          <ProgressBar
-            clinicalEntities={data?.clinicalSubmissions.clinicalEntities}
-            clinicalState={data?.clinicalSubmissions.state}
-          />
+          <div
+            css={css`
+              flex: 1;
+              display: flex;
+              justify-content: space-between;
+            `}
+          >
+            <ProgressBar
+              clinicalEntities={data?.clinicalSubmissions.clinicalEntities}
+              clinicalState={data?.clinicalSubmissions.state}
+            />
+            <Button
+              variant="text"
+              css={css`
+                margin-right: 10px;
+              `}
+              disabled={isSubmissionSystemDisabled || !submissionVersion}
+              onClick={handleSubmissionClear}
+            >
+              Clear submission
+            </Button>
+          </div>
         </ContentHeader>
         <ContentMain>
           <Instructions
