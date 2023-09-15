@@ -20,7 +20,6 @@
 
 import { ClinicalSubmissionQuery } from "@/__generated__/graphql";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
-import { notNull } from "@/global/utils";
 import { Progress, ProgressStatus } from "@icgc-argo/uikit";
 import { isEmpty } from "lodash";
 import { FC } from "react";
