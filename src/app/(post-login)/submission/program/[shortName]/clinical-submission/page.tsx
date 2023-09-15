@@ -29,6 +29,7 @@ import { Button } from "@icgc-argo/uikit";
 import urlJoin from "url-join";
 import Instructions from "./components/Instructions";
 import ProgressBar from "./components/ProgressBar";
+import SubmissionSummaryTable from "./components/SummaryTable";
 
 const ClinicalSubmission = ({
   params: { shortName },
@@ -65,63 +66,70 @@ const ClinicalSubmission = ({
   const handleSignOff = () => null;
   const handleSubmissionClear = () => null;
 
-  return (
-    <>
-      <div
-        css={css`
-          display: flex;
-          flex-direction: column;
-        `}
-      >
-        <ContentHeader
-          breadcrumb={[shortName, "Submit Clinical Data"]}
-          helpUrl={helpUrl}
+  if (data?.clinicalSubmissions === undefined) {
+    return <div> no data</div>;
+  } else {
+    return (
+      <>
+        <div
+          css={css`
+            display: flex;
+            flex-direction: column;
+          `}
         >
-          <div
-            css={css`
-              flex: 1;
-              display: flex;
-              justify-content: space-between;
-            `}
+          <ContentHeader
+            breadcrumb={[shortName, "Submit Clinical Data"]}
+            helpUrl={helpUrl}
           >
-            <ProgressBar
-              clinicalEntities={data?.clinicalSubmissions.clinicalEntities}
-              clinicalState={data?.clinicalSubmissions.state}
-            />
-            <Button
-              variant="text"
+            <div
               css={css`
-                margin-right: 10px;
+                flex: 1;
+                display: flex;
+                justify-content: space-between;
               `}
-              disabled={isSubmissionSystemDisabled || !submissionVersion}
-              onClick={handleSubmissionClear}
             >
-              Clear submission
-            </Button>
-          </div>
-        </ContentHeader>
-        <ContentMain>
-          <Instructions
-            uploadEnabled={!isSubmissionSystemDisabled}
-            signOffEnabled={!isSubmissionSystemDisabled && isReadyForSignoff}
-            validationEnabled={
-              !isSubmissionSystemDisabled &&
-              isReadyForValidation &&
-              !hasDataError &&
-              !isValidated
-            }
-            onUploadFileSelect={handleSubmissionFilesUpload}
-            onValidateClick={handleSubmissionValidation}
-            onSignOffClick={handleSignOff}
-            // clinicalTypes={data.clinicalSubmissions.clinicalEntities.map(
-            //   ({ clinicalType }) => clinicalType,
-            // )}
-            clinicalTypes={["a", "b"]}
-          />
-        </ContentMain>
-      </div>
-    </>
-  );
+              <ProgressBar
+                clinicalEntities={data?.clinicalSubmissions.clinicalEntities}
+                clinicalState={data?.clinicalSubmissions.state}
+              />
+              <Button
+                variant="text"
+                css={css`
+                  margin-right: 10px;
+                `}
+                disabled={isSubmissionSystemDisabled || !submissionVersion}
+                onClick={handleSubmissionClear}
+              >
+                Clear submission
+              </Button>
+            </div>
+          </ContentHeader>
+          <ContentMain>
+            <Instructions
+              uploadEnabled={!isSubmissionSystemDisabled}
+              signOffEnabled={!isSubmissionSystemDisabled && isReadyForSignoff}
+              validationEnabled={
+                !isSubmissionSystemDisabled &&
+                isReadyForValidation &&
+                !hasDataError &&
+                !isValidated
+              }
+              onUploadFileSelect={handleSubmissionFilesUpload}
+              onValidateClick={handleSubmissionValidation}
+              onSignOffClick={handleSignOff}
+              // clinicalTypes={data.clinicalSubmissions.clinicalEntities.map(
+              //   ({ clinicalType }) => clinicalType,
+              // )}
+              clinicalTypes={["a", "b"]}
+            />
+            <SubmissionSummaryTable
+              clinicalEntities={data.clinicalSubmissions.clinicalEntities}
+            />
+          </ContentMain>
+        </div>
+      </>
+    );
+  }
 };
 
 export default ClinicalSubmission;
