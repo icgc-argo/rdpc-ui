@@ -24,34 +24,46 @@ import { Progress, ProgressStatus } from "@icgc-argo/uikit";
 import { isEmpty } from "lodash";
 import { FC } from "react";
 
+type ClinicalEntities =
+  ClinicalSubmissionQuery["clinicalSubmissions"]["clinicalEntities"];
+
 type ProgressBarProps = {
-  clinicalEntities:
-    | ClinicalSubmissionQuery["clinicalSubmissions"]["clinicalEntities"]
-    | undefined;
+  clinicalEntities: ClinicalEntities | undefined;
   clinicalState:
     | ClinicalSubmissionQuery["clinicalSubmissions"]["state"]
     | undefined;
+};
+
+const checkEntities = (
+  clinicalEntities: ProgressBarProps["clinicalEntities"],
+) => {
+  if (!clinicalEntities || isEmpty(clinicalEntities)) {
+    return { hasDataError: false, hasSchemaError: false, hasSomeEntity: false };
+  } else {
+    const hasDataError = clinicalEntities.some(
+      (entity) => entity?.dataErrors?.length,
+    );
+    const hasSchemaError = clinicalEntities.some(
+      (entity) => entity?.schemaErrors.length,
+    );
+    const hasSomeEntity = clinicalEntities.some(
+      (entity) => entity?.records.length,
+    );
+
+    return { hasDataError, hasSchemaError, hasSomeEntity };
+  }
 };
 
 const ProgressBar: FC<ProgressBarProps> = ({
   clinicalEntities,
   clinicalState,
 }) => {
+  console.log("s", clinicalState, "e", clinicalEntities);
   const { isDisabled: isSubmissionSystemDisabled } =
     useSubmissionSystemStatus();
-  if (!clinicalState || !clinicalEntities || isEmpty(clinicalEntities)) {
-    return null;
-  }
 
-  const hasDataError = clinicalEntities.some(
-    (entity) => entity?.dataErrors?.length,
-  );
-  const hasSchemaError = clinicalEntities.some(
-    (entity) => entity?.schemaErrors.length,
-  );
-  const hasSomeEntity = clinicalEntities.some(
-    (entity) => entity?.records.length,
-  );
+  const { hasDataError, hasSchemaError, hasSomeEntity } =
+    checkEntities(clinicalEntities);
 
   const hasSchemaErrorsAfterMigration =
     clinicalState === "INVALID_BY_MIGRATION";
