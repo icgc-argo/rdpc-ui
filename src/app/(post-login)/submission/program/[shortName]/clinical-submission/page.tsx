@@ -52,6 +52,16 @@ const ClinicalSubmission = ({
 
   console.log("gql query", data);
 
+  const isSubmissionSystemDisabled = false;
+  const isReadyForSignoff = false;
+  const isReadyForValidation = true;
+  const hasDataError = false;
+  const isValidated = true;
+
+  const handleSubmissionFilesUpload = () => null;
+  const handleSubmissionValidation = () => null;
+  const handleSignOff = () => null;
+
   return (
     <>
       <div
@@ -70,7 +80,23 @@ const ClinicalSubmission = ({
           />
         </ContentHeader>
         <ContentMain>
-          <Instructions />
+          <Instructions
+            uploadEnabled={!isSubmissionSystemDisabled}
+            signOffEnabled={!isSubmissionSystemDisabled && isReadyForSignoff}
+            validationEnabled={
+              !isSubmissionSystemDisabled &&
+              isReadyForValidation &&
+              !hasDataError &&
+              !isValidated
+            }
+            onUploadFileSelect={handleSubmissionFilesUpload}
+            onValidateClick={handleSubmissionValidation}
+            onSignOffClick={handleSignOff}
+            // clinicalTypes={data.clinicalSubmissions.clinicalEntities.map(
+            //   ({ clinicalType }) => clinicalType,
+            // )}
+            clinicalTypes={["a", "b"]}
+          />
         </ContentMain>
       </div>
     </>
