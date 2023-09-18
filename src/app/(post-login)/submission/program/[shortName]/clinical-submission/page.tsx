@@ -67,10 +67,10 @@ const ClinicalSubmission = ({
   const isValidated = true;
   const submissionVersion = "111";
   // Instruction box handlers
-  const handleSubmissionFilesUpload = () => null;
-  const handleSubmissionValidation = () => null;
-  const handleSignOff = () => null;
-  const handleSubmissionClear = () => null;
+  const handleSubmissionFilesUpload = () => new Promise(() => true);
+  const handleSubmissionValidation = () => new Promise(() => true);
+  const handleSignOff = () => new Promise(() => true);
+  const handleSubmissionClear = () => new Promise(() => true);
 
   // FileNavigator
   // FileNavigator state
@@ -78,7 +78,7 @@ const ClinicalSubmission = ({
   const selectedClinicalEntityType = null;
   const [tabFromData, setTabFromData] = useState("donor");
   // FileNavigator handlers
-  const handleClearSchemaError = () => null;
+  const handleClearSchemaError = () => new Promise(() => true);
   const setSelectedClinicalEntityType = () => null;
 
   if (data?.clinicalSubmissions === undefined) {

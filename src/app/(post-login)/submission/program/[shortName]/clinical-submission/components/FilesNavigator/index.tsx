@@ -26,11 +26,11 @@ import { Col } from "react-grid-system";
 import {
   ClinicalEntities,
   ClinicalSubmission,
+  ClinicalSubmissionEntity,
   ClinicalSubmissionState,
 } from "../../types";
 import FilePreview from "./FilePreview";
 import VerticalTabsSection from "./Tabs";
-import { onErrorClearClick } from "./handlers";
 import { ErrorBox, NoContentPlaceholder } from "./ui";
 
 const FilesNavigator = ({
@@ -44,7 +44,7 @@ const FilesNavigator = ({
 }: {
   submissionState: ClinicalSubmissionState;
   fileStates: ClinicalEntities;
-  clearDataError: (file: ClinicalSubmissionEntityFile) => Promise<any>;
+  clearDataError: (file: ClinicalSubmissionEntity) => Promise<any>;
   selectedClinicalEntityType: string;
   onFileSelect: (clinicalEntityType: string) => void;
   submissionVersion: ClinicalSubmission["version"];
@@ -70,6 +70,34 @@ const FilesNavigator = ({
 
   const schemaErrors = selectedFile?.schemaErrors;
 
+  const clearSubmission = async (fileType: string) => {
+    try {
+      await clearClinicalEntitySubmission({
+        variables: {
+          programShortName: programShortName || "",
+          submissionVersion: submissionVersion || "",
+          fileType,
+        },
+      });
+      toaster.addToast({
+        variant: "SUCCESS",
+        interactionType: "CLOSE",
+        title: "Cleared",
+        content: `Uploaded ${fileType.toUpperCase()} file has been cleared.`,
+      });
+    } catch (err) {
+      //await refetchClinicalSubmission();
+      commonToaster.unknownErrorWithReloadMessage();
+    }
+  };
+
+  const setSelectedClinicalEntityType = () =>
+    console.log(
+      "set selected clinical entity type. large param sync state function that doesn't work in new nextjs",
+    );
+
+  const onErrorClearClick = () => console.log("on error clear click");
+
   // display
   return (
     <div
@@ -82,17 +110,21 @@ const FilesNavigator = ({
       <VerticalTabsSection
         fileStates={fileStates}
         selectedFile={selectedFile}
+        onFileSelect={setSelectedClinicalEntityType}
       />
 
       <Col style={{ position: "relative", overflow: "hidden" }}>
         {schemaErrors?.length ? (
           <ErrorBox
-            errors={schemaErrors}
-            displayName={"schema.name"}
-            onErrorClearClick={onErrorClearClick}
+          // errors={schemaErrors}
+          // displayName={"schema.name"}
+          // onErrorClearClick={onErrorClearClick}
           />
         ) : selectedFile?.records.length ? (
-          <FilePreview file={selectedFile} submissionState={submissionState} />
+          <FilePreview
+            file={selectedFile}
+            {...{ clearSubmission, submissionState }}
+          />
         ) : (
           <NoContentPlaceholder />
         )}

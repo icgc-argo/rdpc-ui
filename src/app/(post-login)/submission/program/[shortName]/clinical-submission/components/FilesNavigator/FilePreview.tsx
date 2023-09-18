@@ -1,16 +1,38 @@
+/*
+ * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ *
+ * This program and the accompanying materials are made available under the terms of
+ * the GNU Affero General Public License v3.0. You should have received a copy of the
+ * GNU Affero General Public License along with this program.
+ *  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import { css } from "@/lib/emotion";
 import { Button, Typography } from "@icgc-argo/uikit";
-import { FC } from "react";
+import { FC, SyntheticEvent } from "react";
 import { ClinicalSubmissionEntity, ClinicalSubmissionState } from "../../types";
-import FileRecordTable from "./FileRecordTable";
-import { onClearClick } from "./handlers";
 
 type FilePreivewProps = {
   file: ClinicalSubmissionEntity;
   submissionState: ClinicalSubmissionState;
+  clearSubmission: (fileType: string) => void;
 };
-const FilePreview: FC<FilePreivewProps> = ({ file, submissionState }) => {
+const FilePreview: FC<FilePreivewProps> = ({
+  file,
+  submissionState,
+  clearSubmission,
+}) => {
   const { isDisabled: isSubmissionSystemDisabled } =
     useSubmissionSystemStatus();
 
@@ -22,7 +44,14 @@ const FilePreview: FC<FilePreivewProps> = ({ file, submissionState }) => {
     "PENDING_APPROVAL",
   ].includes(`${submissionState}`);
 
-  const { displayName, clinicalType, fileName, creator, createdAt } = file;
+  const { displayName, clinicalType, fileName, creator = "", createdAt } = file;
+
+  const onClearClick =
+    (clinicalType: string) =>
+    async (e: SyntheticEvent<HTMLButtonElement, Event>) => {
+      const fileType = clinicalType;
+      await clearSubmission(fileType);
+    };
 
   return (
     <>
@@ -56,6 +85,9 @@ const FilePreview: FC<FilePreivewProps> = ({ file, submissionState }) => {
           </Button>
         )}
       </div>
+      {/* 
+      has to be converted into new Table api
+      
       <FileRecordTable
         isSubmissionValidated={isSubmissionValidated}
         isPendingApproval={isPendingApproval}
@@ -65,7 +97,7 @@ const FilePreview: FC<FilePreivewProps> = ({ file, submissionState }) => {
           creator,
           createdAt,
         }}
-      />
+      /> */}
     </>
   );
 };

@@ -23,14 +23,7 @@ import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus
 import { Progress, ProgressStatus } from "@icgc-argo/uikit";
 import { isEmpty } from "lodash";
 import { FC } from "react";
-import { ClinicalEntities } from "../types";
-
-type ProgressBarProps = {
-  clinicalEntities: ClinicalEntities | undefined;
-  clinicalState:
-    | ClinicalSubmissionQuery["clinicalSubmissions"]["state"]
-    | undefined;
-};
+import { ClinicalSubmission } from "../types";
 
 const checkEntities = (
   clinicalEntities: ProgressBarProps["clinicalEntities"],
@@ -50,6 +43,13 @@ const checkEntities = (
 
     return { hasDataError, hasSchemaError, hasSomeEntity };
   }
+};
+
+type ProgressBarProps = {
+  clinicalEntities: ClinicalSubmission["clinicalEntities"] | undefined;
+  clinicalState:
+    | ClinicalSubmissionQuery["clinicalSubmissions"]["state"]
+    | undefined;
 };
 
 const ProgressBar: FC<ProgressBarProps> = ({

@@ -21,7 +21,7 @@ import { StatArea } from "@/app/components/Table/common";
 import { ColumnDef, css, Table, ThemeColorNames } from "@icgc-argo/uikit";
 import { startCase } from "lodash";
 import { createRef } from "react";
-import { ClinicalEntities } from "../types";
+import { ClinicalEntities, ClinicalSubmission } from "../types";
 
 export const FILE_STATE_COLORS: {
   [k: string]: keyof ThemeColorNames;
@@ -105,7 +105,7 @@ const getColumns = (clinicalEntities: ClinicalEntities) => {
 const SubmissionSummaryTable = ({
   clinicalEntities,
 }: {
-  clinicalEntities: ClinicalEntities;
+  clinicalEntities: ClinicalSubmission["clinicalEntities"];
 }) => {
   const containerRef = createRef<HTMLDivElement>();
   return (
@@ -116,24 +116,24 @@ const SubmissionSummaryTable = ({
       ref={containerRef}
     >
       <Table
-        //variant="STATIC"
-        // getTdProps={(_, row, column) => {
-        //   const isUpdateRow = row.index === 1;
-        //   const isFirstColumn = column.id === FIRST_COLUMN_ACCESSOR;
-        //   return {
-        //     style: {
-        //       background:
-        //         row.original[column.id] > 0 || isFirstColumn
-        //           ? isUpdateRow
-        //             ? theme.colors.accent3_3
-        //             : theme.colors.accent2_4
-        //           : null,
-        //     } as CSSProperties,
-        //   };
-        // }}
-        columns={getColumns(clinicalEntities)}
-        data={getData(clinicalEntities)}
-        //resizable
+      //variant="STATIC"
+      // getTdProps={(_, row, column) => {
+      //   const isUpdateRow = row.index === 1;
+      //   const isFirstColumn = column.id === FIRST_COLUMN_ACCESSOR;
+      //   return {
+      //     style: {
+      //       background:
+      //         row.original[column.id] > 0 || isFirstColumn
+      //           ? isUpdateRow
+      //             ? theme.colors.accent3_3
+      //             : theme.colors.accent2_4
+      //           : null,
+      //     } as CSSProperties,
+      //   };
+      // }}
+      // columns={getColumns(clinicalEntities)}
+      //data={getData(clinicalEntities)}
+      //resizable
       />
     </div>
   );
