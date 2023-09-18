@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,20 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Icon, Table, useTheme } from "@icgc-argo/uikit";
-import get from "lodash/get";
-import orderBy from "lodash/orderBy";
-import pluralize from "pluralize";
-import { ComponentProps, createRef, CSSProperties, useMemo } from "react";
-
 import {
   CellContentCenter,
   DataTableStarIcon,
   StatArea as StatAreaDisplay,
   SubmissionInfoArea,
   TableInfoHeaderContainer,
-} from "../../common";
-import { ClinicalSubmissionEntityFile } from "../types";
+} from "@/app/components/Table/common";
+import { css } from "@/lib/emotion";
+import { Icon, Table, useTheme } from "@icgc-argo/uikit";
+import get from "lodash/get";
+import pluralize from "pluralize";
+import { CSSProperties, ComponentProps, createRef } from "react";
 
 const StarIcon = DataTableStarIcon;
 
@@ -118,36 +116,39 @@ const FileRecordTable = ({
 }) => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   // const { egoJwt, permissions } = useAuthContext();
-  const isDiffPreview = useMemo(
-    () =>
-      (isDccMember(permissions) ||
-        isDataSubmitter({ permissions, programId: programShortName })) &&
-      isPendingApproval,
-    [egoJwt, isPendingApproval],
-  );
+  // const isDiffPreview = useMemo(
+  //   () =>
+  //     (isDccMember(permissions) ||
+  //       isDataSubmitter({ permissions, programId: programShortName })) &&
+  //     isPendingApproval,
+  //   [egoJwt, isPendingApproval],
+  // );
+
   const theme = useTheme();
   const { records, stats, dataWarnings } = file;
   const fields: ClinicalSubmissionEntityFile["records"][0]["fields"] =
     records.length ? records[0].fields : [];
-  const sortedRecords = orderBy(
-    records,
-    !(isDccMember(permissions) && isPendingApproval)
-      ? REQUIRED_FILE_ENTRY_FIELDS.ROW
-      : (r) => {
-          const priority = (() => {
-            switch (true) {
-              case file.stats.updated.some((i) => i === r.row):
-                return 0;
-              case file.stats.new.some((i) => i === r.row):
-                return 1;
-              default:
-                return records.length;
-            }
-          })();
-          return `${priority}::${r.row}`;
-        },
-  );
+  // const sortedRecords = orderBy(
+  //   records,
+  //   !(isDccMember(permissions) && isPendingApproval)
+  //     ? REQUIRED_FILE_ENTRY_FIELDS.ROW
+  //     : (r) => {
+  //         const priority = (() => {
+  //           switch (true) {
+  //             case file.stats.updated.some((i) => i === r.row):
+  //               return 0;
+  //             case file.stats.new.some((i) => i === r.row):
+  //               return 1;
+  //             default:
+  //               return records.length;
+  //           }
+  //         })();
+  //         return `${priority}::${r.row}`;
+  //       },
+  // );
+  const sortedRecords = records;
   const containerRef = createRef<HTMLDivElement>();
+  const isDiffPreview = false;
 
   const tableData = sortedRecords.map((record) =>
     record.fields.reduce(
@@ -220,6 +221,7 @@ const FileRecordTable = ({
       )
     );
   };
+
   const DataFieldCell = ({
     original,
     fieldName,

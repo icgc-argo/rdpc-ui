@@ -17,18 +17,21 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import CLEAR_CLINICAL_SUBMISSION from "@/app/gql/CLEAR_CLINICAL_SUBMISSION";
 import { useToaster } from "@/app/hooks/ToastProvider";
 import useCommonToasters from "@/app/hooks/useCommonToasters";
-import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
+import { css } from "@/lib/emotion";
 import { useMutation } from "@apollo/client";
-import { ContentPlaceholder, css } from "@icgc-argo/uikit";
+import { Col } from "react-grid-system";
 import {
   ClinicalEntities,
   ClinicalSubmission,
   ClinicalSubmissionState,
 } from "../../types";
-
-import CLEAR_CLINICAL_SUBMISSION from "@/app/gql/CLEAR_CLINICAL_SUBMISSION";
+import FilePreview from "./FilePreview";
+import VerticalTabsSection from "./Tabs";
+import { onErrorClearClick } from "./handlers";
+import { ErrorBox, NoContentPlaceholder } from "./ui";
 
 const FilesNavigator = ({
   fileStates,
@@ -47,6 +50,7 @@ const FilesNavigator = ({
   submissionVersion: ClinicalSubmission["version"];
   programShortName: ClinicalSubmission["programShortName"];
 }) => {
+  console.log("file navigaotr file staes", fileStates);
   // toasts
   const commonToaster = useCommonToasters();
   const toaster = useToaster();
@@ -63,92 +67,38 @@ const FilesNavigator = ({
   const selectedFile = fileStates.find(
     (file) => file && file.clinicalType === selectedClinicalEntityType,
   );
-  const isPendingApproval = submissionState === "PENDING_APPROVAL";
-  const { isDisabled: isSubmissionSystemDisabled } =
-    useSubmissionSystemStatus();
-  const shouldShowError = !!selectedFile && !!selectedFile.schemaErrors.length;
-  const isSubmissionValidated = [
-    "INVALID",
-    "VALID",
-    "PENDING_APPROVAL",
-  ].includes(`${submissionState}`);
+
+  const schemaErrors = selectedFile?.schemaErrors;
 
   // display
   return (
-    <ContentPlaceholder
+    <div
       css={css`
+        position: relative;
         width: 100%;
+        display: flex;
       `}
-    />
+    >
+      <VerticalTabsSection
+        fileStates={fileStates}
+        selectedFile={selectedFile}
+      />
+
+      <Col style={{ position: "relative", overflow: "hidden" }}>
+        {schemaErrors?.length ? (
+          <ErrorBox
+            errors={schemaErrors}
+            displayName={"schema.name"}
+            onErrorClearClick={onErrorClearClick}
+          />
+        ) : selectedFile?.records.length ? (
+          <FilePreview file={selectedFile} submissionState={submissionState} />
+        ) : (
+          <NoContentPlaceholder />
+        )}
+      </Col>
+    </div>
   );
 };
-
-//   ) : (
-//     <div
-//       css={css`
-//         position: relative;
-//         width: 100%;
-//         display: flex;
-//       `}
-//     >
-//       <VerticalTabsSection filesStates={fileStates} />
-
-//       <Col style={{ position: "relative", overflow: "hidden" }}>
-//         {shouldShowError ? (
-//           <Error
-//             errors={schema.errors}
-//             displayName={schema.name}
-//             onErrorClearClick={onErrorClearClick}
-//           />
-//         ) : !!selectedFile.records.length ? (
-//           <>
-//             <div
-//               css={css`
-//                 padding: 8px;
-//                 display: flex;
-//                 justify-content: space-between;
-//                 align-items: center;
-//               `}
-//             >
-//               <Typography
-//                 variant="subtitle2"
-//                 color="primary"
-//                 as="h2"
-//                 css={css`
-//                   margin: 0px;
-//                   margin-left: 10px;
-//                 `}
-//               >
-//                 {selectedFile.displayName} File Preview
-//               </Typography>
-//               {!isPendingApproval && (
-//                 <Button
-//                   variant="text"
-//                   size="sm"
-//                   onClick={onClearClick(selectedFile.clinicalType)}
-//                   disabled={isSubmissionSystemDisabled}
-//                 >
-//                   clear
-//                 </Button>
-//               )}
-//             </div>
-//             <FileRecordTable
-//               isSubmissionValidated={isSubmissionValidated}
-//               isPendingApproval={isPendingApproval}
-//               file={selectedFile}
-//               submissionData={{
-//                 fileName: selectedFile.fileName,
-//                 creator: selectedFile.creator,
-//                 createdAt: selectedFile.createdAt,
-//               }}
-//             />
-//           </>
-//         ) : (
-//           <NoContentPlaceholder />
-//         )}
-//       </Col>
-//     </div>
-//   );
-// };
 
 export default FilesNavigator;

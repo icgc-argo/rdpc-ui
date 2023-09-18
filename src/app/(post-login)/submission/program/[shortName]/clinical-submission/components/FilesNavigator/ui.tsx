@@ -1,3 +1,7 @@
+import { toDisplayError } from "@/global/utils";
+import { css } from "@/lib/emotion";
+import { ContentPlaceholder, NOTIFICATION_VARIANTS } from "@icgc-argo/uikit";
+
 export const NoContentPlaceholder = () => (
   <div
     css={css`
@@ -14,7 +18,7 @@ export const NoContentPlaceholder = () => (
   </div>
 );
 
-export const Error = ({ onErrorClearClick, errors, displayName }) => (
+export const ErrorBox = ({ onErrorClearClick, errors, displayName }) => (
   <div
     id="error-submit-clinical-data"
     css={css`
@@ -33,50 +37,5 @@ export const Error = ({ onErrorClearClick, errors, displayName }) => (
       }
       columnConfig={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
     />
-  </div>
-);
-
-export const VerticalTabsSection = (fileStates) => (
-  <div
-    css={css`
-      width: 170px;
-      max-width: 170px;
-      min-width: 170px;
-      overflow: visible;
-    `}
-  >
-    <VerticalTabs
-      css={css`
-        height: 100%;
-      `}
-    >
-      {fileStates.filter(notNull).map((fileState) => (
-        <VerticalTabs.Item
-          key={fileState.clinicalType}
-          active={selectedFile.clinicalType === fileState.clinicalType}
-          onClick={onFileClick(fileState.clinicalType)}
-        >
-          <div
-            css={css`
-              text-align: left;
-            `}
-          >
-            {fileState.displayName}
-          </div>
-          {!!fileState.recordsCount &&
-            fileState.status !== "NONE" &&
-            fileState.status !== "ERROR" && (
-              <VerticalTabs.Tag variant={fileState.status}>
-                {fileState.recordsCount}
-              </VerticalTabs.Tag>
-            )}
-          {fileState.status === "ERROR" && (
-            <VerticalTabs.Tag variant="ERROR">
-              <Icon name="exclamation" fill="#fff" height="10px" width="10px" />
-            </VerticalTabs.Tag>
-          )}
-        </VerticalTabs.Item>
-      ))}
-    </VerticalTabs>
   </div>
 );

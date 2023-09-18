@@ -56,7 +56,6 @@ const ProgressBar: FC<ProgressBarProps> = ({
   clinicalEntities,
   clinicalState,
 }) => {
-  console.log("s", clinicalState, "e", clinicalEntities);
   const { isDisabled: isSubmissionSystemDisabled } =
     useSubmissionSystemStatus();
 

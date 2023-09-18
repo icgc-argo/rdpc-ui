@@ -26,11 +26,13 @@ import { notNull } from "@/global/utils";
 import { css } from "@/lib/emotion";
 import { useQuery } from "@apollo/client";
 import { Button } from "@icgc-argo/uikit";
+import { useState } from "react";
 import urlJoin from "url-join";
 import FilesNavigator from "./components/FilesNavigator";
 import Instructions from "./components/Instructions";
 import ProgressBar from "./components/ProgressBar";
 import SubmissionSummaryTable from "./components/SummaryTable";
+import { getFileNavigatorFiles } from "./data";
 
 const ClinicalSubmission = ({
   params: { shortName },
@@ -45,7 +47,7 @@ const ClinicalSubmission = ({
   );
 
   // page data query
-  const { data } = useQuery(CLINICAL_SUBMISSION_QUERY, {
+  const { data, loading: isLoading } = useQuery(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       shortName,
     },
@@ -72,9 +74,9 @@ const ClinicalSubmission = ({
 
   // FileNavigator
   // FileNavigator state
-  const fileNavigatorFiles = [];
+  const fileNavigatorFiles = data ? getFileNavigatorFiles(data) : [];
   const selectedClinicalEntityType = null;
-  const tabFromData = null;
+  const [tabFromData, setTabFromData] = useState("donor");
   // FileNavigator handlers
   const handleClearSchemaError = () => null;
   const setSelectedClinicalEntityType = () => null;
@@ -82,7 +84,9 @@ const ClinicalSubmission = ({
   if (data?.clinicalSubmissions === undefined) {
     return <div> no data</div>;
   } else {
-    return (
+    return isLoading ? (
+      <div> loading ... </div>
+    ) : (
       <>
         <div
           css={css`
