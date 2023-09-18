@@ -16,10 +16,27 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import { ClinicalSubmissionQuery } from "@/__generated__/graphql";
 
-export function notNull<T>(value: T): value is NonNullable<T> {
-  return value != null && value != undefined;
-}
+export type ClinicalSubmission = ClinicalSubmissionQuery["clinicalSubmissions"];
 
-// dev helper type to expand tooltip types
-export type Clean<T> = T extends infer U ? { [K in keyof U]: U[K] } : never;
+export type ClinicalSubmissionState =
+  ClinicalSubmissionQuery["clinicalSubmissions"]["state"];
+
+type Status = "UPDATE" | "SUCCESS" | "ERROR" | "SUCCESS" | "WARNING" | "NONE";
+
+// sometimes we use GQL data types other times we use the converted local types, they will conflict
+// because gqlClinicalEntityToClinicalSubmissionEntityFile diverts from the gql object
+export type ClinicalSubmissionEntity =
+  ClinicalSubmissionQuery["clinicalSubmissions"]["clinicalEntities"][0] & {
+    fileName: string;
+    batchName?: string;
+    displayName: string;
+    recordsCount?: number;
+    status: Status;
+    createdAt: string;
+    creator: string;
+  };
+
+export type ClinicalEntities = Array<ClinicalSubmissionEntity>;
+export type ClinicalEntityRecord = ClinicalSubmissionEntity;

@@ -25,9 +25,14 @@ import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import { notNull } from "@/global/utils";
 import { css } from "@/lib/emotion";
 import { useQuery } from "@apollo/client";
+import { Button } from "@icgc-argo/uikit";
+import { useState } from "react";
 import urlJoin from "url-join";
+import FilesNavigator from "./components/FilesNavigator";
 import Instructions from "./components/Instructions";
 import ProgressBar from "./components/ProgressBar";
+import SubmissionSummaryTable from "./components/SummaryTable";
+import { getFileNavigatorFiles } from "./data";
 
 const ClinicalSubmission = ({
   params: { shortName },
@@ -41,7 +46,8 @@ const ClinicalSubmission = ({
     "/docs/submission/submitting-clinical-data",
   );
 
-  const { data } = useQuery(CLINICAL_SUBMISSION_QUERY, {
+  // page data query
+  const { data, loading: isLoading } = useQuery(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       shortName,
     },
@@ -50,31 +56,107 @@ const ClinicalSubmission = ({
   const clinicalEntities =
     data?.clinicalSubmissions.clinicalEntities?.filter(notNull) || [];
 
-  console.log("gql query", data);
+  // Instruction box
+  // Instruction box state
+  const isSubmissionSystemDisabled = false;
+  const isReadyForSignoff = false;
+  const isReadyForValidation = true;
+  const hasDataError = false;
+  const isValidated = true;
+  const submissionVersion = "111";
+  // Instruction box handlers
+  const handleSubmissionFilesUpload = () => new Promise(() => true);
+  const handleSubmissionValidation = () => new Promise(() => true);
+  const handleSignOff = () => new Promise(() => true);
+  const handleSubmissionClear = () => new Promise(() => true);
 
-  return (
-    <>
-      <div
-        css={css`
-          display: flex;
-          flex-direction: column;
-        `}
-      >
-        <ContentHeader
-          breadcrumb={[shortName, "Submit Clinical Data"]}
-          helpUrl={helpUrl}
+  // FileNavigator
+  // FileNavigator state
+  const fileNavigatorFiles = data ? getFileNavigatorFiles(data) : [];
+  const selectedClinicalEntityType = null;
+  const [tabFromData, setTabFromData] = useState("donor");
+  // FileNavigator handlers
+  const handleClearSchemaError = () => new Promise(() => true);
+  const setSelectedClinicalEntityType = () => null;
+
+  if (data?.clinicalSubmissions === undefined) {
+    return <div> no data</div>;
+  } else {
+    return isLoading ? (
+      <div> loading ... </div>
+    ) : (
+      <>
+        <div
+          css={css`
+            display: flex;
+            flex-direction: column;
+          `}
         >
-          <ProgressBar
-            clinicalEntities={data?.clinicalSubmissions.clinicalEntities}
-            clinicalState={data?.clinicalSubmissions.state}
-          />
-        </ContentHeader>
-        <ContentMain>
-          <Instructions />
-        </ContentMain>
-      </div>
-    </>
-  );
+          <ContentHeader
+            breadcrumb={[shortName, "Submit Clinical Data"]}
+            helpUrl={helpUrl}
+          >
+            <div
+              css={css`
+                flex: 1;
+                display: flex;
+                justify-content: space-between;
+              `}
+            >
+              <ProgressBar
+                clinicalEntities={data?.clinicalSubmissions.clinicalEntities}
+                clinicalState={data?.clinicalSubmissions.state}
+              />
+              <Button
+                variant="text"
+                css={css`
+                  margin-right: 10px;
+                `}
+                disabled={isSubmissionSystemDisabled || !submissionVersion}
+                onClick={handleSubmissionClear}
+              >
+                Clear submission
+              </Button>
+            </div>
+          </ContentHeader>
+          <ContentMain>
+            <Instructions
+              uploadEnabled={!isSubmissionSystemDisabled}
+              signOffEnabled={!isSubmissionSystemDisabled && isReadyForSignoff}
+              validationEnabled={
+                !isSubmissionSystemDisabled &&
+                isReadyForValidation &&
+                !hasDataError &&
+                !isValidated
+              }
+              onUploadFileSelect={handleSubmissionFilesUpload}
+              onValidateClick={handleSubmissionValidation}
+              onSignOffClick={handleSignOff}
+              // clinicalTypes={data.clinicalSubmissions.clinicalEntities.map(
+              //   ({ clinicalType }) => clinicalType,
+              // )}
+              clinicalTypes={["a", "b"]}
+            />
+            <SubmissionSummaryTable
+              clinicalEntities={data.clinicalSubmissions.clinicalEntities}
+            />
+
+            <FilesNavigator
+              submissionState={data.clinicalSubmissions.state}
+              clearDataError={handleClearSchemaError}
+              fileStates={fileNavigatorFiles}
+              selectedClinicalEntityType={
+                selectedClinicalEntityType || tabFromData
+              }
+              onFileSelect={setSelectedClinicalEntityType}
+              submissionVersion={data.clinicalSubmissions.version}
+              programShortName={shortName}
+            />
+          </ContentMain>
+        </div>
+      </>
+    );
+  }
 };
 
 export default ClinicalSubmission;

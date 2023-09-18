@@ -17,9 +17,44 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export function notNull<T>(value: T): value is NonNullable<T> {
-  return value != null && value != undefined;
-}
+import { css } from "@/lib/emotion";
+import { ContentPlaceholder } from "@icgc-argo/uikit";
 
-// dev helper type to expand tooltip types
-export type Clean<T> = T extends infer U ? { [K in keyof U]: U[K] } : never;
+export const NoContentPlaceholder = () => (
+  <div
+    css={css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    `}
+  >
+    <ContentPlaceholder
+      title="You do not have any data uploaded."
+      subtitle="Follow the instructions above to get started."
+    />
+  </div>
+);
+
+export const ErrorBox = () => (
+  <div
+    id="error-submit-clinical-data"
+    css={css`
+      padding: 16px;
+    `}
+  >
+    Error
+    {/* <ErrorNotification
+      level={NOTIFICATION_VARIANTS.ERROR}
+      onClearClick={onErrorClearClick}
+      title={`${
+        errors.length
+      } error(s) found in uploaded ${displayName.toLowerCase()} file`}
+      errors={errors.map(toDisplayError)}
+      subtitle={
+        "Your file cannot be processed. Please correct the following errors and reupload your file."
+      }
+      columnConfig={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
+    /> */}
+  </div>
+);

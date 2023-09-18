@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,9 +17,22 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export function notNull<T>(value: T): value is NonNullable<T> {
-  return value != null && value != undefined;
-}
+import { gql } from "@/__generated__/gql";
 
-// dev helper type to expand tooltip types
-export type Clean<T> = T extends infer U ? { [K in keyof U]: U[K] } : never;
+const CLEAR_CLINICAL_SUBMISSION = gql(`
+  mutation ClearSubmission(
+    $programShortName: String!
+    $submissionVersion: String!
+    $fileType: String
+  ) {
+    clearClinicalSubmission(
+      programShortName: $programShortName
+      version: $submissionVersion
+      fileType: $fileType
+    ) {
+      id
+    }
+  }
+`);
+
+export default CLEAR_CLINICAL_SUBMISSION;

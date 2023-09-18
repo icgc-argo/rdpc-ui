@@ -15,6 +15,8 @@ import * as types from "./graphql";
 const documents = {
   "\n  mutation ClearClinicalRegistration($shortName: String!, $registrationId: String!) {\n    clearClinicalRegistration(shortName: $shortName, registrationId: $registrationId)\n  }\n":
     types.ClearClinicalRegistrationDocument,
+  "\n  mutation ClearSubmission(\n    $programShortName: String!\n    $submissionVersion: String!\n    $fileType: String\n  ) {\n    clearClinicalSubmission(\n      programShortName: $programShortName\n      version: $submissionVersion\n      fileType: $fileType\n    ) {\n      id\n    }\n  }\n":
+    types.ClearSubmissionDocument,
   "\n  query ClinicalSchemaVersion {\n    clinicalSubmissionSchemaVersion\n  }\n":
     types.ClinicalSchemaVersionDocument,
   "\n\tquery ClinicalSchemaVersion {\n\t\tclinicalSubmissionSchemaVersion\n\t}\n":
@@ -59,6 +61,12 @@ export function gql(source: string): unknown;
 export function gql(
   source: "\n  mutation ClearClinicalRegistration($shortName: String!, $registrationId: String!) {\n    clearClinicalRegistration(shortName: $shortName, registrationId: $registrationId)\n  }\n",
 ): (typeof documents)["\n  mutation ClearClinicalRegistration($shortName: String!, $registrationId: String!) {\n    clearClinicalRegistration(shortName: $shortName, registrationId: $registrationId)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "\n  mutation ClearSubmission(\n    $programShortName: String!\n    $submissionVersion: String!\n    $fileType: String\n  ) {\n    clearClinicalSubmission(\n      programShortName: $programShortName\n      version: $submissionVersion\n      fileType: $fileType\n    ) {\n      id\n    }\n  }\n",
+): (typeof documents)["\n  mutation ClearSubmission(\n    $programShortName: String!\n    $submissionVersion: String!\n    $fileType: String\n  ) {\n    clearClinicalSubmission(\n      programShortName: $programShortName\n      version: $submissionVersion\n      fileType: $fileType\n    ) {\n      id\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
