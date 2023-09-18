@@ -50,7 +50,6 @@ const FilesNavigator = ({
   submissionVersion: ClinicalSubmission["version"];
   programShortName: ClinicalSubmission["programShortName"];
 }) => {
-  console.log("file navigaotr file staes", fileStates);
   // toasts
   const commonToaster = useCommonToasters();
   const toaster = useToaster();
@@ -91,12 +90,9 @@ const FilesNavigator = ({
     }
   };
 
-  const setSelectedClinicalEntityType = () =>
-    console.log(
-      "set selected clinical entity type. large param sync state function that doesn't work in new nextjs",
-    );
+  const setSelectedClinicalEntityType = () => null;
 
-  const onErrorClearClick = () => console.log("on error clear click");
+  const onErrorClearClick = () => null;
 
   // display
   return (

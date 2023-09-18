@@ -27,8 +27,6 @@ export const VerticalTabsSection: FC<{
   selectedFile: ClinicalSubmissionEntity | undefined;
   onFileSelect: (clinicalType: string) => void;
 }> = ({ fileStates, selectedFile, onFileSelect }) => {
-  console.log("v tabs", fileStates);
-
   const onFileClick =
     (clinicalType: string) => (e: SyntheticEvent<HTMLElement, Event>) =>
       onFileSelect(clinicalType);

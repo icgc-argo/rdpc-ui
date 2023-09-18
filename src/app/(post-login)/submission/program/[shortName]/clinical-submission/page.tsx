@@ -56,8 +56,6 @@ const ClinicalSubmission = ({
   const clinicalEntities =
     data?.clinicalSubmissions.clinicalEntities?.filter(notNull) || [];
 
-  console.log("gql query", data);
-
   // Instruction box
   // Instruction box state
   const isSubmissionSystemDisabled = false;

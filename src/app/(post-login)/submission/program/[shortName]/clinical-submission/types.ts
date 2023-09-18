@@ -18,8 +18,6 @@
  */
 import { ClinicalSubmissionQuery } from "@/__generated__/graphql";
 
-// sometimes we use GQL data types other things we use the converted local types, they will conflict
-
 export type ClinicalSubmission = ClinicalSubmissionQuery["clinicalSubmissions"];
 
 export type ClinicalSubmissionState =
@@ -27,6 +25,7 @@ export type ClinicalSubmissionState =
 
 type Status = "UPDATE" | "SUCCESS" | "ERROR" | "SUCCESS" | "WARNING" | "NONE";
 
+// sometimes we use GQL data types other times we use the converted local types, they will conflict
 // because gqlClinicalEntityToClinicalSubmissionEntityFile diverts from the gql object
 export type ClinicalSubmissionEntity =
   ClinicalSubmissionQuery["clinicalSubmissions"]["clinicalEntities"][0] & {

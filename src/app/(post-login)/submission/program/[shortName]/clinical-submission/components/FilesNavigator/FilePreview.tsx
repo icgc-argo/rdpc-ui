@@ -23,12 +23,12 @@ import { Button, Typography } from "@icgc-argo/uikit";
 import { FC, SyntheticEvent } from "react";
 import { ClinicalSubmissionEntity, ClinicalSubmissionState } from "../../types";
 
-type FilePreivewProps = {
+type FilePreviewProps = {
   file: ClinicalSubmissionEntity;
   submissionState: ClinicalSubmissionState;
   clearSubmission: (fileType: string) => void;
 };
-const FilePreview: FC<FilePreivewProps> = ({
+const FilePreview: FC<FilePreviewProps> = ({
   file,
   submissionState,
   clearSubmission,
@@ -85,19 +85,6 @@ const FilePreview: FC<FilePreivewProps> = ({
           </Button>
         )}
       </div>
-      {/* 
-      has to be converted into new Table api
-      
-      <FileRecordTable
-        isSubmissionValidated={isSubmissionValidated}
-        isPendingApproval={isPendingApproval}
-        file={file}
-        submissionData={{
-          fileName,
-          creator,
-          createdAt,
-        }}
-      /> */}
     </>
   );
 };
