@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,30 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { useToaster } from "@/app/hooks/ToastProvider";
+import useCommonToasters from "@/app/hooks/useCommonToasters";
+import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import { useMutation } from "@apollo/client";
+import { ContentPlaceholder, css } from "@icgc-argo/uikit";
 import {
-  Button,
-  ContentPlaceholder,
-  css,
-  Icon,
-  NOTIFICATION_VARIANTS,
-  Typography,
-  VerticalTabs,
-} from "@icgc-argo/uikit";
-import useCommonToasters from "components/useCommonToasters";
-import { useToaster } from "global/hooks/toaster";
-import { toDisplayError } from "global/utils/clinicalUtils";
-import { Col } from "react-grid-system";
-import { useClinicalSubmissionQuery } from "..";
-import ErrorNotification, { getDefaultColumns } from "../../ErrorNotification";
-import { useSubmissionSystemDisabled } from "../../SubmissionSystemLockedNotification";
-import CLEAR_SUBMISSION_MUTATION from "../gql/CLEAR_SUBMISSION_MUTATION";
-import {
-  ClearSubmissionMutationVariables,
-  ClinicalSubmissionEntityFile,
-  ClinicalSubmissionQueryData,
-} from "../types";
-import FileRecordTable from "./FileRecordTable";
+  ClinicalEntities,
+  ClinicalSubmission,
+  ClinicalSubmissionState,
+} from "../../types";
+
+import CLEAR_CLINICAL_SUBMISSION from "@/app/gql/CLEAR_CLINICAL_SUBMISSION";
 
 const FilesNavigator = ({
   fileStates,
@@ -51,211 +39,116 @@ const FilesNavigator = ({
   programShortName,
   submissionVersion,
 }: {
-  submissionState: ClinicalSubmissionQueryData["clinicalSubmissions"]["state"];
-  fileStates: Array<ClinicalSubmissionEntityFile>;
+  submissionState: ClinicalSubmissionState;
+  fileStates: ClinicalEntities;
   clearDataError: (file: ClinicalSubmissionEntityFile) => Promise<any>;
   selectedClinicalEntityType: string;
   onFileSelect: (clinicalEntityType: string) => void;
-  submissionVersion: ClinicalSubmissionQueryData["clinicalSubmissions"]["version"];
-  programShortName: ClinicalSubmissionQueryData["clinicalSubmissions"]["programShortName"];
+  submissionVersion: ClinicalSubmission["version"];
+  programShortName: ClinicalSubmission["programShortName"];
 }) => {
+  // toasts
   const commonToaster = useCommonToasters();
-  const [clearClinicalEntitySubmission] = useMutation<
-    ClinicalSubmissionQueryData,
-    ClearSubmissionMutationVariables
-  >(CLEAR_SUBMISSION_MUTATION);
-
-  const { refetch: refetchClinicalSubmission } =
-    useClinicalSubmissionQuery(programShortName);
-  const isPendingApproval = submissionState === "PENDING_APPROVAL";
-  const isSubmissionSystemDisabled = useSubmissionSystemDisabled();
-
   const toaster = useToaster();
-  const onFileClick = (clinicalType: string) => (e) => {
-    onFileSelect(
-      fileStates.find((file) => clinicalType === file.clinicalType)
-        .clinicalType,
-    );
-  };
-  const selectedFile = fileStates.find(
-    (file) => file.clinicalType === selectedClinicalEntityType,
+
+  // queries
+  const [clearClinicalEntitySubmission] = useMutation(
+    CLEAR_CLINICAL_SUBMISSION,
   );
-  const onClearClick = (clinicalType: string) => async (e) => {
-    const fileType: string = fileStates.find(
-      (file) => clinicalType === file.clinicalType,
-    ).clinicalType;
 
-    try {
-      await clearClinicalEntitySubmission({
-        variables: {
-          programShortName,
-          submissionVersion,
-          fileType,
-        },
-      });
-      toaster.addToast({
-        variant: "SUCCESS",
-        interactionType: "CLOSE",
-        title: "Cleared",
-        content: `Uploaded ${fileType.toUpperCase()} file has been cleared.`,
-      });
-    } catch (err) {
-      await refetchClinicalSubmission();
-      commonToaster.unknownErrorWithReloadMessage();
-    }
-  };
-  const onErrorClearClick = () => {
-    clearDataError(selectedFile);
-  };
+  // const { refetch: refetchClinicalSubmission } =
+  //   useClinicalSubmissionQuery(programShortName);
+
+  // state
+  const selectedFile = fileStates.find(
+    (file) => file && file.clinicalType === selectedClinicalEntityType,
+  );
+  const isPendingApproval = submissionState === "PENDING_APPROVAL";
+  const { isDisabled: isSubmissionSystemDisabled } =
+    useSubmissionSystemStatus();
   const shouldShowError = !!selectedFile && !!selectedFile.schemaErrors.length;
+  const isSubmissionValidated = [
+    "INVALID",
+    "VALID",
+    "PENDING_APPROVAL",
+  ].includes(`${submissionState}`);
 
-  const isSubmissionValidated = (
-    ["INVALID", "VALID", "PENDING_APPROVAL"] as (typeof submissionState)[]
-  ).includes(submissionState);
-  return !selectedFile ? (
+  // display
+  return (
     <ContentPlaceholder
       css={css`
         width: 100%;
       `}
     />
-  ) : (
-    <div
-      css={css`
-        position: relative;
-        width: 100%;
-        display: flex;
-      `}
-    >
-      <div
-        css={css`
-          width: 170px;
-          max-width: 170px;
-          min-width: 170px;
-          overflow: visible;
-        `}
-      >
-        <VerticalTabs
-          css={css`
-            height: 100%;
-          `}
-        >
-          {fileStates.map((fileState) => (
-            <VerticalTabs.Item
-              key={fileState.clinicalType}
-              active={selectedFile.clinicalType === fileState.clinicalType}
-              onClick={onFileClick(fileState.clinicalType)}
-            >
-              <div
-                css={css`
-                  text-align: left;
-                `}
-              >
-                {fileState.displayName}
-              </div>
-              {!!fileState.recordsCount &&
-                fileState.status !== "NONE" &&
-                fileState.status !== "ERROR" && (
-                  <VerticalTabs.Tag variant={fileState.status}>
-                    {fileState.recordsCount}
-                  </VerticalTabs.Tag>
-                )}
-              {fileState.status === "ERROR" && (
-                <VerticalTabs.Tag variant="ERROR">
-                  <Icon
-                    name="exclamation"
-                    fill="#fff"
-                    height="10px"
-                    width="10px"
-                  />
-                </VerticalTabs.Tag>
-              )}
-            </VerticalTabs.Item>
-          ))}
-        </VerticalTabs>
-      </div>
-      <Col style={{ position: "relative", overflow: "hidden" }}>
-        {shouldShowError ? (
-          <div
-            id="error-submit-clinical-data"
-            css={css`
-              padding: 16px;
-            `}
-          >
-            <ErrorNotification
-              level={NOTIFICATION_VARIANTS.ERROR}
-              onClearClick={onErrorClearClick}
-              title={`${
-                selectedFile.schemaErrors.length
-              } error(s) found in uploaded ${selectedFile.displayName.toLowerCase()} file`}
-              errors={selectedFile.schemaErrors.map(toDisplayError)}
-              subtitle={
-                "Your file cannot be processed. Please correct the following errors and reupload your file."
-              }
-              columnConfig={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
-            />
-          </div>
-        ) : !!selectedFile.records.length ? (
-          <>
-            <div
-              css={css`
-                padding: 8px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-              `}
-            >
-              <Typography
-                variant="subtitle2"
-                color="primary"
-                as="h2"
-                css={css`
-                  margin: 0px;
-                  margin-left: 10px;
-                `}
-              >
-                {selectedFile.displayName} File Preview
-              </Typography>
-              {!isPendingApproval && (
-                <Button
-                  id="button-clear-selected-file" // For Selenium
-                  variant="text"
-                  size="sm"
-                  onClick={onClearClick(selectedFile.clinicalType)}
-                  disabled={isSubmissionSystemDisabled}
-                >
-                  clear
-                </Button>
-              )}
-            </div>
-            <FileRecordTable
-              isSubmissionValidated={isSubmissionValidated}
-              isPendingApproval={isPendingApproval}
-              file={selectedFile}
-              submissionData={{
-                fileName: selectedFile.fileName,
-                creator: selectedFile.creator,
-                createdAt: selectedFile.createdAt,
-              }}
-            />
-          </>
-        ) : (
-          <div
-            css={css`
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              height: 100%;
-            `}
-          >
-            <ContentPlaceholder
-              title="You do not have any data uploaded."
-              subtitle="Follow the instructions above to get started."
-            />
-          </div>
-        )}
-      </Col>
-    </div>
   );
 };
+
+//   ) : (
+//     <div
+//       css={css`
+//         position: relative;
+//         width: 100%;
+//         display: flex;
+//       `}
+//     >
+//       <VerticalTabsSection filesStates={fileStates} />
+
+//       <Col style={{ position: "relative", overflow: "hidden" }}>
+//         {shouldShowError ? (
+//           <Error
+//             errors={schema.errors}
+//             displayName={schema.name}
+//             onErrorClearClick={onErrorClearClick}
+//           />
+//         ) : !!selectedFile.records.length ? (
+//           <>
+//             <div
+//               css={css`
+//                 padding: 8px;
+//                 display: flex;
+//                 justify-content: space-between;
+//                 align-items: center;
+//               `}
+//             >
+//               <Typography
+//                 variant="subtitle2"
+//                 color="primary"
+//                 as="h2"
+//                 css={css`
+//                   margin: 0px;
+//                   margin-left: 10px;
+//                 `}
+//               >
+//                 {selectedFile.displayName} File Preview
+//               </Typography>
+//               {!isPendingApproval && (
+//                 <Button
+//                   variant="text"
+//                   size="sm"
+//                   onClick={onClearClick(selectedFile.clinicalType)}
+//                   disabled={isSubmissionSystemDisabled}
+//                 >
+//                   clear
+//                 </Button>
+//               )}
+//             </div>
+//             <FileRecordTable
+//               isSubmissionValidated={isSubmissionValidated}
+//               isPendingApproval={isPendingApproval}
+//               file={selectedFile}
+//               submissionData={{
+//                 fileName: selectedFile.fileName,
+//                 creator: selectedFile.creator,
+//                 createdAt: selectedFile.createdAt,
+//               }}
+//             />
+//           </>
+//         ) : (
+//           <NoContentPlaceholder />
+//         )}
+//       </Col>
+//     </div>
+//   );
+// };
 
 export default FilesNavigator;

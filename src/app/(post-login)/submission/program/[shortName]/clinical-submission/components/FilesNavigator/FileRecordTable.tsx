@@ -17,17 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import {
-  css,
-  Icon,
-  Table,
-  TableColumnConfig,
-  useTheme,
-} from "@icgc-argo/uikit";
-import useAuthContext from "global/hooks/useAuthContext";
-import { usePageQuery } from "global/hooks/usePageContext";
-import { toDisplayRowIndex } from "global/utils/clinicalUtils";
-import { isDataSubmitter, isDccMember } from "global/utils/egoJwt";
+import { css, Icon, Table, useTheme } from "@icgc-argo/uikit";
 import get from "lodash/get";
 import orderBy from "lodash/orderBy";
 import pluralize from "pluralize";
@@ -127,7 +117,7 @@ const FileRecordTable = ({
   submissionData?: ComponentProps<typeof SubmissionInfoArea>;
 }) => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
-  const { egoJwt, permissions } = useAuthContext();
+  // const { egoJwt, permissions } = useAuthContext();
   const isDiffPreview = useMemo(
     () =>
       (isDccMember(permissions) ||
@@ -348,7 +338,6 @@ const FileRecordTable = ({
         right={<SubmissionInfoArea {...submissionData} />}
       />
       <Table
-        parentRef={containerRef}
         getTdProps={(
           _,
           row: { original: (typeof tableData)[0] },

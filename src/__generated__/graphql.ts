@@ -2434,6 +2434,20 @@ export type ClearClinicalRegistrationMutation = {
   clearClinicalRegistration: boolean;
 };
 
+export type ClearSubmissionMutationVariables = Exact<{
+  programShortName: Scalars["String"]["input"];
+  submissionVersion: Scalars["String"]["input"];
+  fileType?: InputMaybe<Scalars["String"]["input"]>;
+}>;
+
+export type ClearSubmissionMutation = {
+  __typename?: "Mutation";
+  clearClinicalSubmission: {
+    __typename?: "ClinicalSubmissionData";
+    id?: string | null;
+  };
+};
+
 export type ClinicalSchemaVersionQueryVariables = Exact<{
   [key: string]: never;
 }>;
@@ -3205,6 +3219,98 @@ export const ClearClinicalRegistrationDocument = {
 } as unknown as DocumentNode<
   ClearClinicalRegistrationMutation,
   ClearClinicalRegistrationMutationVariables
+>;
+export const ClearSubmissionDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "ClearSubmission" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "programShortName" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "submissionVersion" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "fileType" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "clearClinicalSubmission" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "programShortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "version" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "submissionVersion" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "fileType" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "fileType" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ClearSubmissionMutation,
+  ClearSubmissionMutationVariables
 >;
 export const ClinicalSchemaVersionDocument = {
   kind: "Document",

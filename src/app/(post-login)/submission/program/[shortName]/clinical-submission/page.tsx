@@ -27,6 +27,7 @@ import { css } from "@/lib/emotion";
 import { useQuery } from "@apollo/client";
 import { Button } from "@icgc-argo/uikit";
 import urlJoin from "url-join";
+import FilesNavigator from "./components/FilesNavigator";
 import Instructions from "./components/Instructions";
 import ProgressBar from "./components/ProgressBar";
 import SubmissionSummaryTable from "./components/SummaryTable";
@@ -43,6 +44,7 @@ const ClinicalSubmission = ({
     "/docs/submission/submitting-clinical-data",
   );
 
+  // page data query
   const { data } = useQuery(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       shortName,
@@ -54,17 +56,28 @@ const ClinicalSubmission = ({
 
   console.log("gql query", data);
 
+  // Instruction box
+  // Instruction box state
   const isSubmissionSystemDisabled = false;
   const isReadyForSignoff = false;
   const isReadyForValidation = true;
   const hasDataError = false;
   const isValidated = true;
   const submissionVersion = "111";
-
+  // Instruction box handlers
   const handleSubmissionFilesUpload = () => null;
   const handleSubmissionValidation = () => null;
   const handleSignOff = () => null;
   const handleSubmissionClear = () => null;
+
+  // FileNavigator
+  // FileNavigator state
+  const fileNavigatorFiles = [];
+  const selectedClinicalEntityType = null;
+  const tabFromData = null;
+  // FileNavigator handlers
+  const handleClearSchemaError = () => null;
+  const setSelectedClinicalEntityType = () => null;
 
   if (data?.clinicalSubmissions === undefined) {
     return <div> no data</div>;
@@ -135,7 +148,7 @@ const ClinicalSubmission = ({
               }
               onFileSelect={setSelectedClinicalEntityType}
               submissionVersion={data.clinicalSubmissions.version}
-              programShortName={programShortName}
+              programShortName={shortName}
             />
           </ContentMain>
         </div>
