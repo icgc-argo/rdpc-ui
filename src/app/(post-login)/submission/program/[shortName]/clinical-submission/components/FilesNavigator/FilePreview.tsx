@@ -84,6 +84,16 @@ const FilePreview: FC<FilePreviewProps> = ({
             clear
           </Button>
         )}
+        <FileRecordTable
+          isSubmissionValidated={isSubmissionValidated}
+          isPendingApproval={isPendingApproval}
+          file={file}
+          submissionData={{
+            fileName,
+            creator,
+            createdAt,
+          }}
+        />
       </div>
     </>
   );
