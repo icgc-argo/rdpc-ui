@@ -22,11 +22,12 @@ import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
 import CLINICAL_SUBMISSION_QUERY from "@/app/gql/CLINICAL_SUBMISSION_QUERY";
 import { useAppConfigContext } from "@/app/hooks/AppProvider";
+import useUrlQueryState from "@/app/hooks/useURLQueryState";
 import { notNull } from "@/global/utils";
 import { css } from "@/lib/emotion";
 import { useQuery } from "@apollo/client";
 import { Button } from "@icgc-argo/uikit";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import urlJoin from "url-join";
 import FilesNavigator from "./components/FilesNavigator";
 import Instructions from "./components/Instructions";
@@ -34,11 +35,17 @@ import ProgressBar from "./components/ProgressBar";
 import SubmissionSummaryTable from "./components/SummaryTable";
 import { getFileNavigatorFiles } from "./data";
 
+export const URL_QUERY_KEY = "tab";
 const ClinicalSubmission = ({
   params: { shortName },
 }: {
   params: { shortName: string };
 }) => {
+  const [query] = useUrlQueryState(URL_QUERY_KEY);
+  useEffect(() => {
+    setEntityType(query);
+  }, [query]);
+
   // docs url
   const { DOCS_URL_ROOT } = useAppConfigContext();
   const helpUrl = urlJoin(
@@ -73,8 +80,7 @@ const ClinicalSubmission = ({
   // FileNavigator
   // FileNavigator state
   const fileNavigatorFiles = data ? getFileNavigatorFiles(data) : [];
-  const selectedClinicalEntityType = null;
-  const [tabFromData, setTabFromData] = useState("donor");
+  const [selectedClinicalEntityType, setEntityType] = useState(query);
   // FileNavigator handlers
   const handleClearSchemaError = () => new Promise(() => true);
   const setSelectedClinicalEntityType = () => null;
@@ -145,9 +151,7 @@ const ClinicalSubmission = ({
               submissionState={data.clinicalSubmissions.state}
               clearDataError={handleClearSchemaError}
               fileStates={fileNavigatorFiles}
-              selectedClinicalEntityType={
-                selectedClinicalEntityType || tabFromData
-              }
+              selectedClinicalEntityType={selectedClinicalEntityType}
               onFileSelect={setSelectedClinicalEntityType}
               submissionVersion={data.clinicalSubmissions.version}
               programShortName={shortName}
