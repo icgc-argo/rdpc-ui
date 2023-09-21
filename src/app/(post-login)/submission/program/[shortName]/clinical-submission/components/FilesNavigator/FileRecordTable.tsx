@@ -18,21 +18,19 @@
  */
 
 import {
-  CellContentCenter,
   SubmissionInfoArea,
   TableInfoHeaderContainer,
 } from "@/app/components/Table/common";
-import { toDisplayRowIndex } from "@/global/utils";
 import { css } from "@/lib/emotion";
 import { Table, useTheme } from "@icgc-argo/uikit";
 import get from "lodash/get";
 import { CSSProperties, ComponentProps, createRef } from "react";
 import { ClinicalSubmissionEntity } from "../../types";
-import { FILE_STATE_COLORS } from "../SummaryTable";
 import StatsArea from "./StatsArea";
+import { FileRecord } from "./types";
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
-  ROW: "row",
+  ROW_INDEX: "rowIndex",
 };
 
 const FileRecordTable = ({
@@ -81,168 +79,19 @@ const FileRecordTable = ({
   const containerRef = createRef<HTMLDivElement>();
   const isDiffPreview = false;
 
-  const tableData = sortedRecords.map(
-    (record) =>
-      record?.fields.reduce(
-        (acc, { name, value }) => ({ ...acc, [name]: value }),
-        {
-          row: record.row,
-          status: (() => {
-            switch (true) {
-              case stats?.updated.some((i) => i === record.row):
-                return "UPDATE";
-              case stats?.errorsFound.some((i) => i === record.row):
-                return "ERROR";
-              case stats?.new.some((i) => i === record.row):
-                return "NEW";
-              default:
-                return "NONE";
-            }
-          })(),
-        },
-      ),
-  );
-
-  const recordHasError = (record: (typeof tableData)[0]) =>
+  const recordHasError = (record: FileRecord) =>
     stats?.errorsFound.some((row) => row === record?.row);
 
-  const rowHasUpdate = (record: (typeof tableData)[0]) =>
+  const rowHasUpdate = (record: FileRecord) =>
     stats?.updated.some((row) => row === record?.row);
 
-  const cellHasUpdate = (cell: { row: (typeof tableData)[0]; field: string }) =>
+  const cellHasUpdate = (cell: { row: FileRecord; field: string }) =>
     file.dataUpdates.some(
       (update) => update?.field === cell.field && update.row === cell.row?.row,
     );
 
-  const recordHasWarning = (record: (typeof tableData)[0]) =>
+  const recordHasWarning = (record: FileRecord) =>
     dataWarnings.some((dw) => dw?.row === record?.row);
-
-  const StatusColumCell = ({
-    original,
-  }: {
-    original: (typeof tableData)[0];
-  }) => {
-    const hasError = recordHasError(original);
-    const hasUpdate = rowHasUpdate(original);
-    const isNew = stats?.new.some((row) => row === original?.row);
-    return (
-      isSubmissionValidated && (
-        <CellContentCenter
-          css={css`
-            display: flex;
-            justify-content: space-around;
-          `}
-        >
-          <StarIcon
-            fill={
-              hasError
-                ? FILE_STATE_COLORS.ERROR
-                : hasUpdate
-                ? FILE_STATE_COLORS.UPDATED
-                : isNew
-                ? FILE_STATE_COLORS.NEW
-                : FILE_STATE_COLORS.NONE
-            }
-          />
-          {isDiffPreview && hasUpdate && <div>old</div>}
-        </CellContentCenter>
-      )
-    );
-  };
-
-  const DataFieldCell = ({
-    original,
-    fieldName,
-  }: {
-    original: (typeof tableData)[0];
-    fieldName: string;
-  }) => {
-    const originalFieldName = original[fieldName];
-    return isDiffPreview && rowHasUpdate(original) ? (
-      <div
-        css={css`
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          & > div {
-            margin-top: 5px;
-            margin-bottom: 5px;
-            flex: 1;
-          }
-        `}
-      >
-        <div>{originalFieldName}</div>
-        <div>
-          {get(
-            file.dataUpdates.find(
-              (u) => u?.field === fieldName && u.row === original?.row,
-            ),
-            "oldValue",
-            originalFieldName,
-          )}
-        </div>
-      </div>
-    ) : (
-      <>{originalFieldName}</>
-    );
-  };
-
-  const tableColumns: TableColumnConfig<(typeof tableData)[0]>[] = [
-    {
-      id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
-      Cell: ({ original }) => (
-        <CellContentCenter
-          css={
-            rowHasUpdate(original)
-              ? css`
-                  justify-content: flex-start;
-                  padding-top: 5px;
-                `
-              : css``
-          }
-        >
-          {toDisplayRowIndex(original.row)}
-        </CellContentCenter>
-      ),
-      Header: "Line #",
-      resizable: false,
-      width: 70,
-    },
-    {
-      id: "status",
-      Cell: StatusColumCell,
-      accessor: "status",
-      resizable: false,
-      Header: (
-        <CellContentCenter>
-          <StarIcon fill={FILE_STATE_COLORS.NONE} />
-        </CellContentCenter>
-      ),
-      sortMethod: (
-        a: (typeof tableData)[0]["status"],
-        b: (typeof tableData)[0]["status"],
-      ) => {
-        const priorities = {
-          ERROR: 1,
-          UPDATE: 2,
-          NEW: 3,
-          NONE: 4,
-        } as { [k in (typeof tableData)[0]["status"]]: number };
-        return priorities[a] - priorities[b];
-      },
-      width: 50,
-    },
-    ...fields.map(
-      ({ name: fieldName }) =>
-        ({
-          accessor: fieldName,
-          Header: fieldName,
-          Cell: ({ original }) => (
-            <DataFieldCell original={original} fieldName={fieldName} />
-          ),
-        }) as (typeof tableColumns)[0],
-    ),
-  ];
 
   return (
     <div
@@ -272,7 +121,7 @@ const FileRecordTable = ({
       <Table
         getTdProps={(
           _,
-          row: { original: (typeof tableData)[0] },
+          row: { original: FileRecord },
           column: { id: string },
         ) =>
           ({
@@ -285,7 +134,7 @@ const FileRecordTable = ({
                 : {},
           }) as { style: CSSProperties }
         }
-        getTrProps={(_, { original }: { original: (typeof tableData)[0] }) =>
+        getTrProps={(_, { original }: { original: FileRecord }) =>
           ({
             style: recordHasError(original)
               ? {
@@ -302,10 +151,7 @@ const FileRecordTable = ({
               : {},
           }) as { style: CSSProperties }
         }
-        getTrGroupProps={(
-          _,
-          { original }: { original: (typeof tableData)[0] },
-        ) =>
+        getTrGroupProps={(_, { original }: { original: FileRecord }) =>
           isPendingApproval && rowHasUpdate(original)
             ? {
                 className: `updateRow`, // append this classname so parent div's css can apply style
