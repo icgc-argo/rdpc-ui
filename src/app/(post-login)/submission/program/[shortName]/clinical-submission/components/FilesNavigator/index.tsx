@@ -110,11 +110,11 @@ const FilesNavigator = ({
       />
 
       <Col style={{ position: "relative", overflow: "hidden" }}>
-        {schemaErrors?.length ? (
+        {schemaErrors?.length || true ? (
           <ErrorBox
-          // errors={schemaErrors}
-          // displayName={"schema.name"}
-          // onErrorClearClick={onErrorClearClick}
+            data={null}
+            selectedFile={selectedFile}
+            onClearClick={onErrorClearClick}
           />
         ) : selectedFile?.records.length ? (
           <FilePreview
