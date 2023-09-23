@@ -138,10 +138,9 @@ const ClinicalSubmission = ({
               onUploadFileSelect={handleSubmissionFilesUpload}
               onValidateClick={handleSubmissionValidation}
               onSignOffClick={handleSignOff}
-              // clinicalTypes={data.clinicalSubmissions.clinicalEntities.map(
-              //   ({ clinicalType }) => clinicalType,
-              // )}
-              clinicalTypes={["a", "b"]}
+              clinicalTypes={data.clinicalSubmissions.clinicalEntities
+                .filter(notNull)
+                .map(({ clinicalType }) => clinicalType)}
             />
             <SubmissionSummaryTable
               clinicalEntities={data.clinicalSubmissions.clinicalEntities}
