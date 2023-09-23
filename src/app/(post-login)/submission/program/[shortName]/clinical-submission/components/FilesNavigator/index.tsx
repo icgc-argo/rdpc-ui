@@ -110,9 +110,9 @@ const FilesNavigator = ({
       />
 
       <Col style={{ position: "relative", overflow: "hidden" }}>
-        {schemaErrors?.length || true ? (
+        {schemaErrors?.length ? (
           <ErrorBox
-            data={null}
+            data={schemaErrors}
             selectedFile={selectedFile}
             onClearClick={onErrorClearClick}
           />

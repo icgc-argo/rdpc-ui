@@ -17,13 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { ContentPlaceholder } from "@/app/components/ContentPlaceholder";
 import ErrorNotification from "@/app/components/ErrorNotification";
 import ErrorNotificationDefaultTable, {
   getDefaultErrorReportColumns,
 } from "@/app/components/ErrorNotification/ErrorNotificationDefaultTable";
 import { toDisplayError } from "@/global/utils";
 import { css } from "@/lib/emotion";
-import { ContentPlaceholder, NOTIFICATION_VARIANTS } from "@icgc-argo/uikit";
+import { NOTIFICATION_VARIANTS } from "@icgc-argo/uikit";
 
 export const NoContentPlaceholder = () => (
   <div
