@@ -16,15 +16,11 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import { useQuery } from "@apollo/client";
+import CLINICAL_SUBMISSION_SYSTEM_STATUS_QUERY from "../gql/CLINICAL_SUBMISSION_SYSTEM_STATUS";
 
-export const EGO_JWT_KEY = "EGO_JWT";
-export const LOGIN_NONCE = "LOGIN_NONCE";
+export const useSubmissionSystemStatus = () => {
+  const { data } = useQuery(CLINICAL_SUBMISSION_SYSTEM_STATUS_QUERY);
 
-export const BUILD_TIME_VARIABLES = {
-  RUNTIME_CONFIG_URL: process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL || "",
+  return { isDisabled: !!data?.clinicalSubmissionSystemDisabled };
 };
-
-export const CONTACT_PAGE_PATH = "/contact";
-export const SUBMISSION_PATH = `/submission`;
-export const PROGRAM_SHORT_NAME_PATH = `[shortName]`;
-export const PROGRAM_DASHBOARD_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/dashboard`;

@@ -17,14 +17,32 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export const EGO_JWT_KEY = "EGO_JWT";
-export const LOGIN_NONCE = "LOGIN_NONCE";
+import { TOAST_VARIANTS } from "@icgc-argo/uikit";
+import { useToaster } from "./ToastProvider";
 
-export const BUILD_TIME_VARIABLES = {
-  RUNTIME_CONFIG_URL: process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL || "",
-};
-
-export const CONTACT_PAGE_PATH = "/contact";
-export const SUBMISSION_PATH = `/submission`;
-export const PROGRAM_SHORT_NAME_PATH = `[shortName]`;
-export const PROGRAM_DASHBOARD_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/dashboard`;
+export default function useCommonToasters() {
+  const toaster = useToaster();
+  return {
+    unknownError: () =>
+      toaster.addToast({
+        title: "",
+        variant: TOAST_VARIANTS.ERROR,
+        content:
+          "Something went wrong, please try again later or contact us for assistance.",
+      }),
+    unknownErrorWithReloadMessage: () =>
+      toaster.addToast({
+        variant: "ERROR",
+        title: "Something went wrong",
+        content:
+          "Uh oh! It looks like something went wrong. This page has been reloaded.",
+      }),
+    onSave: () =>
+      toaster.addToast({
+        title: "Success!",
+        variant: TOAST_VARIANTS.SUCCESS,
+        content: "Your changes have been saved.",
+        interactionType: "CLOSE",
+      }),
+  };
+}
