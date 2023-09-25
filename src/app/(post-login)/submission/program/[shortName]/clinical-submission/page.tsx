@@ -20,20 +20,27 @@
 
 import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
+import CLEAR_CLINICAL_SUBMISSION from "@/app/gql/CLEAR_CLINICAL_SUBMISSION";
 import CLINICAL_SUBMISSION_QUERY from "@/app/gql/CLINICAL_SUBMISSION_QUERY";
 import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import useUrlQueryState from "@/app/hooks/useURLQueryState";
 import { notNull } from "@/global/utils";
 import { css } from "@/lib/emotion";
-import { useQuery } from "@apollo/client";
-import { Button } from "@icgc-argo/uikit";
+import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import urlJoin from "url-join";
+import ClearSubmissionButton from "./components/ClearSubmissionButton";
 import FilesNavigator from "./components/FilesNavigator";
 import Instructions from "./components/Instructions";
 import ProgressBar from "./components/ProgressBar";
 import SubmissionSummaryTable from "./components/SummaryTable";
 import { getFileNavigatorFiles } from "./data";
+
+// todo better name
+// parse out nulls, undefined, provide sensible defaults so type checking isnt a scattered nightmare
+const parseGQLResp = () => {
+  return { submissionVersion };
+};
 
 export const URL_QUERY_KEY = "tab";
 const ClinicalSubmission = ({
@@ -54,11 +61,25 @@ const ClinicalSubmission = ({
   );
 
   // page data query
-  const { data, loading: isLoading } = useQuery(CLINICAL_SUBMISSION_QUERY, {
+  const {
+    data,
+    loading: isLoading,
+    refetch,
+  } = useQuery(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       shortName,
     },
   });
+
+  const submissionVersion = data?.clinicalSubmissions.version || "";
+
+  const [clearClinicalSubmission] = useMutation(CLEAR_CLINICAL_SUBMISSION, {
+    variables: {
+      programShortName: shortName,
+      submissionVersion,
+    },
+  });
+
   const clinicalState = data?.clinicalSubmissions.state;
   const clinicalEntities =
     data?.clinicalSubmissions.clinicalEntities?.filter(notNull) || [];
@@ -70,12 +91,11 @@ const ClinicalSubmission = ({
   const isReadyForValidation = true;
   const hasDataError = false;
   const isValidated = true;
-  const submissionVersion = "111";
+  // const submissionVersion = data?.clinicalSubmissions.version;
   // Instruction box handlers
   const handleSubmissionFilesUpload = () => new Promise(() => true);
   const handleSubmissionValidation = () => new Promise(() => true);
   const handleSignOff = () => new Promise(() => true);
-  const handleSubmissionClear = () => new Promise(() => true);
 
   // FileNavigator
   // FileNavigator state
@@ -84,6 +104,8 @@ const ClinicalSubmission = ({
   // FileNavigator handlers
   const handleClearSchemaError = () => new Promise(() => true);
   const setSelectedClinicalEntityType = () => null;
+
+  // TODO so much nesting objects, data?.clinicalSubmissions.xxxx cant we do this one and throw generic ui error otherwise
 
   if (data?.clinicalSubmissions === undefined) {
     return <div> no data</div>;
@@ -113,16 +135,11 @@ const ClinicalSubmission = ({
                 clinicalEntities={data?.clinicalSubmissions.clinicalEntities}
                 clinicalState={data?.clinicalSubmissions.state}
               />
-              <Button
-                variant="text"
-                css={css`
-                  margin-right: 10px;
-                `}
-                disabled={isSubmissionSystemDisabled || !submissionVersion}
-                onClick={handleSubmissionClear}
-              >
-                Clear submission
-              </Button>
+              <ClearSubmissionButton
+                isDisabled={isSubmissionSystemDisabled || !submissionVersion}
+                clearSubmission={clearClinicalSubmission}
+                refetchSubmission={refetch}
+              />
             </div>
           </ContentHeader>
           <ContentMain>
