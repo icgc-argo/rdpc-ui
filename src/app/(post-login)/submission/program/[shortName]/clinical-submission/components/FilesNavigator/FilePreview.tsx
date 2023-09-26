@@ -22,6 +22,7 @@ import { css } from "@/lib/emotion";
 import { Button, Typography } from "@icgc-argo/uikit";
 import { FC, SyntheticEvent } from "react";
 import { ClinicalSubmissionEntity, ClinicalSubmissionState } from "../../types";
+import FileRecordTable from "./FileRecordTable";
 
 type FilePreviewProps = {
   file: ClinicalSubmissionEntity;
@@ -55,35 +56,37 @@ const FilePreview: FC<FilePreviewProps> = ({
 
   return (
     <>
-      <div
-        css={css`
-          padding: 8px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        `}
-      >
-        <Typography
-          variant="subtitle2"
-          color="primary"
-          as="h2"
+      <div>
+        <div
           css={css`
-            margin: 0px;
-            margin-left: 10px;
+            padding: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
           `}
         >
-          {displayName} File Preview
-        </Typography>
-        {!isPendingApproval && (
-          <Button
-            variant="text"
-            size="sm"
-            onClick={onClearClick(clinicalType)}
-            disabled={isSubmissionSystemDisabled}
+          <Typography
+            variant="subtitle2"
+            color="primary"
+            as="h2"
+            css={css`
+              margin: 0px;
+              margin-left: 10px;
+            `}
           >
-            clear
-          </Button>
-        )}
+            {displayName} File Preview
+          </Typography>
+          {!isPendingApproval && (
+            <Button
+              variant="text"
+              size="sm"
+              onClick={onClearClick(clinicalType)}
+              disabled={isSubmissionSystemDisabled}
+            >
+              clear
+            </Button>
+          )}
+        </div>
         <FileRecordTable
           isSubmissionValidated={isSubmissionValidated}
           isPendingApproval={isPendingApproval}

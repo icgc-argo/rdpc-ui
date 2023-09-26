@@ -38,9 +38,11 @@ import { getFileNavigatorFiles } from "./data";
 
 // todo better name
 // parse out nulls, undefined, provide sensible defaults so type checking isnt a scattered nightmare
-const parseGQLResp = () => {
-  return { submissionVersion };
-};
+// const parseGQLResp = () => {
+//   return { submissionVersion };
+// };
+
+// useMemo and useCallback - check react docs if you need a refresher
 
 export const URL_QUERY_KEY = "tab";
 const ClinicalSubmission = ({

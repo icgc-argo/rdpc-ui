@@ -21,13 +21,12 @@ import {
   SubmissionInfoArea,
   TableInfoHeaderContainer,
 } from "@/app/components/Table/common";
-import { css } from "@/lib/emotion";
-import { Table, useTheme } from "@icgc-argo/uikit";
-import get from "lodash/get";
-import { CSSProperties, ComponentProps, createRef } from "react";
-import { ClinicalSubmissionEntity } from "../../types";
+import { css, useTheme } from "@/lib/emotion";
+import { Table } from "@icgc-argo/uikit";
+import { ComponentProps } from "react";
+import { ClinicalSubmissionEntityFile } from "../types";
 import StatsArea from "./StatsArea";
-import { FileRecord } from "./types";
+import { getTableColumns, getTableData } from "./tableConfig";
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW_INDEX: "rowIndex",
@@ -41,7 +40,7 @@ const FileRecordTable = ({
 }: {
   isPendingApproval: boolean;
   isSubmissionValidated: boolean;
-  file: ClinicalSubmissionEntity;
+  file: ClinicalSubmissionEntityFile;
   submissionData?: ComponentProps<typeof SubmissionInfoArea>;
 }) => {
   // const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
@@ -53,14 +52,17 @@ const FileRecordTable = ({
   //     isPendingApproval,
   //   [egoJwt, isPendingApproval],
   // );
-
   const theme = useTheme();
+
   const { records, stats, dataWarnings } = file;
-  const fields = get(records, "fields", []);
+
+  const fields: ClinicalSubmissionEntityFile["records"][0]["fields"] =
+    records.length ? records[0].fields : [];
+
   // const sortedRecords = orderBy(
   //   records,
   //   !(isDccMember(permissions) && isPendingApproval)
-  //     ? REQUIRED_FILE_ENTRY_FIELDS.ROW
+  //     ? REQUIRED_FILE_ENTRY_FIELDS.ROW_INDEX
   //     : (r) => {
   //         const priority = (() => {
   //           switch (true) {
@@ -75,27 +77,16 @@ const FileRecordTable = ({
   //         return `${priority}::${r.row}`;
   //       },
   // );
-  const sortedRecords = records;
-  const containerRef = createRef<HTMLDivElement>();
-  const isDiffPreview = false;
 
-  const recordHasError = (record: FileRecord) =>
-    stats?.errorsFound.some((row) => row === record?.row);
-
-  const rowHasUpdate = (record: FileRecord) =>
-    stats?.updated.some((row) => row === record?.row);
-
-  const cellHasUpdate = (cell: { row: FileRecord; field: string }) =>
-    file.dataUpdates.some(
-      (update) => update?.field === cell.field && update.row === cell.row?.row,
-    );
-
-  const recordHasWarning = (record: FileRecord) =>
-    dataWarnings.some((dw) => dw?.row === record?.row);
+  const tableColumns = getTableColumns(
+    file,
+    isPendingApproval,
+    isSubmissionValidated,
+  );
+  const tableData = getTableData(file);
 
   return (
     <div
-      ref={containerRef}
       css={css`
         margin: 5px 10px;
         .updateRow + .updateRow {
@@ -109,58 +100,23 @@ const FileRecordTable = ({
             isSubmissionValidated={isSubmissionValidated}
             total={records.length}
             fileStat={{
-              errorCount: file.stats.errorsFound.length,
-              newCount: file.stats.new.length,
-              noUpdateCount: file.stats.noUpdate.length,
-              updateCount: file.stats.updated.length,
+              errorCount: stats.errorsFound.length,
+              newCount: stats.new.length,
+              noUpdateCount: stats.noUpdate.length,
+              updateCount: stats.updated.length,
             }}
           />
         }
         right={<SubmissionInfoArea {...submissionData} />}
       />
       <Table
-        getTdProps={(
-          _,
-          row: { original: FileRecord },
-          column: { id: string },
-        ) =>
-          ({
-            style:
-              isPendingApproval &&
-              cellHasUpdate({ row: row.original, field: column.id })
-                ? {
-                    background: theme.colors.accent3_3,
-                  }
-                : {},
-          }) as { style: CSSProperties }
-        }
-        getTrProps={(_, { original }: { original: FileRecord }) =>
-          ({
-            style: recordHasError(original)
-              ? {
-                  background: theme.colors.error_4,
-                }
-              : recordHasWarning(original)
-              ? {
-                  background: theme.colors.warning_4,
-                }
-              : isPendingApproval && rowHasUpdate(original)
-              ? {
-                  background: theme.colors.accent3_4,
-                }
-              : {},
-          }) as { style: CSSProperties }
-        }
-        getTrGroupProps={(_, { original }: { original: FileRecord }) =>
-          isPendingApproval && rowHasUpdate(original)
-            ? {
-                className: `updateRow`, // append this classname so parent div's css can apply style
-              }
-            : {}
-        }
         columns={tableColumns}
         data={tableData}
-        showPagination
+        enableSorting
+        showPageSizeOptions
+        withHeaders
+        withPagination
+        withStripes
       />
     </div>
   );

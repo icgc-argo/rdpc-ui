@@ -1,81 +1,188 @@
-import { CellContentCenter } from "@/app/components/Table/common";
+/*
+ * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ *
+ * This program and the accompanying materials are made available under the terms of
+ * the GNU Affero General Public License v3.0. You should have received a copy of the
+ * GNU Affero General Public License along with this program.
+ *  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+import {
+  CellContentCenter,
+  DataTableStarIcon,
+} from "@/app/components/Table/common";
 import { toDisplayRowIndex } from "@/global/utils";
-import { css } from "@emotion/react";
+import { ColumnDef, Row, css } from "@icgc-argo/uikit";
+import { record } from "zod";
 import { FILE_STATE_COLORS } from "./StatsArea";
+import {
+  CellStatusDisplay,
+  DataFieldCell,
+  StatusColumnCell,
+} from "./TableCells";
 import { FileRecord } from "./types";
 
-const tableColumns: TableColumnConfig<FileRecord>[] = [
-  {
-    id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
-    Cell: ({ original }) => (
-      <CellContentCenter
-        css={
-          rowHasUpdate(original)
-            ? css`
+type FileRecordTableProps = { row: { original: FileRecord } };
+
+// util
+export const recordHasError = (original: FileRecord, stats) =>
+  stats?.errorsFound.some((row) => row === original.rowIndex);
+
+export const rowHasUpdate = (original: FileRecord, stats) =>
+  stats?.updated.some((row) => row === original.rowIndex);
+
+export const cellHasUpdate = ({
+  original,
+  field,
+  dataUpdates,
+}: {
+  original: FileRecord;
+  field: string;
+  dataUpdates: any;
+}) =>
+  Array.isArray(dataUpdates) &&
+  dataUpdates.some(
+    (update) => update.field === field && update.row === original.rowIndex,
+  );
+
+export const recordHasWarning = (original: FileRecord, dataWarnings) =>
+  Array.isArray(dataWarnings) &&
+  dataWarnings.some((warning) => warning.row === original.rowIndex);
+
+type GetTableColumns = (
+  file,
+  isPendingApproval: boolean,
+  isSubmissionValidated: boolean,
+) => ColumnDef<FileRecord>[];
+export const getTableColumns: GetTableColumns = (
+  file,
+  isPendingApproval,
+  isSubmissionValidated,
+) => {
+  const { stats, records, dataUpdates } = file;
+  const cols: ColumnDef<FileRecord>[] = [
+    {
+      accessorKey: "rowIndex",
+      cell: ({ row: { original } }: FileRecordTableProps) => (
+        <CellStatusDisplay
+          original={original}
+          isPendingApproval={isPendingApproval}
+          stats={stats}
+          dataUpdates={dataUpdates}
+        >
+          <CellContentCenter
+            css={
+              rowHasUpdate(original, stats) &&
+              css`
                 justify-content: flex-start;
                 padding-top: 5px;
               `
-            : css``
-        }
-      >
-        {toDisplayRowIndex(original.row)}
-      </CellContentCenter>
-    ),
-    Header: "Line #",
-    resizable: false,
-    width: 70,
-  },
-  {
-    id: "status",
-    Cell: StatusColumCell,
-    accessor: "status",
-    resizable: false,
-    Header: (
-      <CellContentCenter>
-        <StarIcon fill={FILE_STATE_COLORS.NONE} />
-      </CellContentCenter>
-    ),
-    sortMethod: (a: FileRecord["status"], b: FileRecord["status"]) => {
-      const priorities = {
-        ERROR: 1,
-        UPDATE: 2,
-        NEW: 3,
-        NONE: 4,
-      } as { [k in FileRecord["status"]]: number };
-      return priorities[a] - priorities[b];
-    },
-    width: 50,
-  },
-  ...fields.map(
-    ({ name: fieldName }) =>
-      ({
-        accessor: fieldName,
-        Header: fieldName,
-        Cell: ({ original }) => (
-          <DataFieldCell original={original} fieldName={fieldName} />
-        ),
-      }) as (typeof tableColumns)[0],
-  ),
-];
+            }
+          >
+            {toDisplayRowIndex(original.rowIndex)}
+          </CellContentCenter>
+        </CellStatusDisplay>
+      ),
 
-const tableData = sortedRecords.map(
-  (record) =>
-    record?.fields.reduce(
-      (acc, { name, value }) => ({ ...acc, [name]: value }),
-      {
-        row: record.row,
-        status: (() => {
-          switch (true) {
-            case stats?.updated.some((i) => i === record.row):
-              return "UPDATE";
-            case stats?.errorsFound.some((i) => i === record.row):
-              return "ERROR";
-            case stats?.new.some((i) => i === record.row):
-              return "NEW";
-            default:
-              return "NONE";
-          }
-        })(),
+      enableResizing: false,
+      header: "Line #",
+      size: 70,
+    },
+    {
+      id: "status",
+      accessorKey: "status",
+      cell: ({ row: { original } }: FileRecordTableProps) => (
+        <CellStatusDisplay original={original} field="status">
+          <StatusColumnCell original={original} stats={stats} />
+        </CellStatusDisplay>
+      ),
+      enableResizing: false,
+
+      header: () => (
+        <CellContentCenter>
+          <DataTableStarIcon fill={FILE_STATE_COLORS.NONE} />
+        </CellContentCenter>
+      ),
+      size: 50,
+      sortingFn: (a: Row<FileRecord>, b: Row<FileRecord>) => {
+        const sortA = a.original.status;
+        const sortB = b.original.status;
+        const priorities: { [k in FileRecord["status"]]: number } = {
+          ERROR: 1,
+          UPDATE: 2,
+          NEW: 3,
+          NONE: 4,
+        };
+        return priorities[sortA] - priorities[sortB];
       },
-    ),
-);
+    },
+    ...records.map(({ name: fieldName }) => ({
+      accessorKey: fieldName,
+      header: fieldName,
+      cell: ({ row: { original } }: FileRecordTableProps) => (
+        <CellStatusDisplay original={original} field={fieldName}>
+          <DataFieldCell original={original} fieldName={fieldName} />
+        </CellStatusDisplay>
+      ),
+    })),
+  ].map((column) => ({
+    ...column,
+
+    meta: {
+      customCell: true,
+    },
+  }));
+  return cols;
+};
+
+const getStatus = (row, stats) => {
+  if (stats.updated.some((i) => i === record.row)) {
+    return "UPDATE";
+  } else if (stats.errorsFound.some((i) => i === record.row)) {
+    return "ERROR";
+  } else if (stats.new.some((i) => i === record.row)) {
+    return "NEW";
+  } else {
+    return "NONE";
+  }
+};
+
+type GetTableData = (file) => FileRecord[];
+export const getTableData: GetTableData = (file) => {
+  console.log("rrr", file);
+  const { stats, records } = file;
+  return records.map((record) => {
+    const { row, name, value } = record;
+    const status = getStatus(row, stats);
+    return {
+      rowIndex: row,
+      status,
+      [name]: value,
+    };
+  });
+};
+// record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {
+//   rowIndex: record.row,
+//   status: (() => {
+//     switch (true) {
+//       case stats.updated.some((i) => i === record.row):
+//         return "UPDATE";
+//       case stats.errorsFound.some((i) => i === record.row):
+//         return "ERROR";
+//       case stats.new.some((i) => i === record.row):
+//         return "NEW";
+//       default:
+//         return "NONE";
+//     }
+//   })(),
+// }),
