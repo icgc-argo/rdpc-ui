@@ -52,6 +52,8 @@ const FileRecordTable = ({
   //     isPendingApproval,
   //   [egoJwt, isPendingApproval],
   // );
+  const isDiffPreview = true;
+
   const theme = useTheme();
 
   const { records, stats, dataWarnings } = file;
@@ -82,8 +84,10 @@ const FileRecordTable = ({
     file,
     isPendingApproval,
     isSubmissionValidated,
+    isDiffPreview,
   );
   const tableData = getTableData(file);
+  console.log("table data", tableData);
 
   return (
     <div

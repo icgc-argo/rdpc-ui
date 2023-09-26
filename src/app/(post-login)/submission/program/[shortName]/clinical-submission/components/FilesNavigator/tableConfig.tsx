@@ -63,13 +63,28 @@ type GetTableColumns = (
   file,
   isPendingApproval: boolean,
   isSubmissionValidated: boolean,
+  isDiffPreview: boolean,
 ) => ColumnDef<FileRecord>[];
 export const getTableColumns: GetTableColumns = (
   file,
   isPendingApproval,
   isSubmissionValidated,
+  isDiffPreview,
 ) => {
   const { stats, records, dataUpdates } = file;
+  console.log("ww", records);
+  const what = records[0].fields.map(({ name: fieldName }) => ({
+    accessorKey: fieldName,
+    header: fieldName,
+    cell: ({ row: { original } }: FileRecordTableProps) => (
+      <CellStatusDisplay original={original} field={fieldName}>
+        <DataFieldCell original={original} fieldName={fieldName} />
+      </CellStatusDisplay>
+    ),
+  }));
+
+  console.log("what", what);
+
   const cols: ColumnDef<FileRecord>[] = [
     {
       accessorKey: "rowIndex",
@@ -103,7 +118,11 @@ export const getTableColumns: GetTableColumns = (
       accessorKey: "status",
       cell: ({ row: { original } }: FileRecordTableProps) => (
         <CellStatusDisplay original={original} field="status">
-          <StatusColumnCell original={original} stats={stats} />
+          <StatusColumnCell
+            original={original}
+            stats={stats}
+            isDiffPreview={isDiffPreview}
+          />
         </CellStatusDisplay>
       ),
       enableResizing: false,
@@ -126,18 +145,9 @@ export const getTableColumns: GetTableColumns = (
         return priorities[sortA] - priorities[sortB];
       },
     },
-    ...records.map(({ name: fieldName }) => ({
-      accessorKey: fieldName,
-      header: fieldName,
-      cell: ({ row: { original } }: FileRecordTableProps) => (
-        <CellStatusDisplay original={original} field={fieldName}>
-          <DataFieldCell original={original} fieldName={fieldName} />
-        </CellStatusDisplay>
-      ),
-    })),
+    ...what,
   ].map((column) => ({
     ...column,
-
     meta: {
       customCell: true,
     },
@@ -159,30 +169,18 @@ const getStatus = (row, stats) => {
 
 type GetTableData = (file) => FileRecord[];
 export const getTableData: GetTableData = (file) => {
-  console.log("rrr", file);
   const { stats, records } = file;
   return records.map((record) => {
-    const { row, name, value } = record;
+    const recordFields = record.fields.reduce((acc, { name, value }) => ({
+      ...acc,
+      [name]: value,
+    }));
+    const { row } = record;
     const status = getStatus(row, stats);
     return {
       rowIndex: row,
       status,
-      [name]: value,
+      ...recordFields,
     };
   });
 };
-// record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {
-//   rowIndex: record.row,
-//   status: (() => {
-//     switch (true) {
-//       case stats.updated.some((i) => i === record.row):
-//         return "UPDATE";
-//       case stats.errorsFound.some((i) => i === record.row):
-//         return "ERROR";
-//       case stats.new.some((i) => i === record.row):
-//         return "NEW";
-//       default:
-//         return "NONE";
-//     }
-//   })(),
-// }),

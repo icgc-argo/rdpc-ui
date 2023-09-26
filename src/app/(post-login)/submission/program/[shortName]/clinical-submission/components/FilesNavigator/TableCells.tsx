@@ -38,10 +38,12 @@ export const StatusColumnCell = ({
   original,
   stats,
   isSubmissionValidated,
+  isDiffPreview,
 }: {
   original: FileRecord;
   stats;
   isSubmissionValidated: boolean;
+  isDiffPreview: boolean;
 }) => {
   const hasError = recordHasError(original);
   const hasUpdate = rowHasUpdate(original);
@@ -74,9 +76,11 @@ export const StatusColumnCell = ({
 export const DataFieldCell = ({
   original,
   fieldName,
+  isDiffPreview,
 }: {
   original: FileRecord;
   fieldName: string;
+  isDiffPreview: boolean;
 }) =>
   isDiffPreview && rowHasUpdate(original) ? (
     <div
