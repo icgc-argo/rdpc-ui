@@ -50,8 +50,7 @@ const FilePreview: FC<FilePreviewProps> = ({
   const onClearClick =
     (clinicalType: string) =>
     async (e: SyntheticEvent<HTMLButtonElement, Event>) => {
-      const fileType = clinicalType;
-      await clearSubmission(fileType);
+      await clearSubmission(clinicalType);
     };
 
   return (

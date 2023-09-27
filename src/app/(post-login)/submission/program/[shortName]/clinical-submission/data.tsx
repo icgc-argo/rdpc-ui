@@ -16,9 +16,8 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { ClinicalSubmissionQuery } from "@/__generated__/graphql";
-import { capitalize, map, orderBy } from "lodash";
-import { ClinicalSubmissionEntity, ClinicalSubmissionState } from "./types";
+import { notNull } from "@/global/utils";
+import { capitalize, orderBy } from "lodash";
 
 const CLINICAL_FILE_ORDER = [
   "donor",
@@ -37,61 +36,92 @@ const CLINICAL_FILE_ORDER = [
   "biomarker",
 ];
 
-const gqlClinicalEntityToClinicalSubmissionEntityFile =
-  (submissionState: ClinicalSubmissionState) =>
-  // using "any" because we're data massaging the returned GQL, even though the final data types have genearted typings from gql endpoints
-  // adding an additional GQLFile type as we have in the original code doesn't make sense
-  (gqlFile: any): ClinicalSubmissionEntity => {
-    const isSubmissionValidated =
-      submissionState === "INVALID" ||
-      submissionState === "VALID" ||
-      submissionState === "PENDING_APPROVAL";
-    const isPendingApproval = submissionState === "PENDING_APPROVAL";
+// parse out nulls, undefined, provide sensible defaults so type checking isnt a scattered nightmare
+export const parseGQLResp = (gqlData) => {
+  console.log("gql data", gqlData);
+
+  const clinicalState = gqlData?.clinicalSubmissions.state;
+  const clinicalVersion = gqlData?.clinicalSubmissions.version || "";
+
+  const isSubmissionValidated =
+    clinicalState === "INVALID" ||
+    clinicalState === "VALID" ||
+    clinicalState === "PENDING_APPROVAL";
+
+  const isPendingApproval = clinicalState === "PENDING_APPROVAL";
+
+  // const filteredEntites =
+  //   gqlData?.clinicalSubmissions.clinicalEntities?.filter(notNull) || [];
+  // const clinicalEntities = orderBy(filteredEntites, (e) =>
+  //   CLINICAL_FILE_ORDER.indexOf(e ? e.clinicalType : ""),
+  // );
+
+  const filteredEntities =
+    gqlData?.clinicalSubmissions.clinicalEntities.filter(notNull) || [];
+  const orderedEntities = orderBy(filteredEntities, (entity) =>
+    CLINICAL_FILE_ORDER.indexOf(entity ? entity.clinicalType : ""),
+  );
+  const clinicalEntities = orderedEntities.map((entity) => {
     const stats = {
       errorsFound: [],
       new: [],
       noUpdate: [],
       updated: [],
-      ...(gqlFile.stats || {}),
+      ...(entity.stats || {}),
     };
-    const hasSchemaError = !!gqlFile.schemaErrors.length;
-    const hasDataError = !!gqlFile.dataErrors.length;
+
+    const {
+      createdAt,
+      creator,
+      batchName,
+      schemaErrors,
+      dataErrors,
+      dataUpdates,
+      dataWarnings,
+      clinicalType,
+      records,
+    } = entity;
+
+    const hasSchemaError = !!schemaErrors.length;
+    const hasDataError = !!dataErrors.length;
     const hasUpdate = !!stats.updated.length;
+
+    const displayName = capitalize((clinicalType || "").split("_").join(" "));
+
+    const status = isPendingApproval
+      ? hasUpdate
+        ? "UPDATE"
+        : "SUCCESS"
+      : hasSchemaError || hasDataError
+      ? "ERROR"
+      : records.length
+      ? isSubmissionValidated
+        ? "SUCCESS"
+        : "WARNING"
+      : "NONE";
+
     return {
       stats,
-      createdAt: gqlFile.createdAt || "",
-      creator: gqlFile.creator || "",
-      fileName: gqlFile.batchName,
-      schemaErrors: gqlFile.schemaErrors,
-      dataErrors: gqlFile.dataErrors,
-      dataUpdates: gqlFile.dataUpdates,
-      dataWarnings: gqlFile.dataWarnings,
-      displayName: capitalize(
-        (gqlFile.clinicalType || "").split("_").join(" "),
-      ),
-      clinicalType: gqlFile.clinicalType,
-      records: gqlFile.records,
-      recordsCount: gqlFile.records.length,
-      status: isPendingApproval
-        ? hasUpdate
-          ? "UPDATE"
-          : "SUCCESS"
-        : hasSchemaError || hasDataError
-        ? "ERROR"
-        : gqlFile.records.length
-        ? isSubmissionValidated
-          ? "SUCCESS"
-          : "WARNING"
-        : "NONE",
+      createdAt: createdAt || "",
+      creator: creator || "",
+      fileName: batchName,
+      schemaErrors,
+      dataErrors,
+      dataUpdates,
+      dataWarnings,
+      displayName,
+      clinicalType,
+      records,
+      recordsCount: records.length,
+      status,
     };
-  };
+  });
 
-export const getFileNavigatorFiles = (dataObj: ClinicalSubmissionQuery) =>
-  map(
-    orderBy(dataObj.clinicalSubmissions.clinicalEntities, (e) =>
-      CLINICAL_FILE_ORDER.indexOf(e ? e.clinicalType : ""),
-    ),
-    gqlClinicalEntityToClinicalSubmissionEntityFile(
-      dataObj.clinicalSubmissions.state,
-    ),
-  );
+  return {
+    clinicalState,
+    clinicalVersion,
+    clinicalEntities,
+    isPendingApproval,
+    isSubmissionValidated,
+  };
+};
