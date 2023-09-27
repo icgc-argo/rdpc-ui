@@ -18,15 +18,17 @@
  */
 "use client";
 
+import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
 import CLEAR_CLINICAL_SUBMISSION from "@/app/gql/CLEAR_CLINICAL_SUBMISSION";
 import CLINICAL_SUBMISSION_QUERY from "@/app/gql/CLINICAL_SUBMISSION_QUERY";
 import { useAppConfigContext } from "@/app/hooks/AppProvider";
+import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import useUrlQueryState from "@/app/hooks/useURLQueryState";
 import { css } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
-import { ContentHeader, DnaLoader } from "@icgc-argo/uikit";
-import { useEffect, useState } from "react";
+import { DnaLoader } from "@icgc-argo/uikit";
+import { useEffect, useMemo, useState } from "react";
 import urlJoin from "url-join";
 import ClearSubmissionButton from "./components/ClearSubmissionButton";
 import FilesNavigator from "./components/FilesNavigator";
@@ -34,22 +36,6 @@ import Instructions from "./components/Instructions";
 import ProgressBar from "./components/ProgressBar";
 import SubmissionSummaryTable from "./components/SummaryTable";
 import { parseGQLResp } from "./data";
-
-export const placeholderClinicalSubmissionQueryData = (
-  shortName: string,
-): ClinicalSubmissionQueryData => ({
-  clinicalSubmissions: {
-    version: "",
-    programShortName: shortName,
-    clinicalEntities: [],
-    fileErrors: [],
-    id: "",
-    state: null,
-    updatedAt: "",
-    updatedBy: "",
-    __typename: "ClinicalSubmissionData",
-  },
-});
 
 // useMemo and useCallback - check react docs if you need a refresher
 
@@ -94,39 +80,81 @@ const ClinicalSubmission = ({
 
   const [clearClinicalSubmission] = useMutation(CLEAR_CLINICAL_SUBMISSION);
 
-  if (isLoading) {
-    <div
-      css={css`
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-      `}
-    >
-      <DnaLoader />
-    </div>;
-  } else if (gqlData) {
-    const { clinicalState, clinicalEntities, clinicalVersion } =
-      parseGQLResp(gqlData);
+  const { isDisabled: isSubmissionSystemDisabled } =
+    useSubmissionSystemStatus();
 
-    console.log(clinicalEntities);
+  const { clinicalState, clinicalEntities, clinicalVersion } =
+    parseGQLResp(gqlData);
+
+  console.log(clinicalEntities);
+
+  const allDataErrors = useMemo(
+    () =>
+      clinicalEntities.reduce(
+        (acc, entity) => [
+          ...acc,
+          ...entity.dataErrors.map((err) => ({
+            ...err,
+            fileName: entity.batchName,
+          })),
+        ],
+        [],
+      ),
+    [clinicalEntities],
+  );
+
+  const allDataWarnings = useMemo(
+    () =>
+      clinicalEntities.reduce(
+        (acc, entity) => [
+          ...acc,
+          ...entity.dataWarnings.map((err) => ({
+            ...err,
+            fileName: entity.batchName,
+          })),
+        ],
+        [],
+      ),
+    [clinicalEntities],
+  );
+
+  if (isLoading) {
+    return (
+      <div
+        css={css`
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+        `}
+      >
+        <DnaLoader />
+      </div>
+    );
+  } else if (gqlData) {
+    const hasDataWarning = !!allDataWarnings.length;
+    const hasDataError = !!allDataErrors.length;
+    const hasSchemaErrorsAfterMigration =
+      clinicalState === "INVALID_BY_MIGRATION";
+    const hasSchemaError =
+      clinicalEntities.length &&
+      clinicalEntities.some(({ schemaErrors }) => !!schemaErrors.length);
+    const hasSomeEntity = clinicalEntities.some(
+      ({ records }) => !!records.length,
+    );
 
     // Instruction box
     // Instruction box state
-    const isSubmissionSystemDisabled = false;
-    const isReadyForSignoff = false;
-    const isReadyForValidation = true;
-    const hasDataError = false;
-    const isValidated = true;
-    // const submissionVersion = data?.clinicalSubmissions.version;
+    const isReadyForValidation =
+      hasSomeEntity && !hasSchemaError && !hasSchemaErrorsAfterMigration;
+    const isReadyForSignoff = isReadyForValidation && clinicalState === "VALID";
+    const isValidated = clinicalState !== "OPEN";
     // Instruction box handlers
     const handleSubmissionFilesUpload = () => new Promise(() => true);
     const handleSubmissionValidation = () => new Promise(() => true);
     const handleSignOff = () => new Promise(() => true);
 
     // FileNavigator
-    // FileNavigator state
-    //    const fileNavigatorFiles = data ? getFileNavigatorFiles(data) : [];
     // FileNavigator handlers
     const handleClearSchemaError = () => new Promise(() => true);
     const setSelectedClinicalEntityType = () => null;
