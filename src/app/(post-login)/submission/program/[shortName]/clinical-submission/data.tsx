@@ -38,8 +38,6 @@ const CLINICAL_FILE_ORDER = [
 
 // parse out nulls, undefined, provide sensible defaults so type checking isnt a scattered nightmare
 export const parseGQLResp = (gqlData) => {
-  console.log("gql data", gqlData);
-
   const clinicalState = gqlData?.clinicalSubmissions.state;
   const clinicalVersion = gqlData?.clinicalSubmissions.version || "";
 
@@ -49,12 +47,6 @@ export const parseGQLResp = (gqlData) => {
     clinicalState === "PENDING_APPROVAL";
 
   const isPendingApproval = clinicalState === "PENDING_APPROVAL";
-
-  // const filteredEntites =
-  //   gqlData?.clinicalSubmissions.clinicalEntities?.filter(notNull) || [];
-  // const clinicalEntities = orderBy(filteredEntites, (e) =>
-  //   CLINICAL_FILE_ORDER.indexOf(e ? e.clinicalType : ""),
-  // );
 
   const filteredEntities =
     gqlData?.clinicalSubmissions.clinicalEntities.filter(notNull) || [];
