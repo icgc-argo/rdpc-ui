@@ -72,8 +72,7 @@ export const getTableColumns: GetTableColumns = (
   isDiffPreview,
 ) => {
   const { stats, records, dataUpdates } = file;
-  console.log("ww", records);
-  const what = records[0].fields.map(({ name: fieldName }) => ({
+  const directlyMappedFields = records[0].fields.map(({ name: fieldName }) => ({
     accessorKey: fieldName,
     header: fieldName,
     cell: ({ row: { original } }: FileRecordTableProps) => (
@@ -82,8 +81,6 @@ export const getTableColumns: GetTableColumns = (
       </CellStatusDisplay>
     ),
   }));
-
-  console.log("what", what);
 
   const cols: ColumnDef<FileRecord>[] = [
     {
@@ -145,7 +142,7 @@ export const getTableColumns: GetTableColumns = (
         return priorities[sortA] - priorities[sortB];
       },
     },
-    ...what,
+    ...directlyMappedFields,
   ].map((column) => ({
     ...column,
     meta: {

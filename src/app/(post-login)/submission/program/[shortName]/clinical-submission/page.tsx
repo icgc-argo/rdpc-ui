@@ -22,7 +22,9 @@ import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
 import CLEAR_CLINICAL_SUBMISSION from "@/app/gql/CLEAR_CLINICAL_SUBMISSION";
 import CLINICAL_SUBMISSION_QUERY from "@/app/gql/CLINICAL_SUBMISSION_QUERY";
+import UPLOAD_CLINICAL_SUBMISSION_MUTATION from "@/app/gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION";
 import { useAppConfigContext } from "@/app/hooks/AppProvider";
+import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import useUrlQueryState from "@/app/hooks/useURLQueryState";
 import { css } from "@/lib/emotion";
@@ -37,8 +39,6 @@ import ProgressBar from "./components/ProgressBar";
 import SubmissionSummaryTable from "./components/SummaryTable";
 import { parseGQLResp } from "./data";
 
-// useMemo and useCallback - check react docs if you need a refresher
-
 export const URL_QUERY_KEY = "tab";
 
 const ClinicalSubmission = ({
@@ -46,6 +46,7 @@ const ClinicalSubmission = ({
 }: {
   params: { shortName: string };
 }) => {
+  const commonToaster = useCommonToasters();
   const [query] = useUrlQueryState(URL_QUERY_KEY);
   const [selectedClinicalEntityType, setEntityType] = useState(query);
 
@@ -71,22 +72,26 @@ const ClinicalSubmission = ({
     },
   });
 
-  // const [clearClinicalSubmission] = useMutation(CLEAR_CLINICAL_SUBMISSION, {
-  //   variables: {
-  //     programShortName: shortName,
-  //     submissionVersion: clinicalVersion,
-  //   },
-  // });
-
+  // mutations
   const [clearClinicalSubmission] = useMutation(CLEAR_CLINICAL_SUBMISSION);
+  const [uploadClinicalSubmission, mutationStatus] = useMutation(
+    UPLOAD_CLINICAL_SUBMISSION_MUTATION,
+    {
+      onCompleted: (d) => {
+        //setSelectedClinicalEntityType(defaultClinicalEntityType);
+      },
+      onError: (e) => {
+        commonToaster.unknownError();
+      },
+    },
+  );
 
   const { isDisabled: isSubmissionSystemDisabled } =
     useSubmissionSystemStatus();
 
+  // data
   const { clinicalState, clinicalEntities, clinicalVersion } =
     parseGQLResp(gqlData);
-
-  console.log(clinicalEntities);
 
   const allDataErrors = useMemo(
     () =>
@@ -150,10 +155,16 @@ const ClinicalSubmission = ({
     const isReadyForSignoff = isReadyForValidation && clinicalState === "VALID";
     const isValidated = clinicalState !== "OPEN";
     // Instruction box handlers
-    const handleSubmissionFilesUpload = () => new Promise(() => true);
-    const handleSubmissionValidation = () => new Promise(() => true);
-    const handleSignOff = () => new Promise(() => true);
+    const handleSubmissionFilesUpload = (files: FileList) =>
+      uploadClinicalSubmission({
+        variables: {
+          programShortName: shortName,
+        },
+      });
 
+    const handleSubmissionValidation = () => new Promise(() => true);
+
+    const handleSignOff = () => new Promise(() => true);
     // FileNavigator
     // FileNavigator handlers
     const handleClearSchemaError = () => new Promise(() => true);
@@ -222,9 +233,6 @@ const ClinicalSubmission = ({
         </div>
       </>
     );
-  } else {
-    // TODO redirect to 404 / 505? whatever error we have
-    return <div>error </div>;
   }
 };
 

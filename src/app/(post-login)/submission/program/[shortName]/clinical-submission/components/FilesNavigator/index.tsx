@@ -59,9 +59,6 @@ const FilesNavigator = ({
     CLEAR_CLINICAL_SUBMISSION,
   );
 
-  // const { refetch: refetchClinicalSubmission } =
-  //   useClinicalSubmissionQuery(programShortName);
-
   // state
   const selectedFile = fileStates.find(
     (file) => file && file.clinicalType === selectedClinicalEntityType,

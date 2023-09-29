@@ -43,15 +43,6 @@ const FileRecordTable = ({
   file: ClinicalSubmissionEntityFile;
   submissionData?: ComponentProps<typeof SubmissionInfoArea>;
 }) => {
-  // const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
-  // const { egoJwt, permissions } = useAuthContext();
-  // const isDiffPreview = useMemo(
-  //   () =>
-  //     (isDccMember(permissions) ||
-  //       isDataSubmitter({ permissions, programId: programShortName })) &&
-  //     isPendingApproval,
-  //   [egoJwt, isPendingApproval],
-  // );
   const isDiffPreview = true;
 
   const theme = useTheme();
@@ -61,25 +52,6 @@ const FileRecordTable = ({
   const fields: ClinicalSubmissionEntityFile["records"][0]["fields"] =
     records.length ? records[0].fields : [];
 
-  // const sortedRecords = orderBy(
-  //   records,
-  //   !(isDccMember(permissions) && isPendingApproval)
-  //     ? REQUIRED_FILE_ENTRY_FIELDS.ROW_INDEX
-  //     : (r) => {
-  //         const priority = (() => {
-  //           switch (true) {
-  //             case file.stats.updated.some((i) => i === r.row):
-  //               return 0;
-  //             case file.stats.new.some((i) => i === r.row):
-  //               return 1;
-  //             default:
-  //               return records.length;
-  //           }
-  //         })();
-  //         return `${priority}::${r.row}`;
-  //       },
-  // );
-
   const tableColumns = getTableColumns(
     file,
     isPendingApproval,
@@ -87,7 +59,6 @@ const FileRecordTable = ({
     isDiffPreview,
   );
   const tableData = getTableData(file);
-  console.log("table data", tableData);
 
   return (
     <div
