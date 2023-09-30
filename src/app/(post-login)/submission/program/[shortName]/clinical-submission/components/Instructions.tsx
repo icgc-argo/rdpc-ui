@@ -18,18 +18,25 @@
  */
 "use client";
 
+import CLINICAL_SCHEMA_VERSION_QUERY from "@/app/gql/CLINICAL_SCHEMA_VERSION";
 import { useAppConfigContext } from "@/app/hooks/AppProvider";
+import { CLINICAL_TEMPLATE_PATH } from "@/global/constants";
 import { css, useTheme } from "@/lib/emotion";
+import { useQuery } from "@apollo/client";
 import {
   BUTTON_SIZES,
   Button,
+  DropdownButton,
   FileSelectButton,
   Icon,
   InstructionBox,
+  Link,
   Typography,
   defaultTheme,
 } from "@icgc-argo/uikit";
-import { useState } from "react";
+import { capitalize } from "lodash";
+import { ComponentProps, useState } from "react";
+import urlJoin from "url-join";
 
 export const instructionBoxButtonIconStyle = css`
   margin-right: 5px;
@@ -55,6 +62,80 @@ export const instructionBoxLoadingButtonStyle = (
     cursor: not-allowed;
   }
 `;
+
+export const createTSVDownloader =
+  (gatewayRoot: string) => (fileName: string) => {
+    if (fileName === "all") {
+      window.location.assign(
+        urlJoin(
+          gatewayRoot,
+          CLINICAL_TEMPLATE_PATH,
+          fileName,
+          "?excludeSampleRegistration=true",
+        ),
+      );
+    } else {
+      window.location.assign(
+        urlJoin(gatewayRoot, CLINICAL_TEMPLATE_PATH, fileName),
+      );
+    }
+  };
+
+const FileTemplatesDownloadButton = ({
+  clinicalTypes,
+}: {
+  clinicalTypes: string[];
+}) => {
+  const { GATEWAY_API_ROOT } = useAppConfigContext();
+  const downloadTsvFileTemplate = createTSVDownloader(GATEWAY_API_ROOT);
+  const onItemClick: ComponentProps<typeof DropdownButton>["onItemClick"] = (
+    item,
+  ) => {
+    if (item.value === "all") {
+      downloadTsvFileTemplate(`all`);
+    } else {
+      downloadTsvFileTemplate(`${item.value}.tsv`);
+    }
+  };
+
+  return (
+    <DropdownButton
+      css={instructionBoxButtonStyle}
+      variant="secondary"
+      size="sm"
+      onItemClick={onItemClick}
+      menuItems={[
+        {
+          display: "Download All",
+          value: "all",
+        },
+        ...clinicalTypes.map((clinicalType) => ({
+          value: clinicalType,
+          display: capitalize(clinicalType.split("_").join(" ")),
+        })),
+      ]}
+    >
+      <span css={instructionBoxButtonContentStyle}>
+        <Icon
+          name="download"
+          fill="accent2_dark"
+          height="12px"
+          css={instructionBoxButtonIconStyle}
+        />
+        File Templates
+        <Icon
+          name="chevron_down"
+          fill="accent2_dark"
+          height="9px"
+          css={css`
+            ${instructionBoxButtonIconStyle}
+            margin-left: 5px;
+          `}
+        />
+      </span>
+    </DropdownButton>
+  );
+};
 
 const InstructionLoader = ({ text }: { text: string }) => {
   const theme = useTheme();
@@ -124,7 +205,8 @@ const Instructions = ({
     await onSignOffClick();
     setIsSigningOff(false);
   };
-  //const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
+
+  const latestDictionaryResponse = useQuery(CLINICAL_SCHEMA_VERSION_QUERY);
 
   return (
     <div
@@ -138,13 +220,17 @@ const Instructions = ({
             <Typography variant="data" component="span">
               BEFORE YOU START: Download the clinical file templates and format
               them using{" "}
-              {/* <Link target="_blank" bold href={DOCS_DICTIONARY_PAGE}>
+              <Link
+                target="_blank"
+                bold
+                href={urlJoin(DOCS_URL_ROOT, "/dictionary")}
+              >
                 Data&nbsp;Dictionary&nbsp;
                 {!latestDictionaryResponse.loading &&
-                  `v${latestDictionaryResponse.data.clinicalSubmissionSchemaVersion}`}
-              </Link> */}
+                  `v${latestDictionaryResponse?.data?.clinicalSubmissionSchemaVersion}`}
+              </Link>
             </Typography>
-            {/* <FileTemplatesDownloadButton clinicalTypes={clinicalTypes} /> */}
+            <FileTemplatesDownloadButton clinicalTypes={clinicalTypes} />
           </>,
           <>
             <Typography variant="data" component="span">

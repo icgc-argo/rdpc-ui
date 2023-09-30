@@ -16,10 +16,13 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import useUrlQueryState from "@/app/hooks/useURLQueryState";
 import { notNull } from "@/global/utils";
 import { css } from "@/lib/emotion";
 import { Icon, VerticalTabs } from "@icgc-argo/uikit";
+import Link from "next/link";
 import { FC, SyntheticEvent } from "react";
+import { URL_QUERY_KEY } from "../../page";
 import { ClinicalEntities, ClinicalSubmissionEntity } from "../../types";
 
 export const VerticalTabsSection: FC<{
@@ -27,9 +30,12 @@ export const VerticalTabsSection: FC<{
   selectedFile: ClinicalSubmissionEntity | undefined;
   onFileSelect: (clinicalType: string) => void;
 }> = ({ fileStates, selectedFile, onFileSelect }) => {
+  // handler
   const onFileClick =
     (clinicalType: string) => (e: SyntheticEvent<HTMLElement, Event>) =>
       onFileSelect(clinicalType);
+  // state
+  const [query, createUrl] = useUrlQueryState(URL_QUERY_KEY);
 
   return (
     <div
@@ -46,36 +52,38 @@ export const VerticalTabsSection: FC<{
         `}
       >
         {fileStates?.filter(notNull).map((fileState) => (
-          <VerticalTabs.Item
-            key={fileState.clinicalType}
-            active={selectedFile?.clinicalType === fileState.clinicalType}
-            onClick={onFileClick(fileState.clinicalType)}
-          >
-            <div
-              css={css`
-                text-align: left;
-              `}
+          <Link href={createUrl(fileState.clinicalType)}>
+            <VerticalTabs.Item
+              key={fileState.clinicalType}
+              active={selectedFile?.clinicalType === fileState.clinicalType}
+              onClick={onFileClick(fileState.clinicalType)}
             >
-              {fileState.displayName}
-            </div>
-            {!!fileState.recordsCount &&
-              fileState.status !== "NONE" &&
-              fileState.status !== "ERROR" && (
-                <VerticalTabs.Tag variant={fileState.status}>
-                  {fileState.recordsCount}
+              <div
+                css={css`
+                  text-align: left;
+                `}
+              >
+                {fileState.displayName}
+              </div>
+              {!!fileState.recordsCount &&
+                fileState.status !== "NONE" &&
+                fileState.status !== "ERROR" && (
+                  <VerticalTabs.Tag variant={fileState.status}>
+                    {fileState.recordsCount}
+                  </VerticalTabs.Tag>
+                )}
+              {fileState.status === "ERROR" && (
+                <VerticalTabs.Tag variant="ERROR">
+                  <Icon
+                    name="exclamation"
+                    fill="#fff"
+                    height="10px"
+                    width="10px"
+                  />
                 </VerticalTabs.Tag>
               )}
-            {fileState.status === "ERROR" && (
-              <VerticalTabs.Tag variant="ERROR">
-                <Icon
-                  name="exclamation"
-                  fill="#fff"
-                  height="10px"
-                  width="10px"
-                />
-              </VerticalTabs.Tag>
-            )}
-          </VerticalTabs.Item>
+            </VerticalTabs.Item>
+          </Link>
         ))}
       </VerticalTabs>
     </div>

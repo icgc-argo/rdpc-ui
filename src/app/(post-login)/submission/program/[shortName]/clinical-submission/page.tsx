@@ -20,25 +20,40 @@
 
 import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
+import CLEAR_CLINICAL_SUBMISSION from "@/app/gql/CLEAR_CLINICAL_SUBMISSION";
 import CLINICAL_SUBMISSION_QUERY from "@/app/gql/CLINICAL_SUBMISSION_QUERY";
+import UPLOAD_CLINICAL_SUBMISSION_MUTATION from "@/app/gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION";
 import { useAppConfigContext } from "@/app/hooks/AppProvider";
-import { notNull } from "@/global/utils";
+import useCommonToasters from "@/app/hooks/useCommonToasters";
+import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
+import useUrlQueryState from "@/app/hooks/useURLQueryState";
 import { css } from "@/lib/emotion";
-import { useQuery } from "@apollo/client";
-import { Button } from "@icgc-argo/uikit";
-import { useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import { DnaLoader } from "@icgc-argo/uikit";
+import { useEffect, useMemo, useState } from "react";
 import urlJoin from "url-join";
+import ClearSubmissionButton from "./components/ClearSubmissionButton";
 import FilesNavigator from "./components/FilesNavigator";
 import Instructions from "./components/Instructions";
 import ProgressBar from "./components/ProgressBar";
 import SubmissionSummaryTable from "./components/SummaryTable";
-import { getFileNavigatorFiles } from "./data";
+import { parseGQLResp } from "./data";
+
+export const URL_QUERY_KEY = "tab";
 
 const ClinicalSubmission = ({
   params: { shortName },
 }: {
   params: { shortName: string };
 }) => {
+  const commonToaster = useCommonToasters();
+  const [query] = useUrlQueryState(URL_QUERY_KEY);
+  const [selectedClinicalEntityType, setEntityType] = useState(query);
+
+  useEffect(() => {
+    setEntityType(query);
+  }, [query]);
+
   // docs url
   const { DOCS_URL_ROOT } = useAppConfigContext();
   const helpUrl = urlJoin(
@@ -47,44 +62,115 @@ const ClinicalSubmission = ({
   );
 
   // page data query
-  const { data, loading: isLoading } = useQuery(CLINICAL_SUBMISSION_QUERY, {
+  const {
+    data: gqlData,
+    loading: isLoading,
+    refetch,
+  } = useQuery(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       shortName,
     },
   });
-  const clinicalState = data?.clinicalSubmissions.state;
-  const clinicalEntities =
-    data?.clinicalSubmissions.clinicalEntities?.filter(notNull) || [];
 
-  // Instruction box
-  // Instruction box state
-  const isSubmissionSystemDisabled = false;
-  const isReadyForSignoff = false;
-  const isReadyForValidation = true;
-  const hasDataError = false;
-  const isValidated = true;
-  const submissionVersion = "111";
-  // Instruction box handlers
-  const handleSubmissionFilesUpload = () => new Promise(() => true);
-  const handleSubmissionValidation = () => new Promise(() => true);
-  const handleSignOff = () => new Promise(() => true);
-  const handleSubmissionClear = () => new Promise(() => true);
+  // mutations
+  const [clearClinicalSubmission] = useMutation(CLEAR_CLINICAL_SUBMISSION);
+  const [uploadClinicalSubmission, mutationStatus] = useMutation(
+    UPLOAD_CLINICAL_SUBMISSION_MUTATION,
+    {
+      onCompleted: (d) => {
+        //setSelectedClinicalEntityType(defaultClinicalEntityType);
+      },
+      onError: (e) => {
+        commonToaster.unknownError();
+      },
+    },
+  );
 
-  // FileNavigator
-  // FileNavigator state
-  const fileNavigatorFiles = data ? getFileNavigatorFiles(data) : [];
-  const selectedClinicalEntityType = null;
-  const [tabFromData, setTabFromData] = useState("donor");
-  // FileNavigator handlers
-  const handleClearSchemaError = () => new Promise(() => true);
-  const setSelectedClinicalEntityType = () => null;
+  const { isDisabled: isSubmissionSystemDisabled } =
+    useSubmissionSystemStatus();
 
-  if (data?.clinicalSubmissions === undefined) {
-    return <div> no data</div>;
-  } else {
-    return isLoading ? (
-      <div> loading ... </div>
-    ) : (
+  // data
+  const { clinicalState, clinicalEntities, clinicalVersion } =
+    parseGQLResp(gqlData);
+
+  const allDataErrors = useMemo(
+    () =>
+      clinicalEntities.reduce(
+        (acc, entity) => [
+          ...acc,
+          ...entity.dataErrors.map((err) => ({
+            ...err,
+            fileName: entity.batchName,
+          })),
+        ],
+        [],
+      ),
+    [clinicalEntities],
+  );
+
+  const allDataWarnings = useMemo(
+    () =>
+      clinicalEntities.reduce(
+        (acc, entity) => [
+          ...acc,
+          ...entity.dataWarnings.map((err) => ({
+            ...err,
+            fileName: entity.batchName,
+          })),
+        ],
+        [],
+      ),
+    [clinicalEntities],
+  );
+
+  if (isLoading) {
+    return (
+      <div
+        css={css`
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+        `}
+      >
+        <DnaLoader />
+      </div>
+    );
+  } else if (gqlData) {
+    const hasDataWarning = !!allDataWarnings.length;
+    const hasDataError = !!allDataErrors.length;
+    const hasSchemaErrorsAfterMigration =
+      clinicalState === "INVALID_BY_MIGRATION";
+    const hasSchemaError =
+      clinicalEntities.length &&
+      clinicalEntities.some(({ schemaErrors }) => !!schemaErrors.length);
+    const hasSomeEntity = clinicalEntities.some(
+      ({ records }) => !!records.length,
+    );
+
+    // Instruction box
+    // Instruction box state
+    const isReadyForValidation =
+      hasSomeEntity && !hasSchemaError && !hasSchemaErrorsAfterMigration;
+    const isReadyForSignoff = isReadyForValidation && clinicalState === "VALID";
+    const isValidated = clinicalState !== "OPEN";
+    // Instruction box handlers
+    const handleSubmissionFilesUpload = (files: FileList) =>
+      uploadClinicalSubmission({
+        variables: {
+          programShortName: shortName,
+        },
+      });
+
+    const handleSubmissionValidation = () => new Promise(() => true);
+
+    const handleSignOff = () => new Promise(() => true);
+    // FileNavigator
+    // FileNavigator handlers
+    const handleClearSchemaError = () => new Promise(() => true);
+    const setSelectedClinicalEntityType = () => null;
+
+    return (
       <>
         <div
           css={css`
@@ -104,19 +190,14 @@ const ClinicalSubmission = ({
               `}
             >
               <ProgressBar
-                clinicalEntities={data?.clinicalSubmissions.clinicalEntities}
-                clinicalState={data?.clinicalSubmissions.state}
+                clinicalEntities={clinicalEntities}
+                clinicalState={clinicalState}
               />
-              <Button
-                variant="text"
-                css={css`
-                  margin-right: 10px;
-                `}
-                disabled={isSubmissionSystemDisabled || !submissionVersion}
-                onClick={handleSubmissionClear}
-              >
-                Clear submission
-              </Button>
+              <ClearSubmissionButton
+                isDisabled={isSubmissionSystemDisabled || !clinicalVersion}
+                clearSubmission={clearClinicalSubmission}
+                refetchSubmission={refetch}
+              />
             </div>
           </ContentHeader>
           <ContentMain>
@@ -132,24 +213,20 @@ const ClinicalSubmission = ({
               onUploadFileSelect={handleSubmissionFilesUpload}
               onValidateClick={handleSubmissionValidation}
               onSignOffClick={handleSignOff}
-              // clinicalTypes={data.clinicalSubmissions.clinicalEntities.map(
-              //   ({ clinicalType }) => clinicalType,
-              // )}
-              clinicalTypes={["a", "b"]}
-            />
-            <SubmissionSummaryTable
-              clinicalEntities={data.clinicalSubmissions.clinicalEntities}
+              clinicalTypes={clinicalEntities.map(
+                ({ clinicalType }) => clinicalType,
+              )}
             />
 
+            <SubmissionSummaryTable clinicalEntities={clinicalEntities} />
+
             <FilesNavigator
-              submissionState={data.clinicalSubmissions.state}
+              submissionState={clinicalState}
               clearDataError={handleClearSchemaError}
-              fileStates={fileNavigatorFiles}
-              selectedClinicalEntityType={
-                selectedClinicalEntityType || tabFromData
-              }
+              fileStates={clinicalEntities}
+              selectedClinicalEntityType={selectedClinicalEntityType}
               onFileSelect={setSelectedClinicalEntityType}
-              submissionVersion={data.clinicalSubmissions.version}
+              submissionVersion={clinicalVersion}
               programShortName={shortName}
             />
           </ContentMain>

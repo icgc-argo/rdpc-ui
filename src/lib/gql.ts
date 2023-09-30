@@ -19,6 +19,7 @@
 "use client";
 
 import { ApolloClient, ApolloLink, InMemoryCache } from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
 import { createUploadLink } from "apollo-upload-client";
 export { gql } from "@/__generated__/gql";
 
@@ -61,7 +62,17 @@ export const createApolloClient = (config: Config) => {
     return forward(operation);
   });
 
-  const additiveLink = ApolloLink.from([authLink, httpLink]);
+  const errorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors)
+      graphQLErrors.forEach(({ message, locations, path }) =>
+        console.log(
+          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+        ),
+      );
+    if (networkError) console.log(`[Network error]: ${networkError}`);
+  });
+
+  const additiveLink = ApolloLink.from([authLink, errorLink, httpLink]);
 
   return new ApolloClient({
     link: additiveLink,

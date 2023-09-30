@@ -59,9 +59,6 @@ const FilesNavigator = ({
     CLEAR_CLINICAL_SUBMISSION,
   );
 
-  // const { refetch: refetchClinicalSubmission } =
-  //   useClinicalSubmissionQuery(programShortName);
-
   // state
   const selectedFile = fileStates.find(
     (file) => file && file.clinicalType === selectedClinicalEntityType,
@@ -112,9 +109,9 @@ const FilesNavigator = ({
       <Col style={{ position: "relative", overflow: "hidden" }}>
         {schemaErrors?.length ? (
           <ErrorBox
-          // errors={schemaErrors}
-          // displayName={"schema.name"}
-          // onErrorClearClick={onErrorClearClick}
+            data={schemaErrors}
+            selectedFile={selectedFile}
+            onClearClick={onErrorClearClick}
           />
         ) : selectedFile?.records.length ? (
           <FilePreview
