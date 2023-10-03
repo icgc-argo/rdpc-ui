@@ -30,7 +30,7 @@ import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus
 import useUrlQueryState from "@/app/hooks/useURLQueryState";
 import { css } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
-import { DnaLoader, FileSelectButton } from "@icgc-argo/uikit";
+import { DnaLoader } from "@icgc-argo/uikit";
 import { useEffect, useMemo, useState } from "react";
 import urlJoin from "url-join";
 import FilesNavigator from "./components/FilesNavigator";
@@ -195,36 +195,6 @@ const ClinicalSubmission = ({
             helpUrl={helpUrl}
           ></ContentHeader>
           <ContentMain>
-            <input
-              type="file"
-              onChange={async (e) => {
-                console.log(e.target.files);
-                const files = e.target.files;
-                // const resp = await uploadFile({
-                //   variables: { shortName, registrationFile: file },
-                // });
-                const resp = await uploadClinicalSubmission({
-                  variables: { programShortName: shortName, files },
-                });
-                console.log("r", resp);
-              }}
-            />
-            <FileSelectButton
-              isAsync
-              inputProps={{
-                accept: ".tsv",
-                multiple: true,
-              }}
-              onFilesSelect={async (files) => {
-                if (files[0])
-                  await uploadClinicalSubmission({
-                    variables: { programShortName: shortName, files },
-                  });
-              }}
-            >
-              select files
-            </FileSelectButton>
-
             <Instructions
               uploadEnabled={!isSubmissionSystemDisabled}
               signOffEnabled={!isSubmissionSystemDisabled && isReadyForSignoff}
