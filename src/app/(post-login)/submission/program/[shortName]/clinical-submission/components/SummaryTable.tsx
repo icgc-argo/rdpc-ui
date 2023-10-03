@@ -18,7 +18,7 @@
  */
 
 import { StatArea } from "@/app/components/Table/common";
-import { ColumnDef, css, Table, ThemeColorNames } from "@icgc-argo/uikit";
+import { ColumnDef, css, ThemeColorNames } from "@icgc-argo/uikit";
 import { startCase } from "lodash";
 import { createRef } from "react";
 import { ClinicalEntities, ClinicalSubmission } from "../types";
@@ -115,7 +115,17 @@ const SubmissionSummaryTable = ({
       `}
       ref={containerRef}
     >
-      <Table
+      table
+    </div>
+  );
+};
+
+export default SubmissionSummaryTable;
+
+/**
+ * 
+ * 
+ *    <Table
       //variant="STATIC"
       // getTdProps={(_, row, column) => {
       //   const isUpdateRow = row.index === 1;
@@ -135,8 +145,4 @@ const SubmissionSummaryTable = ({
       //data={getData(clinicalEntities)}
       //resizable
       />
-    </div>
-  );
-};
-
-export default SubmissionSummaryTable;
+ */

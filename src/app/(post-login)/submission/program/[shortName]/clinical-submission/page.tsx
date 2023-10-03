@@ -23,19 +23,18 @@ import ContentMain from "@/app/components/Content/ContentMain";
 import CLEAR_CLINICAL_SUBMISSION from "@/app/gql/CLEAR_CLINICAL_SUBMISSION";
 import CLINICAL_SUBMISSION_QUERY from "@/app/gql/CLINICAL_SUBMISSION_QUERY";
 import UPLOAD_CLINICAL_SUBMISSION_MUTATION from "@/app/gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION";
+import UPLOAD_REGISTRATION_MUTATION from "@/app/gql/UPLOAD_REGISTRATION_MUTATION";
 import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import useUrlQueryState from "@/app/hooks/useURLQueryState";
 import { css } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
-import { DnaLoader } from "@icgc-argo/uikit";
+import { DnaLoader, FileSelectButton } from "@icgc-argo/uikit";
 import { useEffect, useMemo, useState } from "react";
 import urlJoin from "url-join";
-import ClearSubmissionButton from "./components/ClearSubmissionButton";
 import FilesNavigator from "./components/FilesNavigator";
 import Instructions from "./components/Instructions";
-import ProgressBar from "./components/ProgressBar";
 import SubmissionSummaryTable from "./components/SummaryTable";
 import { parseGQLResp } from "./data";
 
@@ -86,6 +85,14 @@ const ClinicalSubmission = ({
     },
   );
 
+  const handleSubmissionFilesUpload = (files: FileList) =>
+    uploadClinicalSubmission({
+      variables: {
+        programShortName: shortName,
+        files,
+      },
+    });
+
   const { isDisabled: isSubmissionSystemDisabled } =
     useSubmissionSystemStatus();
 
@@ -123,6 +130,17 @@ const ClinicalSubmission = ({
     [clinicalEntities],
   );
 
+  //
+
+  const [uploadFile, { loading: isUploading }] = useMutation(
+    UPLOAD_REGISTRATION_MUTATION,
+
+    {
+      onError: (e) => {
+        commonToaster.unknownError();
+      },
+    },
+  );
   if (isLoading) {
     return (
       <div
@@ -155,12 +173,6 @@ const ClinicalSubmission = ({
     const isReadyForSignoff = isReadyForValidation && clinicalState === "VALID";
     const isValidated = clinicalState !== "OPEN";
     // Instruction box handlers
-    const handleSubmissionFilesUpload = (files: FileList) =>
-      uploadClinicalSubmission({
-        variables: {
-          programShortName: shortName,
-        },
-      });
 
     const handleSubmissionValidation = () => new Promise(() => true);
 
@@ -181,26 +193,38 @@ const ClinicalSubmission = ({
           <ContentHeader
             breadcrumb={[shortName, "Submit Clinical Data"]}
             helpUrl={helpUrl}
-          >
-            <div
-              css={css`
-                flex: 1;
-                display: flex;
-                justify-content: space-between;
-              `}
-            >
-              <ProgressBar
-                clinicalEntities={clinicalEntities}
-                clinicalState={clinicalState}
-              />
-              <ClearSubmissionButton
-                isDisabled={isSubmissionSystemDisabled || !clinicalVersion}
-                clearSubmission={clearClinicalSubmission}
-                refetchSubmission={refetch}
-              />
-            </div>
-          </ContentHeader>
+          ></ContentHeader>
           <ContentMain>
+            <input
+              type="file"
+              onChange={async (e) => {
+                console.log(e.target.files);
+                const files = e.target.files;
+                // const resp = await uploadFile({
+                //   variables: { shortName, registrationFile: file },
+                // });
+                const resp = await uploadClinicalSubmission({
+                  variables: { programShortName: shortName, files },
+                });
+                console.log("r", resp);
+              }}
+            />
+            <FileSelectButton
+              isAsync
+              inputProps={{
+                accept: ".tsv",
+                multiple: true,
+              }}
+              onFilesSelect={async (files) => {
+                if (files[0])
+                  await uploadClinicalSubmission({
+                    variables: { programShortName: shortName, files },
+                  });
+              }}
+            >
+              select files
+            </FileSelectButton>
+
             <Instructions
               uploadEnabled={!isSubmissionSystemDisabled}
               signOffEnabled={!isSubmissionSystemDisabled && isReadyForSignoff}
@@ -217,7 +241,6 @@ const ClinicalSubmission = ({
                 ({ clinicalType }) => clinicalType,
               )}
             />
-
             <SubmissionSummaryTable clinicalEntities={clinicalEntities} />
 
             <FilesNavigator
