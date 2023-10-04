@@ -50,7 +50,6 @@ import urlJoin from "url-join";
 import FileError from "../../../../../components/FileError";
 import FilesNavigator from "./components/FilesNavigator";
 import Instructions from "./components/Instructions";
-import SubmissionSummaryTable from "./components/SummaryTable";
 import { parseGQLResp } from "./data";
 
 export const URL_QUERY_KEY = "tab";
@@ -112,7 +111,9 @@ const ClinicalSubmission = ({
   const { isDisabled: isSubmissionSystemDisabled } =
     useSubmissionSystemStatus();
 
-  // data
+  /**
+   * Data
+   */
   const {
     clinicalState,
     clinicalFileErrors,
@@ -179,7 +180,9 @@ const ClinicalSubmission = ({
       }
     };
 
-  // Submission data error & warnings
+  /**
+   * Submission data errors and warnings
+   */
   const getErrorColumns = (
     level: NotificationVariant,
   ): {
@@ -205,16 +208,29 @@ const ClinicalSubmission = ({
     return { errorReportColumns, errorTableColumns };
   };
 
+  // Errors
   const { errorReportColumns, errorTableColumns } = getErrorColumns(
     NOTIFICATION_VARIANTS.ERROR,
   );
-
-  // Errors
   const errorData = allDataErrors.map(toDisplayError);
   const ErrorTable = (
     <Table
       columns={errorTableColumns}
       data={errorData}
+      {...errorNotificationTableProps}
+    />
+  );
+
+  // Warnings
+  const {
+    errorReportColumns: warningReportColumns,
+    errorTableColumns: warningTableColumns,
+  } = getErrorColumns(NOTIFICATION_VARIANTS.WARNING);
+  const warningData = allDataWarnings.map(toDisplayError);
+  const WarningTable = (
+    <Table
+      columns={warningTableColumns}
+      data={warningData}
       {...errorNotificationTableProps}
     />
   );
@@ -255,6 +271,7 @@ const ClinicalSubmission = ({
     const handleSubmissionValidation = () => new Promise(() => true);
 
     const handleSignOff = () => new Promise(() => true);
+
     // FileNavigator
     // FileNavigator handlers
     const handleClearSchemaError = async (file) => {
@@ -305,8 +322,8 @@ const ClinicalSubmission = ({
                 ({ clinicalType }) => clinicalType,
               )}
             />
-            <SubmissionSummaryTable clinicalEntities={clinicalEntities} />
 
+            {/* File errors */}
             {clinicalFileErrors.map(({ fileNames, message }, i) => (
               <FileError
                 fileError={{
@@ -322,6 +339,7 @@ const ClinicalSubmission = ({
               />
             ))}
 
+            {/* Submimssion data errors */}
             {hasDataError && (
               <div
                 id="error-submission-workspace"
@@ -339,7 +357,9 @@ const ClinicalSubmission = ({
                 />
               </div>
             )}
-            {/* {hasDataWarning && (
+
+            {/* Submission data warnings */}
+            {hasDataWarning && (
               <div
                 id="warning-submission-workspace"
                 css={css`
@@ -348,15 +368,15 @@ const ClinicalSubmission = ({
               >
                 <ErrorNotification
                   level={NOTIFICATION_VARIANTS.WARNING}
-                  title={`${allDataWarnings.length.toLocaleString()} warning(s) found in submission workspace`}
+                  title={`${warningData.length.toLocaleString()} warning(s) found in submission workspace`}
                   subtitle="Your submission has the following warnings, check them to make sure the changes are as intended."
-                  reportData={allDataWarnings.map(toDisplayError)}
+                  reportData={warningData}
                   reportColumns={warningReportColumns}
                   tableComponent={WarningTable}
                 />
               </div>
-            )} */}
-
+            )}
+            {/* Main clinical entity section */}
             <FilesNavigator
               submissionState={clinicalState}
               clearDataError={handleClearSchemaError}
