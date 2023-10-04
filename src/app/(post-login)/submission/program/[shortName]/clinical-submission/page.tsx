@@ -43,6 +43,7 @@ import {
   NotificationVariant,
   Table,
 } from "@icgc-argo/uikit";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import FileError from "../../../../../components/FileError";
 import FilesNavigator from "./components/FilesNavigator";
@@ -50,19 +51,26 @@ import Header from "./components/Header";
 import Instructions from "./components/Instructions";
 import { parseGQLResp } from "./data";
 
-export const URL_QUERY_KEY = "tab";
-
 const ClinicalSubmission = ({
   params: { shortName },
 }: {
   params: { shortName: string };
 }) => {
+  const URL_QUERY_KEY = "tab";
   const commonToaster = useCommonToasters();
   const [query] = useUrlQueryState(URL_QUERY_KEY);
   const [selectedClinicalEntityType, setEntityType] = useState(query);
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    setEntityType(query);
+    const defaultQuery = "?tab=donor";
+    if (query === "") {
+      const url = `${pathname}${defaultQuery}`;
+      router.replace(url);
+    } else {
+      setEntityType(query);
+    }
   }, [query]);
 
   // page data query
