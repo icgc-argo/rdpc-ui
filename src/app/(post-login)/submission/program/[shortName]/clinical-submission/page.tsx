@@ -31,7 +31,7 @@ import useUrlQueryState from "@/app/hooks/useURLQueryState";
 import { css } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
 import { DnaLoader } from "@icgc-argo/uikit";
-import { ComponentProps, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import urlJoin from "url-join";
 import FileError from "../../../../../components/FileError";
 import FilesNavigator from "./components/FilesNavigator";
@@ -149,10 +149,8 @@ const ClinicalSubmission = ({
   );
 
   // File Errors
-  const onErrorClose: (
-    index: number,
-  ) => ComponentProps<typeof Notification>["onInteraction"] =
-    (index) =>
+  const onErrorClose =
+    (index: number) =>
     ({ type }) => {
       if (type === "CLOSE") {
         updateClinicalSubmissionQuery((previous) => ({
@@ -265,7 +263,7 @@ const ClinicalSubmission = ({
                     ", ",
                   )}`,
                 }}
-                onClose={onErrorClose(i)}
+                onClose={onErrorClose}
                 index={i}
               />
             ))}
