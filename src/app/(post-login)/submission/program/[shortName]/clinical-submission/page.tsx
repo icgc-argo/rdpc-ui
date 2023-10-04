@@ -65,6 +65,7 @@ const ClinicalSubmission = ({
     data: gqlData,
     loading: isLoading,
     refetch,
+    updateQuery: updateClinicalSubmissionQuery,
   } = useQuery(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       shortName,
@@ -179,7 +180,23 @@ const ClinicalSubmission = ({
     const handleSignOff = () => new Promise(() => true);
     // FileNavigator
     // FileNavigator handlers
-    const handleClearSchemaError = () => new Promise(() => true);
+    const handleClearSchemaError = async (file) => {
+      await updateClinicalSubmissionQuery((previous) => ({
+        ...previous,
+        clinicalSubmissions: {
+          ...previous.clinicalSubmissions,
+          clinicalEntities: previous.clinicalSubmissions.clinicalEntities.map(
+            (entity) => ({
+              ...entity,
+              schemaErrors:
+                file.clinicalType === entity.clinicalType
+                  ? []
+                  : entity.schemaErrors,
+            }),
+          ),
+        },
+      }));
+    };
     const setSelectedClinicalEntityType = () => null;
 
     return (

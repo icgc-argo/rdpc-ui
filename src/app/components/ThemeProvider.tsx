@@ -95,8 +95,6 @@ export default function ThemeProvider({
               font-family: inherit;
             }
             .rt-table {
-              display: block;
-              width: 0;
             }
           }
         `}

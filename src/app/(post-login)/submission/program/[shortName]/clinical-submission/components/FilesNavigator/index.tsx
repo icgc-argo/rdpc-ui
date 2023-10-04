@@ -67,6 +67,7 @@ const FilesNavigator = ({
   const schemaErrors = selectedFile?.schemaErrors;
 
   const clearSubmission = async (fileType: string) => {
+    console.log("clear submitssion");
     try {
       await clearClinicalEntitySubmission({
         variables: {
@@ -89,8 +90,7 @@ const FilesNavigator = ({
 
   const setSelectedClinicalEntityType = () => null;
 
-  const onErrorClearClick = () => null;
-
+  const onErrorClearClick = () => clearDataError(selectedFile);
   // display
   return (
     <div
