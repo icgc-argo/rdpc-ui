@@ -47,7 +47,7 @@ import {
 import { get } from "lodash";
 import { useState } from "react";
 import urlJoin from "url-join";
-import FileError from "./components/FileError";
+import FileError from "../../../../../components/FileError";
 import FilePreview from "./components/FilePreview";
 import RegisterSamplesModal from "./components/RegisterSampleModal";
 import UploadError from "./components/UploadError";
@@ -217,7 +217,9 @@ export default function Register({
             <FileError
               fileError={{
                 message: fileError.message,
-                fileNames: fileError.fileNames.filter(notNull),
+                title: `File failed to upload: ${fileError?.fileNames.join(
+                  ", ",
+                )}`,
               }}
               index={index}
               onClose={onFileErrorClose}

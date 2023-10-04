@@ -41,6 +41,8 @@ export const parseGQLResp = (gqlData) => {
   const clinicalState = gqlData?.clinicalSubmissions.state;
   const clinicalVersion = gqlData?.clinicalSubmissions.version || "";
 
+  const fileErrors = gqlData?.clinicalSubmissions.fileErrors;
+
   const isSubmissionValidated =
     clinicalState === "INVALID" ||
     clinicalState === "VALID" ||
@@ -112,6 +114,7 @@ export const parseGQLResp = (gqlData) => {
   return {
     clinicalState,
     clinicalVersion,
+    clinicalFileErrors: fileErrors,
     clinicalEntities,
     isPendingApproval,
     isSubmissionValidated,

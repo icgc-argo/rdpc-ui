@@ -31,8 +31,9 @@ import useUrlQueryState from "@/app/hooks/useURLQueryState";
 import { css } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
 import { DnaLoader } from "@icgc-argo/uikit";
-import { useEffect, useMemo, useState } from "react";
+import { ComponentProps, useEffect, useMemo, useState } from "react";
 import urlJoin from "url-join";
+import FileError from "../../../../../components/FileError";
 import FilesNavigator from "./components/FilesNavigator";
 import Instructions from "./components/Instructions";
 import SubmissionSummaryTable from "./components/SummaryTable";
@@ -98,8 +99,12 @@ const ClinicalSubmission = ({
     useSubmissionSystemStatus();
 
   // data
-  const { clinicalState, clinicalEntities, clinicalVersion } =
-    parseGQLResp(gqlData);
+  const {
+    clinicalState,
+    clinicalFileErrors,
+    clinicalEntities,
+    clinicalVersion,
+  } = parseGQLResp(gqlData);
 
   const allDataErrors = useMemo(
     () =>
@@ -142,6 +147,26 @@ const ClinicalSubmission = ({
       },
     },
   );
+
+  // File Errors
+  const onErrorClose: (
+    index: number,
+  ) => ComponentProps<typeof Notification>["onInteraction"] =
+    (index) =>
+    ({ type }) => {
+      if (type === "CLOSE") {
+        updateClinicalSubmissionQuery((previous) => ({
+          ...previous,
+          clinicalSubmissions: {
+            ...previous.clinicalSubmissions,
+            fileErrors: previous.clinicalSubmissions.fileErrors.filter(
+              (_, i) => i !== index,
+            ),
+          },
+        }));
+      }
+    };
+
   if (isLoading) {
     return (
       <div
@@ -229,6 +254,21 @@ const ClinicalSubmission = ({
               )}
             />
             <SubmissionSummaryTable clinicalEntities={clinicalEntities} />
+
+            {clinicalFileErrors.map(({ fileNames, message }, i) => (
+              <FileError
+                fileError={{
+                  message,
+                  title: `${fileNames.length} of ${(
+                    "WHAT IS THIS" || []
+                  ).length.toLocaleString()} files failed to upload: ${fileNames.join(
+                    ", ",
+                  )}`,
+                }}
+                onClose={onErrorClose(i)}
+                index={i}
+              />
+            ))}
 
             <FilesNavigator
               submissionState={clinicalState}
