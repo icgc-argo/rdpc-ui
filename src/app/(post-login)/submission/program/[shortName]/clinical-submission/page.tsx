@@ -20,6 +20,13 @@
 
 import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
+import ErrorNotification, {
+  ErrorReportColumns,
+} from "@/app/components/ErrorNotification";
+import {
+  errorNotificationTableProps,
+  getDefaultErrorTableColumns,
+} from "@/app/components/ErrorNotification/ErrorNotificationDefaultTable";
 import CLEAR_CLINICAL_SUBMISSION from "@/app/gql/CLEAR_CLINICAL_SUBMISSION";
 import CLINICAL_SUBMISSION_QUERY from "@/app/gql/CLINICAL_SUBMISSION_QUERY";
 import UPLOAD_CLINICAL_SUBMISSION_MUTATION from "@/app/gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION";
@@ -28,9 +35,16 @@ import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import useUrlQueryState from "@/app/hooks/useURLQueryState";
+import { toDisplayError } from "@/global/utils";
 import { css } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
-import { DnaLoader } from "@icgc-argo/uikit";
+import {
+  ColumnDef,
+  DnaLoader,
+  NOTIFICATION_VARIANTS,
+  NotificationVariant,
+  Table,
+} from "@icgc-argo/uikit";
 import { useEffect, useMemo, useState } from "react";
 import urlJoin from "url-join";
 import FileError from "../../../../../components/FileError";
@@ -113,7 +127,7 @@ const ClinicalSubmission = ({
           ...acc,
           ...entity.dataErrors.map((err) => ({
             ...err,
-            fileName: entity.batchName,
+            fileName: entity.fileName,
           })),
         ],
         [],
@@ -164,6 +178,46 @@ const ClinicalSubmission = ({
         }));
       }
     };
+
+  // Submission data error & warnings
+  const getErrorColumns = (
+    level: NotificationVariant,
+  ): {
+    errorReportColumns: ErrorReportColumns[];
+    errorTableColumns: ColumnDef<ErrorTableColumns>[];
+  } => {
+    const errorTableColumns: ErrorTableColumnProperties[] = [
+      {
+        accessorKey: "fileName",
+        header: "File",
+        maxSize: 150,
+      },
+      ...getDefaultErrorTableColumns(level),
+    ];
+
+    const errorReportColumns: ErrorReportColumns[] = errorTableColumns.map(
+      ({ accessorKey, header }) => ({
+        header,
+        id: accessorKey,
+      }),
+    );
+
+    return { errorReportColumns, errorTableColumns };
+  };
+
+  const { errorReportColumns, errorTableColumns } = getErrorColumns(
+    NOTIFICATION_VARIANTS.ERROR,
+  );
+
+  // Errors
+  const errorData = allDataErrors.map(toDisplayError);
+  const ErrorTable = (
+    <Table
+      columns={errorTableColumns}
+      data={errorData}
+      {...errorNotificationTableProps}
+    />
+  );
 
   if (isLoading) {
     return (
@@ -267,6 +321,41 @@ const ClinicalSubmission = ({
                 index={i}
               />
             ))}
+
+            {hasDataError && (
+              <div
+                id="error-submission-workspace"
+                css={css`
+                  margin-top: 20px;
+                `}
+              >
+                <ErrorNotification
+                  level={NOTIFICATION_VARIANTS.ERROR}
+                  title={`${errorData.length.toLocaleString()} error(s) found in submission workspace`}
+                  subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
+                  reportData={errorData}
+                  reportColumns={errorReportColumns}
+                  tableComponent={ErrorTable}
+                />
+              </div>
+            )}
+            {/* {hasDataWarning && (
+              <div
+                id="warning-submission-workspace"
+                css={css`
+                  margin-top: 20px;
+                `}
+              >
+                <ErrorNotification
+                  level={NOTIFICATION_VARIANTS.WARNING}
+                  title={`${allDataWarnings.length.toLocaleString()} warning(s) found in submission workspace`}
+                  subtitle="Your submission has the following warnings, check them to make sure the changes are as intended."
+                  reportData={allDataWarnings.map(toDisplayError)}
+                  reportColumns={warningReportColumns}
+                  tableComponent={WarningTable}
+                />
+              </div>
+            )} */}
 
             <FilesNavigator
               submissionState={clinicalState}
