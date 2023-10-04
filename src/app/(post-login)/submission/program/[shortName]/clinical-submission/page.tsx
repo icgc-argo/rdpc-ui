@@ -30,7 +30,6 @@ import CLEAR_CLINICAL_SUBMISSION from "@/app/gql/CLEAR_CLINICAL_SUBMISSION";
 import CLINICAL_SUBMISSION_QUERY from "@/app/gql/CLINICAL_SUBMISSION_QUERY";
 import UPLOAD_CLINICAL_SUBMISSION_MUTATION from "@/app/gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION";
 import UPLOAD_REGISTRATION_MUTATION from "@/app/gql/UPLOAD_REGISTRATION_MUTATION";
-import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import useUrlQueryState from "@/app/hooks/useURLQueryState";
@@ -45,7 +44,6 @@ import {
   Table,
 } from "@icgc-argo/uikit";
 import { useEffect, useMemo, useState } from "react";
-import urlJoin from "url-join";
 import FileError from "../../../../../components/FileError";
 import FilesNavigator from "./components/FilesNavigator";
 import Header from "./components/Header";
@@ -66,13 +64,6 @@ const ClinicalSubmission = ({
   useEffect(() => {
     setEntityType(query);
   }, [query]);
-
-  // docs url
-  const { DOCS_URL_ROOT } = useAppConfigContext();
-  const helpUrl = urlJoin(
-    DOCS_URL_ROOT,
-    "/docs/submission/submitting-clinical-data",
-  );
 
   // page data query
   const {
@@ -300,7 +291,15 @@ const ClinicalSubmission = ({
             flex-direction: column;
           `}
         >
-          <Header />
+          <Header
+            clinicalEntities={clinicalEntities}
+            clinicalState={clinicalState}
+            clinicalVersion={clinicalVersion}
+            refetch={refetch}
+            updateQuery={updateClinicalSubmissionQuery}
+            showProgress={true}
+            programShortName={shortName}
+          />
           <ContentMain>
             <Instructions
               uploadEnabled={!isSubmissionSystemDisabled}

@@ -17,51 +17,59 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import ModalPortal from "@/app/components/Modal";
 import { useGlobalLoader } from "@/app/hooks/GlobalLoaderProvider";
 import { useToaster } from "@/app/hooks/ToastProvider";
 import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { sleep } from "@/global/utils";
-import { css } from "@/lib/emotion";
+import { css, useTheme } from "@/lib/emotion";
 //import { isDccMember } from "@icgc-argo/ego-token-utils/dist/argoRoleChecks";
+import APPROVE_SUBMISSION_MUTATION from "@/app/gql/APPROVE_SUBMISSION_MUTATION";
+import CLEAR_CLINICAL_SUBMISSION from "@/app/gql/CLEAR_CLINICAL_SUBMISSION";
+import REOPEN_SUBMISSION_MUTATION from "@/app/gql/REOPEN_SUBMISSION_MUTATION";
+import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
-import { Button, Modal, TitleBar } from "@icgc-argo/uikit";
+import { useMutation } from "@apollo/client";
+import { Button, TitleBar, Link as UIKitLink } from "@icgc-argo/uikit";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { FC } from "react";
 import { Row } from "react-grid-system";
-import { useMutation } from "react-query";
+import urlJoin from "url-join";
 import ProgressBar from "./ProgressBar";
 
 type HeaderProps = {
   programShortName: string;
   showProgress: boolean;
-  isPendingApproval: boolean;
   clinicalVersion: string;
   clinicalEntities: any;
   clinicalState: any;
+  refetch: any;
+  updateQuery: any;
 };
 const Header: FC<HeaderProps> = ({
   programShortName,
   showProgress,
-  isPendingApproval,
   clinicalVersion,
   clinicalEntities,
   clinicalState,
+  refetch: refetchClinicalSubmission,
+  updateQuery: updateClinicalSubmissionQuery,
 }) => {
-  //const { egoJwt, permissions } = useAuthContext();
-  //const isDcc = useMemo(() => isDccMember(permissions), [egoJwt]);
+  const theme = useTheme();
+
+  // docs url
+  const { DOCS_URL_ROOT } = useAppConfigContext();
+  const helpUrl = urlJoin(
+    DOCS_URL_ROOT,
+    "/docs/submission/submitting-clinical-data",
+  );
+
   const isDcc = false;
-  const { isModalShown, getUserConfirmation, modalProps } =
-    useUserConfirmationModalState();
+
+  const isPendingApproval = clinicalState === "PENDING_APPROVAL";
+
   const { setGlobalLoading } = useGlobalLoader();
-  const {
-    refetch: refetchClinicalSubmission,
-    updateQuery: updateClinicalSubmissionQuery,
-  } = useClinicalSubmissionQuery(programShortName);
 
   const commonToaster = useCommonToasters();
-  const router = useRouter();
   const toaster = useToaster();
 
   const { isDisabled: isSubmissionSystemDisabled } =
@@ -81,7 +89,7 @@ const Header: FC<HeaderProps> = ({
     },
   });
 
-  const [clearClinicalSubmission] = useMutation(CLEAR_SUBMISSION_MUTATION, {
+  const [clearClinicalSubmission] = useMutation(CLEAR_CLINICAL_SUBMISSION, {
     variables: {
       programShortName,
       submissionVersion: clinicalVersion,
@@ -172,14 +180,12 @@ const Header: FC<HeaderProps> = ({
 
   return (
     <>
-      {isModalShown && (
-        <ModalPortal>
-          <Modal {...modalProps} />
-        </ModalPortal>
-      )}
       <div
         css={css`
           display: flex;
+          height: 56px;
+          padding: 0 30px;
+          background-color: ${theme.colors.white};
           justify-content: space-between;
           align-items: center;
           width: 100%;
@@ -229,18 +235,19 @@ const Header: FC<HeaderProps> = ({
               >
                 Clear submission
               </Button>
-              <Link
-                target="_blank"
-                href={DOCS_SUBMITTING_CLINICAL_DATA_PAGE}
-                bold
-                withChevron
-                uppercase
-                underline={false}
-                css={css`
-                  font-size: 14px;
-                `}
-              >
-                HELP
+              <Link href={helpUrl} legacyBehavior>
+                <UIKitLink
+                  target="_blank"
+                  css={css`
+                    font-size: 14px;
+                  `}
+                  withChevron
+                  href={helpUrl}
+                  underline={false}
+                  bold
+                >
+                  HELP
+                </UIKitLink>
               </Link>
             </>
           )}
