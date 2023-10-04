@@ -18,7 +18,6 @@
  */
 "use client";
 
-import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
 import ErrorNotification, {
   ErrorReportColumns,
@@ -49,6 +48,7 @@ import { useEffect, useMemo, useState } from "react";
 import urlJoin from "url-join";
 import FileError from "../../../../../components/FileError";
 import FilesNavigator from "./components/FilesNavigator";
+import Header from "./components/Header";
 import Instructions from "./components/Instructions";
 import { parseGQLResp } from "./data";
 
@@ -150,8 +150,6 @@ const ClinicalSubmission = ({
       ),
     [clinicalEntities],
   );
-
-  //
 
   const [uploadFile, { loading: isUploading }] = useMutation(
     UPLOAD_REGISTRATION_MUTATION,
@@ -260,6 +258,9 @@ const ClinicalSubmission = ({
       ({ records }) => !!records.length,
     );
 
+    // Header
+    const handleSubmissionClear = async () => Promise(true);
+
     // Instruction box
     // Instruction box state
     const isReadyForValidation =
@@ -267,9 +268,7 @@ const ClinicalSubmission = ({
     const isReadyForSignoff = isReadyForValidation && clinicalState === "VALID";
     const isValidated = clinicalState !== "OPEN";
     // Instruction box handlers
-
     const handleSubmissionValidation = () => new Promise(() => true);
-
     const handleSignOff = () => new Promise(() => true);
 
     // FileNavigator
@@ -301,10 +300,7 @@ const ClinicalSubmission = ({
             flex-direction: column;
           `}
         >
-          <ContentHeader
-            breadcrumb={[shortName, "Submit Clinical Data"]}
-            helpUrl={helpUrl}
-          ></ContentHeader>
+          <Header />
           <ContentMain>
             <Instructions
               uploadEnabled={!isSubmissionSystemDisabled}
