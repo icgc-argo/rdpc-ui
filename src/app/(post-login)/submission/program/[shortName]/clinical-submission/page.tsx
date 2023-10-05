@@ -30,6 +30,7 @@ import CLEAR_CLINICAL_SUBMISSION from "@/app/gql/CLEAR_CLINICAL_SUBMISSION";
 import CLINICAL_SUBMISSION_QUERY from "@/app/gql/CLINICAL_SUBMISSION_QUERY";
 import UPLOAD_CLINICAL_SUBMISSION_MUTATION from "@/app/gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION";
 import UPLOAD_REGISTRATION_MUTATION from "@/app/gql/UPLOAD_REGISTRATION_MUTATION";
+import VALIDATE_SUBMISSION_MUTATION from "@/app/gql/VALIDATE_SUBMISSION_MUTATION";
 import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import useUrlQueryState from "@/app/hooks/useURLQueryState";
@@ -112,6 +113,12 @@ const ClinicalSubmissionPage = ({
         files,
       },
     });
+
+  const [validateSubmission] = useMutation(VALIDATE_SUBMISSION_MUTATION, {
+    onCompleted: () => {
+      //setSelectedClinicalEntityType(defaultClinicalEntityType);
+    },
+  });
 
   const { isDisabled: isSubmissionSystemDisabled } =
     useSubmissionSystemStatus();
@@ -225,6 +232,8 @@ const ClinicalSubmissionPage = ({
       columns={errorTableColumns}
       data={errorData}
       {...errorNotificationTableProps}
+      withPagination
+      showPageSizeOptions
     />
   );
 
@@ -239,6 +248,8 @@ const ClinicalSubmissionPage = ({
       columns={warningTableColumns}
       data={warningData}
       {...errorNotificationTableProps}
+      withPagination
+      showPageSizeOptions
     />
   );
 
@@ -279,7 +290,19 @@ const ClinicalSubmissionPage = ({
     const isReadyForSignoff = isReadyForValidation && clinicalState === "VALID";
     const isValidated = clinicalState !== "OPEN";
     // Instruction box handlers
-    const handleSubmissionValidation = () => new Promise(() => true);
+    const handleSubmissionValidation = async () => {
+      try {
+        await validateSubmission({
+          variables: {
+            programShortName: shortName,
+            submissionVersion: clinicalVersion,
+          },
+        });
+      } catch (err) {
+        await refetch();
+        commonToaster.unknownErrorWithReloadMessage();
+      }
+    };
     const handleSignOff = () => new Promise(() => true);
 
     /**
