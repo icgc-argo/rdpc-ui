@@ -50,8 +50,14 @@ import FilesNavigator from "./components/FilesNavigator";
 import Header from "./components/Header";
 import Instructions from "./components/Instructions";
 import { parseGQLResp } from "./data";
+import {
+  ClinicalEntity,
+  ClinicalSubmissionError,
+  ErrorTableColumnProperties,
+  ErrorTableColumns,
+} from "./types";
 
-const ClinicalSubmission = ({
+const ClinicalSubmissionPage = ({
   params: { shortName },
 }: {
   params: { shortName: string };
@@ -122,7 +128,9 @@ const ClinicalSubmission = ({
 
   const allDataErrors = useMemo(
     () =>
-      clinicalEntities.reduce(
+      clinicalEntities.reduce<
+        Array<ClinicalSubmissionError & { fileName: string }>
+      >(
         (acc, entity) => [
           ...acc,
           ...entity.dataErrors.map((err) => ({
@@ -137,12 +145,14 @@ const ClinicalSubmission = ({
 
   const allDataWarnings = useMemo(
     () =>
-      clinicalEntities.reduce(
+      clinicalEntities.reduce<
+        Array<ClinicalSubmissionError & { fileName: string }>
+      >(
         (acc, entity) => [
           ...acc,
           ...entity.dataWarnings.map((err) => ({
             ...err,
-            fileName: entity.batchName,
+            fileName: entity.fileName,
           })),
         ],
         [],
@@ -163,13 +173,13 @@ const ClinicalSubmission = ({
   // File Errors
   const onErrorClose =
     (index: number) =>
-    ({ type }) => {
+    ({ type }: { type: string }) => {
       if (type === "CLOSE") {
         updateClinicalSubmissionQuery((previous) => ({
           ...previous,
           clinicalSubmissions: {
             ...previous.clinicalSubmissions,
-            fileErrors: previous.clinicalSubmissions.fileErrors.filter(
+            fileErrors: previous.clinicalSubmissions.fileErrors?.filter(
               (_, i) => i !== index,
             ),
           },
@@ -260,7 +270,9 @@ const ClinicalSubmission = ({
     // Header
     const handleSubmissionClear = async () => Promise(true);
 
-    // Instruction box
+    /**
+     * Instruction Box
+     */
     // Instruction box state
     const isReadyForValidation =
       hasSomeEntity && !hasSchemaError && !hasSchemaErrorsAfterMigration;
@@ -270,9 +282,11 @@ const ClinicalSubmission = ({
     const handleSubmissionValidation = () => new Promise(() => true);
     const handleSignOff = () => new Promise(() => true);
 
-    // FileNavigator
+    /**
+     * File Navigator
+     */
     // FileNavigator handlers
-    const handleClearSchemaError = async (file) => {
+    const handleClearSchemaError = async (file: ClinicalEntity) => {
       await updateClinicalSubmissionQuery((previous) => ({
         ...previous,
         clinicalSubmissions: {
@@ -281,9 +295,9 @@ const ClinicalSubmission = ({
             (entity) => ({
               ...entity,
               schemaErrors:
-                file.clinicalType === entity.clinicalType
+                file.clinicalType === entity?.clinicalType
                   ? []
-                  : entity.schemaErrors,
+                  : entity?.schemaErrors,
             }),
           ),
         },
@@ -332,7 +346,7 @@ const ClinicalSubmission = ({
                 fileError={{
                   message,
                   title: `${fileNames.length} of ${(
-                    "WHAT IS THIS" || []
+                    "!!" || []
                   ).length.toLocaleString()} files failed to upload: ${fileNames.join(
                     ", ",
                   )}`,
@@ -396,4 +410,4 @@ const ClinicalSubmission = ({
   }
 };
 
-export default ClinicalSubmission;
+export default ClinicalSubmissionPage;

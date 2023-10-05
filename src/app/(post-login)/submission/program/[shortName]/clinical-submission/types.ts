@@ -16,27 +16,120 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { ClinicalSubmissionQuery } from "@/__generated__/graphql";
+export type { ClinicalSubmissionQuery as GqlClinicalSubmissionQuery } from "@/__generated__/graphql";
 
-export type ClinicalSubmission = ClinicalSubmissionQuery["clinicalSubmissions"];
+// export type ClinicalSubmission = ClinicalSubmissionQuery["clinicalSubmissions"];
 
-export type ClinicalSubmissionState =
-  ClinicalSubmissionQuery["clinicalSubmissions"]["state"];
+// export type ClinicalSubmissionState =
+//   ClinicalSubmissionQuery["clinicalSubmissions"]["state"];
 
-type Status = "UPDATE" | "SUCCESS" | "ERROR" | "SUCCESS" | "WARNING" | "NONE";
+// type Status = "UPDATE" | "SUCCESS" | "ERROR" | "SUCCESS" | "WARNING" | "NONE";
 
-// sometimes we use GQL data types other times we use the converted local types, they will conflict
-// because gqlClinicalEntityToClinicalSubmissionEntityFile diverts from the gql object
-export type ClinicalSubmissionEntity =
-  ClinicalSubmissionQuery["clinicalSubmissions"]["clinicalEntities"][0] & {
-    fileName: string;
-    batchName?: string;
-    displayName: string;
-    recordsCount?: number;
-    status: Status;
-    createdAt: string;
-    creator: string;
-  };
+// // sometimes we use GQL data types other times we use the converted local types, they will conflict
+// // because gqlClinicalEntityToClinicalSubmissionEntityFile diverts from the gql object
+// export type ClinicalSubmissionEntity =
+//   ClinicalSubmissionQuery["clinicalSubmissions"]["clinicalEntities"][0] & {
+//     fileName: string;
+//     batchName?: string;
+//     displayName: string;
+//     recordsCount?: number;
+//     status: Status;
+//     createdAt: string;
+//     creator: string;
+//   };
 
-export type ClinicalEntities = Array<ClinicalSubmissionEntity>;
-export type ClinicalEntityRecord = ClinicalSubmissionEntity;
+// export type ClinicalEntities = Array<ClinicalSubmissionEntity>;
+// export type ClinicalEntityRecord = ClinicalSubmissionEntity;
+
+// GQL Resp
+
+//
+
+export type ClinicalSubmissionRecord = {
+  row: number;
+  fields: {
+    value: string;
+    name: string;
+  }[];
+};
+
+export type ClinicalSubmissionError = {
+  message: string;
+  row: number;
+  field: string;
+  value: string;
+  donorId: string;
+};
+
+type ClinicalSubmissionUpdate = {
+  row: number;
+  field: string;
+  newValue: string;
+  oldValue: string;
+  donorId: string;
+};
+
+type SubmissionStatus =
+  | "OPEN"
+  | "VALID"
+  | "INVALID"
+  | "PENDING_APPROVAL"
+  | "INVALID_BY_MIGRATION"
+  | null;
+
+export type Stats = {
+  noUpdate: Array<ClinicalSubmissionRecord["row"]>;
+  updated: Array<ClinicalSubmissionRecord["row"]>;
+  new: Array<ClinicalSubmissionRecord["row"]>;
+  errorsFound: Array<ClinicalSubmissionRecord["row"]>;
+};
+
+export type ClinicalEntity = {
+  stats: Stats;
+  createdAt: string;
+  creator: string;
+  fileName: string;
+  schemaErrors: ClinicalSubmissionError[];
+  dataErrors: ClinicalSubmissionError[];
+  dataUpdates: ClinicalSubmissionUpdate[];
+  dataWarnings: ClinicalSubmissionError[];
+  displayName: string;
+  clinicalType: string;
+  records: ClinicalSubmissionRecord[];
+  recordsCount: number;
+  status: "SUCCESS" | "WARNING" | "ERROR" | "NONE" | "UPDATE";
+};
+
+export type ClinicalFileError = {
+  message: string;
+  fileNames: string[];
+  code: string;
+};
+
+export type ClinicalSubmission = {
+  clinicalState: string;
+  clinicalVersion: string;
+  clinicalFileErrors: ClinicalFileError[];
+  clinicalEntities: ClinicalEntity[];
+  isPendingApproval: boolean;
+  isSubmissionValidated: boolean;
+};
+
+// table
+export type ErrorNotificationDefaultColumns = {
+  donorId: string;
+  field: string;
+  message: string;
+  row: number;
+  value: string;
+};
+
+export type ErrorTableColumns = ErrorNotificationDefaultColumns & {
+  fileName: string;
+};
+
+export type ErrorTableColumnProperties = {
+  accessorKey: keyof ErrorTableColumns;
+  header: string;
+  maxSize?: number;
+};

@@ -21,7 +21,7 @@ import { StatArea } from "@/app/components/Table/common";
 import { ColumnDef, css, ThemeColorNames } from "@icgc-argo/uikit";
 import { startCase } from "lodash";
 import { createRef } from "react";
-import { ClinicalEntities, ClinicalSubmission } from "../types";
+import { ClinicalEntity } from "../types";
 
 export const FILE_STATE_COLORS: {
   [k: string]: keyof ThemeColorNames;
@@ -46,7 +46,7 @@ type Entry = {
 
 const FIRST_COLUMN_ACCESSOR = "__";
 
-const getData = (clinicalEntities: ClinicalEntities) => {
+const getData = (clinicalEntities: ClinicalEntity[]) => {
   const newDataRow: Entry = {
     [FIRST_COLUMN_ACCESSOR]: (
       <>
@@ -86,7 +86,7 @@ const getData = (clinicalEntities: ClinicalEntities) => {
   return [newDataRow, updatedDataRow];
 };
 
-const getColumns = (clinicalEntities: ClinicalEntities) => {
+const getColumns = (clinicalEntities: ClinicalEntity[]) => {
   const columns: ColumnDef<Entry>[] = [
     // this is the first column
     {

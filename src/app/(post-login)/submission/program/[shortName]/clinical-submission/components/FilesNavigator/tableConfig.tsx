@@ -23,7 +23,12 @@ import {
 } from "@/app/components/Table/common";
 import { toDisplayRowIndex } from "@/global/utils";
 import { ColumnDef, Row, css } from "@icgc-argo/uikit";
-import { record } from "zod";
+import {
+  ClinicalEntity,
+  ClinicalSubmissionError,
+  ClinicalSubmissionRecord,
+  Stats,
+} from "../../types";
 import { FILE_STATE_COLORS } from "./StatsArea";
 import {
   CellStatusDisplay,
@@ -35,10 +40,10 @@ import { FileRecord } from "./types";
 type FileRecordTableProps = { row: { original: FileRecord } };
 
 // util
-export const recordHasError = (original: FileRecord, stats) =>
+export const recordHasError = (original: FileRecord, stats: Stats) =>
   stats?.errorsFound.some((row) => row === original.rowIndex);
 
-export const rowHasUpdate = (original: FileRecord, stats) =>
+export const rowHasUpdate = (original: FileRecord, stats: Stats) =>
   stats?.updated.some((row) => row === original.rowIndex);
 
 export const cellHasUpdate = ({
@@ -55,12 +60,15 @@ export const cellHasUpdate = ({
     (update) => update.field === field && update.row === original.rowIndex,
   );
 
-export const recordHasWarning = (original: FileRecord, dataWarnings) =>
+export const recordHasWarning = (
+  original: FileRecord,
+  dataWarnings: ClinicalSubmissionError[],
+) =>
   Array.isArray(dataWarnings) &&
   dataWarnings.some((warning) => warning.row === original.rowIndex);
 
 type GetTableColumns = (
-  file,
+  file: ClinicalEntity,
   isPendingApproval: boolean,
   isSubmissionValidated: boolean,
   isDiffPreview: boolean,
@@ -77,7 +85,11 @@ export const getTableColumns: GetTableColumns = (
     header: fieldName,
     cell: ({ row: { original } }: FileRecordTableProps) => (
       <CellStatusDisplay original={original} field={fieldName}>
-        <DataFieldCell original={original} fieldName={fieldName} />
+        <DataFieldCell
+          original={original}
+          fieldName={fieldName}
+          isDiffPreview={isDiffPreview}
+        />
       </CellStatusDisplay>
     ),
   }));
@@ -119,6 +131,7 @@ export const getTableColumns: GetTableColumns = (
             original={original}
             stats={stats}
             isDiffPreview={isDiffPreview}
+            isSubmissionValidated={isSubmissionValidated}
           />
         </CellStatusDisplay>
       ),
@@ -152,7 +165,7 @@ export const getTableColumns: GetTableColumns = (
   return cols;
 };
 
-const getStatus = (row, stats) => {
+const getStatus = (record: ClinicalSubmissionRecord, stats: Stats) => {
   if (stats.updated.some((i) => i === record.row)) {
     return "UPDATE";
   } else if (stats.errorsFound.some((i) => i === record.row)) {
@@ -164,7 +177,7 @@ const getStatus = (row, stats) => {
   }
 };
 
-type GetTableData = (file) => FileRecord[];
+type GetTableData = (file: ClinicalEntity) => FileRecord[];
 export const getTableData: GetTableData = (file) => {
   const { stats, records } = file;
   return records.map((record) => {
@@ -173,7 +186,7 @@ export const getTableData: GetTableData = (file) => {
       [name]: value,
     }));
     const { row } = record;
-    const status = getStatus(row, stats);
+    const status = getStatus(record, stats);
     return {
       rowIndex: row,
       status,

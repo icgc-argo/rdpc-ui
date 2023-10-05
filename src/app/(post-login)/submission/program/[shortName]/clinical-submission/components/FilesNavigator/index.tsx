@@ -23,12 +23,7 @@ import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { css } from "@/lib/emotion";
 import { useMutation } from "@apollo/client";
 import { Col } from "react-grid-system";
-import {
-  ClinicalEntities,
-  ClinicalSubmission,
-  ClinicalSubmissionEntity,
-  ClinicalSubmissionState,
-} from "../../types";
+import { ClinicalEntity, ClinicalSubmission } from "../../types";
 import FilePreview from "./FilePreview";
 import VerticalTabsSection from "./Tabs";
 import { ErrorBox, NoContentPlaceholder } from "./ui";
@@ -42,13 +37,13 @@ const FilesNavigator = ({
   programShortName,
   submissionVersion,
 }: {
-  submissionState: ClinicalSubmissionState;
-  fileStates: ClinicalEntities;
-  clearDataError: (file: ClinicalSubmissionEntity) => Promise<any>;
+  submissionState: ClinicalSubmission["clinicalState"];
+  fileStates: ClinicalEntity[];
+  clearDataError: (file: ClinicalEntity) => void;
   selectedClinicalEntityType: string;
   onFileSelect: (clinicalEntityType: string) => void;
-  submissionVersion: ClinicalSubmission["version"];
-  programShortName: ClinicalSubmission["programShortName"];
+  submissionVersion: ClinicalSubmission["clinicalVersion"];
+  programShortName: string;
 }) => {
   // toasts
   const commonToaster = useCommonToasters();
@@ -90,8 +85,12 @@ const FilesNavigator = ({
 
   const setSelectedClinicalEntityType = () => null;
 
-  const onErrorClearClick = () => clearDataError(selectedFile);
-  // display
+  const onErrorClearClick = () => {
+    if (selectedFile) {
+      clearDataError(selectedFile);
+    }
+  };
+
   return (
     <div
       css={css`

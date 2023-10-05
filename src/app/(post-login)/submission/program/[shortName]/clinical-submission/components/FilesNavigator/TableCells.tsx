@@ -25,6 +25,7 @@ import { css, useTheme } from "@/lib/emotion";
 import { TableCellWrapper } from "@icgc-argo/uikit";
 import { get } from "lodash";
 import { FC, ReactNode } from "react";
+import { ClinicalEntity, Stats } from "../../types";
 import { FILE_STATE_COLORS } from "./StatsArea";
 import {
   cellHasUpdate,
@@ -34,55 +35,52 @@ import {
 } from "./tableConfig";
 import { FileRecord } from "./types";
 
-export const StatusColumnCell = ({
-  original,
-  stats,
-  isSubmissionValidated,
-  isDiffPreview,
-}: {
+export const StatusColumnCell: FC<{
   original: FileRecord;
-  stats;
+  stats: Stats;
   isSubmissionValidated: boolean;
   isDiffPreview: boolean;
-}) => {
-  const hasError = recordHasError(original);
-  const hasUpdate = rowHasUpdate(original);
+}> = ({ original, stats, isSubmissionValidated, isDiffPreview }) => {
+  const hasError = recordHasError(original, stats);
+  const hasUpdate = rowHasUpdate(original, stats);
   const hasNewData = stats?.new.some((row) => row === original.rowIndex);
-  return (
-    isSubmissionValidated && (
-      <CellContentCenter
-        css={css`
-          display: flex;
-          justify-content: space-around;
-        `}
-      >
-        <DataTableStarIcon
-          fill={
-            hasError
-              ? FILE_STATE_COLORS.ERROR
-              : hasUpdate
-              ? FILE_STATE_COLORS.UPDATED
-              : hasNewData
-              ? FILE_STATE_COLORS.NEW
-              : FILE_STATE_COLORS.NONE
-          }
-        />
-        {isDiffPreview && hasUpdate && <div>old</div>}
-      </CellContentCenter>
-    )
-  );
+  return isSubmissionValidated ? (
+    <CellContentCenter
+      css={css`
+        display: flex;
+        justify-content: space-around;
+      `}
+    >
+      <DataTableStarIcon
+        fill={
+          hasError
+            ? FILE_STATE_COLORS.ERROR
+            : hasUpdate
+            ? FILE_STATE_COLORS.UPDATED
+            : hasNewData
+            ? FILE_STATE_COLORS.NEW
+            : FILE_STATE_COLORS.NONE
+        }
+      />
+      {isDiffPreview && hasUpdate && <div>old</div>}
+    </CellContentCenter>
+  ) : null;
 };
 
 export const DataFieldCell = ({
   original,
   fieldName,
   isDiffPreview,
+  stats,
+  file,
 }: {
   original: FileRecord;
-  fieldName: string;
+  fieldName: keyof typeof original;
   isDiffPreview: boolean;
+  stats: Stats;
+  file: ClinicalEntity;
 }) =>
-  isDiffPreview && rowHasUpdate(original) ? (
+  isDiffPreview && rowHasUpdate(original, stats) ? (
     <div
       css={css`
         height: 100%;

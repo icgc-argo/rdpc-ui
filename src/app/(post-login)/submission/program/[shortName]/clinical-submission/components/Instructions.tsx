@@ -167,7 +167,7 @@ type InstructionsProps = {
   uploadEnabled: boolean;
   signOffEnabled: boolean;
   validationEnabled: boolean;
-  onUploadFileSelect: () => any;
+  onUploadFileSelect: (f: FileList) => void;
   onValidateClick: () => Promise<any>;
   onSignOffClick: () => Promise<any>;
   clinicalTypes: string[];

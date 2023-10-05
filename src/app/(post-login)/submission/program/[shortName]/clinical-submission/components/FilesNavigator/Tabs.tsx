@@ -23,11 +23,11 @@ import { Icon, VerticalTabs } from "@icgc-argo/uikit";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { FC, SyntheticEvent, useCallback } from "react";
-import { ClinicalEntities, ClinicalSubmissionEntity } from "../../types";
+import { ClinicalEntity } from "../../types";
 
 export const VerticalTabsSection: FC<{
-  fileStates: ClinicalEntities;
-  selectedFile: ClinicalSubmissionEntity | undefined;
+  fileStates: ClinicalEntity[];
+  selectedFile: ClinicalEntity | undefined;
   onFileSelect: (clinicalType: string) => void;
 }> = ({ fileStates, selectedFile, onFileSelect }) => {
   // handler

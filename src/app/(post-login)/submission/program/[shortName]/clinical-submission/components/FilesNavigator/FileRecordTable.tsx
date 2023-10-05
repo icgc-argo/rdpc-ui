@@ -24,7 +24,7 @@ import {
 import { css, useTheme } from "@/lib/emotion";
 import { Table } from "@icgc-argo/uikit";
 import { ComponentProps } from "react";
-import { ClinicalSubmissionEntityFile } from "../types";
+import { ClinicalEntity } from "../../types";
 import StatsArea from "./StatsArea";
 import { getTableColumns, getTableData } from "./tableConfig";
 
@@ -40,8 +40,8 @@ const FileRecordTable = ({
 }: {
   isPendingApproval: boolean;
   isSubmissionValidated: boolean;
-  file: ClinicalSubmissionEntityFile;
-  submissionData?: ComponentProps<typeof SubmissionInfoArea>;
+  file: ClinicalEntity;
+  submissionData: ComponentProps<typeof SubmissionInfoArea>;
 }) => {
   const isDiffPreview = true;
 
@@ -49,8 +49,9 @@ const FileRecordTable = ({
 
   const { records, stats, dataWarnings } = file;
 
-  const fields: ClinicalSubmissionEntityFile["records"][0]["fields"] =
-    records.length ? records[0].fields : [];
+  const fields: ClinicalEntity["records"][0]["fields"] = records.length
+    ? records[0].fields
+    : [];
 
   const tableColumns = getTableColumns(
     file,
