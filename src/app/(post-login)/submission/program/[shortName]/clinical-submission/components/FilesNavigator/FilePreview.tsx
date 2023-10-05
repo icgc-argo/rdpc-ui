@@ -21,12 +21,12 @@ import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus
 import { css } from "@/lib/emotion";
 import { Button, Typography } from "@icgc-argo/uikit";
 import { FC, SyntheticEvent } from "react";
-import { ClinicalSubmissionEntity, ClinicalSubmissionState } from "../../types";
+import { ClinicalEntity, ClinicalSubmission } from "../../types";
 import FileRecordTable from "./FileRecordTable";
 
 type FilePreviewProps = {
-  file: ClinicalSubmissionEntity;
-  submissionState: ClinicalSubmissionState;
+  file: ClinicalEntity;
+  submissionState: ClinicalSubmission["clinicalVersion"];
   clearSubmission: (fileType: string) => void;
 };
 const FilePreview: FC<FilePreviewProps> = ({

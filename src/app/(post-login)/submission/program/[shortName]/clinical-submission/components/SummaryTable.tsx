@@ -18,10 +18,10 @@
  */
 
 import { StatArea } from "@/app/components/Table/common";
-import { ColumnDef, css, Table, ThemeColorNames } from "@icgc-argo/uikit";
+import { ColumnDef, css, ThemeColorNames } from "@icgc-argo/uikit";
 import { startCase } from "lodash";
 import { createRef } from "react";
-import { ClinicalEntities, ClinicalSubmission } from "../types";
+import { ClinicalEntity } from "../types";
 
 export const FILE_STATE_COLORS: {
   [k: string]: keyof ThemeColorNames;
@@ -46,7 +46,7 @@ type Entry = {
 
 const FIRST_COLUMN_ACCESSOR = "__";
 
-const getData = (clinicalEntities: ClinicalEntities) => {
+const getData = (clinicalEntities: ClinicalEntity[]) => {
   const newDataRow: Entry = {
     [FIRST_COLUMN_ACCESSOR]: (
       <>
@@ -86,7 +86,7 @@ const getData = (clinicalEntities: ClinicalEntities) => {
   return [newDataRow, updatedDataRow];
 };
 
-const getColumns = (clinicalEntities: ClinicalEntities) => {
+const getColumns = (clinicalEntities: ClinicalEntity[]) => {
   const columns: ColumnDef<Entry>[] = [
     // this is the first column
     {
@@ -115,7 +115,17 @@ const SubmissionSummaryTable = ({
       `}
       ref={containerRef}
     >
-      <Table
+      table
+    </div>
+  );
+};
+
+export default SubmissionSummaryTable;
+
+/**
+ * 
+ * 
+ *    <Table
       //variant="STATIC"
       // getTdProps={(_, row, column) => {
       //   const isUpdateRow = row.index === 1;
@@ -135,8 +145,4 @@ const SubmissionSummaryTable = ({
       //data={getData(clinicalEntities)}
       //resizable
       />
-    </div>
-  );
-};
-
-export default SubmissionSummaryTable;
+ */

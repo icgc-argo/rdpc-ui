@@ -16,26 +16,36 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import useUrlQueryState from "@/app/hooks/useURLQueryState";
+
 import { notNull } from "@/global/utils";
 import { css } from "@/lib/emotion";
 import { Icon, VerticalTabs } from "@icgc-argo/uikit";
 import Link from "next/link";
-import { FC, SyntheticEvent } from "react";
-import { URL_QUERY_KEY } from "../../page";
-import { ClinicalEntities, ClinicalSubmissionEntity } from "../../types";
+import { usePathname, useSearchParams } from "next/navigation";
+import { FC, SyntheticEvent, useCallback } from "react";
+import { ClinicalEntity } from "../../types";
 
 export const VerticalTabsSection: FC<{
-  fileStates: ClinicalEntities;
-  selectedFile: ClinicalSubmissionEntity | undefined;
+  fileStates: ClinicalEntity[];
+  selectedFile: ClinicalEntity | undefined;
   onFileSelect: (clinicalType: string) => void;
 }> = ({ fileStates, selectedFile, onFileSelect }) => {
   // handler
   const onFileClick =
     (clinicalType: string) => (e: SyntheticEvent<HTMLElement, Event>) =>
       onFileSelect(clinicalType);
-  // state
-  const [query, createUrl] = useUrlQueryState(URL_QUERY_KEY);
+
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const createURL = useCallback(
+    (value: string) => {
+      const params = new URLSearchParams(searchParams);
+      params.set("tab", value);
+
+      return pathname + "?" + params.toString();
+    },
+    [searchParams, pathname],
+  );
 
   return (
     <div
@@ -52,7 +62,7 @@ export const VerticalTabsSection: FC<{
         `}
       >
         {fileStates?.filter(notNull).map((fileState) => (
-          <Link href={createUrl(fileState.clinicalType)}>
+          <Link href={createURL(fileState.clinicalType)}>
             <VerticalTabs.Item
               key={fileState.clinicalType}
               active={selectedFile?.clinicalType === fileState.clinicalType}

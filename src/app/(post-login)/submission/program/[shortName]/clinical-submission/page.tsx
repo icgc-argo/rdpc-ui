@@ -18,54 +18,74 @@
  */
 "use client";
 
-import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
+import ErrorNotification, {
+  ErrorReportColumns,
+} from "@/app/components/ErrorNotification";
+import {
+  errorNotificationTableProps,
+  getDefaultErrorTableColumns,
+} from "@/app/components/ErrorNotification/ErrorNotificationDefaultTable";
 import CLEAR_CLINICAL_SUBMISSION from "@/app/gql/CLEAR_CLINICAL_SUBMISSION";
 import CLINICAL_SUBMISSION_QUERY from "@/app/gql/CLINICAL_SUBMISSION_QUERY";
 import UPLOAD_CLINICAL_SUBMISSION_MUTATION from "@/app/gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION";
-import { useAppConfigContext } from "@/app/hooks/AppProvider";
+import UPLOAD_REGISTRATION_MUTATION from "@/app/gql/UPLOAD_REGISTRATION_MUTATION";
+import VALIDATE_SUBMISSION_MUTATION from "@/app/gql/VALIDATE_SUBMISSION_MUTATION";
 import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import useUrlQueryState from "@/app/hooks/useURLQueryState";
+import { toDisplayError } from "@/global/utils";
 import { css } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
-import { DnaLoader } from "@icgc-argo/uikit";
+import {
+  ColumnDef,
+  DnaLoader,
+  NOTIFICATION_VARIANTS,
+  NotificationVariant,
+  Table,
+} from "@icgc-argo/uikit";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import urlJoin from "url-join";
-import ClearSubmissionButton from "./components/ClearSubmissionButton";
+import FileError from "../../../../../components/FileError";
 import FilesNavigator from "./components/FilesNavigator";
+import Header from "./components/Header";
 import Instructions from "./components/Instructions";
-import ProgressBar from "./components/ProgressBar";
-import SubmissionSummaryTable from "./components/SummaryTable";
 import { parseGQLResp } from "./data";
+import {
+  ClinicalEntity,
+  ClinicalSubmissionError,
+  ErrorTableColumnProperties,
+  ErrorTableColumns,
+} from "./types";
 
-export const URL_QUERY_KEY = "tab";
-
-const ClinicalSubmission = ({
+const ClinicalSubmissionPage = ({
   params: { shortName },
 }: {
   params: { shortName: string };
 }) => {
+  const URL_QUERY_KEY = "tab";
   const commonToaster = useCommonToasters();
   const [query] = useUrlQueryState(URL_QUERY_KEY);
   const [selectedClinicalEntityType, setEntityType] = useState(query);
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    setEntityType(query);
+    const defaultQuery = "?tab=donor";
+    if (query === "") {
+      const url = `${pathname}${defaultQuery}`;
+      router.replace(url);
+    } else {
+      setEntityType(query);
+    }
   }, [query]);
-
-  // docs url
-  const { DOCS_URL_ROOT } = useAppConfigContext();
-  const helpUrl = urlJoin(
-    DOCS_URL_ROOT,
-    "/docs/submission/submitting-clinical-data",
-  );
 
   // page data query
   const {
     data: gqlData,
     loading: isLoading,
     refetch,
+    updateQuery: updateClinicalSubmissionQuery,
   } = useQuery(CLINICAL_SUBMISSION_QUERY, {
     variables: {
       shortName,
@@ -86,21 +106,43 @@ const ClinicalSubmission = ({
     },
   );
 
+  const handleSubmissionFilesUpload = (files: FileList) =>
+    uploadClinicalSubmission({
+      variables: {
+        programShortName: shortName,
+        files,
+      },
+    });
+
+  const [validateSubmission] = useMutation(VALIDATE_SUBMISSION_MUTATION, {
+    onCompleted: () => {
+      //setSelectedClinicalEntityType(defaultClinicalEntityType);
+    },
+  });
+
   const { isDisabled: isSubmissionSystemDisabled } =
     useSubmissionSystemStatus();
 
-  // data
-  const { clinicalState, clinicalEntities, clinicalVersion } =
-    parseGQLResp(gqlData);
+  /**
+   * Data
+   */
+  const {
+    clinicalState,
+    clinicalFileErrors,
+    clinicalEntities,
+    clinicalVersion,
+  } = parseGQLResp(gqlData);
 
   const allDataErrors = useMemo(
     () =>
-      clinicalEntities.reduce(
+      clinicalEntities.reduce<
+        Array<ClinicalSubmissionError & { fileName: string }>
+      >(
         (acc, entity) => [
           ...acc,
           ...entity.dataErrors.map((err) => ({
             ...err,
-            fileName: entity.batchName,
+            fileName: entity.fileName,
           })),
         ],
         [],
@@ -110,17 +152,105 @@ const ClinicalSubmission = ({
 
   const allDataWarnings = useMemo(
     () =>
-      clinicalEntities.reduce(
+      clinicalEntities.reduce<
+        Array<ClinicalSubmissionError & { fileName: string }>
+      >(
         (acc, entity) => [
           ...acc,
           ...entity.dataWarnings.map((err) => ({
             ...err,
-            fileName: entity.batchName,
+            fileName: entity.fileName,
           })),
         ],
         [],
       ),
     [clinicalEntities],
+  );
+
+  const [uploadFile, { loading: isUploading }] = useMutation(
+    UPLOAD_REGISTRATION_MUTATION,
+
+    {
+      onError: (e) => {
+        commonToaster.unknownError();
+      },
+    },
+  );
+
+  // File Errors
+  const onErrorClose =
+    (index: number) =>
+    ({ type }: { type: string }) => {
+      if (type === "CLOSE") {
+        updateClinicalSubmissionQuery((previous) => ({
+          ...previous,
+          clinicalSubmissions: {
+            ...previous.clinicalSubmissions,
+            fileErrors: previous.clinicalSubmissions.fileErrors?.filter(
+              (_, i) => i !== index,
+            ),
+          },
+        }));
+      }
+    };
+
+  /**
+   * Submission data errors and warnings
+   */
+  const getErrorColumns = (
+    level: NotificationVariant,
+  ): {
+    errorReportColumns: ErrorReportColumns[];
+    errorTableColumns: ColumnDef<ErrorTableColumns>[];
+  } => {
+    const errorTableColumns: ErrorTableColumnProperties[] = [
+      {
+        accessorKey: "fileName",
+        header: "File",
+        maxSize: 150,
+      },
+      ...getDefaultErrorTableColumns(level),
+    ];
+
+    const errorReportColumns: ErrorReportColumns[] = errorTableColumns.map(
+      ({ accessorKey, header }) => ({
+        header,
+        id: accessorKey,
+      }),
+    );
+
+    return { errorReportColumns, errorTableColumns };
+  };
+
+  // Errors
+  const { errorReportColumns, errorTableColumns } = getErrorColumns(
+    NOTIFICATION_VARIANTS.ERROR,
+  );
+  const errorData = allDataErrors.map(toDisplayError);
+  const ErrorTable = (
+    <Table
+      columns={errorTableColumns}
+      data={errorData}
+      {...errorNotificationTableProps}
+      withPagination
+      showPageSizeOptions
+    />
+  );
+
+  // Warnings
+  const {
+    errorReportColumns: warningReportColumns,
+    errorTableColumns: warningTableColumns,
+  } = getErrorColumns(NOTIFICATION_VARIANTS.WARNING);
+  const warningData = allDataWarnings.map(toDisplayError);
+  const WarningTable = (
+    <Table
+      columns={warningTableColumns}
+      data={warningData}
+      {...errorNotificationTableProps}
+      withPagination
+      showPageSizeOptions
+    />
   );
 
   if (isLoading) {
@@ -148,26 +278,54 @@ const ClinicalSubmission = ({
       ({ records }) => !!records.length,
     );
 
-    // Instruction box
+    // Header
+    const handleSubmissionClear = async () => Promise(true);
+
+    /**
+     * Instruction Box
+     */
     // Instruction box state
     const isReadyForValidation =
       hasSomeEntity && !hasSchemaError && !hasSchemaErrorsAfterMigration;
     const isReadyForSignoff = isReadyForValidation && clinicalState === "VALID";
     const isValidated = clinicalState !== "OPEN";
     // Instruction box handlers
-    const handleSubmissionFilesUpload = (files: FileList) =>
-      uploadClinicalSubmission({
-        variables: {
-          programShortName: shortName,
-        },
-      });
-
-    const handleSubmissionValidation = () => new Promise(() => true);
-
+    const handleSubmissionValidation = async () => {
+      try {
+        await validateSubmission({
+          variables: {
+            programShortName: shortName,
+            submissionVersion: clinicalVersion,
+          },
+        });
+      } catch (err) {
+        await refetch();
+        commonToaster.unknownErrorWithReloadMessage();
+      }
+    };
     const handleSignOff = () => new Promise(() => true);
-    // FileNavigator
+
+    /**
+     * File Navigator
+     */
     // FileNavigator handlers
-    const handleClearSchemaError = () => new Promise(() => true);
+    const handleClearSchemaError = async (file: ClinicalEntity) => {
+      await updateClinicalSubmissionQuery((previous) => ({
+        ...previous,
+        clinicalSubmissions: {
+          ...previous.clinicalSubmissions,
+          clinicalEntities: previous.clinicalSubmissions.clinicalEntities.map(
+            (entity) => ({
+              ...entity,
+              schemaErrors:
+                file.clinicalType === entity?.clinicalType
+                  ? []
+                  : entity?.schemaErrors,
+            }),
+          ),
+        },
+      }));
+    };
     const setSelectedClinicalEntityType = () => null;
 
     return (
@@ -178,28 +336,15 @@ const ClinicalSubmission = ({
             flex-direction: column;
           `}
         >
-          <ContentHeader
-            breadcrumb={[shortName, "Submit Clinical Data"]}
-            helpUrl={helpUrl}
-          >
-            <div
-              css={css`
-                flex: 1;
-                display: flex;
-                justify-content: space-between;
-              `}
-            >
-              <ProgressBar
-                clinicalEntities={clinicalEntities}
-                clinicalState={clinicalState}
-              />
-              <ClearSubmissionButton
-                isDisabled={isSubmissionSystemDisabled || !clinicalVersion}
-                clearSubmission={clearClinicalSubmission}
-                refetchSubmission={refetch}
-              />
-            </div>
-          </ContentHeader>
+          <Header
+            clinicalEntities={clinicalEntities}
+            clinicalState={clinicalState}
+            clinicalVersion={clinicalVersion}
+            refetch={refetch}
+            updateQuery={updateClinicalSubmissionQuery}
+            showProgress={true}
+            programShortName={shortName}
+          />
           <ContentMain>
             <Instructions
               uploadEnabled={!isSubmissionSystemDisabled}
@@ -218,8 +363,60 @@ const ClinicalSubmission = ({
               )}
             />
 
-            <SubmissionSummaryTable clinicalEntities={clinicalEntities} />
+            {/* File errors */}
+            {clinicalFileErrors.map(({ fileNames, message }, i) => (
+              <FileError
+                fileError={{
+                  message,
+                  title: `${fileNames.length} of ${(
+                    "!!" || []
+                  ).length.toLocaleString()} files failed to upload: ${fileNames.join(
+                    ", ",
+                  )}`,
+                }}
+                onClose={onErrorClose}
+                index={i}
+              />
+            ))}
 
+            {/* Submimssion data errors */}
+            {hasDataError && (
+              <div
+                id="error-submission-workspace"
+                css={css`
+                  margin-top: 20px;
+                `}
+              >
+                <ErrorNotification
+                  level={NOTIFICATION_VARIANTS.ERROR}
+                  title={`${errorData.length.toLocaleString()} error(s) found in submission workspace`}
+                  subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
+                  reportData={errorData}
+                  reportColumns={errorReportColumns}
+                  tableComponent={ErrorTable}
+                />
+              </div>
+            )}
+
+            {/* Submission data warnings */}
+            {hasDataWarning && (
+              <div
+                id="warning-submission-workspace"
+                css={css`
+                  margin-top: 20px;
+                `}
+              >
+                <ErrorNotification
+                  level={NOTIFICATION_VARIANTS.WARNING}
+                  title={`${warningData.length.toLocaleString()} warning(s) found in submission workspace`}
+                  subtitle="Your submission has the following warnings, check them to make sure the changes are as intended."
+                  reportData={warningData}
+                  reportColumns={warningReportColumns}
+                  tableComponent={WarningTable}
+                />
+              </div>
+            )}
+            {/* Main clinical entity section */}
             <FilesNavigator
               submissionState={clinicalState}
               clearDataError={handleClearSchemaError}
@@ -236,4 +433,4 @@ const ClinicalSubmission = ({
   }
 };
 
-export default ClinicalSubmission;
+export default ClinicalSubmissionPage;

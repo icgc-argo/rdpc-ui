@@ -25,7 +25,7 @@ import {
 import { FC } from "react";
 
 type FileErrorProps = {
-  fileError: { message: string; fileNames: string[] };
+  fileError: { message: string; title: string };
   index: number;
   onClose: (
     i: number,
@@ -53,7 +53,7 @@ const FileError: FC<FileErrorProps> = ({ fileError, index, onClose }) => {
         size="SM"
         variant="ERROR"
         interactionType="CLOSE"
-        title={`File failed to upload: ${fileError?.fileNames.join(", ")}`}
+        title={fileError.title}
         content={fileError.message}
         onInteraction={onClose(index)}
       />

@@ -167,7 +167,7 @@ type InstructionsProps = {
   uploadEnabled: boolean;
   signOffEnabled: boolean;
   validationEnabled: boolean;
-  onUploadFileSelect: (files: FileList) => Promise<any>;
+  onUploadFileSelect: (f: FileList) => void;
   onValidateClick: () => Promise<any>;
   onSignOffClick: () => Promise<any>;
   clinicalTypes: string[];
@@ -188,7 +188,7 @@ const Instructions = ({
   const [isValidating, setIsValidating] = useState<boolean>(false);
   const [isSigningOff, setIsSigningOff] = useState<boolean>(false);
 
-  const handleFileUploadClick = async (files: FileList) => {
+  const handleFileUploadClick = async (files: any) => {
     setIsUploading(true);
     await onUploadFileSelect(files);
     setIsUploading(false);
@@ -249,7 +249,9 @@ const Instructions = ({
                 accept: ".tsv",
                 multiple: true,
               }}
-              onFilesSelect={handleFileUploadClick}
+              onFilesSelect={async (files) => {
+                if (files[0]) handleFileUploadClick(files);
+              }}
               isLoading={isUploading}
               disabled={!uploadEnabled}
               Loader={() => <InstructionLoader text="VALIDATING FILES" />}
