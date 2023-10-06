@@ -18,6 +18,7 @@
  */
 "use client";
 
+import { ClinicalSubmissionEntity } from "@/__generated__/graphql";
 import ContentMain from "@/app/components/Content/ContentMain";
 import ErrorNotification, {
   ErrorReportColumns,
@@ -169,7 +170,6 @@ const ClinicalSubmissionPage = ({
 
   const [uploadFile, { loading: isUploading }] = useMutation(
     UPLOAD_REGISTRATION_MUTATION,
-
     {
       onError: (e) => {
         commonToaster.unknownError();
@@ -279,7 +279,7 @@ const ClinicalSubmissionPage = ({
     );
 
     // Header
-    const handleSubmissionClear = async () => Promise(true);
+    const handleSubmissionClear = async () => new Promise(() => true);
 
     /**
      * Instruction Box
@@ -309,22 +309,30 @@ const ClinicalSubmissionPage = ({
      * File Navigator
      */
     // FileNavigator handlers
+    // errors are client side only and not persisted, this updates GQL cache only
     const handleClearSchemaError = async (file: ClinicalEntity) => {
-      await updateClinicalSubmissionQuery((previous) => ({
-        ...previous,
-        clinicalSubmissions: {
-          ...previous.clinicalSubmissions,
-          clinicalEntities: previous.clinicalSubmissions.clinicalEntities.map(
-            (entity) => ({
-              ...entity,
-              schemaErrors:
-                file.clinicalType === entity?.clinicalType
-                  ? []
-                  : entity?.schemaErrors,
-            }),
-          ),
-        },
-      }));
+      updateClinicalSubmissionQuery((previous) => {
+        return {
+          ...previous,
+          clinicalSubmissions: {
+            ...previous.clinicalSubmissions,
+            clinicalEntities: previous.clinicalSubmissions.clinicalEntities.map(
+              (entity) => {
+                const clearedSchemaType = file.clinicalType;
+                const currentEntityType = entity?.clinicalType || "";
+                const currentEntitySchemaError = entity?.schemaErrors || [];
+                return {
+                  ...entity,
+                  schemaErrors:
+                    clearedSchemaType === currentEntityType
+                      ? []
+                      : currentEntitySchemaError,
+                } as ClinicalSubmissionEntity;
+              },
+            ),
+          },
+        };
+      });
     };
     const setSelectedClinicalEntityType = () => null;
 

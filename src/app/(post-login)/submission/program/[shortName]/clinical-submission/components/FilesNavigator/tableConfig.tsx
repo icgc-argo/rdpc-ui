@@ -89,6 +89,8 @@ export const getTableColumns: GetTableColumns = (
           original={original}
           fieldName={fieldName}
           isDiffPreview={isDiffPreview}
+          file={file}
+          stats={stats}
         />
       </CellStatusDisplay>
     ),
