@@ -18,7 +18,7 @@
  */
 import { notNull } from "@/global/utils";
 import { capitalize, orderBy } from "lodash";
-import { ClinicalSubmission, GqlClinicalSubmissionQuery } from "./types";
+import { ClinicalSubmission, clinicalStatuses } from "./types";
 
 const CLINICAL_FILE_ORDER = [
   "donor",
@@ -38,9 +38,7 @@ const CLINICAL_FILE_ORDER = [
 ];
 
 // parse out nulls, undefined, provide sensible defaults so type checking isnt a scattered nightmare
-export const parseGQLResp: (
-  x: GqlClinicalSubmissionQuery | undefined,
-) => ClinicalSubmission = (gqlData) => {
+export const parseGQLResp: (v: any) => ClinicalSubmission = (gqlData) => {
   const clinicalState = gqlData?.clinicalSubmissions.state;
   const clinicalVersion = gqlData?.clinicalSubmissions.version || "";
 
@@ -87,15 +85,15 @@ export const parseGQLResp: (
 
     const status = isPendingApproval
       ? hasUpdate
-        ? "UPDATE"
-        : "SUCCESS"
+        ? clinicalStatuses.UPDATE
+        : clinicalStatuses.SUCCESS
       : hasSchemaError || hasDataError
-      ? "ERROR"
+      ? clinicalStatuses.ERROR
       : records.length
       ? isSubmissionValidated
-        ? "SUCCESS"
-        : "WARNING"
-      : "NONE";
+        ? clinicalStatuses.SUCCESS
+        : clinicalStatuses.WARNING
+      : clinicalStatuses.NONE;
 
     return {
       stats,

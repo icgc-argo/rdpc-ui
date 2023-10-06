@@ -84,6 +84,15 @@ export type Stats = {
   errorsFound: Array<ClinicalSubmissionRecord["row"]>;
 };
 
+export const clinicalStatuses = {
+  SUCCESS: "SUCCESS",
+  WARNING: "WARNING",
+  ERROR: "ERROR",
+  NONE: "NONE",
+  UPDATE: "UPDATE",
+} as const;
+type ClinicalEntityStatus = keyof typeof clinicalStatuses;
+
 export type ClinicalEntity = {
   stats: Stats;
   createdAt: string;
@@ -97,7 +106,7 @@ export type ClinicalEntity = {
   clinicalType: string;
   records: ClinicalSubmissionRecord[];
   recordsCount: number;
-  status: "SUCCESS" | "WARNING" | "ERROR" | "NONE" | "UPDATE";
+  status: ClinicalEntityStatus;
 };
 
 export type ClinicalFileError = {
