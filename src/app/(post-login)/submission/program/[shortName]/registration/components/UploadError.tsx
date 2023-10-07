@@ -88,6 +88,7 @@ type DownloadHandlerProps = {
   level: string;
   columnConfig: Cols;
 };
+
 const createDownloadHandler =
   ({ errors, excludeCols, columnConfig, level }: DownloadHandlerProps) =>
   () => {
@@ -108,6 +109,7 @@ const createDownloadHandler =
 
 type ClinicalDataErrors =
   GetRegistrationQuery["clinicalRegistration"]["errors"];
+
 type UploadErrorProps = {
   level: NotificationVariant;
   title: string;
@@ -116,6 +118,7 @@ type UploadErrorProps = {
   onClearClick?: ComponentProps<typeof Button>["onClick"];
   tsvExcludeCols?: Array<keyof Error>;
 };
+
 const UploadError: FC<UploadErrorProps> = ({
   level,
   title,

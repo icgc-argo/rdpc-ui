@@ -18,15 +18,16 @@
  */
 "use client";
 
+import Instructions from "@/app/(post-login)/submission/program/[shortName]/registration/components/Instructions";
+import ProgressBar from "@/app/(post-login)/submission/program/[shortName]/registration/components/ProgressBar";
 import Card from "@/app/components/Card";
 import ContentHeader from "@/app/components/Content/ContentHeader";
 import ContentMain from "@/app/components/Content/ContentMain";
-import ProgressBar from "@/app/components/Content/ProgressBar";
 import NoDataMessage from "@/app/components/NoData";
-import Instructions from "@/app/components/page/submission/program/registration/Instructions";
 import CLEAR_CLINICAL_REGISTRATION_MUTATION from "@/app/gql/CLEAR_CLINICAL_REGISTRATION_MUTATION";
 import CLINICAL_SCHEMA_VERSION_QUERY from "@/app/gql/CLINICAL_SCHEMA_VERSION_QUERY";
 import GET_REGISTRATION_QUERY from "@/app/gql/GET_REGISTRATION_QUERY";
+import UPLOAD_CLINICAL_SUBMISSION_MUTATION from "@/app/gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION";
 import UPLOAD_REGISTRATION_MUTATION from "@/app/gql/UPLOAD_REGISTRATION_MUTATION";
 import { useAppConfigContext } from "@/app/hooks/AppProvider";
 import { useToaster } from "@/app/hooks/ToastProvider";
@@ -46,7 +47,7 @@ import {
 import { get } from "lodash";
 import { useState } from "react";
 import urlJoin from "url-join";
-import FileError from "./components/FileError";
+import FileError from "../../../../../components/FileError";
 import FilePreview from "./components/FilePreview";
 import RegisterSamplesModal from "./components/RegisterSampleModal";
 import UploadError from "./components/UploadError";
@@ -116,9 +117,21 @@ export default function Register({
     },
   );
 
+  const [uploadClinicalSubmission, mutationStatus] = useMutation(
+    UPLOAD_CLINICAL_SUBMISSION_MUTATION,
+    {
+      onCompleted: (d) => {
+        //setSelectedClinicalEntityType(defaultClinicalEntityType);
+      },
+      onError: (e) => {
+        commonToaster.unknownError();
+      },
+    },
+  );
+
   const handleUpload = (file: File) =>
-    uploadFile({
-      variables: { shortName, registrationFile: file },
+    uploadClinicalSubmission({
+      variables: { programShortName: shortName, files: file },
     });
 
   const handleRegister = () => {
@@ -204,7 +217,9 @@ export default function Register({
             <FileError
               fileError={{
                 message: fileError.message,
-                fileNames: fileError.fileNames.filter(notNull),
+                title: `File failed to upload: ${fileError?.fileNames.join(
+                  ", ",
+                )}`,
               }}
               index={index}
               onClose={onFileErrorClose}

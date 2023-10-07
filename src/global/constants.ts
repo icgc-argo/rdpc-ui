@@ -28,3 +28,5 @@ export const CONTACT_PAGE_PATH = "/contact";
 export const SUBMISSION_PATH = `/submission`;
 export const PROGRAM_SHORT_NAME_PATH = `[shortName]`;
 export const PROGRAM_DASHBOARD_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/dashboard`;
+
+export const CLINICAL_TEMPLATE_PATH = "/clinical/template";

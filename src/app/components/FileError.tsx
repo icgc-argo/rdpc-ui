@@ -16,14 +16,49 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import { css } from "@/lib/emotion";
+import {
+  Notification,
+  NotificationInteraction,
+  NotificationInteractionEvent,
+} from "@icgc-argo/uikit";
+import { FC } from "react";
 
-/** @type {import('next').NextConfig} */
-
-const nextConfig = {
-  reactStrictMode: true,
-  compiler: {
-    emotion: true,
-  },
+type FileErrorProps = {
+  fileError: { message: string; title: string };
+  index: number;
+  onClose: (
+    i: number,
+  ) => ({
+    type,
+    event,
+  }: {
+    type: NotificationInteraction;
+    event: NotificationInteractionEvent;
+  }) => void;
+};
+const FileError: FC<FileErrorProps> = ({ fileError, index, onClose }) => {
+  return (
+    <div
+      className="error"
+      css={css`
+        > div {
+          border: none;
+          background: inherit;
+        }
+      `}
+    >
+      <Notification
+        key={index}
+        size="SM"
+        variant="ERROR"
+        interactionType="CLOSE"
+        title={fileError.title}
+        content={fileError.message}
+        onInteraction={onClose(index)}
+      />
+    </div>
+  );
 };
 
-module.exports = nextConfig;
+export default FileError;
