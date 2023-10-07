@@ -17,6 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import createEgoUtils from "@icgc-argo/ego-token-utils";
+import {
+  canWriteToRdpc,
+  isDccMember,
+  isRdpcAdmin,
+} from "@icgc-argo/ego-token-utils/dist/argoRoleChecks";
 import { useAppConfigContext } from "./AppProvider";
 
 export type UserRoleList = {
@@ -66,8 +71,10 @@ const useUserRole = (egoJwt: string, programId: string): UserRoleList => {
     (isValidJwt && TokenUtils.getPermissionsFromToken(egoJwt)) || [];
 
   return {
-    isRDPCAdmin: false,
-    isDCCAdmin: false,
+    isRDPCAdmin:
+      isRdpcAdmin(permissions) &&
+      canWriteToRdpc({ permissions, rdpcCode: programId }),
+    isDCCAdmin: isDccMember(permissions),
     isProgramAdmin: TokenUtils.isProgramAdmin({
       permissions,
       programId,
