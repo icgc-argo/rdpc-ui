@@ -17,17 +17,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useGlobalLoader } from "@/app/hooks/GlobalLoaderProvider";
-import { useToaster } from "@/app/hooks/ToastProvider";
-import useCommonToasters from "@/app/hooks/useCommonToasters";
-import { sleep } from "@/global/utils";
-import { css, useTheme } from "@/lib/emotion";
-//import { isDccMember } from "@icgc-argo/ego-token-utils/dist/argoRoleChecks";
 import APPROVE_SUBMISSION_MUTATION from "@/app/gql/APPROVE_SUBMISSION_MUTATION";
 import CLEAR_CLINICAL_SUBMISSION from "@/app/gql/CLEAR_CLINICAL_SUBMISSION";
 import REOPEN_SUBMISSION_MUTATION from "@/app/gql/REOPEN_SUBMISSION_MUTATION";
 import { useAppConfigContext } from "@/app/hooks/AppProvider";
+import { useGlobalLoader } from "@/app/hooks/GlobalLoaderProvider";
+import { useToaster } from "@/app/hooks/ToastProvider";
+import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
+import { sleep } from "@/global/utils";
+import { css, useTheme } from "@/lib/emotion";
 import { useMutation } from "@apollo/client";
 import { Button, TitleBar, Link as UIKitLink } from "@icgc-argo/uikit";
 import Link from "next/link";
@@ -98,65 +97,10 @@ const Header: FC<HeaderProps> = ({
 
   const handleSubmissionReopen = async () => {
     console.log("handle submission reoepn");
-    // const didUserConfirm = await getUserConfirmation({
-    //   title: isDcc
-    //     ? "Reopen Submission?"
-    //     : "Are you sure you want to reopen your submission?",
-    //   children: isDcc
-    //     ? "Are you sure you want to reopen this clinical submission?"
-    //     : "If you reopen your clinical submission it will be recalled from DCC approval and your workspace will be open for modifications.",
-    //   actionButtonText: isDcc ? "Yes, Reopen" : "Yes, Reopen Submission",
-    //   actionButtonId: "modal-confirm-reopen",
-    //   buttonSize: "sm",
-    // });
-    // if (didUserConfirm) {
-    //   setGlobalLoading(true);
-    //   await sleep();
-    //   try {
-    //     await reopenSubmission();
-    //   } catch (err) {
-    //     await refetchClinicalSubmission();
-    //     commonToaster.unknownErrorWithReloadMessage();
-    //   } finally {
-    //     setGlobalLoading(false);
-    //   }
-    // }
   };
 
   const handleSubmissionApproval = async () => {
     console.log("handle submission approval");
-    // const didUserConfirm = await getUserConfirmation({
-    //   title: "Approve Submission?",
-    //   children: "Are you sure you want to approve this clinical submission?",
-    //   actionButtonText: "Yes, Approve",
-    //   actionButtonId: "modal-confirm-approve",
-    //   buttonSize: "sm",
-    // });
-    // if (didUserConfirm) {
-    //   setGlobalLoading(true);
-    //   await sleep();
-    //   try {
-    //     await approveClinicalSubmission();
-    //     updateClinicalSubmissionQuery((previous) => ({
-    //       ...previous,
-    //       clinicalSubmissions:
-    //         placeholderClinicalSubmissionQueryData(programShortName)
-    //           .clinicalSubmissions,
-    //     }));
-    //     router.push(DCC_DASHBOARD_PATH);
-    //     toaster.addToast({
-    //       variant: "SUCCESS",
-    //       interactionType: "CLOSE",
-    //       title: "Clinical Data is successfully approved",
-    //       content: `${programShortName} updated clinical data has been approved.`,
-    //     });
-    //   } catch (err) {
-    //     await refetchClinicalSubmission();
-    //     commonToaster.unknownErrorWithReloadMessage();
-    //   } finally {
-    //     setGlobalLoading(false);
-    //   }
-    // }
   };
 
   const handleSubmissionClear = async () => {

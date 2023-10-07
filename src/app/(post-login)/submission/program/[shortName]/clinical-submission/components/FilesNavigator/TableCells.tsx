@@ -71,7 +71,7 @@ function isValidFieldNameIndex(
   fieldName: any,
   file: FileRecord,
 ): fieldName is keyof FileRecord {
-  return file.hasOwnProperty(fieldName);
+  return Object.prototype.hasOwnProperty.call(file, "fieldName");
 }
 
 export const DataFieldCell = ({

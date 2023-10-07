@@ -374,6 +374,7 @@ const ClinicalSubmissionPage = ({
             {/* File errors */}
             {clinicalFileErrors.map(({ fileNames, message }, i) => (
               <FileError
+                key={i}
                 fileError={{
                   message,
                   title: `${fileNames.length} of ${(
