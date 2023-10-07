@@ -12,12 +12,11 @@
     "gql:compile": "graphql-codegen",
     "gql:watch": "graphql-codegen -w",
     "type-check": "tsc -p ./tsconfig.json"
-
   },
   "dependencies": {
     "@apollo/client": "^3.8.1",
     "@hookform/resolvers": "^3.1.1",
-    "@icgc-argo/ego-token-utils": "^8.2.0",
+    "@icgc-argo/ego-token-utils": "^8.3.0",
     "@icgc-argo/uikit": "^3.0.1",
     "@types/url-join": "^4.0.1",
     "apollo-upload-client": "^17.0.0",
