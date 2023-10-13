@@ -1,184 +1,193 @@
 /* eslint-disable */
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T,
+> = { [_ in K]?: never };
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
+    };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
-  Date: { input: any; output: any; }
-  DateTime: { input: any; output: any; }
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
+  Date: { input: any; output: any };
+  DateTime: { input: any; output: any };
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
-  JSON: { input: any; output: any; }
-  Upload: { input: any; output: any; }
+  JSON: { input: any; output: any };
+  Upload: { input: any; output: any };
 };
 
 export type AccessKey = {
-  __typename?: 'AccessKey';
-  error?: Maybe<Scalars['String']['output']>;
+  __typename?: "AccessKey";
+  error?: Maybe<Scalars["String"]["output"]>;
   /** Time till expiry in milliseconds */
-  exp?: Maybe<Scalars['Int']['output']>;
-  key?: Maybe<Scalars['String']['output']>;
+  exp?: Maybe<Scalars["Int"]["output"]>;
+  key?: Maybe<Scalars["String"]["output"]>;
 };
 
 /** ########## QUERY TYPES ########### */
 export type AggState = {
-  __typename?: 'AggState';
-  active?: Maybe<Scalars['Boolean']['output']>;
-  field?: Maybe<Scalars['String']['output']>;
-  show?: Maybe<Scalars['Boolean']['output']>;
+  __typename?: "AggState";
+  active?: Maybe<Scalars["Boolean"]["output"]>;
+  field?: Maybe<Scalars["String"]["output"]>;
+  show?: Maybe<Scalars["Boolean"]["output"]>;
   /** @deprecated This field is deprecated in favour of client-side deduction of the type using the es mapping and @arranger/mapping-utils/esToAggTypeMap. This computation will already be done with @Arranger/components. Projects created with 0.4.6 will return null for this query */
-  type?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<Scalars["String"]["output"]>;
 };
 
 /** ########## INPUT TYPES ########### */
 export type AggStateInput = {
-  active?: InputMaybe<Scalars['Boolean']['input']>;
-  field?: InputMaybe<Scalars['String']['input']>;
-  show?: InputMaybe<Scalars['Boolean']['input']>;
+  active?: InputMaybe<Scalars["Boolean"]["input"]>;
+  field?: InputMaybe<Scalars["String"]["input"]>;
+  show?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type Aggregations = {
-  __typename?: 'Aggregations';
-  bucket_count?: Maybe<Scalars['Int']['output']>;
+  __typename?: "Aggregations";
+  bucket_count?: Maybe<Scalars["Int"]["output"]>;
   buckets?: Maybe<Array<Maybe<Bucket>>>;
-  cardinality?: Maybe<Scalars['Int']['output']>;
+  cardinality?: Maybe<Scalars["Int"]["output"]>;
 };
-
 
 export type AggregationsBucketsArgs = {
-  max?: InputMaybe<Scalars['Int']['input']>;
+  max?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
-
 export type AggregationsCardinalityArgs = {
-  precision_threshold?: InputMaybe<Scalars['Int']['input']>;
+  precision_threshold?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 export type AggsState = {
-  __typename?: 'AggsState';
+  __typename?: "AggsState";
   state?: Maybe<Array<Maybe<AggState>>>;
-  timestamp?: Maybe<Scalars['String']['output']>;
+  timestamp?: Maybe<Scalars["String"]["output"]>;
 };
 
 /** Date range aggregations for a given donor field. */
 export type AnalysisObject = {
-  __typename?: 'AnalysisObject';
+  __typename?: "AnalysisObject";
   buckets?: Maybe<Array<Maybe<DateRangeBucket>>>;
   title?: Maybe<DonorField>;
 };
 
 export type Bucket = {
-  __typename?: 'Bucket';
-  doc_count?: Maybe<Scalars['Int']['output']>;
-  filter_by_term?: Maybe<Scalars['JSON']['output']>;
-  key?: Maybe<Scalars['String']['output']>;
-  key_as_string?: Maybe<Scalars['String']['output']>;
-  top_hits?: Maybe<Scalars['JSON']['output']>;
+  __typename?: "Bucket";
+  doc_count?: Maybe<Scalars["Int"]["output"]>;
+  filter_by_term?: Maybe<Scalars["JSON"]["output"]>;
+  key?: Maybe<Scalars["String"]["output"]>;
+  key_as_string?: Maybe<Scalars["String"]["output"]>;
+  top_hits?: Maybe<Scalars["JSON"]["output"]>;
 };
-
 
 export type BucketFilter_By_TermArgs = {
-  filter?: InputMaybe<Scalars['JSON']['input']>;
+  filter?: InputMaybe<Scalars["JSON"]["input"]>;
 };
 
-
 export type BucketTop_HitsArgs = {
-  _source?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  size?: InputMaybe<Scalars['Int']['input']>;
+  _source?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  size?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 /** Collated Clinical Data Query Response */
 export type ClinicalData = {
-  __typename?: 'ClinicalData';
+  __typename?: "ClinicalData";
   clinicalEntities: Array<Maybe<ClinicalDataEntities>>;
   clinicalErrors?: Maybe<Array<Maybe<ClinicalErrors>>>;
   completionStats?: Maybe<Array<Maybe<CompletionStats>>>;
-  programShortName: Scalars['String']['output'];
+  programShortName: Scalars["String"]["output"];
 };
 
 /** Submitted Program Clinical Data arranged by Entity type */
 export type ClinicalDataEntities = {
-  __typename?: 'ClinicalDataEntities';
+  __typename?: "ClinicalDataEntities";
   completionStats?: Maybe<Array<Maybe<CompletionStats>>>;
-  entityFields?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  entityName: Scalars['String']['output'];
+  entityFields?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
+  entityName: Scalars["String"]["output"];
   records: Array<Maybe<Array<Maybe<ClinicalRecordField>>>>;
-  totalDocs: Scalars['Int']['output'];
+  totalDocs: Scalars["Int"]["output"];
 };
 
 export type ClinicalEntityError = {
-  donorId: Scalars['String']['output'];
-  field: Scalars['String']['output'];
-  message: Scalars['String']['output'];
-  row: Scalars['Int']['output'];
-  type: Scalars['String']['output'];
-  value: Scalars['String']['output'];
+  donorId: Scalars["String"]["output"];
+  field: Scalars["String"]["output"];
+  message: Scalars["String"]["output"];
+  row: Scalars["Int"]["output"];
+  type: Scalars["String"]["output"];
+  value: Scalars["String"]["output"];
 };
 
 export type ClinicalErrorInfo = {
-  __typename?: 'ClinicalErrorInfo';
-  message?: Maybe<Scalars['String']['output']>;
-  value?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  __typename?: "ClinicalErrorInfo";
+  message?: Maybe<Scalars["String"]["output"]>;
+  value?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
 };
 
 /** Specific Error Field + Values */
 export type ClinicalErrorRecord = {
-  __typename?: 'ClinicalErrorRecord';
-  entityName?: Maybe<Scalars['String']['output']>;
-  errorType?: Maybe<Scalars['String']['output']>;
-  fieldName?: Maybe<Scalars['String']['output']>;
-  index?: Maybe<Scalars['Int']['output']>;
+  __typename?: "ClinicalErrorRecord";
+  entityName?: Maybe<Scalars["String"]["output"]>;
+  errorType?: Maybe<Scalars["String"]["output"]>;
+  fieldName?: Maybe<Scalars["String"]["output"]>;
+  index?: Maybe<Scalars["Int"]["output"]>;
   info?: Maybe<ClinicalErrorInfo>;
-  message?: Maybe<Scalars['String']['output']>;
+  message?: Maybe<Scalars["String"]["output"]>;
 };
 
 /** Data Submission / Schema Errors for a given Donor */
 export type ClinicalErrors = {
-  __typename?: 'ClinicalErrors';
-  donorId?: Maybe<Scalars['Int']['output']>;
+  __typename?: "ClinicalErrors";
+  donorId?: Maybe<Scalars["Int"]["output"]>;
   errors?: Maybe<Array<Maybe<ClinicalErrorRecord>>>;
-  submitterDonorId?: Maybe<Scalars['String']['output']>;
+  submitterDonorId?: Maybe<Scalars["String"]["output"]>;
 };
 
 /** All schemas below describe clinical errors */
 export type ClinicalFileError = {
-  __typename?: 'ClinicalFileError';
-  code: Scalars['String']['output'];
-  fileNames: Array<Maybe<Scalars['String']['output']>>;
-  message: Scalars['String']['output'];
+  __typename?: "ClinicalFileError";
+  code: Scalars["String"]["output"];
+  fileNames: Array<Maybe<Scalars["String"]["output"]>>;
+  message: Scalars["String"]["output"];
 };
 
 /** Query Variables for Pagination & Filtering */
 export type ClinicalInput = {
-  completionState?: InputMaybe<Scalars['String']['input']>;
-  donorIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  entityTypes?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  page: Scalars['Int']['input'];
-  pageSize: Scalars['Int']['input'];
-  sort?: InputMaybe<Scalars['String']['input']>;
-  submitterDonorIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  completionState?: InputMaybe<Scalars["String"]["input"]>;
+  donorIds?: InputMaybe<Array<InputMaybe<Scalars["Int"]["input"]>>>;
+  entityTypes?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  page: Scalars["Int"]["input"];
+  pageSize: Scalars["Int"]["input"];
+  sort?: InputMaybe<Scalars["String"]["input"]>;
+  submitterDonorIds?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
 
 /** Generic schema of clinical tsv records */
 export type ClinicalRecord = {
-  __typename?: 'ClinicalRecord';
+  __typename?: "ClinicalRecord";
   fields: Array<ClinicalRecordField>;
-  row: Scalars['Int']['output'];
+  row: Scalars["Int"]["output"];
 };
 
 export type ClinicalRecordField = {
-  __typename?: 'ClinicalRecordField';
-  name: Scalars['String']['output'];
-  value?: Maybe<Scalars['String']['output']>;
+  __typename?: "ClinicalRecordField";
+  name: Scalars["String"]["output"];
+  value?: Maybe<Scalars["String"]["output"]>;
 };
 
 /**
@@ -186,90 +195,90 @@ export type ClinicalRecordField = {
  *   in this case the object will return with id and creator equal to null, and an empty records list.
  */
 export type ClinicalRegistrationData = {
-  __typename?: 'ClinicalRegistrationData';
+  __typename?: "ClinicalRegistrationData";
   alreadyRegistered: ClinicalRegistrationStats;
-  createdAt?: Maybe<Scalars['DateTime']['output']>;
-  creator?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
+  creator?: Maybe<Scalars["String"]["output"]>;
   errors: Array<Maybe<ClinicalRegistrationError>>;
   fileErrors?: Maybe<Array<Maybe<ClinicalFileError>>>;
-  fileName?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['ID']['output']>;
+  fileName?: Maybe<Scalars["String"]["output"]>;
+  id?: Maybe<Scalars["ID"]["output"]>;
   newDonors: ClinicalRegistrationStats;
   newSamples: ClinicalRegistrationStats;
   newSpecimens: ClinicalRegistrationStats;
-  programShortName?: Maybe<Scalars['ID']['output']>;
+  programShortName?: Maybe<Scalars["ID"]["output"]>;
   records: Array<Maybe<ClinicalRecord>>;
 };
 
 export type ClinicalRegistrationError = ClinicalEntityError & {
-  __typename?: 'ClinicalRegistrationError';
-  donorId: Scalars['String']['output'];
-  field: Scalars['String']['output'];
-  message: Scalars['String']['output'];
-  row: Scalars['Int']['output'];
-  sampleId?: Maybe<Scalars['String']['output']>;
-  specimenId?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-  value: Scalars['String']['output'];
+  __typename?: "ClinicalRegistrationError";
+  donorId: Scalars["String"]["output"];
+  field: Scalars["String"]["output"];
+  message: Scalars["String"]["output"];
+  row: Scalars["Int"]["output"];
+  sampleId?: Maybe<Scalars["String"]["output"]>;
+  specimenId?: Maybe<Scalars["String"]["output"]>;
+  type: Scalars["String"]["output"];
+  value: Scalars["String"]["output"];
 };
 
 export type ClinicalRegistrationStatValue = {
-  __typename?: 'ClinicalRegistrationStatValue';
-  name: Scalars['String']['output'];
-  rows: Array<Maybe<Scalars['Int']['output']>>;
+  __typename?: "ClinicalRegistrationStatValue";
+  name: Scalars["String"]["output"];
+  rows: Array<Maybe<Scalars["Int"]["output"]>>;
 };
 
 export type ClinicalRegistrationStats = {
-  __typename?: 'ClinicalRegistrationStats';
-  count: Scalars['Int']['output'];
-  names: Array<Maybe<Scalars['String']['output']>>;
-  rows: Array<Maybe<Scalars['Int']['output']>>;
+  __typename?: "ClinicalRegistrationStats";
+  count: Scalars["Int"]["output"];
+  names: Array<Maybe<Scalars["String"]["output"]>>;
+  rows: Array<Maybe<Scalars["Int"]["output"]>>;
   values: Array<Maybe<ClinicalRegistrationStatValue>>;
 };
 
 /** Clinical Data DonorId Search Query Response */
 export type ClinicalSearchData = {
-  __typename?: 'ClinicalSearchData';
-  programShortName: Scalars['String']['output'];
+  __typename?: "ClinicalSearchData";
+  programShortName: Scalars["String"]["output"];
   searchResults: Array<Maybe<ClinicalSearchResults>>;
-  totalResults: Scalars['Int']['output'];
+  totalResults: Scalars["Int"]["output"];
 };
 
 /** Clinical Data DonorId Search Result Record */
 export type ClinicalSearchResults = {
-  __typename?: 'ClinicalSearchResults';
-  donorId: Scalars['Int']['output'];
-  submitterDonorId?: Maybe<Scalars['String']['output']>;
+  __typename?: "ClinicalSearchResults";
+  donorId: Scalars["Int"]["output"];
+  submitterDonorId?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type ClinicalSubmissionData = {
-  __typename?: 'ClinicalSubmissionData';
+  __typename?: "ClinicalSubmissionData";
   clinicalEntities: Array<Maybe<ClinicalSubmissionEntity>>;
   fileErrors?: Maybe<Array<Maybe<ClinicalFileError>>>;
-  id?: Maybe<Scalars['ID']['output']>;
-  programShortName?: Maybe<Scalars['ID']['output']>;
+  id?: Maybe<Scalars["ID"]["output"]>;
+  programShortName?: Maybe<Scalars["ID"]["output"]>;
   state?: Maybe<SubmissionState>;
-  updatedAt?: Maybe<Scalars['DateTime']['output']>;
-  updatedBy?: Maybe<Scalars['String']['output']>;
-  version?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  updatedBy?: Maybe<Scalars["String"]["output"]>;
+  version?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type ClinicalSubmissionDataError = ClinicalEntityError & {
-  __typename?: 'ClinicalSubmissionDataError';
-  donorId: Scalars['String']['output'];
-  field: Scalars['String']['output'];
-  message: Scalars['String']['output'];
-  row: Scalars['Int']['output'];
-  type: Scalars['String']['output'];
-  value: Scalars['String']['output'];
+  __typename?: "ClinicalSubmissionDataError";
+  donorId: Scalars["String"]["output"];
+  field: Scalars["String"]["output"];
+  message: Scalars["String"]["output"];
+  row: Scalars["Int"]["output"];
+  type: Scalars["String"]["output"];
+  value: Scalars["String"]["output"];
 };
 
 export type ClinicalSubmissionEntity = {
-  __typename?: 'ClinicalSubmissionEntity';
-  batchName?: Maybe<Scalars['String']['output']>;
-  clinicalType: Scalars['String']['output'];
-  createdAt?: Maybe<Scalars['DateTime']['output']>;
-  creator?: Maybe<Scalars['String']['output']>;
+  __typename?: "ClinicalSubmissionEntity";
+  batchName?: Maybe<Scalars["String"]["output"]>;
+  clinicalType: Scalars["String"]["output"];
+  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
+  creator?: Maybe<Scalars["String"]["output"]>;
   dataErrors: Array<Maybe<ClinicalSubmissionDataError>>;
   dataUpdates: Array<Maybe<ClinicalSubmissionUpdate>>;
   dataWarnings: Array<Maybe<ClinicalSubmissionSchemaError>>;
@@ -279,256 +288,256 @@ export type ClinicalSubmissionEntity = {
 };
 
 export type ClinicalSubmissionSchemaError = ClinicalEntityError & {
-  __typename?: 'ClinicalSubmissionSchemaError';
-  clinicalType: Scalars['String']['output'];
-  donorId: Scalars['String']['output'];
-  field: Scalars['String']['output'];
-  message: Scalars['String']['output'];
-  row: Scalars['Int']['output'];
-  type: Scalars['String']['output'];
-  value: Scalars['String']['output'];
+  __typename?: "ClinicalSubmissionSchemaError";
+  clinicalType: Scalars["String"]["output"];
+  donorId: Scalars["String"]["output"];
+  field: Scalars["String"]["output"];
+  message: Scalars["String"]["output"];
+  row: Scalars["Int"]["output"];
+  type: Scalars["String"]["output"];
+  value: Scalars["String"]["output"];
 };
 
 /** Each field is an array of row index referenced in ClinicalSubmissionRecord */
 export type ClinicalSubmissionStats = {
-  __typename?: 'ClinicalSubmissionStats';
-  errorsFound: Array<Maybe<Scalars['Int']['output']>>;
-  new: Array<Maybe<Scalars['Int']['output']>>;
-  noUpdate: Array<Maybe<Scalars['Int']['output']>>;
-  updated: Array<Maybe<Scalars['Int']['output']>>;
+  __typename?: "ClinicalSubmissionStats";
+  errorsFound: Array<Maybe<Scalars["Int"]["output"]>>;
+  new: Array<Maybe<Scalars["Int"]["output"]>>;
+  noUpdate: Array<Maybe<Scalars["Int"]["output"]>>;
+  updated: Array<Maybe<Scalars["Int"]["output"]>>;
 };
 
 export type ClinicalSubmissionUpdate = {
-  __typename?: 'ClinicalSubmissionUpdate';
-  donorId: Scalars['String']['output'];
-  field: Scalars['String']['output'];
-  newValue: Scalars['String']['output'];
-  oldValue: Scalars['String']['output'];
-  row: Scalars['Int']['output'];
+  __typename?: "ClinicalSubmissionUpdate";
+  donorId: Scalars["String"]["output"];
+  field: Scalars["String"]["output"];
+  newValue: Scalars["String"]["output"];
+  oldValue: Scalars["String"]["output"];
+  row: Scalars["Int"]["output"];
 };
 
 export type Column = {
-  __typename?: 'Column';
-  accessor?: Maybe<Scalars['String']['output']>;
-  canChangeShow?: Maybe<Scalars['Boolean']['output']>;
-  field?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
-  jsonPath?: Maybe<Scalars['String']['output']>;
-  query?: Maybe<Scalars['String']['output']>;
-  show?: Maybe<Scalars['Boolean']['output']>;
-  sortable?: Maybe<Scalars['Boolean']['output']>;
-  type?: Maybe<Scalars['String']['output']>;
+  __typename?: "Column";
+  accessor?: Maybe<Scalars["String"]["output"]>;
+  canChangeShow?: Maybe<Scalars["Boolean"]["output"]>;
+  field?: Maybe<Scalars["String"]["output"]>;
+  id?: Maybe<Scalars["String"]["output"]>;
+  jsonPath?: Maybe<Scalars["String"]["output"]>;
+  query?: Maybe<Scalars["String"]["output"]>;
+  show?: Maybe<Scalars["Boolean"]["output"]>;
+  sortable?: Maybe<Scalars["Boolean"]["output"]>;
+  type?: Maybe<Scalars["String"]["output"]>;
 };
 
 /** ########## INPUT TYPES ########### */
 export type ColumnInput = {
-  accessor?: InputMaybe<Scalars['String']['input']>;
-  canChangeShow?: InputMaybe<Scalars['Boolean']['input']>;
-  field?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  jsonPath?: InputMaybe<Scalars['String']['input']>;
-  query?: InputMaybe<Scalars['String']['input']>;
-  show?: InputMaybe<Scalars['Boolean']['input']>;
-  sortable?: InputMaybe<Scalars['Boolean']['input']>;
-  type?: InputMaybe<Scalars['String']['input']>;
+  accessor?: InputMaybe<Scalars["String"]["input"]>;
+  canChangeShow?: InputMaybe<Scalars["Boolean"]["input"]>;
+  field?: InputMaybe<Scalars["String"]["input"]>;
+  id?: InputMaybe<Scalars["String"]["input"]>;
+  jsonPath?: InputMaybe<Scalars["String"]["input"]>;
+  query?: InputMaybe<Scalars["String"]["input"]>;
+  show?: InputMaybe<Scalars["Boolean"]["input"]>;
+  sortable?: InputMaybe<Scalars["Boolean"]["input"]>;
+  type?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 /** ########## QUERY TYPES ########### */
 export type ColumnSort = {
-  __typename?: 'ColumnSort';
-  desc?: Maybe<Scalars['Boolean']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
+  __typename?: "ColumnSort";
+  desc?: Maybe<Scalars["Boolean"]["output"]>;
+  id?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type ColumnSortInput = {
-  desc?: InputMaybe<Scalars['Boolean']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
+  desc?: InputMaybe<Scalars["Boolean"]["input"]>;
+  id?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type ColumnState = {
-  __typename?: 'ColumnState';
+  __typename?: "ColumnState";
   columns?: Maybe<Array<Maybe<Column>>>;
   defaultSorted?: Maybe<Array<Maybe<ColumnSort>>>;
-  keyField?: Maybe<Scalars['String']['output']>;
-  type?: Maybe<Scalars['String']['output']>;
+  keyField?: Maybe<Scalars["String"]["output"]>;
+  type?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type ColumnStateInput = {
   columns?: InputMaybe<Array<InputMaybe<ColumnInput>>>;
   defaultSorted?: InputMaybe<Array<InputMaybe<ColumnSortInput>>>;
-  keyField?: InputMaybe<Scalars['String']['input']>;
-  type?: InputMaybe<Scalars['String']['input']>;
+  keyField?: InputMaybe<Scalars["String"]["input"]>;
+  type?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type ColumnsState = {
-  __typename?: 'ColumnsState';
+  __typename?: "ColumnsState";
   state?: Maybe<ColumnState>;
-  timestamp?: Maybe<Scalars['String']['output']>;
+  timestamp?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type ColumnsStates = {
-  __typename?: 'ColumnsStates';
-  index?: Maybe<Scalars['String']['output']>;
+  __typename?: "ColumnsStates";
+  index?: Maybe<Scalars["String"]["output"]>;
   states?: Maybe<Array<Maybe<ColumnsState>>>;
 };
 
 /** Display Data For Core Completion Entities */
 export type CompletionEntityData = {
-  __typename?: 'CompletionEntityData';
+  __typename?: "CompletionEntityData";
   specimens?: Maybe<SpecimenCoreCompletion>;
 };
 
 /** Completion Data for a given Donor */
 export type CompletionStats = {
-  __typename?: 'CompletionStats';
+  __typename?: "CompletionStats";
   coreCompletion?: Maybe<CoreCompletionFields>;
-  coreCompletionDate?: Maybe<Scalars['String']['output']>;
-  coreCompletionPercentage?: Maybe<Scalars['Float']['output']>;
-  donorId?: Maybe<Scalars['Int']['output']>;
+  coreCompletionDate?: Maybe<Scalars["String"]["output"]>;
+  coreCompletionPercentage?: Maybe<Scalars["Float"]["output"]>;
+  donorId?: Maybe<Scalars["Int"]["output"]>;
   entityData?: Maybe<CompletionEntityData>;
-  overriddenCoreCompletion?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  overriddenCoreCompletion?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
 };
 
 /** Specific Entity Completion Values */
 export type CoreCompletionFields = {
-  __typename?: 'CoreCompletionFields';
-  donor: Scalars['Float']['output'];
-  followUps: Scalars['Float']['output'];
-  primaryDiagnosis: Scalars['Float']['output'];
-  specimens: Scalars['Float']['output'];
-  treatments: Scalars['Float']['output'];
+  __typename?: "CoreCompletionFields";
+  donor: Scalars["Float"]["output"];
+  followUps: Scalars["Float"]["output"];
+  primaryDiagnosis: Scalars["Float"]["output"];
+  specimens: Scalars["Float"]["output"];
+  treatments: Scalars["Float"]["output"];
 };
 
 export type CoreCompletionStatusCount = {
-  __typename?: 'CoreCompletionStatusCount';
-  completed: Scalars['Int']['output'];
-  incomplete: Scalars['Int']['output'];
-  noData: Scalars['Int']['output'];
+  __typename?: "CoreCompletionStatusCount";
+  completed: Scalars["Int"]["output"];
+  incomplete: Scalars["Int"]["output"];
+  noData: Scalars["Int"]["output"];
 };
 
 export type DataSubmissionStatus = {
-  __typename?: 'DataSubmissionStatus';
-  dataSubmitted: Scalars['Int']['output'];
-  noDataSubmitted: Scalars['Int']['output'];
+  __typename?: "DataSubmissionStatus";
+  dataSubmitted: Scalars["Int"]["output"];
+  noDataSubmitted: Scalars["Int"]["output"];
 };
 
 export type DateRangeBucket = {
-  __typename?: 'DateRangeBucket';
+  __typename?: "DateRangeBucket";
   /** This date is the last day in this date range bucket. */
-  date?: Maybe<Scalars['DateTime']['output']>;
+  date?: Maybe<Scalars["DateTime"]["output"]>;
   /** Number of donors with data published for the relevant analysis, from the beginning of time to this date. */
-  donors?: Maybe<Scalars['Int']['output']>;
+  donors?: Maybe<Scalars["Int"]["output"]>;
 };
 
 export enum DonorField {
   /** Timestamp of when this donor first had alignment data published */
-  AlignmentFirstPublishedDate = 'alignmentFirstPublishedDate',
+  AlignmentFirstPublishedDate = "alignmentFirstPublishedDate",
   /** Timestamp of when this donor first had core clinical data completed */
-  CoreCompletionDate = 'coreCompletionDate',
+  CoreCompletionDate = "coreCompletionDate",
   /** Timestamp of when this donor first had Mutect2 variant callings data published */
-  MutectFirstPublishedDate = 'mutectFirstPublishedDate',
+  MutectFirstPublishedDate = "mutectFirstPublishedDate",
   /** Timestamp of when this donor first had Open Access data published */
-  OpenAccessFirstPublishedDate = 'openAccessFirstPublishedDate',
+  OpenAccessFirstPublishedDate = "openAccessFirstPublishedDate",
   /** Timestamp of when this donor first had raw reads data published */
-  RawReadsFirstPublishedDate = 'rawReadsFirstPublishedDate',
+  RawReadsFirstPublishedDate = "rawReadsFirstPublishedDate",
   /** Timestamp of when this donor first had RNA alignment data published */
-  RnaAlignmentFirstPublishedDate = 'rnaAlignmentFirstPublishedDate',
+  RnaAlignmentFirstPublishedDate = "rnaAlignmentFirstPublishedDate",
   /** Timestamp of when this donor first had RNA raw reads data published */
-  RnaRawReadsFirstPublishedDate = 'rnaRawReadsFirstPublishedDate',
+  RnaRawReadsFirstPublishedDate = "rnaRawReadsFirstPublishedDate",
   /** Timestamp of when this donor first had Sanger VC data published */
-  SangerVcsFirstPublishedDate = 'sangerVcsFirstPublishedDate'
+  SangerVcsFirstPublishedDate = "sangerVcsFirstPublishedDate",
 }
 
 export enum DonorMolecularDataProcessingStatus {
-  Complete = 'COMPLETE',
-  Processing = 'PROCESSING',
-  Registered = 'REGISTERED'
+  Complete = "COMPLETE",
+  Processing = "PROCESSING",
+  Registered = "REGISTERED",
 }
 
 export enum DonorMolecularDataReleaseStatus {
-  FullyReleased = 'FULLY_RELEASED',
-  NoRelease = 'NO_RELEASE',
-  PartiallyReleased = 'PARTIALLY_RELEASED'
+  FullyReleased = "FULLY_RELEASED",
+  NoRelease = "NO_RELEASE",
+  PartiallyReleased = "PARTIALLY_RELEASED",
 }
 
 export type DonorSummary = {
-  __typename?: 'DonorSummary';
+  __typename?: "DonorSummary";
   entries?: Maybe<Array<DonorSummaryEntry>>;
   stats: ProgramDonorSummaryStats;
 };
 
 /** Includes status summary of clinical and molecular data processing for the given donor */
 export type DonorSummaryEntry = {
-  __typename?: 'DonorSummaryEntry';
+  __typename?: "DonorSummaryEntry";
   /** Number of DNA alignments completed for this donor */
-  alignmentsCompleted: Scalars['Int']['output'];
+  alignmentsCompleted: Scalars["Int"]["output"];
   /** Number of DNA alignments that is failing for this donor */
-  alignmentsFailed: Scalars['Int']['output'];
+  alignmentsFailed: Scalars["Int"]["output"];
   /** Number of DNA alignments currently running for this donor */
-  alignmentsRunning: Scalars['Int']['output'];
+  alignmentsRunning: Scalars["Int"]["output"];
   /** Timestamp of when this donor was first registered */
-  createdAt: Scalars['DateTime']['output'];
+  createdAt: Scalars["DateTime"]["output"];
   /** Donor id of the donor within the program */
-  donorId: Scalars['String']['output'];
+  donorId: Scalars["String"]["output"];
   /** Unique object ID for this summary object */
-  id: Scalars['ID']['output'];
+  id: Scalars["ID"]["output"];
   /** Number of matched normal/tumour DNA sample pairs registered for this donor */
-  matchedTNPairsDNA: Scalars['Int']['output'];
+  matchedTNPairsDNA: Scalars["Int"]["output"];
   /** Number of DNA Mutect2 completed for this donor */
-  mutectCompleted: Scalars['Int']['output'];
+  mutectCompleted: Scalars["Int"]["output"];
   /** Number of DNA Mutect2 that is failed for this donor */
-  mutectFailed: Scalars['Int']['output'];
+  mutectFailed: Scalars["Int"]["output"];
   /** Number of DNA Mutect2 currently running for this donor */
-  mutectRunning: Scalars['Int']['output'];
+  mutectRunning: Scalars["Int"]["output"];
   /** Number of Open Access completed for this donor */
-  openAccessCompleted: Scalars['Int']['output'];
+  openAccessCompleted: Scalars["Int"]["output"];
   /** Number of DNA Open Access that is failed for this donor */
-  openAccessFailed: Scalars['Int']['output'];
+  openAccessFailed: Scalars["Int"]["output"];
   /** Number of DNA Open Access currently running for this donor */
-  openAccessRunning: Scalars['Int']['output'];
+  openAccessRunning: Scalars["Int"]["output"];
   /** Molecular data processing status of this donor */
   processingStatus: DonorMolecularDataProcessingStatus;
   /** Short name of the program in which this donor is registered */
-  programShortName: Scalars['String']['output'];
+  programShortName: Scalars["String"]["output"];
   /** Number of normal DNA sample analysis that has been published for this donor */
-  publishedNormalAnalysis: Scalars['Int']['output'];
+  publishedNormalAnalysis: Scalars["Int"]["output"];
   /** Number of tumour DNA sample analysis that has been published for this donor */
-  publishedTumourAnalysis: Scalars['Int']['output'];
+  publishedTumourAnalysis: Scalars["Int"]["output"];
   /** Number of normal DNA samples registered for this donor */
-  registeredNormalSamples: Scalars['Int']['output'];
+  registeredNormalSamples: Scalars["Int"]["output"];
   /** Number of tumour DNA samples registered for this donor */
-  registeredTumourSamples: Scalars['Int']['output'];
+  registeredTumourSamples: Scalars["Int"]["output"];
   /** Release status of the donor's molecular data */
   releaseStatus: DonorMolecularDataReleaseStatus;
   /** Number of RNA alignments that are failing for this donor */
-  rnaAlignmentFailed: Scalars['Int']['output'];
+  rnaAlignmentFailed: Scalars["Int"]["output"];
   /** Number of RNA alignments completed for this donor */
-  rnaAlignmentsCompleted: Scalars['Int']['output'];
+  rnaAlignmentsCompleted: Scalars["Int"]["output"];
   /** Number of RNA alignments currently running for this donor */
-  rnaAlignmentsRunning: Scalars['Int']['output'];
+  rnaAlignmentsRunning: Scalars["Int"]["output"];
   /** Number of normal RNA sample analysis that has been published for this donor */
-  rnaPublishedNormalAnalysis: Scalars['Int']['output'];
+  rnaPublishedNormalAnalysis: Scalars["Int"]["output"];
   /** Number of tumour RNA sample analysis that has been published for this donor */
-  rnaPublishedTumourAnalysis: Scalars['Int']['output'];
+  rnaPublishedTumourAnalysis: Scalars["Int"]["output"];
   /** Number of normal RNA samples registered for this donor */
-  rnaRegisteredNormalSamples: Scalars['Int']['output'];
+  rnaRegisteredNormalSamples: Scalars["Int"]["output"];
   /** Number of tumour RNA samples registered for this donor */
-  rnaRegisteredTumourSamples: Scalars['Int']['output'];
+  rnaRegisteredTumourSamples: Scalars["Int"]["output"];
   /** Number of DNA Sanger VCs completed for this donor */
-  sangerVcsCompleted: Scalars['Int']['output'];
+  sangerVcsCompleted: Scalars["Int"]["output"];
   /** Number of DNA Sanger VCs that is failing for this donor */
-  sangerVcsFailed: Scalars['Int']['output'];
+  sangerVcsFailed: Scalars["Int"]["output"];
   /** Number of DNA Sanger VCs currently running for this donor */
-  sangerVcsRunning: Scalars['Int']['output'];
+  sangerVcsRunning: Scalars["Int"]["output"];
   /** Percentage of core clinical data fields that has been submitted for this donor. All core fields are listed at: https://docs.icgc-argo.org/dictionary */
-  submittedCoreDataPercent: Scalars['Float']['output'];
+  submittedCoreDataPercent: Scalars["Float"]["output"];
   /** Percentage of extended clinical data fields that has been submitted for this donor. All extended fields are listed at: https://docs.icgc-argo.org/dictionary */
-  submittedExtendedDataPercent: Scalars['Float']['output'];
-  submitterDonorId: Scalars['String']['output'];
+  submittedExtendedDataPercent: Scalars["Float"]["output"];
+  submitterDonorId: Scalars["String"]["output"];
   /** Timestamp of the latest update applied to this donor's clinical data */
-  updatedAt: Scalars['DateTime']['output'];
+  updatedAt: Scalars["DateTime"]["output"];
   /** Whether the donor submitted donor is valid according to the latest data dictionary layed out at: https://docs.icgc-argo.org/dictionary */
-  validWithCurrentDictionary: Scalars['Boolean']['output'];
+  validWithCurrentDictionary: Scalars["Boolean"]["output"];
 };
 
 export type DonorSummaryEntrySort = {
@@ -537,105 +546,105 @@ export type DonorSummaryEntrySort = {
 };
 
 export enum EsRefresh {
-  False = 'FALSE',
-  True = 'TRUE',
-  WaitFor = 'WAIT_FOR'
+  False = "FALSE",
+  True = "TRUE",
+  WaitFor = "WAIT_FOR",
 }
 
 export type FileSize = {
-  __typename?: 'FileSize';
-  value?: Maybe<Scalars['Float']['output']>;
+  __typename?: "FileSize";
+  value?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export enum InviteStatus {
-  Accepted = 'ACCEPTED',
-  Expired = 'EXPIRED',
-  Pending = 'PENDING',
-  Revoked = 'REVOKED'
+  Accepted = "ACCEPTED",
+  Expired = "EXPIRED",
+  Pending = "PENDING",
+  Revoked = "REVOKED",
 }
 
 export type InviteUserInput = {
-  programShortName: Scalars['String']['input'];
-  userEmail: Scalars['String']['input'];
-  userFirstName: Scalars['String']['input'];
-  userLastName: Scalars['String']['input'];
+  programShortName: Scalars["String"]["input"];
+  userEmail: Scalars["String"]["input"];
+  userFirstName: Scalars["String"]["input"];
+  userLastName: Scalars["String"]["input"];
   userRole: UserRole;
 };
 
 export enum JiraTicketCategory {
-  ApplyingAccess = 'APPLYING_ACCESS',
-  DataDownload = 'DATA_DOWNLOAD',
-  DataQuery = 'DATA_QUERY',
-  DataSubmission = 'DATA_SUBMISSION',
-  MediaQuery = 'MEDIA_QUERY',
-  Other = 'OTHER',
-  PublicationQuery = 'PUBLICATION_QUERY'
+  ApplyingAccess = "APPLYING_ACCESS",
+  DataDownload = "DATA_DOWNLOAD",
+  DataQuery = "DATA_QUERY",
+  DataSubmission = "DATA_SUBMISSION",
+  MediaQuery = "MEDIA_QUERY",
+  Other = "OTHER",
+  PublicationQuery = "PUBLICATION_QUERY",
 }
 
 export type JoinProgramInput = {
-  department: Scalars['String']['input'];
-  institute: Scalars['String']['input'];
-  invitationId: Scalars['ID']['input'];
-  piFirstName: Scalars['String']['input'];
-  piLastName: Scalars['String']['input'];
+  department: Scalars["String"]["input"];
+  institute: Scalars["String"]["input"];
+  invitationId: Scalars["ID"]["input"];
+  piFirstName: Scalars["String"]["input"];
+  piLastName: Scalars["String"]["input"];
 };
 
 export type JoinProgramInvite = {
-  __typename?: 'JoinProgramInvite';
-  acceptedAt?: Maybe<Scalars['DateTime']['output']>;
-  createdAt: Scalars['DateTime']['output'];
-  emailSent: Scalars['Boolean']['output'];
-  expiresAt: Scalars['DateTime']['output'];
-  id: Scalars['ID']['output'];
+  __typename?: "JoinProgramInvite";
+  acceptedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  createdAt: Scalars["DateTime"]["output"];
+  emailSent: Scalars["Boolean"]["output"];
+  expiresAt: Scalars["DateTime"]["output"];
+  id: Scalars["ID"]["output"];
   program: Program;
   status: InviteStatus;
   user: ProgramUser;
 };
 
 export type MatchBoxField = {
-  __typename?: 'MatchBoxField';
-  displayName?: Maybe<Scalars['String']['output']>;
-  field?: Maybe<Scalars['String']['output']>;
-  isActive?: Maybe<Scalars['Boolean']['output']>;
-  keyField?: Maybe<Scalars['String']['output']>;
-  searchFields?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  __typename?: "MatchBoxField";
+  displayName?: Maybe<Scalars["String"]["output"]>;
+  field?: Maybe<Scalars["String"]["output"]>;
+  isActive?: Maybe<Scalars["Boolean"]["output"]>;
+  keyField?: Maybe<Scalars["String"]["output"]>;
+  searchFields?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
 };
 
 export type MatchBoxState = {
-  __typename?: 'MatchBoxState';
+  __typename?: "MatchBoxState";
   state?: Maybe<Array<Maybe<MatchBoxField>>>;
-  timestamp?: Maybe<Scalars['String']['output']>;
+  timestamp?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type MatchBoxStates = {
-  __typename?: 'MatchBoxStates';
-  index?: Maybe<Scalars['String']['output']>;
+  __typename?: "MatchBoxStates";
+  index?: Maybe<Scalars["String"]["output"]>;
   states?: Maybe<Array<Maybe<MatchBoxState>>>;
 };
 
 export enum MembershipType {
-  Associate = 'ASSOCIATE',
-  Full = 'FULL'
+  Associate = "ASSOCIATE",
+  Full = "FULL",
 }
 
 export enum Missing {
-  First = 'first',
-  Last = 'last'
+  First = "first",
+  Last = "last",
 }
 
 export enum Mode {
-  Avg = 'avg',
-  Max = 'max',
-  Min = 'min',
-  Sum = 'sum'
+  Avg = "avg",
+  Max = "max",
+  Min = "min",
+  Sum = "sum",
 }
 
 export type Mutation = {
-  __typename?: 'Mutation';
+  __typename?: "Mutation";
   /** Available for DCC members to approve a clinical submission */
-  approveClinicalSubmission: Scalars['Boolean']['output'];
+  approveClinicalSubmission: Scalars["Boolean"]["output"];
   /** Remove the Clinical Registration data currently uploaded and not committed */
-  clearClinicalRegistration: Scalars['Boolean']['output'];
+  clearClinicalRegistration: Scalars["Boolean"]["output"];
   /**
    * Clear Clinical Submission
    * fileType is optional, if it is not provided all fileTypes will be cleared. The values for fileType are the same as the file names from each template (ex. donor, specimen)
@@ -645,7 +654,7 @@ export type Mutation = {
    * Complete registration of the currently uploaded Clinical Registration data
    * On Success, returns a list of the new sample IDs that were committed
    */
-  commitClinicalRegistration: Array<Maybe<Scalars['String']['output']>>;
+  commitClinicalRegistration: Array<Maybe<Scalars["String"]["output"]>>;
   /**
    * - If there is update: makes a clinical submission ready for approval by a DCC member,
    * returning submission data with updated state
@@ -665,7 +674,7 @@ export type Mutation = {
    * Invite a user to join a program
    * Returns the email of the user if the invite is successfully sent
    */
-  inviteUser?: Maybe<Scalars['String']['output']>;
+  inviteUser?: Maybe<Scalars["String"]["output"]>;
   /**
    * Join a program by accepting an invitation
    * Returns the user data
@@ -675,7 +684,7 @@ export type Mutation = {
    * Remove a user from a program
    * Returns message from server
    */
-  removeUser?: Maybe<Scalars['String']['output']>;
+  removeUser?: Maybe<Scalars["String"]["output"]>;
   /** Available for DCC members to reopen a clinical submission */
   reopenClinicalSubmission: ClinicalSubmissionData;
   saveSet?: Maybe<Set>;
@@ -683,12 +692,12 @@ export type Mutation = {
    * Update Program
    * Returns shortName of the program if succesfully updated
    */
-  updateProgram?: Maybe<Scalars['String']['output']>;
+  updateProgram?: Maybe<Scalars["String"]["output"]>;
   /**
    * Update a user's role in a prgoram
    * Returns the user data
    */
-  updateUser?: Maybe<Scalars['Boolean']['output']>;
+  updateUser?: Maybe<Scalars["Boolean"]["output"]>;
   /** Upload a Registration file */
   uploadClinicalRegistration: ClinicalRegistrationData;
   /** Upload Clinical Submission files */
@@ -697,156 +706,138 @@ export type Mutation = {
   validateClinicalSubmissions: ClinicalSubmissionData;
 };
 
-
 export type MutationApproveClinicalSubmissionArgs = {
-  programShortName: Scalars['String']['input'];
-  version: Scalars['String']['input'];
+  programShortName: Scalars["String"]["input"];
+  version: Scalars["String"]["input"];
 };
-
 
 export type MutationClearClinicalRegistrationArgs = {
-  registrationId: Scalars['String']['input'];
-  shortName: Scalars['String']['input'];
+  registrationId: Scalars["String"]["input"];
+  shortName: Scalars["String"]["input"];
 };
-
 
 export type MutationClearClinicalSubmissionArgs = {
-  fileType?: InputMaybe<Scalars['String']['input']>;
-  programShortName: Scalars['String']['input'];
-  version: Scalars['String']['input'];
+  fileType?: InputMaybe<Scalars["String"]["input"]>;
+  programShortName: Scalars["String"]["input"];
+  version: Scalars["String"]["input"];
 };
-
 
 export type MutationCommitClinicalRegistrationArgs = {
-  registrationId: Scalars['String']['input'];
-  shortName: Scalars['String']['input'];
+  registrationId: Scalars["String"]["input"];
+  shortName: Scalars["String"]["input"];
 };
-
 
 export type MutationCommitClinicalSubmissionArgs = {
-  programShortName: Scalars['String']['input'];
-  version: Scalars['String']['input'];
+  programShortName: Scalars["String"]["input"];
+  version: Scalars["String"]["input"];
 };
-
 
 export type MutationCreateJiraTicketWithReCaptchaArgs = {
-  displayName?: InputMaybe<Scalars['String']['input']>;
-  emailAddress: Scalars['String']['input'];
+  displayName?: InputMaybe<Scalars["String"]["input"]>;
+  emailAddress: Scalars["String"]["input"];
   messageCategory: JiraTicketCategory;
-  reCaptchaResponse: Scalars['String']['input'];
-  requestText: Scalars['String']['input'];
+  reCaptchaResponse: Scalars["String"]["input"];
+  requestText: Scalars["String"]["input"];
 };
-
 
 export type MutationCreateProgramArgs = {
   program: ProgramInput;
 };
 
-
 export type MutationInviteUserArgs = {
   invite: InviteUserInput;
 };
-
 
 export type MutationJoinProgramArgs = {
   join: JoinProgramInput;
 };
 
-
 export type MutationRemoveUserArgs = {
-  programShortName: Scalars['String']['input'];
-  userEmail: Scalars['String']['input'];
+  programShortName: Scalars["String"]["input"];
+  userEmail: Scalars["String"]["input"];
 };
-
 
 export type MutationReopenClinicalSubmissionArgs = {
-  programShortName: Scalars['String']['input'];
-  version: Scalars['String']['input'];
+  programShortName: Scalars["String"]["input"];
+  version: Scalars["String"]["input"];
 };
-
 
 export type MutationSaveSetArgs = {
-  path: Scalars['String']['input'];
+  path: Scalars["String"]["input"];
   refresh?: InputMaybe<EsRefresh>;
   sort?: InputMaybe<Array<InputMaybe<Sort>>>;
-  sqon: Scalars['JSON']['input'];
+  sqon: Scalars["JSON"]["input"];
   type: ProjectType;
-  userId?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars["String"]["input"]>;
 };
 
-
 export type MutationUpdateProgramArgs = {
-  shortName: Scalars['String']['input'];
+  shortName: Scalars["String"]["input"];
   updates: UpdateProgramInput;
 };
 
-
 export type MutationUpdateUserArgs = {
-  programShortName: Scalars['String']['input'];
-  userEmail: Scalars['String']['input'];
+  programShortName: Scalars["String"]["input"];
+  userEmail: Scalars["String"]["input"];
   userRole: UserRole;
 };
 
-
 export type MutationUploadClinicalRegistrationArgs = {
-  registrationFile: Scalars['Upload']['input'];
-  shortName: Scalars['String']['input'];
+  registrationFile: Scalars["Upload"]["input"];
+  shortName: Scalars["String"]["input"];
 };
-
 
 export type MutationUploadClinicalSubmissionsArgs = {
-  clinicalFiles?: InputMaybe<Array<Scalars['Upload']['input']>>;
-  programShortName: Scalars['String']['input'];
+  clinicalFiles?: InputMaybe<Array<Scalars["Upload"]["input"]>>;
+  programShortName: Scalars["String"]["input"];
 };
 
-
 export type MutationValidateClinicalSubmissionsArgs = {
-  programShortName: Scalars['String']['input'];
-  version: Scalars['String']['input'];
+  programShortName: Scalars["String"]["input"];
+  version: Scalars["String"]["input"];
 };
 
 export type Node = {
-  id: Scalars['ID']['output'];
+  id: Scalars["ID"]["output"];
 };
 
 export type NumericAggregations = {
-  __typename?: 'NumericAggregations';
+  __typename?: "NumericAggregations";
   histogram?: Maybe<Aggregations>;
   stats?: Maybe<Stats>;
 };
 
-
 export type NumericAggregationsHistogramArgs = {
-  interval?: InputMaybe<Scalars['Float']['input']>;
+  interval?: InputMaybe<Scalars["Float"]["input"]>;
 };
 
 export enum Order {
-  Asc = 'asc',
-  Desc = 'desc'
+  Asc = "asc",
+  Desc = "desc",
 }
 
 export type Profile = {
-  __typename?: 'Profile';
+  __typename?: "Profile";
   apiKey?: Maybe<AccessKey>;
-  isDacoApproved?: Maybe<Scalars['Boolean']['output']>;
+  isDacoApproved?: Maybe<Scalars["Boolean"]["output"]>;
 };
 
 export type Program = {
-  __typename?: 'Program';
-  cancerTypes?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  commitmentDonors?: Maybe<Scalars['Int']['output']>;
-  countries?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  description?: Maybe<Scalars['String']['output']>;
-  genomicDonors?: Maybe<Scalars['Int']['output']>;
-  institutions?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  __typename?: "Program";
+  cancerTypes?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
+  commitmentDonors?: Maybe<Scalars["Int"]["output"]>;
+  countries?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
+  description?: Maybe<Scalars["String"]["output"]>;
+  genomicDonors?: Maybe<Scalars["Int"]["output"]>;
+  institutions?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
   membershipType?: Maybe<MembershipType>;
-  name?: Maybe<Scalars['String']['output']>;
-  primarySites?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  regions?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  shortName: Scalars['String']['output'];
-  submittedDonors?: Maybe<Scalars['Int']['output']>;
+  name?: Maybe<Scalars["String"]["output"]>;
+  primarySites?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
+  regions?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
+  shortName: Scalars["String"]["output"];
+  submittedDonors?: Maybe<Scalars["Int"]["output"]>;
   users?: Maybe<Array<Maybe<ProgramUser>>>;
-  website?: Maybe<Scalars['String']['output']>;
+  website?: Maybe<Scalars["String"]["output"]>;
 };
 
 export enum ProgramDonorSummaryEntryField {
@@ -857,37 +848,37 @@ export enum ProgramDonorSummaryEntryField {
    * FAILED = donor has more than 1 failed alignment workflow;
    * NO_DATA = donor has 0 of all the above alignment workflow.
    */
-  AlignmentStatus = 'alignmentStatus',
-  AlignmentsCompleted = 'alignmentsCompleted',
-  AlignmentsFailed = 'alignmentsFailed',
-  AlignmentsRunning = 'alignmentsRunning',
+  AlignmentStatus = "alignmentStatus",
+  AlignmentsCompleted = "alignmentsCompleted",
+  AlignmentsFailed = "alignmentsFailed",
+  AlignmentsRunning = "alignmentsRunning",
   /** use this field to filter donor entries by partially matching donorId or submitterDonorId, e.g.: "donor", "donor5" */
-  CombinedDonorId = 'combinedDonorId',
+  CombinedDonorId = "combinedDonorId",
   /**
    * use this field to filter donor entries by 3 aggregations of submittedCoreDataPercent,
    * 3 enum options to filter by: NO_DATA, COMPLETE, INCOMPLETE.
    */
-  CoreDataPercentAggregation = 'coreDataPercentAggregation',
-  CreatedAt = 'createdAt',
+  CoreDataPercentAggregation = "coreDataPercentAggregation",
+  CreatedAt = "createdAt",
   /**
    * use this field to filter donor entries by 4 enum values: TUMOR_NORMAL_MATCHED_PAIR, TUMOR_NORMAL_NO_MATCHED_PAIR, NO_DATA.
    * TUMOR_NORMAL_MATCHED_PAIR = donor has at least 1 tumor/normal matched pair.
    * TUMOR_NORMAL_NO_MATCHED_PAIR = donor has at least 1 registered tumour or 1 normal DNA sample, but no matched pairs.
    * NO_DATA = donor has not registered any tumour or normal DNA samples.
    */
-  DnaTnMatchedPair = 'dnaTNMatchedPair',
+  DnaTnMatchedPair = "dnaTNMatchedPair",
   /**
    * use this field to filter donor entries by 3 enum values: TUMOR_AND_NORMAL, TUMOR_OR_NORMAL, NO_DATA.
    * TUMOR_AND_NORMAL = donor has at least 1 registered tumour and 1 normal DNA sample.
    * TUMOR_OR_NORMAL = donor has at least 1 registered tumour or 1 normal DNA sample, but not both.
    * NO_DATA = donor has not registered any tumour or normal DNA samples.
    */
-  DnaTnRegistered = 'dnaTNRegistered',
-  DonorId = 'donorId',
-  MatchedTnPairsDna = 'matchedTNPairsDNA',
-  MutectCompleted = 'mutectCompleted',
-  MutectFailed = 'mutectFailed',
-  MutectRunning = 'mutectRunning',
+  DnaTnRegistered = "dnaTNRegistered",
+  DonorId = "donorId",
+  MatchedTnPairsDna = "matchedTNPairsDNA",
+  MutectCompleted = "mutectCompleted",
+  MutectFailed = "mutectFailed",
+  MutectRunning = "mutectRunning",
   /**
    * use this field to filter donor entries by 4 enum values: COMPLETED, IN_PROGRESS, FAILED, NO_DATA.
    * COMPLETED = donor has more than 1 completed Mutect 2 workflow;
@@ -895,10 +886,10 @@ export enum ProgramDonorSummaryEntryField {
    * FAILED = donor has more than 1 failed Mutect 2 workflow;
    * NO_DATA = donor has 0 of all the above Mutect 2 workflow.
    */
-  MutectStatus = 'mutectStatus',
-  OpenAccessCompleted = 'openAccessCompleted',
-  OpenAccessFailed = 'openAccessFailed',
-  OpenAccessRunning = 'openAccessRunning',
+  MutectStatus = "mutectStatus",
+  OpenAccessCompleted = "openAccessCompleted",
+  OpenAccessFailed = "openAccessFailed",
+  OpenAccessRunning = "openAccessRunning",
   /**
    * use this field to filter donor entries by 4 enum values: COMPLETED, IN_PROGRESS, FAILED, NO_DATA.
    * COMPLETED = donor has 1 or more completed Open Access workflow;
@@ -906,27 +897,27 @@ export enum ProgramDonorSummaryEntryField {
    * FAILED = donor has 1 or more failed Open Access workflow;
    * NO_DATA = donor has 0 of all the above Open Access workflow.
    */
-  OpenAccessStatus = 'openAccessStatus',
-  ProcessingStatus = 'processingStatus',
-  ProgramShortName = 'programShortName',
-  PublishedNormalAnalysis = 'publishedNormalAnalysis',
-  PublishedTumourAnalysis = 'publishedTumourAnalysis',
+  OpenAccessStatus = "openAccessStatus",
+  ProcessingStatus = "processingStatus",
+  ProgramShortName = "programShortName",
+  PublishedNormalAnalysis = "publishedNormalAnalysis",
+  PublishedTumourAnalysis = "publishedTumourAnalysis",
   /**
    * use this field to filter donor entries by 2 enum values: VALID, INVALID.
    * VALID means the donor has at least 1 submitted tumour/normal sequencing reads.
    * INVALID means the donor has not registered any tumour or sequencing reads.
    */
-  RawReads = 'rawReads',
-  RegisteredNormalSamples = 'registeredNormalSamples',
+  RawReads = "rawReads",
+  RegisteredNormalSamples = "registeredNormalSamples",
   /**
    * use this field to filter donor entries by 2 enum values: VALID, INVALID.
    * VALID means the donor has at least 1 registered tumour/normal sample pair.
    * INVALID means the donor has not registered any tumour or normal samples.
    */
-  RegisteredSamplePairs = 'registeredSamplePairs',
-  RegisteredTumourSamples = 'registeredTumourSamples',
-  ReleaseStatus = 'releaseStatus',
-  RnaAlignmentFailed = 'rnaAlignmentFailed',
+  RegisteredSamplePairs = "registeredSamplePairs",
+  RegisteredTumourSamples = "registeredTumourSamples",
+  ReleaseStatus = "releaseStatus",
+  RnaAlignmentFailed = "rnaAlignmentFailed",
   /**
    * use this field to filter donor entries by 4 enum values: COMPLETED, IN_PROGRESS, FAILED, NO_DATA.
    * COMPLETED = donor has more than 1 completed RNA alignment workflow;
@@ -934,25 +925,25 @@ export enum ProgramDonorSummaryEntryField {
    * FAILED = donor has more than 1 failed RNA alignment workflow;
    * NO_DATA = donor has 0 of all the above RNA alignment workflow.
    */
-  RnaAlignmentStatus = 'rnaAlignmentStatus',
-  RnaAlignmentsCompleted = 'rnaAlignmentsCompleted',
-  RnaAlignmentsRunning = 'rnaAlignmentsRunning',
-  RnaPublishedNormalAnalysis = 'rnaPublishedNormalAnalysis',
-  RnaPublishedTumourAnalysis = 'rnaPublishedTumourAnalysis',
+  RnaAlignmentStatus = "rnaAlignmentStatus",
+  RnaAlignmentsCompleted = "rnaAlignmentsCompleted",
+  RnaAlignmentsRunning = "rnaAlignmentsRunning",
+  RnaPublishedNormalAnalysis = "rnaPublishedNormalAnalysis",
+  RnaPublishedTumourAnalysis = "rnaPublishedTumourAnalysis",
   /**
    * use this field to filter donor entries by 2 enum values: DATA_SUBMITTED, NO_DATA.
    * DATA_SUBMITTED means the donor has at least 1 published tumour or 1 published normal RNA raw reads.
    * NO_DATA means the donor has no tumour and normal RNA raw reads.
    */
-  RnaRawReads = 'rnaRawReads',
-  RnaRegisteredNormalSamples = 'rnaRegisteredNormalSamples',
+  RnaRawReads = "rnaRawReads",
+  RnaRegisteredNormalSamples = "rnaRegisteredNormalSamples",
   /**
    * use this field to filter donor entries by 2 enum values: DATA_SUBMITTED, NO_DATA.
    * DATA_SUBMITTED means the donor has at least 1 registered tumour or 1 normal RNA sample.
    * NO_DATA means the donor has not registered any tumour or normal RNA samples.
    */
-  RnaRegisteredSample = 'rnaRegisteredSample',
-  RnaRegisteredTumourSamples = 'rnaRegisteredTumourSamples',
+  RnaRegisteredSample = "rnaRegisteredSample",
+  RnaRegisteredTumourSamples = "rnaRegisteredTumourSamples",
   /**
    * use this field to filter donor entries by 4 enum values: COMPLETED, IN_PROGRESS, FAILED, NO_DATA.
    * COMPLETED = donor has more than 1 completed sanger VC workflow;
@@ -960,31 +951,31 @@ export enum ProgramDonorSummaryEntryField {
    * FAILED = donor has more than 1 failed sanger VC workflow;
    * NO_DATA = donor has 0 of all the above sanger VC workflow.
    */
-  SangerVcStatus = 'sangerVCStatus',
-  SangerVcsCompleted = 'sangerVcsCompleted',
-  SangerVcsFailed = 'sangerVcsFailed',
-  SangerVcsRunning = 'sangerVcsRunning',
-  SubmittedCoreDataPercent = 'submittedCoreDataPercent',
-  SubmittedExtendedDataPercent = 'submittedExtendedDataPercent',
-  SubmitterDonorId = 'submitterDonorId',
-  UpdatedAt = 'updatedAt',
-  ValidWithCurrentDictionary = 'validWithCurrentDictionary'
+  SangerVcStatus = "sangerVCStatus",
+  SangerVcsCompleted = "sangerVcsCompleted",
+  SangerVcsFailed = "sangerVcsFailed",
+  SangerVcsRunning = "sangerVcsRunning",
+  SubmittedCoreDataPercent = "submittedCoreDataPercent",
+  SubmittedExtendedDataPercent = "submittedExtendedDataPercent",
+  SubmitterDonorId = "submitterDonorId",
+  UpdatedAt = "updatedAt",
+  ValidWithCurrentDictionary = "validWithCurrentDictionary",
 }
 
 export type ProgramDonorSummaryFilter = {
   field: ProgramDonorSummaryEntryField;
-  values: Array<Scalars['String']['input']>;
+  values: Array<Scalars["String"]["input"]>;
 };
 
 /** Contains summary of aggregate clinical and molecular data processing status for the given program */
 export type ProgramDonorSummaryStats = {
-  __typename?: 'ProgramDonorSummaryStats';
+  __typename?: "ProgramDonorSummaryStats";
   /** Number of donors that have COMPLETED/IN_PROGRESS/FAILED/NO_DATA as alignment workflow status */
   alignmentStatusCount: WorkflowStatusCount;
   /** Total number of genomic files associated with this program */
-  allFilesCount: Scalars['Int']['output'];
+  allFilesCount: Scalars["Int"]["output"];
   /** Number of donors whose initiated workflows are all complete */
-  completedWorkflowRuns: Scalars['Int']['output'];
+  completedWorkflowRuns: Scalars["Int"]["output"];
   /** Number of donors that are clinically completed/incomplete/no core fields */
   coreCompletion: CoreCompletionStatusCount;
   /** Number of donors that have tumor & normal matched pairs submitted */
@@ -992,41 +983,41 @@ export type ProgramDonorSummaryStats = {
   /** Number of donors that have tumor and normal data registered */
   dnaTNRegisteredStatus: TumorNormalStatusCount;
   /** Number of donors invalidated with current data dictionary version */
-  donorsInvalidWithCurrentDictionaryCount: Scalars['Int']['output'];
+  donorsInvalidWithCurrentDictionaryCount: Scalars["Int"]["output"];
   /** Number of donors whose molecular data is being processed */
-  donorsProcessingMolecularDataCount: Scalars['Int']['output'];
+  donorsProcessingMolecularDataCount: Scalars["Int"]["output"];
   /** Number of donors whose files have been released */
-  donorsWithReleasedFilesCount: Scalars['Int']['output'];
+  donorsWithReleasedFilesCount: Scalars["Int"]["output"];
   /** Number of donors with workflow runs that have failed */
-  failedWorkflowRuns: Scalars['Int']['output'];
+  failedWorkflowRuns: Scalars["Int"]["output"];
   /** Number of files to QC */
-  filesToQcCount: Scalars['Int']['output'];
+  filesToQcCount: Scalars["Int"]["output"];
   /** Number of donors whose genomic files have been fully released */
-  fullyReleasedDonorsCount: Scalars['Int']['output'];
+  fullyReleasedDonorsCount: Scalars["Int"]["output"];
   /** Unique ID of this summary object */
-  id: Scalars['ID']['output'];
+  id: Scalars["ID"]["output"];
   /** Number of donors with workflow runs that are currently running */
-  inProgressWorkflowRuns: Scalars['Int']['output'];
+  inProgressWorkflowRuns: Scalars["Int"]["output"];
   /** Date of the most recent update to the donor summary index for this program. Can be null if no documents for this program */
-  lastUpdate?: Maybe<Scalars['DateTime']['output']>;
+  lastUpdate?: Maybe<Scalars["DateTime"]["output"]>;
   /** Number of donors that have COMPLETED/IN_PROGRESS/FAILED/NO_DATA as mutect2 workflow status */
   mutectStatusCount: WorkflowStatusCount;
   /** Number of donors registered to the program who currently has no released genomic file */
-  noReleaseDonorsCount: Scalars['Int']['output'];
+  noReleaseDonorsCount: Scalars["Int"]["output"];
   /** Number of donors that have COMPLETED/IN_PROGRESS/FAILED/NO_DATA as Open Access workflow status */
   openAccessStatusCount: WorkflowStatusCount;
   /** Number of donors who only have some genomic files that have been released */
-  partiallyReleasedDonorsCount: Scalars['Int']['output'];
+  partiallyReleasedDonorsCount: Scalars["Int"]["output"];
   /** Percentage of core clinical data fields submitted over total core clinical data fields */
-  percentageCoreClinical: Scalars['Float']['output'];
+  percentageCoreClinical: Scalars["Float"]["output"];
   /** Percentage of donors with at least 1 matched tumour/normal DNA raw reads pair */
-  percentageTumourAndNormal: Scalars['Float']['output'];
+  percentageTumourAndNormal: Scalars["Float"]["output"];
   /** Short name of the program which this summary object is associated with */
-  programShortName: Scalars['String']['output'];
+  programShortName: Scalars["String"]["output"];
   /** Number of donors that have VALID/INVALID raw reads */
   rawReadsStatus: SamplePairsStatusCount;
   /** Total number of donors registered for this program */
-  registeredDonorsCount: Scalars['Int']['output'];
+  registeredDonorsCount: Scalars["Int"]["output"];
   /** Number of donors that have COMPLETED/IN_PROGRESS/FAILED/NO_DATA as RNA alignment workflow status */
   rnaAlignmentStatusCount: WorkflowStatusCount;
   /** Number of donors that have submitted RNA published raw reads */
@@ -1041,54 +1032,54 @@ export type ProgramDonorSummaryStats = {
 
 export type ProgramInput = {
   admins: Array<ProgramUserInput>;
-  cancerTypes: Array<InputMaybe<Scalars['String']['input']>>;
-  commitmentDonors: Scalars['Int']['input'];
-  countries: Array<Scalars['String']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  institutions: Array<Scalars['String']['input']>;
+  cancerTypes: Array<InputMaybe<Scalars["String"]["input"]>>;
+  commitmentDonors: Scalars["Int"]["input"];
+  countries: Array<Scalars["String"]["input"]>;
+  description?: InputMaybe<Scalars["String"]["input"]>;
+  institutions: Array<Scalars["String"]["input"]>;
   membershipType: MembershipType;
-  name: Scalars['String']['input'];
-  primarySites: Array<InputMaybe<Scalars['String']['input']>>;
-  regions: Array<Scalars['String']['input']>;
-  shortName: Scalars['String']['input'];
-  website: Scalars['String']['input'];
+  name: Scalars["String"]["input"];
+  primarySites: Array<InputMaybe<Scalars["String"]["input"]>>;
+  regions: Array<Scalars["String"]["input"]>;
+  shortName: Scalars["String"]["input"];
+  website: Scalars["String"]["input"];
 };
 
 export type ProgramOptions = {
-  __typename?: 'ProgramOptions';
-  cancerTypes: Array<Maybe<Scalars['String']['output']>>;
-  countries: Array<Maybe<Scalars['String']['output']>>;
-  institutions: Array<Maybe<Scalars['String']['output']>>;
-  primarySites: Array<Maybe<Scalars['String']['output']>>;
-  regions: Array<Maybe<Scalars['String']['output']>>;
+  __typename?: "ProgramOptions";
+  cancerTypes: Array<Maybe<Scalars["String"]["output"]>>;
+  countries: Array<Maybe<Scalars["String"]["output"]>>;
+  institutions: Array<Maybe<Scalars["String"]["output"]>>;
+  primarySites: Array<Maybe<Scalars["String"]["output"]>>;
+  regions: Array<Maybe<Scalars["String"]["output"]>>;
 };
 
 export type ProgramUser = {
-  __typename?: 'ProgramUser';
-  email: Scalars['String']['output'];
-  firstName: Scalars['String']['output'];
-  inviteAcceptedAt?: Maybe<Scalars['String']['output']>;
+  __typename?: "ProgramUser";
+  email: Scalars["String"]["output"];
+  firstName: Scalars["String"]["output"];
+  inviteAcceptedAt?: Maybe<Scalars["String"]["output"]>;
   inviteStatus?: Maybe<InviteStatus>;
-  isDacoApproved?: Maybe<Scalars['Boolean']['output']>;
-  lastName: Scalars['String']['output'];
+  isDacoApproved?: Maybe<Scalars["Boolean"]["output"]>;
+  lastName: Scalars["String"]["output"];
   role: UserRole;
 };
 
 export type ProgramUserInput = {
-  email: Scalars['String']['input'];
-  firstName: Scalars['String']['input'];
-  lastName: Scalars['String']['input'];
+  email: Scalars["String"]["input"];
+  firstName: Scalars["String"]["input"];
+  lastName: Scalars["String"]["input"];
   role: UserRole;
 };
 
 export enum ProjectType {
-  File = 'file',
-  Sets = 'sets'
+  File = "file",
+  Sets = "sets",
 }
 
 export type Query = {
-  __typename?: 'Query';
-  _jiraRootQuery: Scalars['String']['output'];
+  __typename?: "Query";
+  _jiraRootQuery: Scalars["String"]["output"];
   /** Retrieve all stored Clinical Entity and Donor Completion data for a program */
   clinicalData: ClinicalData;
   /** Retrieve all stored Clinical Migration Errors for a program */
@@ -1098,11 +1089,11 @@ export type Query = {
   /** Retrieve DonorIds + Submitter Donor Ids for given Clinical Entity and Program */
   clinicalSearchResults: ClinicalSearchData;
   /** Retrieve current stored Clinical Submission Data Dictionary Schema version */
-  clinicalSubmissionSchemaVersion: Scalars['String']['output'];
+  clinicalSubmissionSchemaVersion: Scalars["String"]["output"];
   /** Retrieve current Clinical Submission disabled state for both sample_registration and clinical entity files */
-  clinicalSubmissionSystemDisabled: Scalars['Boolean']['output'];
+  clinicalSubmissionSystemDisabled: Scalars["Boolean"]["output"];
   /** Retrieve current stored Clinical Submission Types list */
-  clinicalSubmissionTypesList?: Maybe<Array<Scalars['String']['output']>>;
+  clinicalSubmissionTypesList?: Maybe<Array<Scalars["String"]["output"]>>;
   /** Retrieve current stored Clinical Submission data for a program */
   clinicalSubmissions: ClinicalSubmissionData;
   file?: Maybe<File>;
@@ -1129,274 +1120,258 @@ export type Query = {
   users?: Maybe<Array<Maybe<User>>>;
 };
 
-
 export type QueryClinicalDataArgs = {
   filters: ClinicalInput;
-  programShortName: Scalars['String']['input'];
+  programShortName: Scalars["String"]["input"];
 };
-
 
 export type QueryClinicalErrorsArgs = {
-  donorIds?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  programShortName: Scalars['String']['input'];
+  donorIds?: InputMaybe<Array<InputMaybe<Scalars["Int"]["input"]>>>;
+  programShortName: Scalars["String"]["input"];
 };
-
 
 export type QueryClinicalRegistrationArgs = {
-  shortName: Scalars['String']['input'];
+  shortName: Scalars["String"]["input"];
 };
-
 
 export type QueryClinicalSearchResultsArgs = {
   filters: ClinicalInput;
-  programShortName: Scalars['String']['input'];
+  programShortName: Scalars["String"]["input"];
 };
-
 
 export type QueryClinicalSubmissionsArgs = {
-  programShortName: Scalars['String']['input'];
+  programShortName: Scalars["String"]["input"];
 };
-
 
 export type QueryJoinProgramInviteArgs = {
-  id: Scalars['ID']['input'];
+  id: Scalars["ID"]["input"];
 };
-
 
 export type QueryNodeArgs = {
-  id: Scalars['ID']['input'];
+  id: Scalars["ID"]["input"];
 };
-
 
 export type QueryProgramArgs = {
-  shortName: Scalars['String']['input'];
+  shortName: Scalars["String"]["input"];
 };
-
 
 export type QueryProgramDonorPublishedAnalysisByDateRangeArgs = {
-  bucketCount?: InputMaybe<Scalars['Int']['input']>;
-  dateRangeFrom: Scalars['DateTime']['input'];
-  dateRangeTo: Scalars['DateTime']['input'];
+  bucketCount?: InputMaybe<Scalars["Int"]["input"]>;
+  dateRangeFrom: Scalars["DateTime"]["input"];
+  dateRangeTo: Scalars["DateTime"]["input"];
   donorFields: Array<InputMaybe<DonorField>>;
-  programShortName: Scalars['String']['input'];
+  programShortName: Scalars["String"]["input"];
 };
-
 
 export type QueryProgramDonorSummaryArgs = {
   filters?: InputMaybe<Array<ProgramDonorSummaryFilter>>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  programShortName: Scalars['String']['input'];
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  programShortName: Scalars["String"]["input"];
   sorts?: InputMaybe<Array<InputMaybe<DonorSummaryEntrySort>>>;
 };
 
-
 export type QueryQueryArgs = {
-  query?: InputMaybe<Scalars['String']['input']>;
-  types?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  query?: InputMaybe<Scalars["String"]["input"]>;
+  types?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
-
 
 export type QueryUserArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars["String"]["input"];
 };
 
-
 export type QueryUsersArgs = {
-  groups?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  pageNum?: InputMaybe<Scalars['Int']['input']>;
-  query?: InputMaybe<Scalars['String']['input']>;
-  sort?: InputMaybe<Scalars['String']['input']>;
+  groups?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  pageNum?: InputMaybe<Scalars["Int"]["input"]>;
+  query?: InputMaybe<Scalars["String"]["input"]>;
+  sort?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type QueryResults = {
-  __typename?: 'QueryResults';
+  __typename?: "QueryResults";
   hits?: Maybe<Array<Maybe<Node>>>;
-  total?: Maybe<Scalars['Int']['output']>;
+  total?: Maybe<Scalars["Int"]["output"]>;
 };
 
 export type SamplePairsStatusCount = {
-  __typename?: 'SamplePairsStatusCount';
-  invalid: Scalars['Int']['output'];
-  valid: Scalars['Int']['output'];
+  __typename?: "SamplePairsStatusCount";
+  invalid: Scalars["Int"]["output"];
+  valid: Scalars["Int"]["output"];
 };
 
 export type Set = {
-  __typename?: 'Set';
-  createdAt?: Maybe<Scalars['Date']['output']>;
-  ids?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  path?: Maybe<Scalars['String']['output']>;
-  setId?: Maybe<Scalars['String']['output']>;
-  size?: Maybe<Scalars['Int']['output']>;
-  sqon?: Maybe<Scalars['JSON']['output']>;
-  type?: Maybe<Scalars['String']['output']>;
-  userId?: Maybe<Scalars['String']['output']>;
+  __typename?: "Set";
+  createdAt?: Maybe<Scalars["Date"]["output"]>;
+  ids?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
+  path?: Maybe<Scalars["String"]["output"]>;
+  setId?: Maybe<Scalars["String"]["output"]>;
+  size?: Maybe<Scalars["Int"]["output"]>;
+  sqon?: Maybe<Scalars["JSON"]["output"]>;
+  type?: Maybe<Scalars["String"]["output"]>;
+  userId?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type Sort = {
-  field: Scalars['String']['input'];
+  field: Scalars["String"]["input"];
   missing?: InputMaybe<Missing>;
   mode?: InputMaybe<Mode>;
   order?: InputMaybe<Order>;
 };
 
 export enum SortOrder {
-  Asc = 'asc',
-  Desc = 'desc'
+  Asc = "asc",
+  Desc = "desc",
 }
 
 export type SpecimenCoreCompletion = {
-  __typename?: 'SpecimenCoreCompletion';
-  coreCompletionPercentage: Scalars['Float']['output'];
-  normalRegistrations: Scalars['Float']['output'];
-  normalSpecimensPercentage: Scalars['Float']['output'];
-  normalSubmissions: Scalars['Float']['output'];
-  tumourRegistrations: Scalars['Float']['output'];
-  tumourSpecimensPercentage: Scalars['Float']['output'];
-  tumourSubmissions: Scalars['Float']['output'];
+  __typename?: "SpecimenCoreCompletion";
+  coreCompletionPercentage: Scalars["Float"]["output"];
+  normalRegistrations: Scalars["Float"]["output"];
+  normalSpecimensPercentage: Scalars["Float"]["output"];
+  normalSubmissions: Scalars["Float"]["output"];
+  tumourRegistrations: Scalars["Float"]["output"];
+  tumourSpecimensPercentage: Scalars["Float"]["output"];
+  tumourSubmissions: Scalars["Float"]["output"];
 };
 
 export type Stats = {
-  __typename?: 'Stats';
-  avg?: Maybe<Scalars['Float']['output']>;
-  count?: Maybe<Scalars['Int']['output']>;
-  max?: Maybe<Scalars['Float']['output']>;
-  min?: Maybe<Scalars['Float']['output']>;
-  sum?: Maybe<Scalars['Float']['output']>;
+  __typename?: "Stats";
+  avg?: Maybe<Scalars["Float"]["output"]>;
+  count?: Maybe<Scalars["Int"]["output"]>;
+  max?: Maybe<Scalars["Float"]["output"]>;
+  min?: Maybe<Scalars["Float"]["output"]>;
+  sum?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export enum SubmissionState {
-  Invalid = 'INVALID',
-  InvalidByMigration = 'INVALID_BY_MIGRATION',
-  Open = 'OPEN',
-  PendingApproval = 'PENDING_APPROVAL',
-  Valid = 'VALID'
+  Invalid = "INVALID",
+  InvalidByMigration = "INVALID_BY_MIGRATION",
+  Open = "OPEN",
+  PendingApproval = "PENDING_APPROVAL",
+  Valid = "VALID",
 }
 
 export type SystemAlert = {
-  __typename?: 'SystemAlert';
-  dismissable: Scalars['Boolean']['output'];
-  id: Scalars['ID']['output'];
-  level: Scalars['String']['output'];
-  message?: Maybe<Scalars['String']['output']>;
-  title: Scalars['String']['output'];
+  __typename?: "SystemAlert";
+  dismissable: Scalars["Boolean"]["output"];
+  id: Scalars["ID"]["output"];
+  level: Scalars["String"]["output"];
+  message?: Maybe<Scalars["String"]["output"]>;
+  title: Scalars["String"]["output"];
 };
 
 export type TicketCreationResponse = {
-  __typename?: 'TicketCreationResponse';
+  __typename?: "TicketCreationResponse";
   _links?: Maybe<TicketLink>;
-  issueId?: Maybe<Scalars['String']['output']>;
-  issueKey?: Maybe<Scalars['String']['output']>;
+  issueId?: Maybe<Scalars["String"]["output"]>;
+  issueKey?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type TicketLink = {
-  __typename?: 'TicketLink';
-  web?: Maybe<Scalars['String']['output']>;
+  __typename?: "TicketLink";
+  web?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type TumorNormalMatchedPairStatusCount = {
-  __typename?: 'TumorNormalMatchedPairStatusCount';
-  noData: Scalars['Int']['output'];
-  tumorNormalMatchedPair: Scalars['Int']['output'];
-  tumorNormalMatchedPairMissingRawReads: Scalars['Int']['output'];
-  tumorNormalNoMatchedPair: Scalars['Int']['output'];
+  __typename?: "TumorNormalMatchedPairStatusCount";
+  noData: Scalars["Int"]["output"];
+  tumorNormalMatchedPair: Scalars["Int"]["output"];
+  tumorNormalMatchedPairMissingRawReads: Scalars["Int"]["output"];
+  tumorNormalNoMatchedPair: Scalars["Int"]["output"];
 };
 
 export type TumorNormalStatusCount = {
-  __typename?: 'TumorNormalStatusCount';
-  noData: Scalars['Int']['output'];
-  tumorAndNormal: Scalars['Int']['output'];
-  tumorOrNormal: Scalars['Int']['output'];
+  __typename?: "TumorNormalStatusCount";
+  noData: Scalars["Int"]["output"];
+  tumorAndNormal: Scalars["Int"]["output"];
+  tumorOrNormal: Scalars["Int"]["output"];
 };
 
 export type UpdateProgramInput = {
-  cancerTypes?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  commitmentDonors?: InputMaybe<Scalars['Int']['input']>;
-  countries?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  institutions?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  cancerTypes?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  commitmentDonors?: InputMaybe<Scalars["Int"]["input"]>;
+  countries?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  description?: InputMaybe<Scalars["String"]["input"]>;
+  institutions?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
   membershipType?: InputMaybe<MembershipType>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  primarySites?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  regions?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  website?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars["String"]["input"]>;
+  primarySites?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  regions?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  website?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type User = {
-  __typename?: 'User';
-  applications?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  __typename?: "User";
+  applications?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
   /** ISO Formatted DateTime: */
-  createdAt?: Maybe<Scalars['String']['output']>;
-  email: Scalars['String']['output'];
-  firstName?: Maybe<Scalars['String']['output']>;
-  groups?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  id: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars["String"]["output"]>;
+  email: Scalars["String"]["output"];
+  firstName?: Maybe<Scalars["String"]["output"]>;
+  groups?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
+  id: Scalars["String"]["output"];
   /** ISO Formatted DateTime: */
-  lastLogin?: Maybe<Scalars['String']['output']>;
-  lastName?: Maybe<Scalars['String']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  preferredLanguage?: Maybe<Scalars['String']['output']>;
-  scopes?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  status?: Maybe<Scalars['String']['output']>;
-  type?: Maybe<Scalars['String']['output']>;
+  lastLogin?: Maybe<Scalars["String"]["output"]>;
+  lastName?: Maybe<Scalars["String"]["output"]>;
+  name?: Maybe<Scalars["String"]["output"]>;
+  preferredLanguage?: Maybe<Scalars["String"]["output"]>;
+  scopes?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
+  status?: Maybe<Scalars["String"]["output"]>;
+  type?: Maybe<Scalars["String"]["output"]>;
 };
 
 export enum UserRole {
-  Admin = 'ADMIN',
-  Banned = 'BANNED',
-  Collaborator = 'COLLABORATOR',
-  Curator = 'CURATOR',
-  Submitter = 'SUBMITTER'
+  Admin = "ADMIN",
+  Banned = "BANNED",
+  Collaborator = "COLLABORATOR",
+  Curator = "CURATOR",
+  Submitter = "SUBMITTER",
 }
 
 export type WorkflowStatusCount = {
-  __typename?: 'WorkflowStatusCount';
-  completed: Scalars['Int']['output'];
-  failed: Scalars['Int']['output'];
-  inProgress: Scalars['Int']['output'];
-  noData: Scalars['Int']['output'];
+  __typename?: "WorkflowStatusCount";
+  completed: Scalars["Int"]["output"];
+  failed: Scalars["Int"]["output"];
+  inProgress: Scalars["Int"]["output"];
+  noData: Scalars["Int"]["output"];
 };
 
 export type File = {
-  __typename?: 'file';
+  __typename?: "file";
   aggregations?: Maybe<FileAggregations>;
   aggsState?: Maybe<AggsState>;
   columnsState?: Maybe<ColumnsState>;
-  extended?: Maybe<Scalars['JSON']['output']>;
+  extended?: Maybe<Scalars["JSON"]["output"]>;
   hits?: Maybe<FileConnection>;
-  mapping?: Maybe<Scalars['JSON']['output']>;
+  mapping?: Maybe<Scalars["JSON"]["output"]>;
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
-
 export type FileAggregationsArgs = {
-  aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  include_missing?: InputMaybe<Scalars['Boolean']['input']>;
+  aggregations_filter_themselves?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  include_missing?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
-
 
 export type FileExtendedArgs = {
-  fields?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  fields?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
 
-
 export type FileHitsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  score?: InputMaybe<Scalars['String']['input']>;
-  searchAfter?: InputMaybe<Scalars['JSON']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  score?: InputMaybe<Scalars["String"]["input"]>;
+  searchAfter?: InputMaybe<Scalars["JSON"]["input"]>;
   sort?: InputMaybe<Array<InputMaybe<Sort>>>;
-  trackTotalHits?: InputMaybe<Scalars['Boolean']['input']>;
+  trackTotalHits?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type FileAggregations = {
-  __typename?: 'fileAggregations';
+  __typename?: "fileAggregations";
   analysis__analysis_id?: Maybe<Aggregations>;
   analysis__analysis_state?: Maybe<Aggregations>;
   analysis__analysis_type?: Maybe<Aggregations>;
@@ -1570,33 +1545,33 @@ export type FileAggregations = {
 };
 
 export type FileAnalysis = {
-  __typename?: 'fileAnalysis';
-  analysis_id?: Maybe<Scalars['String']['output']>;
-  analysis_state?: Maybe<Scalars['String']['output']>;
-  analysis_type?: Maybe<Scalars['String']['output']>;
-  analysis_version?: Maybe<Scalars['Float']['output']>;
+  __typename?: "fileAnalysis";
+  analysis_id?: Maybe<Scalars["String"]["output"]>;
+  analysis_state?: Maybe<Scalars["String"]["output"]>;
+  analysis_type?: Maybe<Scalars["String"]["output"]>;
+  analysis_version?: Maybe<Scalars["Float"]["output"]>;
   experiment?: Maybe<FileAnalysisExperiment>;
-  first_published_at?: Maybe<Scalars['String']['output']>;
-  published_at?: Maybe<Scalars['String']['output']>;
-  updated_at?: Maybe<Scalars['String']['output']>;
-  variant_class?: Maybe<Scalars['String']['output']>;
+  first_published_at?: Maybe<Scalars["String"]["output"]>;
+  published_at?: Maybe<Scalars["String"]["output"]>;
+  updated_at?: Maybe<Scalars["String"]["output"]>;
+  variant_class?: Maybe<Scalars["String"]["output"]>;
   workflow?: Maybe<FileAnalysisWorkflow>;
 };
 
 export type FileAnalysisExperiment = {
-  __typename?: 'fileAnalysisExperiment';
-  experimental_strategy?: Maybe<Scalars['String']['output']>;
-  platform?: Maybe<Scalars['String']['output']>;
+  __typename?: "fileAnalysisExperiment";
+  experimental_strategy?: Maybe<Scalars["String"]["output"]>;
+  platform?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type FileAnalysisWorkflow = {
-  __typename?: 'fileAnalysisWorkflow';
-  workflow_name?: Maybe<Scalars['String']['output']>;
-  workflow_version?: Maybe<Scalars['String']['output']>;
+  __typename?: "fileAnalysisWorkflow";
+  workflow_name?: Maybe<Scalars["String"]["output"]>;
+  workflow_version?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type FileClinical = {
-  __typename?: 'fileClinical';
+  __typename?: "fileClinical";
   donor?: Maybe<FileClinicalDonor>;
   follow_ups?: Maybe<FileClinicalFollow_Ups>;
   primary_diagnosis?: Maybe<FileClinicalPrimary_Diagnosis>;
@@ -1605,61 +1580,58 @@ export type FileClinical = {
 };
 
 export type FileClinicalDonor = {
-  __typename?: 'fileClinicalDonor';
-  age_at_menarche?: Maybe<Scalars['Float']['output']>;
-  bmi?: Maybe<Scalars['Float']['output']>;
-  cause_of_death?: Maybe<Scalars['String']['output']>;
-  donor_id?: Maybe<Scalars['String']['output']>;
-  height?: Maybe<Scalars['Float']['output']>;
-  menopause_status?: Maybe<Scalars['String']['output']>;
-  number_of_children?: Maybe<Scalars['Float']['output']>;
-  number_of_pregnancies?: Maybe<Scalars['Float']['output']>;
-  primary_site?: Maybe<Scalars['String']['output']>;
-  submitter_donor_id?: Maybe<Scalars['String']['output']>;
-  survival_time?: Maybe<Scalars['Float']['output']>;
-  vital_status?: Maybe<Scalars['String']['output']>;
-  weight?: Maybe<Scalars['Float']['output']>;
+  __typename?: "fileClinicalDonor";
+  age_at_menarche?: Maybe<Scalars["Float"]["output"]>;
+  bmi?: Maybe<Scalars["Float"]["output"]>;
+  cause_of_death?: Maybe<Scalars["String"]["output"]>;
+  donor_id?: Maybe<Scalars["String"]["output"]>;
+  height?: Maybe<Scalars["Float"]["output"]>;
+  menopause_status?: Maybe<Scalars["String"]["output"]>;
+  number_of_children?: Maybe<Scalars["Float"]["output"]>;
+  number_of_pregnancies?: Maybe<Scalars["Float"]["output"]>;
+  primary_site?: Maybe<Scalars["String"]["output"]>;
+  submitter_donor_id?: Maybe<Scalars["String"]["output"]>;
+  survival_time?: Maybe<Scalars["Float"]["output"]>;
+  vital_status?: Maybe<Scalars["String"]["output"]>;
+  weight?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type FileClinicalFollow_Ups = {
-  __typename?: 'fileClinicalFollow_ups';
+  __typename?: "fileClinicalFollow_ups";
   aggregations?: Maybe<FileClinicalFollow_UpsAggregations>;
   aggsState?: Maybe<AggsState>;
   columnsState?: Maybe<ColumnsState>;
-  extended?: Maybe<Scalars['JSON']['output']>;
+  extended?: Maybe<Scalars["JSON"]["output"]>;
   hits?: Maybe<FileClinicalFollow_UpsConnection>;
-  mapping?: Maybe<Scalars['JSON']['output']>;
+  mapping?: Maybe<Scalars["JSON"]["output"]>;
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
-
 export type FileClinicalFollow_UpsAggregationsArgs = {
-  aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  include_missing?: InputMaybe<Scalars['Boolean']['input']>;
+  aggregations_filter_themselves?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  include_missing?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
-
 
 export type FileClinicalFollow_UpsExtendedArgs = {
-  fields?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  fields?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
 
-
 export type FileClinicalFollow_UpsHitsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  score?: InputMaybe<Scalars['String']['input']>;
-  searchAfter?: InputMaybe<Scalars['JSON']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  score?: InputMaybe<Scalars["String"]["input"]>;
+  searchAfter?: InputMaybe<Scalars["JSON"]["input"]>;
   sort?: InputMaybe<Array<InputMaybe<Sort>>>;
-  trackTotalHits?: InputMaybe<Scalars['Boolean']['input']>;
+  trackTotalHits?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type FileClinicalFollow_UpsAggregations = {
-  __typename?: 'fileClinicalFollow_upsAggregations';
+  __typename?: "fileClinicalFollow_upsAggregations";
   anatomic_site_progression_or_recurrences?: Maybe<Aggregations>;
   disease_status_at_followup?: Maybe<Aggregations>;
   follow_up_id?: Maybe<Aggregations>;
@@ -1688,87 +1660,84 @@ export type FileClinicalFollow_UpsAggregations = {
 };
 
 export type FileClinicalFollow_UpsConnection = {
-  __typename?: 'fileClinicalFollow_upsConnection';
+  __typename?: "fileClinicalFollow_upsConnection";
   edges?: Maybe<Array<Maybe<FileClinicalFollow_UpsEdge>>>;
-  total: Scalars['Int']['output'];
+  total: Scalars["Int"]["output"];
 };
 
 export type FileClinicalFollow_UpsEdge = {
-  __typename?: 'fileClinicalFollow_upsEdge';
+  __typename?: "fileClinicalFollow_upsEdge";
   node?: Maybe<FileClinicalFollow_UpsNode>;
-  searchAfter?: Maybe<Scalars['JSON']['output']>;
+  searchAfter?: Maybe<Scalars["JSON"]["output"]>;
 };
 
 export type FileClinicalFollow_UpsNode = Node & {
-  __typename?: 'fileClinicalFollow_upsNode';
-  anatomic_site_progression_or_recurrences?: Maybe<Scalars['String']['output']>;
-  disease_status_at_followup?: Maybe<Scalars['String']['output']>;
-  follow_up_id?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  interval_of_followup?: Maybe<Scalars['Float']['output']>;
-  is_primary_treatment?: Maybe<Scalars['String']['output']>;
-  method_of_progression_status?: Maybe<Scalars['String']['output']>;
-  posttherapy_m_category?: Maybe<Scalars['String']['output']>;
-  posttherapy_n_category?: Maybe<Scalars['String']['output']>;
-  posttherapy_stage_group?: Maybe<Scalars['String']['output']>;
-  posttherapy_t_category?: Maybe<Scalars['String']['output']>;
-  posttherapy_tumour_staging_system?: Maybe<Scalars['String']['output']>;
-  primary_diagnosis_id?: Maybe<Scalars['String']['output']>;
-  recurrence_m_category?: Maybe<Scalars['String']['output']>;
-  recurrence_n_category?: Maybe<Scalars['String']['output']>;
-  recurrence_stage_group?: Maybe<Scalars['String']['output']>;
-  recurrence_t_category?: Maybe<Scalars['String']['output']>;
-  recurrence_tumour_staging_system?: Maybe<Scalars['String']['output']>;
-  relapse_interval?: Maybe<Scalars['Float']['output']>;
-  relapse_type?: Maybe<Scalars['String']['output']>;
-  score?: Maybe<Scalars['Int']['output']>;
-  submitter_follow_up_id?: Maybe<Scalars['String']['output']>;
-  submitter_primary_diagnosis_id?: Maybe<Scalars['String']['output']>;
-  submitter_treatment_id?: Maybe<Scalars['String']['output']>;
-  treatment_id?: Maybe<Scalars['String']['output']>;
-  treatment_type?: Maybe<Scalars['String']['output']>;
-  weight_at_followup?: Maybe<Scalars['Float']['output']>;
+  __typename?: "fileClinicalFollow_upsNode";
+  anatomic_site_progression_or_recurrences?: Maybe<Scalars["String"]["output"]>;
+  disease_status_at_followup?: Maybe<Scalars["String"]["output"]>;
+  follow_up_id?: Maybe<Scalars["String"]["output"]>;
+  id: Scalars["ID"]["output"];
+  interval_of_followup?: Maybe<Scalars["Float"]["output"]>;
+  is_primary_treatment?: Maybe<Scalars["String"]["output"]>;
+  method_of_progression_status?: Maybe<Scalars["String"]["output"]>;
+  posttherapy_m_category?: Maybe<Scalars["String"]["output"]>;
+  posttherapy_n_category?: Maybe<Scalars["String"]["output"]>;
+  posttherapy_stage_group?: Maybe<Scalars["String"]["output"]>;
+  posttherapy_t_category?: Maybe<Scalars["String"]["output"]>;
+  posttherapy_tumour_staging_system?: Maybe<Scalars["String"]["output"]>;
+  primary_diagnosis_id?: Maybe<Scalars["String"]["output"]>;
+  recurrence_m_category?: Maybe<Scalars["String"]["output"]>;
+  recurrence_n_category?: Maybe<Scalars["String"]["output"]>;
+  recurrence_stage_group?: Maybe<Scalars["String"]["output"]>;
+  recurrence_t_category?: Maybe<Scalars["String"]["output"]>;
+  recurrence_tumour_staging_system?: Maybe<Scalars["String"]["output"]>;
+  relapse_interval?: Maybe<Scalars["Float"]["output"]>;
+  relapse_type?: Maybe<Scalars["String"]["output"]>;
+  score?: Maybe<Scalars["Int"]["output"]>;
+  submitter_follow_up_id?: Maybe<Scalars["String"]["output"]>;
+  submitter_primary_diagnosis_id?: Maybe<Scalars["String"]["output"]>;
+  submitter_treatment_id?: Maybe<Scalars["String"]["output"]>;
+  treatment_id?: Maybe<Scalars["String"]["output"]>;
+  treatment_type?: Maybe<Scalars["String"]["output"]>;
+  weight_at_followup?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type FileClinicalPrimary_Diagnosis = {
-  __typename?: 'fileClinicalPrimary_diagnosis';
+  __typename?: "fileClinicalPrimary_diagnosis";
   aggregations?: Maybe<FileClinicalPrimary_DiagnosisAggregations>;
   aggsState?: Maybe<AggsState>;
   columnsState?: Maybe<ColumnsState>;
-  extended?: Maybe<Scalars['JSON']['output']>;
+  extended?: Maybe<Scalars["JSON"]["output"]>;
   hits?: Maybe<FileClinicalPrimary_DiagnosisConnection>;
-  mapping?: Maybe<Scalars['JSON']['output']>;
+  mapping?: Maybe<Scalars["JSON"]["output"]>;
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
-
 export type FileClinicalPrimary_DiagnosisAggregationsArgs = {
-  aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  include_missing?: InputMaybe<Scalars['Boolean']['input']>;
+  aggregations_filter_themselves?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  include_missing?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
-
 
 export type FileClinicalPrimary_DiagnosisExtendedArgs = {
-  fields?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  fields?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
 
-
 export type FileClinicalPrimary_DiagnosisHitsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  score?: InputMaybe<Scalars['String']['input']>;
-  searchAfter?: InputMaybe<Scalars['JSON']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  score?: InputMaybe<Scalars["String"]["input"]>;
+  searchAfter?: InputMaybe<Scalars["JSON"]["input"]>;
   sort?: InputMaybe<Array<InputMaybe<Sort>>>;
-  trackTotalHits?: InputMaybe<Scalars['Boolean']['input']>;
+  trackTotalHits?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type FileClinicalPrimary_DiagnosisAggregations = {
-  __typename?: 'fileClinicalPrimary_diagnosisAggregations';
+  __typename?: "fileClinicalPrimary_diagnosisAggregations";
   age_at_diagnosis?: Maybe<NumericAggregations>;
   basis_of_diagnosis?: Maybe<Aggregations>;
   cancer_type_additional_information?: Maybe<Aggregations>;
@@ -1787,77 +1756,74 @@ export type FileClinicalPrimary_DiagnosisAggregations = {
 };
 
 export type FileClinicalPrimary_DiagnosisConnection = {
-  __typename?: 'fileClinicalPrimary_diagnosisConnection';
+  __typename?: "fileClinicalPrimary_diagnosisConnection";
   edges?: Maybe<Array<Maybe<FileClinicalPrimary_DiagnosisEdge>>>;
-  total: Scalars['Int']['output'];
+  total: Scalars["Int"]["output"];
 };
 
 export type FileClinicalPrimary_DiagnosisEdge = {
-  __typename?: 'fileClinicalPrimary_diagnosisEdge';
+  __typename?: "fileClinicalPrimary_diagnosisEdge";
   node?: Maybe<FileClinicalPrimary_DiagnosisNode>;
-  searchAfter?: Maybe<Scalars['JSON']['output']>;
+  searchAfter?: Maybe<Scalars["JSON"]["output"]>;
 };
 
 export type FileClinicalPrimary_DiagnosisNode = Node & {
-  __typename?: 'fileClinicalPrimary_diagnosisNode';
-  age_at_diagnosis?: Maybe<Scalars['Float']['output']>;
-  basis_of_diagnosis?: Maybe<Scalars['String']['output']>;
-  cancer_type_additional_information?: Maybe<Scalars['String']['output']>;
-  cancer_type_code?: Maybe<Scalars['String']['output']>;
-  clinical_m_category?: Maybe<Scalars['String']['output']>;
-  clinical_n_category?: Maybe<Scalars['String']['output']>;
-  clinical_stage_group?: Maybe<Scalars['String']['output']>;
-  clinical_t_category?: Maybe<Scalars['String']['output']>;
-  clinical_tumour_staging_system?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  number_lymph_nodes_examined?: Maybe<Scalars['Float']['output']>;
-  number_lymph_nodes_positive?: Maybe<Scalars['Float']['output']>;
-  performance_status?: Maybe<Scalars['String']['output']>;
-  presenting_symptoms?: Maybe<Scalars['String']['output']>;
-  primary_diagnosis_id?: Maybe<Scalars['String']['output']>;
-  score?: Maybe<Scalars['Int']['output']>;
-  submitter_primary_diagnosis_id?: Maybe<Scalars['String']['output']>;
+  __typename?: "fileClinicalPrimary_diagnosisNode";
+  age_at_diagnosis?: Maybe<Scalars["Float"]["output"]>;
+  basis_of_diagnosis?: Maybe<Scalars["String"]["output"]>;
+  cancer_type_additional_information?: Maybe<Scalars["String"]["output"]>;
+  cancer_type_code?: Maybe<Scalars["String"]["output"]>;
+  clinical_m_category?: Maybe<Scalars["String"]["output"]>;
+  clinical_n_category?: Maybe<Scalars["String"]["output"]>;
+  clinical_stage_group?: Maybe<Scalars["String"]["output"]>;
+  clinical_t_category?: Maybe<Scalars["String"]["output"]>;
+  clinical_tumour_staging_system?: Maybe<Scalars["String"]["output"]>;
+  id: Scalars["ID"]["output"];
+  number_lymph_nodes_examined?: Maybe<Scalars["Float"]["output"]>;
+  number_lymph_nodes_positive?: Maybe<Scalars["Float"]["output"]>;
+  performance_status?: Maybe<Scalars["String"]["output"]>;
+  presenting_symptoms?: Maybe<Scalars["String"]["output"]>;
+  primary_diagnosis_id?: Maybe<Scalars["String"]["output"]>;
+  score?: Maybe<Scalars["Int"]["output"]>;
+  submitter_primary_diagnosis_id?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type FileClinicalSpecimens = {
-  __typename?: 'fileClinicalSpecimens';
+  __typename?: "fileClinicalSpecimens";
   aggregations?: Maybe<FileClinicalSpecimensAggregations>;
   aggsState?: Maybe<AggsState>;
   columnsState?: Maybe<ColumnsState>;
-  extended?: Maybe<Scalars['JSON']['output']>;
+  extended?: Maybe<Scalars["JSON"]["output"]>;
   hits?: Maybe<FileClinicalSpecimensConnection>;
-  mapping?: Maybe<Scalars['JSON']['output']>;
+  mapping?: Maybe<Scalars["JSON"]["output"]>;
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
-
 export type FileClinicalSpecimensAggregationsArgs = {
-  aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  include_missing?: InputMaybe<Scalars['Boolean']['input']>;
+  aggregations_filter_themselves?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  include_missing?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
-
 
 export type FileClinicalSpecimensExtendedArgs = {
-  fields?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  fields?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
 
-
 export type FileClinicalSpecimensHitsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  score?: InputMaybe<Scalars['String']['input']>;
-  searchAfter?: InputMaybe<Scalars['JSON']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  score?: InputMaybe<Scalars["String"]["input"]>;
+  searchAfter?: InputMaybe<Scalars["JSON"]["input"]>;
   sort?: InputMaybe<Array<InputMaybe<Sort>>>;
-  trackTotalHits?: InputMaybe<Scalars['Boolean']['input']>;
+  trackTotalHits?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type FileClinicalSpecimensAggregations = {
-  __typename?: 'fileClinicalSpecimensAggregations';
+  __typename?: "fileClinicalSpecimensAggregations";
   pathological_m_category?: Maybe<Aggregations>;
   pathological_n_category?: Maybe<Aggregations>;
   pathological_stage_group?: Maybe<Aggregations>;
@@ -1883,84 +1849,81 @@ export type FileClinicalSpecimensAggregations = {
 };
 
 export type FileClinicalSpecimensConnection = {
-  __typename?: 'fileClinicalSpecimensConnection';
+  __typename?: "fileClinicalSpecimensConnection";
   edges?: Maybe<Array<Maybe<FileClinicalSpecimensEdge>>>;
-  total: Scalars['Int']['output'];
+  total: Scalars["Int"]["output"];
 };
 
 export type FileClinicalSpecimensEdge = {
-  __typename?: 'fileClinicalSpecimensEdge';
+  __typename?: "fileClinicalSpecimensEdge";
   node?: Maybe<FileClinicalSpecimensNode>;
-  searchAfter?: Maybe<Scalars['JSON']['output']>;
+  searchAfter?: Maybe<Scalars["JSON"]["output"]>;
 };
 
 export type FileClinicalSpecimensNode = Node & {
-  __typename?: 'fileClinicalSpecimensNode';
-  id: Scalars['ID']['output'];
-  pathological_m_category?: Maybe<Scalars['String']['output']>;
-  pathological_n_category?: Maybe<Scalars['String']['output']>;
-  pathological_stage_group?: Maybe<Scalars['String']['output']>;
-  pathological_t_category?: Maybe<Scalars['String']['output']>;
-  pathological_tumour_staging_system?: Maybe<Scalars['String']['output']>;
-  percent_inflammatory_tissue?: Maybe<Scalars['Float']['output']>;
-  percent_necrosis?: Maybe<Scalars['Float']['output']>;
-  percent_proliferating_cells?: Maybe<Scalars['Float']['output']>;
-  percent_stromal_cells?: Maybe<Scalars['Float']['output']>;
-  percent_tumour_cells?: Maybe<Scalars['Float']['output']>;
-  primary_diagnosis_id?: Maybe<Scalars['String']['output']>;
-  reference_pathology_confirmed?: Maybe<Scalars['String']['output']>;
-  score?: Maybe<Scalars['Int']['output']>;
-  specimen_acquisition_interval?: Maybe<Scalars['Float']['output']>;
-  specimen_anatomic_location?: Maybe<Scalars['String']['output']>;
-  specimen_id?: Maybe<Scalars['String']['output']>;
-  specimen_processing?: Maybe<Scalars['String']['output']>;
-  specimen_storage?: Maybe<Scalars['String']['output']>;
-  submitter_primary_diagnosis_id?: Maybe<Scalars['String']['output']>;
-  submitter_specimen_id?: Maybe<Scalars['String']['output']>;
-  tumour_grade?: Maybe<Scalars['String']['output']>;
-  tumour_grading_system?: Maybe<Scalars['String']['output']>;
-  tumour_histological_type?: Maybe<Scalars['String']['output']>;
+  __typename?: "fileClinicalSpecimensNode";
+  id: Scalars["ID"]["output"];
+  pathological_m_category?: Maybe<Scalars["String"]["output"]>;
+  pathological_n_category?: Maybe<Scalars["String"]["output"]>;
+  pathological_stage_group?: Maybe<Scalars["String"]["output"]>;
+  pathological_t_category?: Maybe<Scalars["String"]["output"]>;
+  pathological_tumour_staging_system?: Maybe<Scalars["String"]["output"]>;
+  percent_inflammatory_tissue?: Maybe<Scalars["Float"]["output"]>;
+  percent_necrosis?: Maybe<Scalars["Float"]["output"]>;
+  percent_proliferating_cells?: Maybe<Scalars["Float"]["output"]>;
+  percent_stromal_cells?: Maybe<Scalars["Float"]["output"]>;
+  percent_tumour_cells?: Maybe<Scalars["Float"]["output"]>;
+  primary_diagnosis_id?: Maybe<Scalars["String"]["output"]>;
+  reference_pathology_confirmed?: Maybe<Scalars["String"]["output"]>;
+  score?: Maybe<Scalars["Int"]["output"]>;
+  specimen_acquisition_interval?: Maybe<Scalars["Float"]["output"]>;
+  specimen_anatomic_location?: Maybe<Scalars["String"]["output"]>;
+  specimen_id?: Maybe<Scalars["String"]["output"]>;
+  specimen_processing?: Maybe<Scalars["String"]["output"]>;
+  specimen_storage?: Maybe<Scalars["String"]["output"]>;
+  submitter_primary_diagnosis_id?: Maybe<Scalars["String"]["output"]>;
+  submitter_specimen_id?: Maybe<Scalars["String"]["output"]>;
+  tumour_grade?: Maybe<Scalars["String"]["output"]>;
+  tumour_grading_system?: Maybe<Scalars["String"]["output"]>;
+  tumour_histological_type?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type FileClinicalTreatments = {
-  __typename?: 'fileClinicalTreatments';
+  __typename?: "fileClinicalTreatments";
   aggregations?: Maybe<FileClinicalTreatmentsAggregations>;
   aggsState?: Maybe<AggsState>;
   columnsState?: Maybe<ColumnsState>;
-  extended?: Maybe<Scalars['JSON']['output']>;
+  extended?: Maybe<Scalars["JSON"]["output"]>;
   hits?: Maybe<FileClinicalTreatmentsConnection>;
-  mapping?: Maybe<Scalars['JSON']['output']>;
+  mapping?: Maybe<Scalars["JSON"]["output"]>;
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
-
 export type FileClinicalTreatmentsAggregationsArgs = {
-  aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  include_missing?: InputMaybe<Scalars['Boolean']['input']>;
+  aggregations_filter_themselves?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  include_missing?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
-
 
 export type FileClinicalTreatmentsExtendedArgs = {
-  fields?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  fields?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
 
-
 export type FileClinicalTreatmentsHitsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  score?: InputMaybe<Scalars['String']['input']>;
-  searchAfter?: InputMaybe<Scalars['JSON']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  score?: InputMaybe<Scalars["String"]["input"]>;
+  searchAfter?: InputMaybe<Scalars["JSON"]["input"]>;
   sort?: InputMaybe<Array<InputMaybe<Sort>>>;
-  trackTotalHits?: InputMaybe<Scalars['Boolean']['input']>;
+  trackTotalHits?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type FileClinicalTreatmentsAggregations = {
-  __typename?: 'fileClinicalTreatmentsAggregations';
+  __typename?: "fileClinicalTreatmentsAggregations";
   adverse_events?: Maybe<Aggregations>;
   anatomical_site_irradiated?: Maybe<Aggregations>;
   chemotherapy_dosage_units?: Maybe<Aggregations>;
@@ -1994,98 +1957,95 @@ export type FileClinicalTreatmentsAggregations = {
 };
 
 export type FileClinicalTreatmentsConnection = {
-  __typename?: 'fileClinicalTreatmentsConnection';
+  __typename?: "fileClinicalTreatmentsConnection";
   edges?: Maybe<Array<Maybe<FileClinicalTreatmentsEdge>>>;
-  total: Scalars['Int']['output'];
+  total: Scalars["Int"]["output"];
 };
 
 export type FileClinicalTreatmentsEdge = {
-  __typename?: 'fileClinicalTreatmentsEdge';
+  __typename?: "fileClinicalTreatmentsEdge";
   node?: Maybe<FileClinicalTreatmentsNode>;
-  searchAfter?: Maybe<Scalars['JSON']['output']>;
+  searchAfter?: Maybe<Scalars["JSON"]["output"]>;
 };
 
 export type FileClinicalTreatmentsNode = Node & {
-  __typename?: 'fileClinicalTreatmentsNode';
-  adverse_events?: Maybe<Scalars['String']['output']>;
-  anatomical_site_irradiated?: Maybe<Scalars['String']['output']>;
-  chemotherapy_dosage_units?: Maybe<Scalars['String']['output']>;
-  clinical_trial_number?: Maybe<Scalars['String']['output']>;
-  clinical_trials_database?: Maybe<Scalars['String']['output']>;
-  cumulative_drug_dosage?: Maybe<Scalars['Float']['output']>;
-  days_per_cycle?: Maybe<Scalars['Float']['output']>;
-  drug_name?: Maybe<Scalars['String']['output']>;
-  drug_rxnormcui?: Maybe<Scalars['String']['output']>;
-  hemotological_toxicity?: Maybe<Scalars['String']['output']>;
-  hormone_drug_dosage_units?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  is_primary_treatment?: Maybe<Scalars['String']['output']>;
-  line_of_treatment?: Maybe<Scalars['Float']['output']>;
-  number_of_cycles?: Maybe<Scalars['Float']['output']>;
-  outcome_of_treatment?: Maybe<Scalars['String']['output']>;
-  primary_diagnosis_id?: Maybe<Scalars['String']['output']>;
-  radiation_therapy_dosage?: Maybe<Scalars['Float']['output']>;
-  radiation_therapy_fractions?: Maybe<Scalars['Float']['output']>;
-  radiation_therapy_modality?: Maybe<Scalars['String']['output']>;
-  radiation_therapy_type?: Maybe<Scalars['String']['output']>;
-  response_to_treatment?: Maybe<Scalars['String']['output']>;
-  score?: Maybe<Scalars['Int']['output']>;
-  submitter_primary_diagnosis_id?: Maybe<Scalars['String']['output']>;
-  submitter_treatment_id?: Maybe<Scalars['String']['output']>;
-  toxicity_type?: Maybe<Scalars['String']['output']>;
-  treatment_duration?: Maybe<Scalars['Float']['output']>;
-  treatment_id?: Maybe<Scalars['String']['output']>;
-  treatment_intent?: Maybe<Scalars['String']['output']>;
-  treatment_setting?: Maybe<Scalars['String']['output']>;
-  treatment_start_interval?: Maybe<Scalars['Float']['output']>;
-  treatment_type?: Maybe<Scalars['String']['output']>;
+  __typename?: "fileClinicalTreatmentsNode";
+  adverse_events?: Maybe<Scalars["String"]["output"]>;
+  anatomical_site_irradiated?: Maybe<Scalars["String"]["output"]>;
+  chemotherapy_dosage_units?: Maybe<Scalars["String"]["output"]>;
+  clinical_trial_number?: Maybe<Scalars["String"]["output"]>;
+  clinical_trials_database?: Maybe<Scalars["String"]["output"]>;
+  cumulative_drug_dosage?: Maybe<Scalars["Float"]["output"]>;
+  days_per_cycle?: Maybe<Scalars["Float"]["output"]>;
+  drug_name?: Maybe<Scalars["String"]["output"]>;
+  drug_rxnormcui?: Maybe<Scalars["String"]["output"]>;
+  hemotological_toxicity?: Maybe<Scalars["String"]["output"]>;
+  hormone_drug_dosage_units?: Maybe<Scalars["String"]["output"]>;
+  id: Scalars["ID"]["output"];
+  is_primary_treatment?: Maybe<Scalars["String"]["output"]>;
+  line_of_treatment?: Maybe<Scalars["Float"]["output"]>;
+  number_of_cycles?: Maybe<Scalars["Float"]["output"]>;
+  outcome_of_treatment?: Maybe<Scalars["String"]["output"]>;
+  primary_diagnosis_id?: Maybe<Scalars["String"]["output"]>;
+  radiation_therapy_dosage?: Maybe<Scalars["Float"]["output"]>;
+  radiation_therapy_fractions?: Maybe<Scalars["Float"]["output"]>;
+  radiation_therapy_modality?: Maybe<Scalars["String"]["output"]>;
+  radiation_therapy_type?: Maybe<Scalars["String"]["output"]>;
+  response_to_treatment?: Maybe<Scalars["String"]["output"]>;
+  score?: Maybe<Scalars["Int"]["output"]>;
+  submitter_primary_diagnosis_id?: Maybe<Scalars["String"]["output"]>;
+  submitter_treatment_id?: Maybe<Scalars["String"]["output"]>;
+  toxicity_type?: Maybe<Scalars["String"]["output"]>;
+  treatment_duration?: Maybe<Scalars["Float"]["output"]>;
+  treatment_id?: Maybe<Scalars["String"]["output"]>;
+  treatment_intent?: Maybe<Scalars["String"]["output"]>;
+  treatment_setting?: Maybe<Scalars["String"]["output"]>;
+  treatment_start_interval?: Maybe<Scalars["Float"]["output"]>;
+  treatment_type?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type FileConnection = {
-  __typename?: 'fileConnection';
+  __typename?: "fileConnection";
   edges?: Maybe<Array<Maybe<FileEdge>>>;
-  total: Scalars['Int']['output'];
+  total: Scalars["Int"]["output"];
 };
 
 export type FileDonors = {
-  __typename?: 'fileDonors';
+  __typename?: "fileDonors";
   aggregations?: Maybe<FileDonorsAggregations>;
   aggsState?: Maybe<AggsState>;
   columnsState?: Maybe<ColumnsState>;
-  extended?: Maybe<Scalars['JSON']['output']>;
+  extended?: Maybe<Scalars["JSON"]["output"]>;
   hits?: Maybe<FileDonorsConnection>;
-  mapping?: Maybe<Scalars['JSON']['output']>;
+  mapping?: Maybe<Scalars["JSON"]["output"]>;
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
-
 export type FileDonorsAggregationsArgs = {
-  aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  include_missing?: InputMaybe<Scalars['Boolean']['input']>;
+  aggregations_filter_themselves?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  include_missing?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
-
 
 export type FileDonorsExtendedArgs = {
-  fields?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  fields?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
 
-
 export type FileDonorsHitsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  score?: InputMaybe<Scalars['String']['input']>;
-  searchAfter?: InputMaybe<Scalars['JSON']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  score?: InputMaybe<Scalars["String"]["input"]>;
+  searchAfter?: InputMaybe<Scalars["JSON"]["input"]>;
   sort?: InputMaybe<Array<InputMaybe<Sort>>>;
-  trackTotalHits?: InputMaybe<Scalars['Boolean']['input']>;
+  trackTotalHits?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type FileDonorsAggregations = {
-  __typename?: 'fileDonorsAggregations';
+  __typename?: "fileDonorsAggregations";
   donor_id?: Maybe<Aggregations>;
   gender?: Maybe<Aggregations>;
   specimens__samples__matched_normal_submitter_sample_id?: Maybe<Aggregations>;
@@ -2101,66 +2061,63 @@ export type FileDonorsAggregations = {
 };
 
 export type FileDonorsConnection = {
-  __typename?: 'fileDonorsConnection';
+  __typename?: "fileDonorsConnection";
   edges?: Maybe<Array<Maybe<FileDonorsEdge>>>;
-  total: Scalars['Int']['output'];
+  total: Scalars["Int"]["output"];
 };
 
 export type FileDonorsEdge = {
-  __typename?: 'fileDonorsEdge';
+  __typename?: "fileDonorsEdge";
   node?: Maybe<FileDonorsNode>;
-  searchAfter?: Maybe<Scalars['JSON']['output']>;
+  searchAfter?: Maybe<Scalars["JSON"]["output"]>;
 };
 
 export type FileDonorsNode = Node & {
-  __typename?: 'fileDonorsNode';
-  donor_id?: Maybe<Scalars['String']['output']>;
-  gender?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  score?: Maybe<Scalars['Int']['output']>;
+  __typename?: "fileDonorsNode";
+  donor_id?: Maybe<Scalars["String"]["output"]>;
+  gender?: Maybe<Scalars["String"]["output"]>;
+  id: Scalars["ID"]["output"];
+  score?: Maybe<Scalars["Int"]["output"]>;
   specimens?: Maybe<FileDonorsSpecimens>;
-  submitter_donor_id?: Maybe<Scalars['String']['output']>;
+  submitter_donor_id?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type FileDonorsSpecimens = {
-  __typename?: 'fileDonorsSpecimens';
+  __typename?: "fileDonorsSpecimens";
   aggregations?: Maybe<FileDonorsSpecimensAggregations>;
   aggsState?: Maybe<AggsState>;
   columnsState?: Maybe<ColumnsState>;
-  extended?: Maybe<Scalars['JSON']['output']>;
+  extended?: Maybe<Scalars["JSON"]["output"]>;
   hits?: Maybe<FileDonorsSpecimensConnection>;
-  mapping?: Maybe<Scalars['JSON']['output']>;
+  mapping?: Maybe<Scalars["JSON"]["output"]>;
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
-
 export type FileDonorsSpecimensAggregationsArgs = {
-  aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  include_missing?: InputMaybe<Scalars['Boolean']['input']>;
+  aggregations_filter_themselves?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  include_missing?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
-
 
 export type FileDonorsSpecimensExtendedArgs = {
-  fields?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  fields?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
 
-
 export type FileDonorsSpecimensHitsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  score?: InputMaybe<Scalars['String']['input']>;
-  searchAfter?: InputMaybe<Scalars['JSON']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  score?: InputMaybe<Scalars["String"]["input"]>;
+  searchAfter?: InputMaybe<Scalars["JSON"]["input"]>;
   sort?: InputMaybe<Array<InputMaybe<Sort>>>;
-  trackTotalHits?: InputMaybe<Scalars['Boolean']['input']>;
+  trackTotalHits?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type FileDonorsSpecimensAggregations = {
-  __typename?: 'fileDonorsSpecimensAggregations';
+  __typename?: "fileDonorsSpecimensAggregations";
   samples__matched_normal_submitter_sample_id?: Maybe<Aggregations>;
   samples__sample_id?: Maybe<Aggregations>;
   samples__sample_type?: Maybe<Aggregations>;
@@ -2173,68 +2130,65 @@ export type FileDonorsSpecimensAggregations = {
 };
 
 export type FileDonorsSpecimensConnection = {
-  __typename?: 'fileDonorsSpecimensConnection';
+  __typename?: "fileDonorsSpecimensConnection";
   edges?: Maybe<Array<Maybe<FileDonorsSpecimensEdge>>>;
-  total: Scalars['Int']['output'];
+  total: Scalars["Int"]["output"];
 };
 
 export type FileDonorsSpecimensEdge = {
-  __typename?: 'fileDonorsSpecimensEdge';
+  __typename?: "fileDonorsSpecimensEdge";
   node?: Maybe<FileDonorsSpecimensNode>;
-  searchAfter?: Maybe<Scalars['JSON']['output']>;
+  searchAfter?: Maybe<Scalars["JSON"]["output"]>;
 };
 
 export type FileDonorsSpecimensNode = Node & {
-  __typename?: 'fileDonorsSpecimensNode';
-  id: Scalars['ID']['output'];
+  __typename?: "fileDonorsSpecimensNode";
+  id: Scalars["ID"]["output"];
   samples?: Maybe<FileDonorsSpecimensSamples>;
-  score?: Maybe<Scalars['Int']['output']>;
-  specimen_id?: Maybe<Scalars['String']['output']>;
-  specimen_tissue_source?: Maybe<Scalars['String']['output']>;
-  specimen_type?: Maybe<Scalars['String']['output']>;
-  submitter_specimen_id?: Maybe<Scalars['String']['output']>;
-  tumour_normal_designation?: Maybe<Scalars['String']['output']>;
+  score?: Maybe<Scalars["Int"]["output"]>;
+  specimen_id?: Maybe<Scalars["String"]["output"]>;
+  specimen_tissue_source?: Maybe<Scalars["String"]["output"]>;
+  specimen_type?: Maybe<Scalars["String"]["output"]>;
+  submitter_specimen_id?: Maybe<Scalars["String"]["output"]>;
+  tumour_normal_designation?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type FileDonorsSpecimensSamples = {
-  __typename?: 'fileDonorsSpecimensSamples';
+  __typename?: "fileDonorsSpecimensSamples";
   aggregations?: Maybe<FileDonorsSpecimensSamplesAggregations>;
   aggsState?: Maybe<AggsState>;
   columnsState?: Maybe<ColumnsState>;
-  extended?: Maybe<Scalars['JSON']['output']>;
+  extended?: Maybe<Scalars["JSON"]["output"]>;
   hits?: Maybe<FileDonorsSpecimensSamplesConnection>;
-  mapping?: Maybe<Scalars['JSON']['output']>;
+  mapping?: Maybe<Scalars["JSON"]["output"]>;
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
-
 export type FileDonorsSpecimensSamplesAggregationsArgs = {
-  aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  include_missing?: InputMaybe<Scalars['Boolean']['input']>;
+  aggregations_filter_themselves?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  include_missing?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
-
 
 export type FileDonorsSpecimensSamplesExtendedArgs = {
-  fields?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  fields?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
 
-
 export type FileDonorsSpecimensSamplesHitsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  score?: InputMaybe<Scalars['String']['input']>;
-  searchAfter?: InputMaybe<Scalars['JSON']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  score?: InputMaybe<Scalars["String"]["input"]>;
+  searchAfter?: InputMaybe<Scalars["JSON"]["input"]>;
   sort?: InputMaybe<Array<InputMaybe<Sort>>>;
-  trackTotalHits?: InputMaybe<Scalars['Boolean']['input']>;
+  trackTotalHits?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type FileDonorsSpecimensSamplesAggregations = {
-  __typename?: 'fileDonorsSpecimensSamplesAggregations';
+  __typename?: "fileDonorsSpecimensSamplesAggregations";
   matched_normal_submitter_sample_id?: Maybe<Aggregations>;
   sample_id?: Maybe<Aggregations>;
   sample_type?: Maybe<Aggregations>;
@@ -2242,138 +2196,135 @@ export type FileDonorsSpecimensSamplesAggregations = {
 };
 
 export type FileDonorsSpecimensSamplesConnection = {
-  __typename?: 'fileDonorsSpecimensSamplesConnection';
+  __typename?: "fileDonorsSpecimensSamplesConnection";
   edges?: Maybe<Array<Maybe<FileDonorsSpecimensSamplesEdge>>>;
-  total: Scalars['Int']['output'];
+  total: Scalars["Int"]["output"];
 };
 
 export type FileDonorsSpecimensSamplesEdge = {
-  __typename?: 'fileDonorsSpecimensSamplesEdge';
+  __typename?: "fileDonorsSpecimensSamplesEdge";
   node?: Maybe<FileDonorsSpecimensSamplesNode>;
-  searchAfter?: Maybe<Scalars['JSON']['output']>;
+  searchAfter?: Maybe<Scalars["JSON"]["output"]>;
 };
 
 export type FileDonorsSpecimensSamplesNode = Node & {
-  __typename?: 'fileDonorsSpecimensSamplesNode';
-  id: Scalars['ID']['output'];
-  matched_normal_submitter_sample_id?: Maybe<Scalars['String']['output']>;
-  sample_id?: Maybe<Scalars['String']['output']>;
-  sample_type?: Maybe<Scalars['String']['output']>;
-  score?: Maybe<Scalars['Int']['output']>;
-  submitter_sample_id?: Maybe<Scalars['String']['output']>;
+  __typename?: "fileDonorsSpecimensSamplesNode";
+  id: Scalars["ID"]["output"];
+  matched_normal_submitter_sample_id?: Maybe<Scalars["String"]["output"]>;
+  sample_id?: Maybe<Scalars["String"]["output"]>;
+  sample_type?: Maybe<Scalars["String"]["output"]>;
+  score?: Maybe<Scalars["Int"]["output"]>;
+  submitter_sample_id?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type FileEdge = {
-  __typename?: 'fileEdge';
+  __typename?: "fileEdge";
   node?: Maybe<FileNode>;
-  searchAfter?: Maybe<Scalars['JSON']['output']>;
+  searchAfter?: Maybe<Scalars["JSON"]["output"]>;
 };
 
 export type FileFile = {
-  __typename?: 'fileFile';
+  __typename?: "fileFile";
   index_file?: Maybe<FileFileIndex_File>;
-  md5sum?: Maybe<Scalars['String']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  size?: Maybe<Scalars['Float']['output']>;
+  md5sum?: Maybe<Scalars["String"]["output"]>;
+  name?: Maybe<Scalars["String"]["output"]>;
+  size?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type FileFileIndex_File = {
-  __typename?: 'fileFileIndex_file';
-  file_type?: Maybe<Scalars['String']['output']>;
-  md5sum?: Maybe<Scalars['String']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  object_id?: Maybe<Scalars['String']['output']>;
-  size?: Maybe<Scalars['Float']['output']>;
+  __typename?: "fileFileIndex_file";
+  file_type?: Maybe<Scalars["String"]["output"]>;
+  md5sum?: Maybe<Scalars["String"]["output"]>;
+  name?: Maybe<Scalars["String"]["output"]>;
+  object_id?: Maybe<Scalars["String"]["output"]>;
+  size?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type FileMeta = {
-  __typename?: 'fileMeta';
-  embargo_stage?: Maybe<Scalars['String']['output']>;
-  release_state?: Maybe<Scalars['String']['output']>;
-  study_id?: Maybe<Scalars['String']['output']>;
+  __typename?: "fileMeta";
+  embargo_stage?: Maybe<Scalars["String"]["output"]>;
+  release_state?: Maybe<Scalars["String"]["output"]>;
+  study_id?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type FileMetrics = {
-  __typename?: 'fileMetrics';
-  average_insert_size?: Maybe<Scalars['Float']['output']>;
-  average_length?: Maybe<Scalars['Float']['output']>;
-  duplicated_bases?: Maybe<Scalars['Float']['output']>;
-  error_rate?: Maybe<Scalars['Float']['output']>;
-  mapped_bases_cigar?: Maybe<Scalars['Float']['output']>;
-  mapped_reads?: Maybe<Scalars['Float']['output']>;
-  mismatch_bases?: Maybe<Scalars['Float']['output']>;
-  paired_reads?: Maybe<Scalars['Float']['output']>;
-  pairs_on_different_chromosomes?: Maybe<Scalars['Float']['output']>;
-  properly_paired_reads?: Maybe<Scalars['Float']['output']>;
-  total_bases?: Maybe<Scalars['Float']['output']>;
-  total_reads?: Maybe<Scalars['Float']['output']>;
+  __typename?: "fileMetrics";
+  average_insert_size?: Maybe<Scalars["Float"]["output"]>;
+  average_length?: Maybe<Scalars["Float"]["output"]>;
+  duplicated_bases?: Maybe<Scalars["Float"]["output"]>;
+  error_rate?: Maybe<Scalars["Float"]["output"]>;
+  mapped_bases_cigar?: Maybe<Scalars["Float"]["output"]>;
+  mapped_reads?: Maybe<Scalars["Float"]["output"]>;
+  mismatch_bases?: Maybe<Scalars["Float"]["output"]>;
+  paired_reads?: Maybe<Scalars["Float"]["output"]>;
+  pairs_on_different_chromosomes?: Maybe<Scalars["Float"]["output"]>;
+  properly_paired_reads?: Maybe<Scalars["Float"]["output"]>;
+  total_bases?: Maybe<Scalars["Float"]["output"]>;
+  total_reads?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type FileNode = Node & {
-  __typename?: 'fileNode';
+  __typename?: "fileNode";
   analysis?: Maybe<FileAnalysis>;
-  analysis_tools?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  analysis_tools?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
   clinical?: Maybe<FileClinical>;
-  data_category?: Maybe<Scalars['String']['output']>;
-  data_type?: Maybe<Scalars['String']['output']>;
+  data_category?: Maybe<Scalars["String"]["output"]>;
+  data_type?: Maybe<Scalars["String"]["output"]>;
   donors?: Maybe<FileDonors>;
-  embargo_stage?: Maybe<Scalars['String']['output']>;
+  embargo_stage?: Maybe<Scalars["String"]["output"]>;
   file?: Maybe<FileFile>;
-  file_access?: Maybe<Scalars['String']['output']>;
-  file_autocomplete?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  file_id?: Maybe<Scalars['String']['output']>;
-  file_number?: Maybe<Scalars['Float']['output']>;
-  file_type?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
+  file_access?: Maybe<Scalars["String"]["output"]>;
+  file_autocomplete?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
+  file_id?: Maybe<Scalars["String"]["output"]>;
+  file_number?: Maybe<Scalars["Float"]["output"]>;
+  file_type?: Maybe<Scalars["String"]["output"]>;
+  id: Scalars["ID"]["output"];
   meta?: Maybe<FileMeta>;
   metrics?: Maybe<FileMetrics>;
-  object_id?: Maybe<Scalars['String']['output']>;
-  program_access_date?: Maybe<Scalars['String']['output']>;
-  release_state?: Maybe<Scalars['String']['output']>;
+  object_id?: Maybe<Scalars["String"]["output"]>;
+  program_access_date?: Maybe<Scalars["String"]["output"]>;
+  release_state?: Maybe<Scalars["String"]["output"]>;
   repositories?: Maybe<FileRepositories>;
-  score?: Maybe<Scalars['Int']['output']>;
-  study_id?: Maybe<Scalars['String']['output']>;
+  score?: Maybe<Scalars["Int"]["output"]>;
+  study_id?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type FileRepositories = {
-  __typename?: 'fileRepositories';
+  __typename?: "fileRepositories";
   aggregations?: Maybe<FileRepositoriesAggregations>;
   aggsState?: Maybe<AggsState>;
   columnsState?: Maybe<ColumnsState>;
-  extended?: Maybe<Scalars['JSON']['output']>;
+  extended?: Maybe<Scalars["JSON"]["output"]>;
   hits?: Maybe<FileRepositoriesConnection>;
-  mapping?: Maybe<Scalars['JSON']['output']>;
+  mapping?: Maybe<Scalars["JSON"]["output"]>;
   matchBoxState?: Maybe<MatchBoxState>;
 };
 
-
 export type FileRepositoriesAggregationsArgs = {
-  aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  include_missing?: InputMaybe<Scalars['Boolean']['input']>;
+  aggregations_filter_themselves?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  include_missing?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
-
 
 export type FileRepositoriesExtendedArgs = {
-  fields?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  fields?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
 
-
 export type FileRepositoriesHitsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  score?: InputMaybe<Scalars['String']['input']>;
-  searchAfter?: InputMaybe<Scalars['JSON']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  score?: InputMaybe<Scalars["String"]["input"]>;
+  searchAfter?: InputMaybe<Scalars["JSON"]["input"]>;
   sort?: InputMaybe<Array<InputMaybe<Sort>>>;
-  trackTotalHits?: InputMaybe<Scalars['Boolean']['input']>;
+  trackTotalHits?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type FileRepositoriesAggregations = {
-  __typename?: 'fileRepositoriesAggregations';
+  __typename?: "fileRepositoriesAggregations";
   code?: Maybe<Aggregations>;
   country?: Maybe<Aggregations>;
   name?: Maybe<Aggregations>;
@@ -2382,64 +2333,61 @@ export type FileRepositoriesAggregations = {
 };
 
 export type FileRepositoriesConnection = {
-  __typename?: 'fileRepositoriesConnection';
+  __typename?: "fileRepositoriesConnection";
   edges?: Maybe<Array<Maybe<FileRepositoriesEdge>>>;
-  total: Scalars['Int']['output'];
+  total: Scalars["Int"]["output"];
 };
 
 export type FileRepositoriesEdge = {
-  __typename?: 'fileRepositoriesEdge';
+  __typename?: "fileRepositoriesEdge";
   node?: Maybe<FileRepositoriesNode>;
-  searchAfter?: Maybe<Scalars['JSON']['output']>;
+  searchAfter?: Maybe<Scalars["JSON"]["output"]>;
 };
 
 export type FileRepositoriesNode = Node & {
-  __typename?: 'fileRepositoriesNode';
-  code?: Maybe<Scalars['String']['output']>;
-  country?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  name?: Maybe<Scalars['String']['output']>;
-  organization?: Maybe<Scalars['String']['output']>;
-  score?: Maybe<Scalars['Int']['output']>;
-  url?: Maybe<Scalars['String']['output']>;
+  __typename?: "fileRepositoriesNode";
+  code?: Maybe<Scalars["String"]["output"]>;
+  country?: Maybe<Scalars["String"]["output"]>;
+  id: Scalars["ID"]["output"];
+  name?: Maybe<Scalars["String"]["output"]>;
+  organization?: Maybe<Scalars["String"]["output"]>;
+  score?: Maybe<Scalars["Int"]["output"]>;
+  url?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type Sets = {
-  __typename?: 'sets';
+  __typename?: "sets";
   aggregations?: Maybe<SetsAggregations>;
-  extended?: Maybe<Scalars['JSON']['output']>;
+  extended?: Maybe<Scalars["JSON"]["output"]>;
   hits?: Maybe<SetsConnection>;
-  mapping?: Maybe<Scalars['JSON']['output']>;
+  mapping?: Maybe<Scalars["JSON"]["output"]>;
 };
-
 
 export type SetsAggregationsArgs = {
-  aggregations_filter_themselves?: InputMaybe<Scalars['Boolean']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  include_missing?: InputMaybe<Scalars['Boolean']['input']>;
+  aggregations_filter_themselves?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  include_missing?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
-
 
 export type SetsExtendedArgs = {
-  fields?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  fields?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
 
-
 export type SetsHitsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  filters?: InputMaybe<Scalars['JSON']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  score?: InputMaybe<Scalars['String']['input']>;
-  searchAfter?: InputMaybe<Scalars['JSON']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  filters?: InputMaybe<Scalars["JSON"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  score?: InputMaybe<Scalars["String"]["input"]>;
+  searchAfter?: InputMaybe<Scalars["JSON"]["input"]>;
   sort?: InputMaybe<Array<InputMaybe<Sort>>>;
-  trackTotalHits?: InputMaybe<Scalars['Boolean']['input']>;
+  trackTotalHits?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type SetsAggregations = {
-  __typename?: 'setsAggregations';
+  __typename?: "setsAggregations";
   createdAt?: Maybe<NumericAggregations>;
   ids?: Maybe<Aggregations>;
   path?: Maybe<Aggregations>;
@@ -2451,149 +2399,3202 @@ export type SetsAggregations = {
 };
 
 export type SetsConnection = {
-  __typename?: 'setsConnection';
+  __typename?: "setsConnection";
   edges?: Maybe<Array<Maybe<SetsEdge>>>;
-  total: Scalars['Int']['output'];
+  total: Scalars["Int"]["output"];
 };
 
 export type SetsEdge = {
-  __typename?: 'setsEdge';
+  __typename?: "setsEdge";
   node?: Maybe<SetsNode>;
-  searchAfter?: Maybe<Scalars['JSON']['output']>;
+  searchAfter?: Maybe<Scalars["JSON"]["output"]>;
 };
 
 export type SetsNode = Node & {
-  __typename?: 'setsNode';
-  createdAt?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  ids?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  path?: Maybe<Scalars['String']['output']>;
-  score?: Maybe<Scalars['Int']['output']>;
-  setId?: Maybe<Scalars['String']['output']>;
-  size?: Maybe<Scalars['Float']['output']>;
-  sqon?: Maybe<Scalars['JSON']['output']>;
-  type?: Maybe<Scalars['String']['output']>;
-  userId?: Maybe<Scalars['String']['output']>;
+  __typename?: "setsNode";
+  createdAt?: Maybe<Scalars["String"]["output"]>;
+  id: Scalars["ID"]["output"];
+  ids?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
+  path?: Maybe<Scalars["String"]["output"]>;
+  score?: Maybe<Scalars["Int"]["output"]>;
+  setId?: Maybe<Scalars["String"]["output"]>;
+  size?: Maybe<Scalars["Float"]["output"]>;
+  sqon?: Maybe<Scalars["JSON"]["output"]>;
+  type?: Maybe<Scalars["String"]["output"]>;
+  userId?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type ApproveSubmissionMutationVariables = Exact<{
-  programShortName: Scalars['String']['input'];
-  submissionVersion: Scalars['String']['input'];
+  programShortName: Scalars["String"]["input"];
+  submissionVersion: Scalars["String"]["input"];
 }>;
 
-
-export type ApproveSubmissionMutation = { __typename?: 'Mutation', approveClinicalSubmission: boolean };
+export type ApproveSubmissionMutation = {
+  __typename?: "Mutation";
+  approveClinicalSubmission: boolean;
+};
 
 export type ClearClinicalRegistrationMutationVariables = Exact<{
-  shortName: Scalars['String']['input'];
-  registrationId: Scalars['String']['input'];
+  shortName: Scalars["String"]["input"];
+  registrationId: Scalars["String"]["input"];
 }>;
 
-
-export type ClearClinicalRegistrationMutation = { __typename?: 'Mutation', clearClinicalRegistration: boolean };
+export type ClearClinicalRegistrationMutation = {
+  __typename?: "Mutation";
+  clearClinicalRegistration: boolean;
+};
 
 export type ClearSubmissionMutationVariables = Exact<{
-  programShortName: Scalars['String']['input'];
-  submissionVersion: Scalars['String']['input'];
-  fileType?: InputMaybe<Scalars['String']['input']>;
+  programShortName: Scalars["String"]["input"];
+  submissionVersion: Scalars["String"]["input"];
+  fileType?: InputMaybe<Scalars["String"]["input"]>;
 }>;
 
+export type ClearSubmissionMutation = {
+  __typename?: "Mutation";
+  clearClinicalSubmission: {
+    __typename?: "ClinicalSubmissionData";
+    id?: string | null;
+  };
+};
 
-export type ClearSubmissionMutation = { __typename?: 'Mutation', clearClinicalSubmission: { __typename?: 'ClinicalSubmissionData', id?: string | null } };
+export type ClinicalSchemaVersionQueryVariables = Exact<{
+  [key: string]: never;
+}>;
 
-export type ClinicalSchemaVersionQueryVariables = Exact<{ [key: string]: never; }>;
+export type ClinicalSchemaVersionQuery = {
+  __typename?: "Query";
+  clinicalSubmissionSchemaVersion: string;
+};
 
-
-export type ClinicalSchemaVersionQuery = { __typename?: 'Query', clinicalSubmissionSchemaVersion: string };
-
-export type ClinicalSubmissionFragmentFragment = { __typename?: 'ClinicalSubmissionData', programShortName?: string | null, state?: SubmissionState | null, version?: string | null, updatedAt?: any | null, updatedBy?: string | null, clinicalEntities: Array<{ __typename?: 'ClinicalSubmissionEntity', clinicalType: string, batchName?: string | null, creator?: string | null, createdAt?: any | null, stats?: { __typename?: 'ClinicalSubmissionStats', noUpdate: Array<number | null>, new: Array<number | null>, updated: Array<number | null>, errorsFound: Array<number | null> } | null, records: Array<{ __typename?: 'ClinicalRecord', row: number, fields: Array<{ __typename?: 'ClinicalRecordField', name: string, value?: string | null }> } | null>, dataUpdates: Array<{ __typename?: 'ClinicalSubmissionUpdate', row: number, field: string, newValue: string, oldValue: string, donorId: string } | null>, dataWarnings: Array<{ __typename?: 'ClinicalSubmissionSchemaError', message: string, row: number, field: string, value: string, donorId: string } | null>, dataErrors: Array<{ __typename?: 'ClinicalSubmissionDataError', message: string, row: number, field: string, value: string, donorId: string } | null>, schemaErrors: Array<{ __typename?: 'ClinicalSubmissionSchemaError', message: string, row: number, field: string, value: string, donorId: string } | null> } | null>, fileErrors?: Array<{ __typename?: 'ClinicalFileError', message: string, fileNames: Array<string | null>, code: string } | null> | null } & { ' $fragmentName'?: 'ClinicalSubmissionFragmentFragment' };
+export type ClinicalSubmissionFragmentFragment = {
+  __typename?: "ClinicalSubmissionData";
+  programShortName?: string | null;
+  state?: SubmissionState | null;
+  version?: string | null;
+  updatedAt?: any | null;
+  updatedBy?: string | null;
+  clinicalEntities: Array<{
+    __typename?: "ClinicalSubmissionEntity";
+    clinicalType: string;
+    batchName?: string | null;
+    creator?: string | null;
+    createdAt?: any | null;
+    stats?: {
+      __typename?: "ClinicalSubmissionStats";
+      noUpdate: Array<number | null>;
+      new: Array<number | null>;
+      updated: Array<number | null>;
+      errorsFound: Array<number | null>;
+    } | null;
+    records: Array<{
+      __typename?: "ClinicalRecord";
+      row: number;
+      fields: Array<{
+        __typename?: "ClinicalRecordField";
+        name: string;
+        value?: string | null;
+      }>;
+    } | null>;
+    dataUpdates: Array<{
+      __typename?: "ClinicalSubmissionUpdate";
+      row: number;
+      field: string;
+      newValue: string;
+      oldValue: string;
+      donorId: string;
+    } | null>;
+    dataWarnings: Array<{
+      __typename?: "ClinicalSubmissionSchemaError";
+      message: string;
+      row: number;
+      field: string;
+      value: string;
+      donorId: string;
+    } | null>;
+    dataErrors: Array<{
+      __typename?: "ClinicalSubmissionDataError";
+      message: string;
+      row: number;
+      field: string;
+      value: string;
+      donorId: string;
+    } | null>;
+    schemaErrors: Array<{
+      __typename?: "ClinicalSubmissionSchemaError";
+      message: string;
+      row: number;
+      field: string;
+      value: string;
+      donorId: string;
+    } | null>;
+  } | null>;
+  fileErrors?: Array<{
+    __typename?: "ClinicalFileError";
+    message: string;
+    fileNames: Array<string | null>;
+    code: string;
+  } | null> | null;
+} & { " $fragmentName"?: "ClinicalSubmissionFragmentFragment" };
 
 export type ClinicalSubmissionQueryVariables = Exact<{
-  shortName: Scalars['String']['input'];
+  shortName: Scalars["String"]["input"];
 }>;
 
+export type ClinicalSubmissionQuery = {
+  __typename?: "Query";
+  clinicalSubmissions: {
+    __typename?: "ClinicalSubmissionData";
+    programShortName?: string | null;
+    state?: SubmissionState | null;
+    version?: string | null;
+    updatedAt?: any | null;
+    updatedBy?: string | null;
+    clinicalEntities: Array<{
+      __typename?: "ClinicalSubmissionEntity";
+      clinicalType: string;
+      batchName?: string | null;
+      creator?: string | null;
+      createdAt?: any | null;
+      stats?: {
+        __typename?: "ClinicalSubmissionStats";
+        noUpdate: Array<number | null>;
+        new: Array<number | null>;
+        updated: Array<number | null>;
+        errorsFound: Array<number | null>;
+      } | null;
+      records: Array<{
+        __typename?: "ClinicalRecord";
+        row: number;
+        fields: Array<{
+          __typename?: "ClinicalRecordField";
+          name: string;
+          value?: string | null;
+        }>;
+      } | null>;
+      dataUpdates: Array<{
+        __typename?: "ClinicalSubmissionUpdate";
+        row: number;
+        field: string;
+        newValue: string;
+        oldValue: string;
+        donorId: string;
+      } | null>;
+      dataWarnings: Array<{
+        __typename?: "ClinicalSubmissionSchemaError";
+        message: string;
+        row: number;
+        field: string;
+        value: string;
+        donorId: string;
+      } | null>;
+      dataErrors: Array<{
+        __typename?: "ClinicalSubmissionDataError";
+        message: string;
+        row: number;
+        field: string;
+        value: string;
+        donorId: string;
+      } | null>;
+      schemaErrors: Array<{
+        __typename?: "ClinicalSubmissionSchemaError";
+        message: string;
+        row: number;
+        field: string;
+        value: string;
+        donorId: string;
+      } | null>;
+    } | null>;
+    fileErrors?: Array<{
+      __typename?: "ClinicalFileError";
+      message: string;
+      fileNames: Array<string | null>;
+      code: string;
+    } | null> | null;
+  };
+};
 
-export type ClinicalSubmissionQuery = { __typename?: 'Query', clinicalSubmissions: { __typename?: 'ClinicalSubmissionData', programShortName?: string | null, state?: SubmissionState | null, version?: string | null, updatedAt?: any | null, updatedBy?: string | null, clinicalEntities: Array<{ __typename?: 'ClinicalSubmissionEntity', clinicalType: string, batchName?: string | null, creator?: string | null, createdAt?: any | null, stats?: { __typename?: 'ClinicalSubmissionStats', noUpdate: Array<number | null>, new: Array<number | null>, updated: Array<number | null>, errorsFound: Array<number | null> } | null, records: Array<{ __typename?: 'ClinicalRecord', row: number, fields: Array<{ __typename?: 'ClinicalRecordField', name: string, value?: string | null }> } | null>, dataUpdates: Array<{ __typename?: 'ClinicalSubmissionUpdate', row: number, field: string, newValue: string, oldValue: string, donorId: string } | null>, dataWarnings: Array<{ __typename?: 'ClinicalSubmissionSchemaError', message: string, row: number, field: string, value: string, donorId: string } | null>, dataErrors: Array<{ __typename?: 'ClinicalSubmissionDataError', message: string, row: number, field: string, value: string, donorId: string } | null>, schemaErrors: Array<{ __typename?: 'ClinicalSubmissionSchemaError', message: string, row: number, field: string, value: string, donorId: string } | null> } | null>, fileErrors?: Array<{ __typename?: 'ClinicalFileError', message: string, fileNames: Array<string | null>, code: string } | null> | null } };
+export type ClinicalSubmissionSystemDisabledQueryVariables = Exact<{
+  [key: string]: never;
+}>;
 
-export type ClinicalSubmissionSystemDisabledQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ClinicalSubmissionSystemDisabledQuery = { __typename?: 'Query', clinicalSubmissionSystemDisabled: boolean };
+export type ClinicalSubmissionSystemDisabledQuery = {
+  __typename?: "Query";
+  clinicalSubmissionSystemDisabled: boolean;
+};
 
 export type CommitClinicalRegistrationMutationVariables = Exact<{
-  shortName: Scalars['String']['input'];
-  registrationId: Scalars['String']['input'];
+  shortName: Scalars["String"]["input"];
+  registrationId: Scalars["String"]["input"];
 }>;
 
-
-export type CommitClinicalRegistrationMutation = { __typename?: 'Mutation', commitClinicalRegistration: Array<string | null> };
+export type CommitClinicalRegistrationMutation = {
+  __typename?: "Mutation";
+  commitClinicalRegistration: Array<string | null>;
+};
 
 export type GetRegistrationQueryVariables = Exact<{
-  shortName: Scalars['String']['input'];
+  shortName: Scalars["String"]["input"];
 }>;
 
+export type GetRegistrationQuery = {
+  __typename?: "Query";
+  clinicalRegistration: {
+    __typename?: "ClinicalRegistrationData";
+    id?: string | null;
+    programShortName?: string | null;
+    creator?: string | null;
+    fileName?: string | null;
+    createdAt?: any | null;
+    records: Array<{
+      __typename?: "ClinicalRecord";
+      row: number;
+      fields: Array<{
+        __typename?: "ClinicalRecordField";
+        name: string;
+        value?: string | null;
+      }>;
+    } | null>;
+    errors: Array<{
+      __typename?: "ClinicalRegistrationError";
+      type: string;
+      message: string;
+      row: number;
+      field: string;
+      value: string;
+      sampleId?: string | null;
+      donorId: string;
+      specimenId?: string | null;
+    } | null>;
+    fileErrors?: Array<{
+      __typename?: "ClinicalFileError";
+      message: string;
+      fileNames: Array<string | null>;
+      code: string;
+    } | null> | null;
+    newDonors: {
+      __typename?: "ClinicalRegistrationStats";
+      count: number;
+      rows: Array<number | null>;
+    };
+    newSpecimens: {
+      __typename?: "ClinicalRegistrationStats";
+      count: number;
+      rows: Array<number | null>;
+    };
+    newSamples: {
+      __typename?: "ClinicalRegistrationStats";
+      count: number;
+      rows: Array<number | null>;
+    };
+    alreadyRegistered: {
+      __typename?: "ClinicalRegistrationStats";
+      count: number;
+      rows: Array<number | null>;
+    };
+  };
+};
 
-export type GetRegistrationQuery = { __typename?: 'Query', clinicalRegistration: { __typename?: 'ClinicalRegistrationData', id?: string | null, programShortName?: string | null, creator?: string | null, fileName?: string | null, createdAt?: any | null, records: Array<{ __typename?: 'ClinicalRecord', row: number, fields: Array<{ __typename?: 'ClinicalRecordField', name: string, value?: string | null }> } | null>, errors: Array<{ __typename?: 'ClinicalRegistrationError', type: string, message: string, row: number, field: string, value: string, sampleId?: string | null, donorId: string, specimenId?: string | null } | null>, fileErrors?: Array<{ __typename?: 'ClinicalFileError', message: string, fileNames: Array<string | null>, code: string } | null> | null, newDonors: { __typename?: 'ClinicalRegistrationStats', count: number, rows: Array<number | null> }, newSpecimens: { __typename?: 'ClinicalRegistrationStats', count: number, rows: Array<number | null> }, newSamples: { __typename?: 'ClinicalRegistrationStats', count: number, rows: Array<number | null> }, alreadyRegistered: { __typename?: 'ClinicalRegistrationStats', count: number, rows: Array<number | null> } } };
+export type ProgramsListQueryVariables = Exact<{ [key: string]: never }>;
 
-export type ProgramsListQueryVariables = Exact<{ [key: string]: never; }>;
+export type ProgramsListQuery = {
+  __typename?: "Query";
+  programs?: Array<{
+    __typename?: "Program";
+    shortName: string;
+    name?: string | null;
+    cancerTypes?: Array<string | null> | null;
+    countries?: Array<string | null> | null;
+    membershipType?: MembershipType | null;
+    genomicDonors?: number | null;
+    submittedDonors?: number | null;
+    commitmentDonors?: number | null;
+    users?: Array<{
+      __typename?: "ProgramUser";
+      email: string;
+      firstName: string;
+      lastName: string;
+      role: UserRole;
+    } | null> | null;
+  } | null> | null;
+};
 
-
-export type ProgramsListQuery = { __typename?: 'Query', programs?: Array<{ __typename?: 'Program', shortName: string, name?: string | null, cancerTypes?: Array<string | null> | null, countries?: Array<string | null> | null, membershipType?: MembershipType | null, genomicDonors?: number | null, submittedDonors?: number | null, commitmentDonors?: number | null, users?: Array<{ __typename?: 'ProgramUser', email: string, firstName: string, lastName: string, role: UserRole } | null> | null } | null> | null };
-
-export type RegistrationFragment = { __typename?: 'ClinicalRegistrationData', id?: string | null, programShortName?: string | null, creator?: string | null, fileName?: string | null, createdAt?: any | null, records: Array<{ __typename?: 'ClinicalRecord', row: number, fields: Array<{ __typename?: 'ClinicalRecordField', name: string, value?: string | null }> } | null>, errors: Array<{ __typename?: 'ClinicalRegistrationError', type: string, message: string, row: number, field: string, value: string, sampleId?: string | null, donorId: string, specimenId?: string | null } | null>, fileErrors?: Array<{ __typename?: 'ClinicalFileError', message: string, fileNames: Array<string | null>, code: string } | null> | null, newDonors: { __typename?: 'ClinicalRegistrationStats', count: number, rows: Array<number | null> }, newSpecimens: { __typename?: 'ClinicalRegistrationStats', count: number, rows: Array<number | null> }, newSamples: { __typename?: 'ClinicalRegistrationStats', count: number, rows: Array<number | null> }, alreadyRegistered: { __typename?: 'ClinicalRegistrationStats', count: number, rows: Array<number | null> } } & { ' $fragmentName'?: 'RegistrationFragment' };
+export type RegistrationFragment = {
+  __typename?: "ClinicalRegistrationData";
+  id?: string | null;
+  programShortName?: string | null;
+  creator?: string | null;
+  fileName?: string | null;
+  createdAt?: any | null;
+  records: Array<{
+    __typename?: "ClinicalRecord";
+    row: number;
+    fields: Array<{
+      __typename?: "ClinicalRecordField";
+      name: string;
+      value?: string | null;
+    }>;
+  } | null>;
+  errors: Array<{
+    __typename?: "ClinicalRegistrationError";
+    type: string;
+    message: string;
+    row: number;
+    field: string;
+    value: string;
+    sampleId?: string | null;
+    donorId: string;
+    specimenId?: string | null;
+  } | null>;
+  fileErrors?: Array<{
+    __typename?: "ClinicalFileError";
+    message: string;
+    fileNames: Array<string | null>;
+    code: string;
+  } | null> | null;
+  newDonors: {
+    __typename?: "ClinicalRegistrationStats";
+    count: number;
+    rows: Array<number | null>;
+  };
+  newSpecimens: {
+    __typename?: "ClinicalRegistrationStats";
+    count: number;
+    rows: Array<number | null>;
+  };
+  newSamples: {
+    __typename?: "ClinicalRegistrationStats";
+    count: number;
+    rows: Array<number | null>;
+  };
+  alreadyRegistered: {
+    __typename?: "ClinicalRegistrationStats";
+    count: number;
+    rows: Array<number | null>;
+  };
+} & { " $fragmentName"?: "RegistrationFragment" };
 
 export type ReopenSubmissionMutationVariables = Exact<{
-  programShortName: Scalars['String']['input'];
-  submissionVersion: Scalars['String']['input'];
+  programShortName: Scalars["String"]["input"];
+  submissionVersion: Scalars["String"]["input"];
 }>;
 
-
-export type ReopenSubmissionMutation = { __typename?: 'Mutation', clinicalSubmissions: { __typename?: 'ClinicalSubmissionData', programShortName?: string | null, state?: SubmissionState | null, version?: string | null, updatedAt?: any | null, updatedBy?: string | null, clinicalEntities: Array<{ __typename?: 'ClinicalSubmissionEntity', clinicalType: string, batchName?: string | null, creator?: string | null, createdAt?: any | null, stats?: { __typename?: 'ClinicalSubmissionStats', noUpdate: Array<number | null>, new: Array<number | null>, updated: Array<number | null>, errorsFound: Array<number | null> } | null, records: Array<{ __typename?: 'ClinicalRecord', row: number, fields: Array<{ __typename?: 'ClinicalRecordField', name: string, value?: string | null }> } | null>, dataUpdates: Array<{ __typename?: 'ClinicalSubmissionUpdate', row: number, field: string, newValue: string, oldValue: string, donorId: string } | null>, dataWarnings: Array<{ __typename?: 'ClinicalSubmissionSchemaError', message: string, row: number, field: string, value: string, donorId: string } | null>, dataErrors: Array<{ __typename?: 'ClinicalSubmissionDataError', message: string, row: number, field: string, value: string, donorId: string } | null>, schemaErrors: Array<{ __typename?: 'ClinicalSubmissionSchemaError', message: string, row: number, field: string, value: string, donorId: string } | null> } | null>, fileErrors?: Array<{ __typename?: 'ClinicalFileError', message: string, fileNames: Array<string | null>, code: string } | null> | null } };
+export type ReopenSubmissionMutation = {
+  __typename?: "Mutation";
+  clinicalSubmissions: {
+    __typename?: "ClinicalSubmissionData";
+    programShortName?: string | null;
+    state?: SubmissionState | null;
+    version?: string | null;
+    updatedAt?: any | null;
+    updatedBy?: string | null;
+    clinicalEntities: Array<{
+      __typename?: "ClinicalSubmissionEntity";
+      clinicalType: string;
+      batchName?: string | null;
+      creator?: string | null;
+      createdAt?: any | null;
+      stats?: {
+        __typename?: "ClinicalSubmissionStats";
+        noUpdate: Array<number | null>;
+        new: Array<number | null>;
+        updated: Array<number | null>;
+        errorsFound: Array<number | null>;
+      } | null;
+      records: Array<{
+        __typename?: "ClinicalRecord";
+        row: number;
+        fields: Array<{
+          __typename?: "ClinicalRecordField";
+          name: string;
+          value?: string | null;
+        }>;
+      } | null>;
+      dataUpdates: Array<{
+        __typename?: "ClinicalSubmissionUpdate";
+        row: number;
+        field: string;
+        newValue: string;
+        oldValue: string;
+        donorId: string;
+      } | null>;
+      dataWarnings: Array<{
+        __typename?: "ClinicalSubmissionSchemaError";
+        message: string;
+        row: number;
+        field: string;
+        value: string;
+        donorId: string;
+      } | null>;
+      dataErrors: Array<{
+        __typename?: "ClinicalSubmissionDataError";
+        message: string;
+        row: number;
+        field: string;
+        value: string;
+        donorId: string;
+      } | null>;
+      schemaErrors: Array<{
+        __typename?: "ClinicalSubmissionSchemaError";
+        message: string;
+        row: number;
+        field: string;
+        value: string;
+        donorId: string;
+      } | null>;
+    } | null>;
+    fileErrors?: Array<{
+      __typename?: "ClinicalFileError";
+      message: string;
+      fileNames: Array<string | null>;
+      code: string;
+    } | null> | null;
+  };
+};
 
 export type SideMenuQueryVariables = Exact<{
-  shortName: Scalars['String']['input'];
+  activeProgramName: Scalars["String"]["input"];
+  filters: ClinicalInput;
 }>;
 
-
-export type SideMenuQuery = { __typename?: 'Query', programs?: Array<{ __typename?: 'Program', shortName: string } | null> | null, clinicalRegistration: { __typename?: 'ClinicalRegistrationData', programShortName?: string | null, fileName?: string | null, fileErrors?: Array<{ __typename?: 'ClinicalFileError', message: string, code: string } | null> | null, errors: Array<{ __typename?: 'ClinicalRegistrationError', type: string } | null> } };
+export type SideMenuQuery = {
+  __typename?: "Query";
+  programs?: Array<{ __typename?: "Program"; shortName: string } | null> | null;
+  clinicalRegistration: {
+    __typename?: "ClinicalRegistrationData";
+    programShortName?: string | null;
+    fileName?: string | null;
+    fileErrors?: Array<{
+      __typename?: "ClinicalFileError";
+      message: string;
+      code: string;
+    } | null> | null;
+    errors: Array<{
+      __typename?: "ClinicalRegistrationError";
+      type: string;
+    } | null>;
+  };
+  clinicalSubmissions: {
+    __typename?: "ClinicalSubmissionData";
+    programShortName?: string | null;
+    state?: SubmissionState | null;
+    clinicalEntities: Array<{
+      __typename?: "ClinicalSubmissionEntity";
+      schemaErrors: Array<{
+        __typename?: "ClinicalSubmissionSchemaError";
+        row: number;
+      } | null>;
+    } | null>;
+  };
+  clinicalData: {
+    __typename?: "ClinicalData";
+    programShortName: string;
+    clinicalEntities: Array<{
+      __typename?: "ClinicalDataEntities";
+      entityName: string;
+    } | null>;
+    clinicalErrors?: Array<{
+      __typename?: "ClinicalErrors";
+      errors?: Array<{
+        __typename?: "ClinicalErrorRecord";
+        entityName?: string | null;
+      } | null> | null;
+    } | null> | null;
+  };
+};
 
 export type UploadClinicalSubmissionMutationVariables = Exact<{
-  programShortName: Scalars['String']['input'];
-  files?: InputMaybe<Array<Scalars['Upload']['input']> | Scalars['Upload']['input']>;
+  programShortName: Scalars["String"]["input"];
+  files?: InputMaybe<
+    Array<Scalars["Upload"]["input"]> | Scalars["Upload"]["input"]
+  >;
 }>;
 
-
-export type UploadClinicalSubmissionMutation = { __typename?: 'Mutation', uploadClinicalSubmissions: { __typename?: 'ClinicalSubmissionData', programShortName?: string | null, state?: SubmissionState | null, version?: string | null, updatedAt?: any | null, updatedBy?: string | null, clinicalEntities: Array<{ __typename?: 'ClinicalSubmissionEntity', clinicalType: string, batchName?: string | null, creator?: string | null, createdAt?: any | null, stats?: { __typename?: 'ClinicalSubmissionStats', noUpdate: Array<number | null>, new: Array<number | null>, updated: Array<number | null>, errorsFound: Array<number | null> } | null, records: Array<{ __typename?: 'ClinicalRecord', row: number, fields: Array<{ __typename?: 'ClinicalRecordField', name: string, value?: string | null }> } | null>, dataUpdates: Array<{ __typename?: 'ClinicalSubmissionUpdate', row: number, field: string, newValue: string, oldValue: string, donorId: string } | null>, dataWarnings: Array<{ __typename?: 'ClinicalSubmissionSchemaError', message: string, row: number, field: string, value: string, donorId: string } | null>, dataErrors: Array<{ __typename?: 'ClinicalSubmissionDataError', message: string, row: number, field: string, value: string, donorId: string } | null>, schemaErrors: Array<{ __typename?: 'ClinicalSubmissionSchemaError', message: string, row: number, field: string, value: string, donorId: string } | null> } | null>, fileErrors?: Array<{ __typename?: 'ClinicalFileError', message: string, fileNames: Array<string | null>, code: string } | null> | null } };
+export type UploadClinicalSubmissionMutation = {
+  __typename?: "Mutation";
+  uploadClinicalSubmissions: {
+    __typename?: "ClinicalSubmissionData";
+    programShortName?: string | null;
+    state?: SubmissionState | null;
+    version?: string | null;
+    updatedAt?: any | null;
+    updatedBy?: string | null;
+    clinicalEntities: Array<{
+      __typename?: "ClinicalSubmissionEntity";
+      clinicalType: string;
+      batchName?: string | null;
+      creator?: string | null;
+      createdAt?: any | null;
+      stats?: {
+        __typename?: "ClinicalSubmissionStats";
+        noUpdate: Array<number | null>;
+        new: Array<number | null>;
+        updated: Array<number | null>;
+        errorsFound: Array<number | null>;
+      } | null;
+      records: Array<{
+        __typename?: "ClinicalRecord";
+        row: number;
+        fields: Array<{
+          __typename?: "ClinicalRecordField";
+          name: string;
+          value?: string | null;
+        }>;
+      } | null>;
+      dataUpdates: Array<{
+        __typename?: "ClinicalSubmissionUpdate";
+        row: number;
+        field: string;
+        newValue: string;
+        oldValue: string;
+        donorId: string;
+      } | null>;
+      dataWarnings: Array<{
+        __typename?: "ClinicalSubmissionSchemaError";
+        message: string;
+        row: number;
+        field: string;
+        value: string;
+        donorId: string;
+      } | null>;
+      dataErrors: Array<{
+        __typename?: "ClinicalSubmissionDataError";
+        message: string;
+        row: number;
+        field: string;
+        value: string;
+        donorId: string;
+      } | null>;
+      schemaErrors: Array<{
+        __typename?: "ClinicalSubmissionSchemaError";
+        message: string;
+        row: number;
+        field: string;
+        value: string;
+        donorId: string;
+      } | null>;
+    } | null>;
+    fileErrors?: Array<{
+      __typename?: "ClinicalFileError";
+      message: string;
+      fileNames: Array<string | null>;
+      code: string;
+    } | null> | null;
+  };
+};
 
 export type UploadRegistrationMutationVariables = Exact<{
-  shortName: Scalars['String']['input'];
-  registrationFile: Scalars['Upload']['input'];
+  shortName: Scalars["String"]["input"];
+  registrationFile: Scalars["Upload"]["input"];
 }>;
 
-
-export type UploadRegistrationMutation = { __typename?: 'Mutation', uploadClinicalRegistration: { __typename?: 'ClinicalRegistrationData', id?: string | null, programShortName?: string | null, creator?: string | null, fileName?: string | null, createdAt?: any | null, records: Array<{ __typename?: 'ClinicalRecord', row: number, fields: Array<{ __typename?: 'ClinicalRecordField', name: string, value?: string | null }> } | null>, errors: Array<{ __typename?: 'ClinicalRegistrationError', type: string, message: string, row: number, field: string, value: string, sampleId?: string | null, donorId: string, specimenId?: string | null } | null>, fileErrors?: Array<{ __typename?: 'ClinicalFileError', message: string, fileNames: Array<string | null>, code: string } | null> | null, newDonors: { __typename?: 'ClinicalRegistrationStats', count: number, rows: Array<number | null> }, newSpecimens: { __typename?: 'ClinicalRegistrationStats', count: number, rows: Array<number | null> }, newSamples: { __typename?: 'ClinicalRegistrationStats', count: number, rows: Array<number | null> }, alreadyRegistered: { __typename?: 'ClinicalRegistrationStats', count: number, rows: Array<number | null> } } };
+export type UploadRegistrationMutation = {
+  __typename?: "Mutation";
+  uploadClinicalRegistration: {
+    __typename?: "ClinicalRegistrationData";
+    id?: string | null;
+    programShortName?: string | null;
+    creator?: string | null;
+    fileName?: string | null;
+    createdAt?: any | null;
+    records: Array<{
+      __typename?: "ClinicalRecord";
+      row: number;
+      fields: Array<{
+        __typename?: "ClinicalRecordField";
+        name: string;
+        value?: string | null;
+      }>;
+    } | null>;
+    errors: Array<{
+      __typename?: "ClinicalRegistrationError";
+      type: string;
+      message: string;
+      row: number;
+      field: string;
+      value: string;
+      sampleId?: string | null;
+      donorId: string;
+      specimenId?: string | null;
+    } | null>;
+    fileErrors?: Array<{
+      __typename?: "ClinicalFileError";
+      message: string;
+      fileNames: Array<string | null>;
+      code: string;
+    } | null> | null;
+    newDonors: {
+      __typename?: "ClinicalRegistrationStats";
+      count: number;
+      rows: Array<number | null>;
+    };
+    newSpecimens: {
+      __typename?: "ClinicalRegistrationStats";
+      count: number;
+      rows: Array<number | null>;
+    };
+    newSamples: {
+      __typename?: "ClinicalRegistrationStats";
+      count: number;
+      rows: Array<number | null>;
+    };
+    alreadyRegistered: {
+      __typename?: "ClinicalRegistrationStats";
+      count: number;
+      rows: Array<number | null>;
+    };
+  };
+};
 
 export type ValidateSubmissionMutationVariables = Exact<{
-  programShortName: Scalars['String']['input'];
-  submissionVersion: Scalars['String']['input'];
+  programShortName: Scalars["String"]["input"];
+  submissionVersion: Scalars["String"]["input"];
 }>;
 
+export type ValidateSubmissionMutation = {
+  __typename?: "Mutation";
+  validateClinicalSubmissions: {
+    __typename?: "ClinicalSubmissionData";
+    programShortName?: string | null;
+    state?: SubmissionState | null;
+    version?: string | null;
+    updatedAt?: any | null;
+    updatedBy?: string | null;
+    clinicalEntities: Array<{
+      __typename?: "ClinicalSubmissionEntity";
+      clinicalType: string;
+      batchName?: string | null;
+      creator?: string | null;
+      createdAt?: any | null;
+      stats?: {
+        __typename?: "ClinicalSubmissionStats";
+        noUpdate: Array<number | null>;
+        new: Array<number | null>;
+        updated: Array<number | null>;
+        errorsFound: Array<number | null>;
+      } | null;
+      records: Array<{
+        __typename?: "ClinicalRecord";
+        row: number;
+        fields: Array<{
+          __typename?: "ClinicalRecordField";
+          name: string;
+          value?: string | null;
+        }>;
+      } | null>;
+      dataUpdates: Array<{
+        __typename?: "ClinicalSubmissionUpdate";
+        row: number;
+        field: string;
+        newValue: string;
+        oldValue: string;
+        donorId: string;
+      } | null>;
+      dataWarnings: Array<{
+        __typename?: "ClinicalSubmissionSchemaError";
+        message: string;
+        row: number;
+        field: string;
+        value: string;
+        donorId: string;
+      } | null>;
+      dataErrors: Array<{
+        __typename?: "ClinicalSubmissionDataError";
+        message: string;
+        row: number;
+        field: string;
+        value: string;
+        donorId: string;
+      } | null>;
+      schemaErrors: Array<{
+        __typename?: "ClinicalSubmissionSchemaError";
+        message: string;
+        row: number;
+        field: string;
+        value: string;
+        donorId: string;
+      } | null>;
+    } | null>;
+    fileErrors?: Array<{
+      __typename?: "ClinicalFileError";
+      message: string;
+      fileNames: Array<string | null>;
+      code: string;
+    } | null> | null;
+  };
+};
 
-export type ValidateSubmissionMutation = { __typename?: 'Mutation', validateClinicalSubmissions: { __typename?: 'ClinicalSubmissionData', programShortName?: string | null, state?: SubmissionState | null, version?: string | null, updatedAt?: any | null, updatedBy?: string | null, clinicalEntities: Array<{ __typename?: 'ClinicalSubmissionEntity', clinicalType: string, batchName?: string | null, creator?: string | null, createdAt?: any | null, stats?: { __typename?: 'ClinicalSubmissionStats', noUpdate: Array<number | null>, new: Array<number | null>, updated: Array<number | null>, errorsFound: Array<number | null> } | null, records: Array<{ __typename?: 'ClinicalRecord', row: number, fields: Array<{ __typename?: 'ClinicalRecordField', name: string, value?: string | null }> } | null>, dataUpdates: Array<{ __typename?: 'ClinicalSubmissionUpdate', row: number, field: string, newValue: string, oldValue: string, donorId: string } | null>, dataWarnings: Array<{ __typename?: 'ClinicalSubmissionSchemaError', message: string, row: number, field: string, value: string, donorId: string } | null>, dataErrors: Array<{ __typename?: 'ClinicalSubmissionDataError', message: string, row: number, field: string, value: string, donorId: string } | null>, schemaErrors: Array<{ __typename?: 'ClinicalSubmissionSchemaError', message: string, row: number, field: string, value: string, donorId: string } | null> } | null>, fileErrors?: Array<{ __typename?: 'ClinicalFileError', message: string, fileNames: Array<string | null>, code: string } | null> | null } };
-
-export const ClinicalSubmissionFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ClinicalSubmissionFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ClinicalSubmissionData"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"programShortName"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"version"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedBy"}},{"kind":"Field","name":{"kind":"Name","value":"clinicalEntities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clinicalType"}},{"kind":"Field","name":{"kind":"Name","value":"batchName"}},{"kind":"Field","name":{"kind":"Name","value":"creator"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"noUpdate"}},{"kind":"Field","name":{"kind":"Name","value":"new"}},{"kind":"Field","name":{"kind":"Name","value":"updated"}},{"kind":"Field","name":{"kind":"Name","value":"errorsFound"}}]}},{"kind":"Field","name":{"kind":"Name","value":"records"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"dataUpdates"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"newValue"}},{"kind":"Field","name":{"kind":"Name","value":"oldValue"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dataWarnings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dataErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"schemaErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"fileErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"fileNames"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]} as unknown as DocumentNode<ClinicalSubmissionFragmentFragment, unknown>;
-export const RegistrationFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Registration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ClinicalRegistrationData"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"programShortName"}},{"kind":"Field","name":{"kind":"Name","value":"creator"}},{"kind":"Field","name":{"kind":"Name","value":"fileName"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"records"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"errors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"sampleId"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}},{"kind":"Field","name":{"kind":"Name","value":"specimenId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"fileErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"fileNames"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}},{"kind":"Field","name":{"kind":"Name","value":"newDonors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"newSpecimens"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"newSamples"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alreadyRegistered"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"rows"}}]}}]}}]} as unknown as DocumentNode<RegistrationFragment, unknown>;
-export const ApproveSubmissionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ApproveSubmission"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"programShortName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"submissionVersion"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"approveClinicalSubmission"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"programShortName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"programShortName"}}},{"kind":"Argument","name":{"kind":"Name","value":"version"},"value":{"kind":"Variable","name":{"kind":"Name","value":"submissionVersion"}}}]}]}}]} as unknown as DocumentNode<ApproveSubmissionMutation, ApproveSubmissionMutationVariables>;
-export const ClearClinicalRegistrationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ClearClinicalRegistration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"shortName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"registrationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clearClinicalRegistration"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"shortName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"shortName"}}},{"kind":"Argument","name":{"kind":"Name","value":"registrationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"registrationId"}}}]}]}}]} as unknown as DocumentNode<ClearClinicalRegistrationMutation, ClearClinicalRegistrationMutationVariables>;
-export const ClearSubmissionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ClearSubmission"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"programShortName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"submissionVersion"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"fileType"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clearClinicalSubmission"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"programShortName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"programShortName"}}},{"kind":"Argument","name":{"kind":"Name","value":"version"},"value":{"kind":"Variable","name":{"kind":"Name","value":"submissionVersion"}}},{"kind":"Argument","name":{"kind":"Name","value":"fileType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fileType"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<ClearSubmissionMutation, ClearSubmissionMutationVariables>;
-export const ClinicalSchemaVersionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ClinicalSchemaVersion"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clinicalSubmissionSchemaVersion"}}]}}]} as unknown as DocumentNode<ClinicalSchemaVersionQuery, ClinicalSchemaVersionQueryVariables>;
-export const ClinicalSubmissionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ClinicalSubmission"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"shortName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clinicalSubmissions"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"programShortName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"shortName"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"programShortName"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"version"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedBy"}},{"kind":"Field","name":{"kind":"Name","value":"clinicalEntities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clinicalType"}},{"kind":"Field","name":{"kind":"Name","value":"batchName"}},{"kind":"Field","name":{"kind":"Name","value":"creator"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"noUpdate"}},{"kind":"Field","name":{"kind":"Name","value":"new"}},{"kind":"Field","name":{"kind":"Name","value":"updated"}},{"kind":"Field","name":{"kind":"Name","value":"errorsFound"}}]}},{"kind":"Field","name":{"kind":"Name","value":"records"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"dataUpdates"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"newValue"}},{"kind":"Field","name":{"kind":"Name","value":"oldValue"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dataWarnings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dataErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"schemaErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"fileErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"fileNames"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]} as unknown as DocumentNode<ClinicalSubmissionQuery, ClinicalSubmissionQueryVariables>;
-export const ClinicalSubmissionSystemDisabledDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ClinicalSubmissionSystemDisabled"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clinicalSubmissionSystemDisabled"}}]}}]} as unknown as DocumentNode<ClinicalSubmissionSystemDisabledQuery, ClinicalSubmissionSystemDisabledQueryVariables>;
-export const CommitClinicalRegistrationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CommitClinicalRegistration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"shortName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"registrationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"commitClinicalRegistration"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"shortName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"shortName"}}},{"kind":"Argument","name":{"kind":"Name","value":"registrationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"registrationId"}}}]}]}}]} as unknown as DocumentNode<CommitClinicalRegistrationMutation, CommitClinicalRegistrationMutationVariables>;
-export const GetRegistrationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRegistration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"shortName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clinicalRegistration"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"shortName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"shortName"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"programShortName"}},{"kind":"Field","name":{"kind":"Name","value":"creator"}},{"kind":"Field","name":{"kind":"Name","value":"fileName"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"records"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"errors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"sampleId"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}},{"kind":"Field","name":{"kind":"Name","value":"specimenId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"fileErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"fileNames"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}},{"kind":"Field","name":{"kind":"Name","value":"newDonors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"newSpecimens"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"newSamples"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alreadyRegistered"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"rows"}}]}}]}}]}}]} as unknown as DocumentNode<GetRegistrationQuery, GetRegistrationQueryVariables>;
-export const ProgramsListDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ProgramsList"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"programs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"shortName"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"cancerTypes"}},{"kind":"Field","name":{"kind":"Name","value":"countries"}},{"kind":"Field","name":{"kind":"Name","value":"membershipType"}},{"kind":"Field","name":{"kind":"Name","value":"genomicDonors"}},{"kind":"Field","name":{"kind":"Name","value":"submittedDonors"}},{"kind":"Field","name":{"kind":"Name","value":"commitmentDonors"}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}}]}}]}}]} as unknown as DocumentNode<ProgramsListQuery, ProgramsListQueryVariables>;
-export const ReopenSubmissionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ReopenSubmission"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"programShortName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"submissionVersion"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"clinicalSubmissions"},"name":{"kind":"Name","value":"reopenClinicalSubmission"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"programShortName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"programShortName"}}},{"kind":"Argument","name":{"kind":"Name","value":"version"},"value":{"kind":"Variable","name":{"kind":"Name","value":"submissionVersion"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"programShortName"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"version"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedBy"}},{"kind":"Field","name":{"kind":"Name","value":"clinicalEntities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clinicalType"}},{"kind":"Field","name":{"kind":"Name","value":"batchName"}},{"kind":"Field","name":{"kind":"Name","value":"creator"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"noUpdate"}},{"kind":"Field","name":{"kind":"Name","value":"new"}},{"kind":"Field","name":{"kind":"Name","value":"updated"}},{"kind":"Field","name":{"kind":"Name","value":"errorsFound"}}]}},{"kind":"Field","name":{"kind":"Name","value":"records"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"dataUpdates"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"newValue"}},{"kind":"Field","name":{"kind":"Name","value":"oldValue"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dataWarnings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dataErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"schemaErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"fileErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"fileNames"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]} as unknown as DocumentNode<ReopenSubmissionMutation, ReopenSubmissionMutationVariables>;
-export const SideMenuDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SideMenu"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"shortName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"programs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"clinicalRegistration"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"shortName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"shortName"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"programShortName"}},{"kind":"Field","name":{"kind":"Name","value":"fileErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}},{"kind":"Field","name":{"kind":"Name","value":"fileName"}},{"kind":"Field","name":{"kind":"Name","value":"errors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]}}]} as unknown as DocumentNode<SideMenuQuery, SideMenuQueryVariables>;
-export const UploadClinicalSubmissionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UploadClinicalSubmission"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"programShortName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"files"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Upload"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uploadClinicalSubmissions"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"programShortName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"programShortName"}}},{"kind":"Argument","name":{"kind":"Name","value":"clinicalFiles"},"value":{"kind":"Variable","name":{"kind":"Name","value":"files"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"programShortName"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"version"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedBy"}},{"kind":"Field","name":{"kind":"Name","value":"clinicalEntities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clinicalType"}},{"kind":"Field","name":{"kind":"Name","value":"batchName"}},{"kind":"Field","name":{"kind":"Name","value":"creator"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"noUpdate"}},{"kind":"Field","name":{"kind":"Name","value":"new"}},{"kind":"Field","name":{"kind":"Name","value":"updated"}},{"kind":"Field","name":{"kind":"Name","value":"errorsFound"}}]}},{"kind":"Field","name":{"kind":"Name","value":"records"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"dataUpdates"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"newValue"}},{"kind":"Field","name":{"kind":"Name","value":"oldValue"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dataWarnings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dataErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"schemaErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"fileErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"fileNames"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]} as unknown as DocumentNode<UploadClinicalSubmissionMutation, UploadClinicalSubmissionMutationVariables>;
-export const UploadRegistrationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UploadRegistration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"shortName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"registrationFile"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Upload"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uploadClinicalRegistration"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"shortName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"shortName"}}},{"kind":"Argument","name":{"kind":"Name","value":"registrationFile"},"value":{"kind":"Variable","name":{"kind":"Name","value":"registrationFile"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"programShortName"}},{"kind":"Field","name":{"kind":"Name","value":"creator"}},{"kind":"Field","name":{"kind":"Name","value":"fileName"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"records"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"errors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"sampleId"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}},{"kind":"Field","name":{"kind":"Name","value":"specimenId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"fileErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"fileNames"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}},{"kind":"Field","name":{"kind":"Name","value":"newDonors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"newSpecimens"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"newSamples"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alreadyRegistered"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"rows"}}]}}]}}]}}]} as unknown as DocumentNode<UploadRegistrationMutation, UploadRegistrationMutationVariables>;
-export const ValidateSubmissionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ValidateSubmission"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"programShortName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"submissionVersion"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"validateClinicalSubmissions"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"programShortName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"programShortName"}}},{"kind":"Argument","name":{"kind":"Name","value":"version"},"value":{"kind":"Variable","name":{"kind":"Name","value":"submissionVersion"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"programShortName"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"version"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedBy"}},{"kind":"Field","name":{"kind":"Name","value":"clinicalEntities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clinicalType"}},{"kind":"Field","name":{"kind":"Name","value":"batchName"}},{"kind":"Field","name":{"kind":"Name","value":"creator"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"noUpdate"}},{"kind":"Field","name":{"kind":"Name","value":"new"}},{"kind":"Field","name":{"kind":"Name","value":"updated"}},{"kind":"Field","name":{"kind":"Name","value":"errorsFound"}}]}},{"kind":"Field","name":{"kind":"Name","value":"records"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"dataUpdates"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"newValue"}},{"kind":"Field","name":{"kind":"Name","value":"oldValue"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dataWarnings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dataErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"schemaErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"row"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"donorId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"fileErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"fileNames"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]} as unknown as DocumentNode<ValidateSubmissionMutation, ValidateSubmissionMutationVariables>;
+export const ClinicalSubmissionFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ClinicalSubmissionFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "ClinicalSubmissionData" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "programShortName" } },
+          { kind: "Field", name: { kind: "Name", value: "state" } },
+          { kind: "Field", name: { kind: "Name", value: "version" } },
+          { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+          { kind: "Field", name: { kind: "Name", value: "updatedBy" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "clinicalEntities" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "clinicalType" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "batchName" } },
+                { kind: "Field", name: { kind: "Name", value: "creator" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "stats" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "noUpdate" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "new" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updated" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "errorsFound" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "records" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "row" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "fields" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "dataUpdates" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "row" } },
+                      { kind: "Field", name: { kind: "Name", value: "field" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "newValue" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "oldValue" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "donorId" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "dataWarnings" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "row" } },
+                      { kind: "Field", name: { kind: "Name", value: "field" } },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "donorId" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "dataErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "row" } },
+                      { kind: "Field", name: { kind: "Name", value: "field" } },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "donorId" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "schemaErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "row" } },
+                      { kind: "Field", name: { kind: "Name", value: "field" } },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "donorId" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "fileErrors" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "message" } },
+                { kind: "Field", name: { kind: "Name", value: "fileNames" } },
+                { kind: "Field", name: { kind: "Name", value: "code" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ClinicalSubmissionFragmentFragment, unknown>;
+export const RegistrationFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "Registration" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "ClinicalRegistrationData" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "programShortName" } },
+          { kind: "Field", name: { kind: "Name", value: "creator" } },
+          { kind: "Field", name: { kind: "Name", value: "fileName" } },
+          { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "records" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "row" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "fields" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "errors" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "type" } },
+                { kind: "Field", name: { kind: "Name", value: "message" } },
+                { kind: "Field", name: { kind: "Name", value: "row" } },
+                { kind: "Field", name: { kind: "Name", value: "field" } },
+                { kind: "Field", name: { kind: "Name", value: "value" } },
+                { kind: "Field", name: { kind: "Name", value: "sampleId" } },
+                { kind: "Field", name: { kind: "Name", value: "donorId" } },
+                { kind: "Field", name: { kind: "Name", value: "specimenId" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "fileErrors" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "message" } },
+                { kind: "Field", name: { kind: "Name", value: "fileNames" } },
+                { kind: "Field", name: { kind: "Name", value: "code" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "newDonors" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+                { kind: "Field", name: { kind: "Name", value: "rows" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "newSpecimens" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+                { kind: "Field", name: { kind: "Name", value: "rows" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "newSamples" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+                { kind: "Field", name: { kind: "Name", value: "rows" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "alreadyRegistered" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+                { kind: "Field", name: { kind: "Name", value: "rows" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<RegistrationFragment, unknown>;
+export const ApproveSubmissionDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "ApproveSubmission" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "programShortName" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "submissionVersion" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "approveClinicalSubmission" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "programShortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "version" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "submissionVersion" },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ApproveSubmissionMutation,
+  ApproveSubmissionMutationVariables
+>;
+export const ClearClinicalRegistrationDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "ClearClinicalRegistration" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "shortName" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "registrationId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "clearClinicalRegistration" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "shortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "shortName" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "registrationId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "registrationId" },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ClearClinicalRegistrationMutation,
+  ClearClinicalRegistrationMutationVariables
+>;
+export const ClearSubmissionDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "ClearSubmission" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "programShortName" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "submissionVersion" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "fileType" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "clearClinicalSubmission" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "programShortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "version" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "submissionVersion" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "fileType" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "fileType" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ClearSubmissionMutation,
+  ClearSubmissionMutationVariables
+>;
+export const ClinicalSchemaVersionDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "ClinicalSchemaVersion" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "clinicalSubmissionSchemaVersion" },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ClinicalSchemaVersionQuery,
+  ClinicalSchemaVersionQueryVariables
+>;
+export const ClinicalSubmissionDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "ClinicalSubmission" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "shortName" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "clinicalSubmissions" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "programShortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "shortName" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "state" } },
+                { kind: "Field", name: { kind: "Name", value: "version" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedBy" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "clinicalEntities" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "clinicalType" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "batchName" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "stats" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "noUpdate" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "new" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updated" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "errorsFound" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "records" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "fields" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "dataUpdates" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "field" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "newValue" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "oldValue" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "donorId" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "dataWarnings" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "message" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "field" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "donorId" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "dataErrors" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "message" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "field" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "donorId" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "schemaErrors" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "message" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "field" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "donorId" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "fileErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "fileNames" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ClinicalSubmissionQuery,
+  ClinicalSubmissionQueryVariables
+>;
+export const ClinicalSubmissionSystemDisabledDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "ClinicalSubmissionSystemDisabled" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "clinicalSubmissionSystemDisabled" },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ClinicalSubmissionSystemDisabledQuery,
+  ClinicalSubmissionSystemDisabledQueryVariables
+>;
+export const CommitClinicalRegistrationDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CommitClinicalRegistration" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "shortName" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "registrationId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "commitClinicalRegistration" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "shortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "shortName" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "registrationId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "registrationId" },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CommitClinicalRegistrationMutation,
+  CommitClinicalRegistrationMutationVariables
+>;
+export const GetRegistrationDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetRegistration" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "shortName" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "clinicalRegistration" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "shortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "shortName" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "creator" } },
+                { kind: "Field", name: { kind: "Name", value: "fileName" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "records" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "row" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "fields" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "errors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "type" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "row" } },
+                      { kind: "Field", name: { kind: "Name", value: "field" } },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "sampleId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "donorId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "specimenId" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "fileErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "fileNames" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "newDonors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "count" } },
+                      { kind: "Field", name: { kind: "Name", value: "rows" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "newSpecimens" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "count" } },
+                      { kind: "Field", name: { kind: "Name", value: "rows" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "newSamples" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "count" } },
+                      { kind: "Field", name: { kind: "Name", value: "rows" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "alreadyRegistered" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "count" } },
+                      { kind: "Field", name: { kind: "Name", value: "rows" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetRegistrationQuery,
+  GetRegistrationQueryVariables
+>;
+export const ProgramsListDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "ProgramsList" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "programs" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "shortName" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                { kind: "Field", name: { kind: "Name", value: "cancerTypes" } },
+                { kind: "Field", name: { kind: "Name", value: "countries" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "membershipType" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "genomicDonors" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "submittedDonors" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "commitmentDonors" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "users" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "firstName" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "lastName" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "role" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ProgramsListQuery, ProgramsListQueryVariables>;
+export const ReopenSubmissionDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "ReopenSubmission" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "programShortName" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "submissionVersion" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            alias: { kind: "Name", value: "clinicalSubmissions" },
+            name: { kind: "Name", value: "reopenClinicalSubmission" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "programShortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "version" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "submissionVersion" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "state" } },
+                { kind: "Field", name: { kind: "Name", value: "version" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedBy" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "clinicalEntities" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "clinicalType" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "batchName" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "stats" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "noUpdate" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "new" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updated" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "errorsFound" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "records" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "fields" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "dataUpdates" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "field" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "newValue" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "oldValue" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "donorId" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "dataWarnings" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "message" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "field" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "donorId" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "dataErrors" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "message" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "field" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "donorId" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "schemaErrors" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "message" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "field" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "donorId" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "fileErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "fileNames" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ReopenSubmissionMutation,
+  ReopenSubmissionMutationVariables
+>;
+export const SideMenuDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "SideMenu" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "activeProgramName" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "filters" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "ClinicalInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "programs" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "shortName" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "clinicalRegistration" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "shortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "activeProgramName" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "fileErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "fileName" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "errors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "type" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "clinicalSubmissions" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "programShortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "activeProgramName" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "state" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "clinicalEntities" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "schemaErrors" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "clinicalData" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "programShortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "activeProgramName" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "filters" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "filters" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "clinicalEntities" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "entityName" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "clinicalErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "errors" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "entityName" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SideMenuQuery, SideMenuQueryVariables>;
+export const UploadClinicalSubmissionDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "UploadClinicalSubmission" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "programShortName" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "files" },
+          },
+          type: {
+            kind: "ListType",
+            type: {
+              kind: "NonNullType",
+              type: {
+                kind: "NamedType",
+                name: { kind: "Name", value: "Upload" },
+              },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "uploadClinicalSubmissions" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "programShortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "clinicalFiles" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "files" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "state" } },
+                { kind: "Field", name: { kind: "Name", value: "version" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedBy" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "clinicalEntities" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "clinicalType" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "batchName" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "stats" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "noUpdate" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "new" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updated" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "errorsFound" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "records" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "fields" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "dataUpdates" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "field" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "newValue" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "oldValue" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "donorId" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "dataWarnings" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "message" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "field" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "donorId" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "dataErrors" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "message" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "field" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "donorId" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "schemaErrors" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "message" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "field" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "donorId" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "fileErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "fileNames" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  UploadClinicalSubmissionMutation,
+  UploadClinicalSubmissionMutationVariables
+>;
+export const UploadRegistrationDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "UploadRegistration" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "shortName" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "registrationFile" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "Upload" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "uploadClinicalRegistration" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "shortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "shortName" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "registrationFile" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "registrationFile" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "creator" } },
+                { kind: "Field", name: { kind: "Name", value: "fileName" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "records" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "row" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "fields" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "errors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "type" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "row" } },
+                      { kind: "Field", name: { kind: "Name", value: "field" } },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "sampleId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "donorId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "specimenId" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "fileErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "fileNames" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "newDonors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "count" } },
+                      { kind: "Field", name: { kind: "Name", value: "rows" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "newSpecimens" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "count" } },
+                      { kind: "Field", name: { kind: "Name", value: "rows" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "newSamples" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "count" } },
+                      { kind: "Field", name: { kind: "Name", value: "rows" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "alreadyRegistered" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "count" } },
+                      { kind: "Field", name: { kind: "Name", value: "rows" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  UploadRegistrationMutation,
+  UploadRegistrationMutationVariables
+>;
+export const ValidateSubmissionDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "ValidateSubmission" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "programShortName" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "submissionVersion" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "validateClinicalSubmissions" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "programShortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "version" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "submissionVersion" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "state" } },
+                { kind: "Field", name: { kind: "Name", value: "version" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedBy" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "clinicalEntities" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "clinicalType" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "batchName" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "stats" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "noUpdate" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "new" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updated" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "errorsFound" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "records" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "fields" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "dataUpdates" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "field" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "newValue" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "oldValue" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "donorId" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "dataWarnings" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "message" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "field" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "donorId" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "dataErrors" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "message" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "field" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "donorId" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "schemaErrors" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "message" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "field" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "donorId" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "fileErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "fileNames" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ValidateSubmissionMutation,
+  ValidateSubmissionMutationVariables
+>;
