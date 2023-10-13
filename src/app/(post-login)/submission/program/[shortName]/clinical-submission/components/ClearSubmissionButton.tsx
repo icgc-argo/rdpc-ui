@@ -36,11 +36,11 @@ const ClearSubmissionButton: FC<ClearSubmissionButtonProps> = ({
   clearSubmission,
   refetchSubmission,
 }) => {
-  const handleSubmissionClear = async () => {
-    const toaster = useToaster();
-    const commonToaster = useCommonToasters();
-    const { setGlobalLoading } = useGlobalLoader();
+  const toaster = useToaster();
+  const commonToaster = useCommonToasters();
+  const { setGlobalLoading } = useGlobalLoader();
 
+  const handleSubmissionClear = async () => {
     setGlobalLoading(true);
     await sleep(0);
     try {

@@ -61,8 +61,8 @@ export const VerticalTabsSection: FC<{
           height: 100%;
         `}
       >
-        {fileStates?.filter(notNull).map((fileState) => (
-          <Link href={createURL(fileState.clinicalType)}>
+        {fileStates?.filter(notNull).map((fileState, index) => (
+          <Link href={createURL(fileState.clinicalType)} key={index}>
             <VerticalTabs.Item
               key={fileState.clinicalType}
               active={selectedFile?.clinicalType === fileState.clinicalType}

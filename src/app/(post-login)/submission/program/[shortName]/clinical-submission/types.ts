@@ -18,33 +18,6 @@
  */
 export type { ClinicalSubmissionQuery as GqlClinicalSubmissionQuery } from "@/__generated__/graphql";
 
-// export type ClinicalSubmission = ClinicalSubmissionQuery["clinicalSubmissions"];
-
-// export type ClinicalSubmissionState =
-//   ClinicalSubmissionQuery["clinicalSubmissions"]["state"];
-
-// type Status = "UPDATE" | "SUCCESS" | "ERROR" | "SUCCESS" | "WARNING" | "NONE";
-
-// // sometimes we use GQL data types other times we use the converted local types, they will conflict
-// // because gqlClinicalEntityToClinicalSubmissionEntityFile diverts from the gql object
-// export type ClinicalSubmissionEntity =
-//   ClinicalSubmissionQuery["clinicalSubmissions"]["clinicalEntities"][0] & {
-//     fileName: string;
-//     batchName?: string;
-//     displayName: string;
-//     recordsCount?: number;
-//     status: Status;
-//     createdAt: string;
-//     creator: string;
-//   };
-
-// export type ClinicalEntities = Array<ClinicalSubmissionEntity>;
-// export type ClinicalEntityRecord = ClinicalSubmissionEntity;
-
-// GQL Resp
-
-//
-
 export type ClinicalSubmissionRecord = {
   row: number;
   fields: {
