@@ -49,10 +49,6 @@ const FileRecordTable = ({
 
   const { records, stats, dataWarnings } = file;
 
-  const fields: ClinicalEntity["records"][0]["fields"] = records.length
-    ? records[0].fields
-    : [];
-
   const tableColumns = getTableColumns(
     file,
     isPendingApproval,

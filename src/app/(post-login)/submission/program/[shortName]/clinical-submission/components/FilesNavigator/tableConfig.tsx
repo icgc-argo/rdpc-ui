@@ -80,7 +80,9 @@ export const getTableColumns: GetTableColumns = (
   isDiffPreview,
 ) => {
   const { stats, records, dataUpdates } = file;
-  const directlyMappedFields = records[0].fields.map(({ name: fieldName }) => ({
+
+  const fields = records.length ? records[0].fields : [];
+  const directlyMappedFields = fields.map(({ name: fieldName }) => ({
     accessorKey: fieldName,
     header: fieldName,
     cell: ({ row: { original } }: FileRecordTableProps) => (

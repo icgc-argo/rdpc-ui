@@ -67,13 +67,6 @@ export const StatusColumnCell: FC<{
   ) : null;
 };
 
-function isValidFieldNameIndex(
-  fieldName: any,
-  file: FileRecord,
-): fieldName is keyof FileRecord {
-  return Object.prototype.hasOwnProperty.call(file, "fieldName");
-}
-
 export const DataFieldCell = ({
   original,
   fieldName,
@@ -82,42 +75,38 @@ export const DataFieldCell = ({
   file,
 }: {
   original: FileRecord;
-  fieldName: string;
+  fieldName: keyof FileRecord;
   isDiffPreview: boolean;
   stats: Stats;
   file: ClinicalEntity;
 }) => {
-  if (isValidFieldNameIndex(fieldName, original)) {
-    return isDiffPreview && rowHasUpdate(original, stats) ? (
-      <div
-        css={css`
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          & > div {
-            margin-top: 5px;
-            margin-bottom: 5px;
-            flex: 1;
-          }
-        `}
-      >
-        <div>{original[fieldName]}</div>
-        <div>
-          {get(
-            file.dataUpdates.find(
-              (u) => u.field === fieldName && u.row === original.rowIndex,
-            ),
-            "oldValue",
-            original[fieldName],
-          )}
-        </div>
+  return isDiffPreview && rowHasUpdate(original, stats) ? (
+    <div
+      css={css`
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        & > div {
+          margin-top: 5px;
+          margin-bottom: 5px;
+          flex: 1;
+        }
+      `}
+    >
+      <div>{original[fieldName]}</div>
+      <div>
+        {get(
+          file.dataUpdates.find(
+            (u) => u.field === fieldName && u.row === original.rowIndex,
+          ),
+          "oldValue",
+          original[fieldName],
+        )}
       </div>
-    ) : (
-      <>{original[fieldName]}</>
-    );
-  } else {
-    return null;
-  }
+    </div>
+  ) : (
+    <>{original[fieldName]}</>
+  );
 };
 
 type CellStatusDisplayProps = {
