@@ -79,6 +79,7 @@ const FilesNavigator = ({
       });
     } catch (err) {
       //await refetchClinicalSubmission();
+      console.log("err", err);
       commonToaster.unknownErrorWithReloadMessage();
     }
   };

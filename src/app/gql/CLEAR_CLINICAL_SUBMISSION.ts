@@ -30,7 +30,63 @@ const CLEAR_CLINICAL_SUBMISSION = gql(`
       version: $submissionVersion
       fileType: $fileType
     ) {
-      id
+      programShortName # this is the ID
+      state
+      version
+      updatedAt
+      updatedBy
+      clinicalEntities {
+        clinicalType
+        batchName
+        creator
+        createdAt
+        stats {
+          noUpdate
+          new
+          updated
+          errorsFound
+        }
+        records {
+          row
+          fields {
+            name
+            value
+          }
+        }
+        dataUpdates {
+          row
+          field
+          newValue
+          oldValue
+          donorId
+        }
+        dataWarnings {
+          message
+          row
+          field
+          value
+          donorId
+        }
+        dataErrors {
+          message
+          row
+          field
+          value
+          donorId
+        }
+        schemaErrors {
+          message
+          row
+          field
+          value
+          donorId
+        }
+      }
+      fileErrors {
+        message
+        fileNames
+        code
+      }
     }
   }
 `);
