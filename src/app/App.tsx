@@ -24,6 +24,7 @@ import { AppProvider } from "@/app/hooks/AppProvider";
 import GlobalLoaderProvider, {
   loaderPortalRef,
 } from "@/app/hooks/GlobalLoaderProvider";
+import ThemeProvider from "@/app/hooks/ThemeProvider";
 import ToastProvider from "@/app/hooks/ToastProvider";
 import { AuthProvider } from "@/global/utils/auth";
 import { css } from "@/lib/emotion";
@@ -33,7 +34,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { modalPortalRef } from "./components/Modal";
-import ThemeProvider from "./components/ThemeProvider";
 
 // Apollo on app error messaging instead of error messages in webpages
 if (process.env.NODE_ENV === "development") {
