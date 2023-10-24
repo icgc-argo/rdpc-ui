@@ -20,6 +20,7 @@
 
 import { ClinicalSubmissionQuery } from "@/__generated__/graphql";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
+import { css } from "@/lib/emotion";
 import { Progress, ProgressStatus } from "@icgc-argo/uikit";
 import { isEmpty } from "lodash";
 import { FC } from "react";
@@ -50,11 +51,13 @@ type ProgressBarProps = {
   clinicalState:
     | ClinicalSubmissionQuery["clinicalSubmissions"]["state"]
     | undefined;
+  approvalBarWidth?: number;
 };
 
 const ProgressBar: FC<ProgressBarProps> = ({
   clinicalEntities,
   clinicalState,
+  approvalBarWidth,
 }) => {
   const { isDisabled: isSubmissionSystemDisabled } =
     useSubmissionSystemStatus();
@@ -98,11 +101,22 @@ const ProgressBar: FC<ProgressBarProps> = ({
       ? "success"
       : "disabled",
   };
+  const pendingApprovalWidth = `${approvalBarWidth || 100}px`;
+
   return (
     <Progress>
       <Progress.Item state={progressStates.upload} text="Upload" />
       <Progress.Item state={progressStates.validate} text="Validate" />
       <Progress.Item state={progressStates.signOff} text="Sign Off" />
+      {isPendingApproval && (
+        <Progress.Item
+          css={css`
+            width: ${pendingApprovalWidth};
+          `}
+          text="Pending Approval"
+          state="locked"
+        />
+      )}
     </Progress>
   );
 };
