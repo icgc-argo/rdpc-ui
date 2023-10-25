@@ -26,11 +26,12 @@ import { useToaster } from "@/app/hooks/ToastProvider";
 import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import { sleep } from "@/global/utils";
+import { useAuthContext } from "@/global/utils/auth";
 import { css, useTheme } from "@/lib/emotion";
 import { useMutation } from "@apollo/client";
 import { Button, TitleBar, Link as UIKitLink } from "@icgc-argo/uikit";
 import Link from "next/link";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { Row } from "react-grid-system";
 import urlJoin from "url-join";
 import ProgressBar from "./ProgressBar";
@@ -61,8 +62,9 @@ const Header: FC<HeaderProps> = ({
     DOCS_URL_ROOT,
     "/docs/submission/submitting-clinical-data",
   );
+  const { egoJwt, permissions, TokenUtils } = useAuthContext();
 
-  const isDcc = false;
+  const isDcc = useMemo(() => TokenUtils.isDccMember(permissions), [egoJwt]);
 
   const isPendingApproval = clinicalState === "PENDING_APPROVAL";
 

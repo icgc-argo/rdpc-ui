@@ -16,86 +16,105 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
+"use client";
 
-import Header from '@/app/components/Header';
-import { DnaLoader } from '@icgc-argo/uikit';
-import Cookies from 'js-cookie';
-import { usePathname, useRouter } from 'next/navigation';
+import Header from "@/app/components/Header";
+import { useAppConfigContext } from "@/app/hooks/AppProvider";
+import createEgoUtils from "@icgc-argo/ego-token-utils";
+import { DnaLoader } from "@icgc-argo/uikit";
+import Cookies from "js-cookie";
+import { usePathname, useRouter } from "next/navigation";
 import {
-	Dispatch,
-	ReactNode,
-	SetStateAction,
-	Suspense,
-	createContext,
-	useContext,
-	useState,
-} from 'react';
-import { EGO_JWT_KEY, LOGIN_NONCE } from '../constants';
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  Suspense,
+  createContext,
+  useContext,
+  useState,
+} from "react";
+import { EGO_JWT_KEY, LOGIN_NONCE } from "../constants";
 
 type AuthContextValue = {
-	egoJwt: string;
-	setEgoJwt: Dispatch<SetStateAction<string>>;
-	authLoading: boolean;
-	setAuthLoading: Dispatch<SetStateAction<boolean>>;
-	logIn: (newToken: string) => void;
-	logOut: () => void;
+  egoJwt: string;
+  setEgoJwt: Dispatch<SetStateAction<string>>;
+  authLoading: boolean;
+  setAuthLoading: Dispatch<SetStateAction<boolean>>;
+  logIn: (newToken: string) => void;
+  logOut: () => void;
+  permissions: string[];
+  TokenUtils: ReturnType<typeof createEgoUtils>;
 };
 
 const AuthContext = createContext<AuthContextValue>({
-	egoJwt: '',
-	setEgoJwt: () => '',
-	authLoading: false,
-	setAuthLoading: () => false,
-	logIn: () => undefined,
-	logOut: () => undefined,
+  egoJwt: "",
+  setEgoJwt: () => "",
+  authLoading: false,
+  setAuthLoading: () => false,
+  logIn: () => undefined,
+  logOut: () => undefined,
+  permissions: [],
+  TokenUtils: createEgoUtils(""),
 });
 
 export const getStoredToken = () => Cookies.get(EGO_JWT_KEY);
 
 export const storeToken = (egoToken: string) => {
-	Cookies.set(EGO_JWT_KEY, egoToken);
+  Cookies.set(EGO_JWT_KEY, egoToken);
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-	const storedToken = getStoredToken();
-	const [egoJwt, setEgoJwt] = useState(storedToken || '');
-	const router = useRouter();
-	const path = usePathname();
-	const loginStateOnPageLoad = path === '/logging-in' && !egoJwt.length;
-	const [authLoading, setAuthLoading] = useState(loginStateOnPageLoad);
+  const config = useAppConfigContext();
+  const storedToken = getStoredToken();
+  const [egoJwt, setEgoJwt] = useState(storedToken || "");
+  const TokenUtils = createEgoUtils(config.EGO_PUBLIC_KEY);
+  const router = useRouter();
+  const path = usePathname();
+  const loginStateOnPageLoad = path === "/logging-in" && !egoJwt.length;
+  const [authLoading, setAuthLoading] = useState(loginStateOnPageLoad);
 
-	const logIn = (newToken: string) => {
-		storeToken(newToken);
-		setEgoJwt(newToken);
-		setAuthLoading(false);
-	};
+  const logIn = (newToken: string) => {
+    storeToken(newToken);
+    setEgoJwt(newToken);
+    setAuthLoading(false);
+  };
 
-	const logOut = () => {
-		setAuthLoading(true);
-		setEgoJwt('');
-		Cookies.remove(EGO_JWT_KEY);
-		Cookies.remove(LOGIN_NONCE);
-		router.push('/');
-		setAuthLoading(false);
-	};
+  const logOut = () => {
+    setAuthLoading(true);
+    setEgoJwt("");
+    Cookies.remove(EGO_JWT_KEY);
+    Cookies.remove(LOGIN_NONCE);
+    router.push("/");
+    setAuthLoading(false);
+  };
 
-	const value: AuthContextValue = { egoJwt, setEgoJwt, authLoading, setAuthLoading, logIn, logOut };
+  const permissions = TokenUtils.getPermissionsFromToken(egoJwt);
 
-	return (
-		<AuthContext.Provider value={value}>
-			<Suspense
-				fallback={
-					<>
-						<Header />
-						<DnaLoader />
-					</>
-				}
-			>
-				{children}
-			</Suspense>
-		</AuthContext.Provider>
-	);
+  const value: AuthContextValue = {
+    egoJwt,
+    setEgoJwt,
+    authLoading,
+    setAuthLoading,
+    logIn,
+    logOut,
+    permissions,
+    TokenUtils,
+  };
+
+  return (
+    <AuthContext.Provider value={value}>
+      <Suspense
+        fallback={
+          <>
+            <Header />
+            <DnaLoader />
+          </>
+        }
+      >
+        {children}
+      </Suspense>
+    </AuthContext.Provider>
+  );
 }
 
 export const useAuthContext = () => useContext(AuthContext);
