@@ -1518,6 +1518,7 @@ export type FileAggregations = {
   file_id?: Maybe<Aggregations>;
   file_number?: Maybe<NumericAggregations>;
   file_type?: Maybe<Aggregations>;
+  has_clinical_data?: Maybe<Aggregations>;
   meta__embargo_stage?: Maybe<Aggregations>;
   meta__release_state?: Maybe<Aggregations>;
   meta__study_id?: Maybe<Aggregations>;
@@ -2278,6 +2279,7 @@ export type FileNode = Node & {
   file_id?: Maybe<Scalars["String"]["output"]>;
   file_number?: Maybe<Scalars["Float"]["output"]>;
   file_type?: Maybe<Scalars["String"]["output"]>;
+  has_clinical_data?: Maybe<Scalars["Boolean"]["output"]>;
   id: Scalars["ID"]["output"];
   meta?: Maybe<FileMeta>;
   metrics?: Maybe<FileMetrics>;
@@ -2918,7 +2920,8 @@ export type ReopenSubmissionMutation = {
 };
 
 export type SideMenuQueryVariables = Exact<{
-  shortName: Scalars["String"]["input"];
+  activeProgramName: Scalars["String"]["input"];
+  filters: ClinicalInput;
 }>;
 
 export type SideMenuQuery = {
@@ -2936,6 +2939,33 @@ export type SideMenuQuery = {
     errors: Array<{
       __typename?: "ClinicalRegistrationError";
       type: string;
+    } | null>;
+  };
+  clinicalSubmissions: {
+    __typename?: "ClinicalSubmissionData";
+    programShortName?: string | null;
+    state?: SubmissionState | null;
+    clinicalEntities: Array<{
+      __typename?: "ClinicalSubmissionEntity";
+      schemaErrors: Array<{
+        __typename?: "ClinicalSubmissionSchemaError";
+        row: number;
+      } | null>;
+    } | null>;
+  };
+  clinicalData: {
+    __typename?: "ClinicalData";
+    programShortName: string;
+    clinicalEntities: Array<{
+      __typename?: "ClinicalDataEntities";
+      entityName: string;
+    } | null>;
+    clinicalErrors: Array<{
+      __typename?: "ClinicalErrors";
+      errors?: Array<{
+        __typename?: "ClinicalErrorRecord";
+        entityName?: string | null;
+      } | null> | null;
     } | null>;
   };
 };
@@ -4933,13 +4963,27 @@ export const SideMenuDocument = {
           kind: "VariableDefinition",
           variable: {
             kind: "Variable",
-            name: { kind: "Name", value: "shortName" },
+            name: { kind: "Name", value: "activeProgramName" },
           },
           type: {
             kind: "NonNullType",
             type: {
               kind: "NamedType",
               name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "filters" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "ClinicalInput" },
             },
           },
         },
@@ -4966,7 +5010,7 @@ export const SideMenuDocument = {
                 name: { kind: "Name", value: "shortName" },
                 value: {
                   kind: "Variable",
-                  name: { kind: "Name", value: "shortName" },
+                  name: { kind: "Name", value: "activeProgramName" },
                 },
               },
             ],
@@ -4999,6 +5043,118 @@ export const SideMenuDocument = {
                     kind: "SelectionSet",
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "type" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "clinicalSubmissions" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "programShortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "activeProgramName" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "state" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "clinicalEntities" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "schemaErrors" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "row" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "clinicalData" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "programShortName" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "activeProgramName" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "filters" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "filters" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "programShortName" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "clinicalEntities" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "entityName" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "clinicalErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "errors" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "entityName" },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
