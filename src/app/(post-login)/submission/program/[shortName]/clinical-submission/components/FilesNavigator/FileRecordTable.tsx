@@ -64,10 +64,6 @@ const FileRecordTable = ({
         .updateRow + .updateRow {
           border-top: solid 1px ${theme.colors.grey_2};
         }
-
-        > tr {
-          display: flex;
-        }
       `}
     >
       <TableInfoHeaderContainer
