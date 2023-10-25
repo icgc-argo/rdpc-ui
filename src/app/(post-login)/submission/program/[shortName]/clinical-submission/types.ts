@@ -115,3 +115,19 @@ export type ErrorTableColumnProperties = {
   header: string;
   maxSize?: number;
 };
+
+export type ClinicalEntityType =
+  | "donor"
+  | "specimen"
+  | "primary_diagnosis"
+  | "treatment"
+  | "chemotherapy"
+  | "hormone_therapy"
+  | "immunotherapy"
+  | "radiation"
+  | "surgery"
+  | "follow_up"
+  | "family_history"
+  | "exposure"
+  | "comorbidity"
+  | "biomarker";

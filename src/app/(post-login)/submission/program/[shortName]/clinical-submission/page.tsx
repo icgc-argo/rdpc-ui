@@ -39,7 +39,11 @@ import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import useUrlQueryState from "@/app/hooks/useURLQueryState";
 import useUserConfirmationModalState from "@/app/hooks/useUserConfirmationModalState";
-import { toDisplayError } from "@/global/utils";
+import {
+  PROGRAM_DASHBOARD_PATH,
+  PROGRAM_SHORT_NAME_PATH,
+} from "@/global/constants";
+import { sleep, toDisplayError } from "@/global/utils";
 import { css } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
 import {
@@ -311,42 +315,39 @@ const ClinicalSubmissionPage = ({
       }
     };
 
-    // const handleSignOff = async () => Promise.resolve(true);
-
     const handleSignOff = async () => {
-      console.log("handle signoff");
       try {
         const userDidApprove = await getSignOffConfirmation();
-        console.log("user did approve", userDidApprove);
-        // if (userDidApprove) {
-        //   setGlobalLoading(true);
-        //   await sleep();
-        //   const { data: newData } = await signOffSubmission({
-        //     variables: {
-        //       programShortName: shortName,
-        //       submissionVersion: clinicalVersion,
-        //     },
-        //   });
 
-        //   if (newData.clinicalSubmissions.state === null) {
-        //     router.push(
-        //       PROGRAM_DASHBOARD_PATH.replace(
-        //         PROGRAM_SHORT_NAME_PATH,
-        //         shortName,
-        //       ),
-        //     );
+        if (userDidApprove) {
+          setGlobalLoading(true);
+          await sleep();
+          const { data: newData } = await signOffSubmission({
+            variables: {
+              programShortName: shortName,
+              submissionVersion: clinicalVersion,
+            },
+          });
 
-        //     toaster.addToast({
-        //       variant: "SUCCESS",
-        //       interactionType: "CLOSE",
-        //       title: "Successful Clinical Submission!",
-        //       content:
-        //         "Your clinical data has been submitted. You will see the updates on your dashboard shortly.",
-        //     });
-        //   } else {
-        //     setGlobalLoading(false);
-        //   }
-        // }
+          if (newData.clinicalSubmissions.state === null) {
+            router.push(
+              PROGRAM_DASHBOARD_PATH.replace(
+                PROGRAM_SHORT_NAME_PATH,
+                shortName,
+              ),
+            );
+
+            toaster.addToast({
+              variant: "SUCCESS",
+              interactionType: "CLOSE",
+              title: "Successful Clinical Submission!",
+              content:
+                "Your clinical data has been submitted. You will see the updates on your dashboard shortly.",
+            });
+          } else {
+            setGlobalLoading(false);
+          }
+        }
       } catch (err) {
         await refetch();
         commonToaster.unknownErrorWithReloadMessage();

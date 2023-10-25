@@ -19,7 +19,7 @@
 
 import { css, Modal, ModalContainer, Typography } from "@icgc-argo/uikit";
 import { ComponentProps, ComponentType, ReactNode } from "react";
-// import SubmissionSummaryTable from "./SubmissionSummaryTable";
+import SubmissionSummaryTable from "./SubmissionSummaryTable";
 // import { GqlClinicalSubmissionData } from "./types";
 
 // const SignOffModalCont = styled(ModalContainer)`
@@ -83,8 +83,7 @@ const SignOffValidationModal = ({
           Clinical Submission Summary
         </Typography>
       </div>
-      Submission summary table ehre
-      {/* <SubmissionSummaryTable clinicalEntities={clinicalEntities} /> */}
+      <SubmissionSummaryTable clinicalEntities={clinicalEntities} />
     </Modal>
   );
 };
