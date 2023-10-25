@@ -20,11 +20,6 @@
 import { css, Modal, ModalContainer, Typography } from "@icgc-argo/uikit";
 import { ComponentProps, ComponentType, ReactNode } from "react";
 import SubmissionSummaryTable from "./SubmissionSummaryTable";
-// import { GqlClinicalSubmissionData } from "./types";
-
-// const SignOffModalCont = styled(ModalContainer)`
-//   max-width: 1120px;
-// `;
 
 const SignOffModalCont: ComponentType<{ children?: ReactNode }> = ({
   children,

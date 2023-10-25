@@ -496,6 +496,7 @@ const ClinicalSubmissionPage = ({
               onFileSelect={setSelectedClinicalEntityType}
               submissionVersion={clinicalVersion}
               programShortName={shortName}
+              refetchClinicalSubmission={refetch}
             />
           </ContentMain>
         </div>
