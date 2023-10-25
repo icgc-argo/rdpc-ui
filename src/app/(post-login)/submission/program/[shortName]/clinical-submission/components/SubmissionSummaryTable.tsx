@@ -28,7 +28,7 @@ import {
 import { capitalize } from "lodash";
 import { createRef } from "react";
 import { ClinicalEntity, ClinicalEntityType } from "../types";
-import { FILE_STATE_COLORS } from "./FilesNavigator/StatsArea";
+import { FILE_STATE_COLORS, RecordState } from "./FilesNavigator/StatsArea";
 
 type SubmissionSummaryStatus = {
   submissionSummaryStatus: string;
@@ -78,6 +78,8 @@ const SubmissionSummaryTable = ({
       size: 100,
       cell: ({ row: { index, original } }) => {
         const cellValue = original[FIRST_COLUMN_ACCESSOR];
+        const cellValueColourMap: keyof typeof FILE_STATE_COLORS =
+          (cellValue?.toUpperCase() as RecordState) || FILE_STATE_COLORS.NONE;
         return (
           <TableCellWrapper
             css={css`
@@ -86,9 +88,7 @@ const SubmissionSummaryTable = ({
                 : theme.colors.accent2_4};
             `}
           >
-            <StatArea.StarIcon
-              fill={FILE_STATE_COLORS[cellValue.toUpperCase()]}
-            />
+            <StatArea.StarIcon fill={FILE_STATE_COLORS[cellValueColourMap]} />
             &nbsp;{cellValue}
           </TableCellWrapper>
         );
@@ -100,7 +100,7 @@ const SubmissionSummaryTable = ({
     ...clinicalEntities.map((entity) => ({
       accessorKey: entity.clinicalType,
       header: capitalize(entity.clinicalType.split("_").join(" ")),
-      cell: ({ cell, row }) => (
+      cell: ({ cell, row }: { cell: any; row: any }) => (
         <TableCellWrapper
           css={css`
             background: ${Number(cell.getValue())
