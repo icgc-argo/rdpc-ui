@@ -131,7 +131,10 @@ const Header: FC<HeaderProps> = ({
           display: flex;
           height: 56px;
           padding: 0 30px;
-          background-color: ${theme.colors.white};
+          background-color: ${isPendingApproval
+            ? theme.colors.accent3_4
+            : theme.colors.white};
+          border-bottom: 1px solid ${theme.colors.grey_2};
           justify-content: space-between;
           align-items: center;
           width: 100%;
