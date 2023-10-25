@@ -1518,7 +1518,6 @@ export type FileAggregations = {
   file_id?: Maybe<Aggregations>;
   file_number?: Maybe<NumericAggregations>;
   file_type?: Maybe<Aggregations>;
-  has_clinical_data?: Maybe<Aggregations>;
   meta__embargo_stage?: Maybe<Aggregations>;
   meta__release_state?: Maybe<Aggregations>;
   meta__study_id?: Maybe<Aggregations>;
@@ -2279,7 +2278,6 @@ export type FileNode = Node & {
   file_id?: Maybe<Scalars["String"]["output"]>;
   file_number?: Maybe<Scalars["Float"]["output"]>;
   file_type?: Maybe<Scalars["String"]["output"]>;
-  has_clinical_data?: Maybe<Scalars["Boolean"]["output"]>;
   id: Scalars["ID"]["output"];
   meta?: Maybe<FileMeta>;
   metrics?: Maybe<FileMetrics>;
