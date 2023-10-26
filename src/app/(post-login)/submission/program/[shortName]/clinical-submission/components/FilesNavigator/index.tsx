@@ -36,6 +36,7 @@ const FilesNavigator = ({
   onFileSelect,
   programShortName,
   submissionVersion,
+  refetchClinicalSubmission,
 }: {
   submissionState: ClinicalSubmission["clinicalState"];
   fileStates: ClinicalEntity[];
@@ -44,6 +45,7 @@ const FilesNavigator = ({
   onFileSelect: (clinicalEntityType: string) => void;
   submissionVersion: ClinicalSubmission["clinicalVersion"];
   programShortName: string;
+  refetchClinicalSubmission: () => void;
 }) => {
   // toasts
   const commonToaster = useCommonToasters();
@@ -62,7 +64,6 @@ const FilesNavigator = ({
   const schemaErrors = selectedFile?.schemaErrors;
 
   const clearSubmission = async (fileType: string) => {
-    console.log("clear submitssion");
     try {
       await clearClinicalEntitySubmission({
         variables: {
@@ -78,7 +79,7 @@ const FilesNavigator = ({
         content: `Uploaded ${fileType.toUpperCase()} file has been cleared.`,
       });
     } catch (err) {
-      //await refetchClinicalSubmission();
+      await refetchClinicalSubmission();
       commonToaster.unknownErrorWithReloadMessage();
     }
   };

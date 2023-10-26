@@ -22,7 +22,7 @@ import { css } from "@/lib/emotion";
 import { Icon, VerticalTabs } from "@icgc-argo/uikit";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { FC, SyntheticEvent, useCallback } from "react";
+import { FC, useCallback } from "react";
 import { ClinicalEntity } from "../../types";
 
 export const VerticalTabsSection: FC<{
@@ -31,9 +31,8 @@ export const VerticalTabsSection: FC<{
   onFileSelect: (clinicalType: string) => void;
 }> = ({ fileStates, selectedFile, onFileSelect }) => {
   // handler
-  const onFileClick =
-    (clinicalType: string) => (e: SyntheticEvent<HTMLElement, Event>) =>
-      onFileSelect(clinicalType);
+  const onFileClick = (clinicalType: string) => () =>
+    onFileSelect(clinicalType);
 
   const pathname = usePathname();
   const searchParams = useSearchParams();

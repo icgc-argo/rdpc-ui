@@ -1,3 +1,5 @@
+import { FileRecord } from "./components/FilesNavigator/types";
+
 /*
  * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
  *
@@ -22,7 +24,7 @@ export type ClinicalSubmissionRecord = {
   row: number;
   fields: {
     value: string;
-    name: string;
+    name: keyof FileRecord;
   }[];
 };
 
@@ -115,3 +117,19 @@ export type ErrorTableColumnProperties = {
   header: string;
   maxSize?: number;
 };
+
+export type ClinicalEntityType =
+  | "donor"
+  | "specimen"
+  | "primary_diagnosis"
+  | "treatment"
+  | "chemotherapy"
+  | "hormone_therapy"
+  | "immunotherapy"
+  | "radiation"
+  | "surgery"
+  | "follow_up"
+  | "family_history"
+  | "exposure"
+  | "comorbidity"
+  | "biomarker";

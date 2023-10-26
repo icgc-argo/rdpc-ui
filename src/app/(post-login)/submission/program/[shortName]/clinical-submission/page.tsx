@@ -27,15 +27,23 @@ import {
   errorNotificationTableProps,
   getDefaultErrorTableColumns,
 } from "@/app/components/ErrorNotification/ErrorNotificationDefaultTable";
+import ModalPortal from "@/app/components/Modal";
 import CLEAR_CLINICAL_SUBMISSION from "@/app/gql/CLEAR_CLINICAL_SUBMISSION";
 import CLINICAL_SUBMISSION_QUERY from "@/app/gql/CLINICAL_SUBMISSION_QUERY";
+import SIGN_OFF_SUBMISSION_MUTATION from "@/app/gql/SIGN_OFF_SUBMISSION_MUTATION";
 import UPLOAD_CLINICAL_SUBMISSION_MUTATION from "@/app/gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION";
-import UPLOAD_REGISTRATION_MUTATION from "@/app/gql/UPLOAD_REGISTRATION_MUTATION";
 import VALIDATE_SUBMISSION_MUTATION from "@/app/gql/VALIDATE_SUBMISSION_MUTATION";
+import { useGlobalLoader } from "@/app/hooks/GlobalLoaderProvider";
+import { useToaster } from "@/app/hooks/ToastProvider";
 import useCommonToasters from "@/app/hooks/useCommonToasters";
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import useUrlQueryState from "@/app/hooks/useURLQueryState";
-import { toDisplayError } from "@/global/utils";
+import useUserConfirmationModalState from "@/app/hooks/useUserConfirmationModalState";
+import {
+  PROGRAM_DASHBOARD_PATH,
+  PROGRAM_SHORT_NAME_PATH,
+} from "@/global/constants";
+import { sleep, toDisplayError } from "@/global/utils";
 import { css } from "@/lib/emotion";
 import { useMutation, useQuery } from "@apollo/client";
 import {
@@ -51,6 +59,7 @@ import FileError from "../../../../../components/FileError";
 import FilesNavigator from "./components/FilesNavigator";
 import Header from "./components/Header";
 import Instructions from "./components/Instructions";
+import SignOffValidationModal from "./components/SignOffValidationModal";
 import { parseGQLResp } from "./data";
 import {
   ClinicalEntity,
@@ -70,6 +79,8 @@ const ClinicalSubmissionPage = ({
   const [selectedClinicalEntityType, setEntityType] = useState(query);
   const router = useRouter();
   const pathname = usePathname();
+  const { setGlobalLoading } = useGlobalLoader();
+  const toaster = useToaster();
 
   useEffect(() => {
     const defaultQuery = "?tab=donor";
@@ -95,13 +106,10 @@ const ClinicalSubmissionPage = ({
 
   // mutations
   const [clearClinicalSubmission] = useMutation(CLEAR_CLINICAL_SUBMISSION);
-  const [uploadClinicalSubmission, mutationStatus] = useMutation(
+  const [uploadClinicalSubmission] = useMutation(
     UPLOAD_CLINICAL_SUBMISSION_MUTATION,
     {
-      onCompleted: (d) => {
-        //setSelectedClinicalEntityType(defaultClinicalEntityType);
-      },
-      onError: (e) => {
+      onError: () => {
         commonToaster.unknownError();
       },
     },
@@ -120,6 +128,8 @@ const ClinicalSubmissionPage = ({
       //setSelectedClinicalEntityType(defaultClinicalEntityType);
     },
   });
+
+  const [signOffSubmission] = useMutation(SIGN_OFF_SUBMISSION_MUTATION);
 
   const { isDisabled: isSubmissionSystemDisabled } =
     useSubmissionSystemStatus();
@@ -166,15 +176,6 @@ const ClinicalSubmissionPage = ({
         [],
       ),
     [clinicalEntities],
-  );
-
-  const [uploadFile, { loading: isUploading }] = useMutation(
-    UPLOAD_REGISTRATION_MUTATION,
-    {
-      onError: (e) => {
-        commonToaster.unknownError();
-      },
-    },
   );
 
   // File Errors
@@ -253,6 +254,13 @@ const ClinicalSubmissionPage = ({
     />
   );
 
+  const {
+    isModalShown: signOffModalShown,
+    getUserConfirmation: getSignOffConfirmation,
+    onConfirmed: onSignOffApproved,
+    onCancel: onSignOffCanceled,
+  } = useUserConfirmationModalState();
+
   if (isLoading) {
     return (
       <div
@@ -278,9 +286,6 @@ const ClinicalSubmissionPage = ({
       ({ records }) => !!records.length,
     );
 
-    // Header
-    const handleSubmissionClear = async () => new Promise(() => true);
-
     /**
      * Instruction Box
      */
@@ -303,7 +308,46 @@ const ClinicalSubmissionPage = ({
         commonToaster.unknownErrorWithReloadMessage();
       }
     };
-    const handleSignOff = () => new Promise(() => true);
+
+    const handleSignOff = async () => {
+      try {
+        const userDidApprove = await getSignOffConfirmation();
+
+        if (userDidApprove) {
+          setGlobalLoading(true);
+          await sleep();
+          const { data: newData } = await signOffSubmission({
+            variables: {
+              programShortName: shortName,
+              submissionVersion: clinicalVersion,
+            },
+          });
+
+          if (newData.clinicalSubmissions.state === null) {
+            router.push(
+              PROGRAM_DASHBOARD_PATH.replace(
+                PROGRAM_SHORT_NAME_PATH,
+                shortName,
+              ),
+            );
+
+            toaster.addToast({
+              variant: "SUCCESS",
+              interactionType: "CLOSE",
+              title: "Successful Clinical Submission!",
+              content:
+                "Your clinical data has been submitted. You will see the updates on your dashboard shortly.",
+            });
+          } else {
+            setGlobalLoading(false);
+          }
+        }
+      } catch (err) {
+        await refetch();
+        commonToaster.unknownErrorWithReloadMessage();
+        setGlobalLoading(false);
+      }
+    };
 
     /**
      * File Navigator
@@ -338,6 +382,17 @@ const ClinicalSubmissionPage = ({
 
     return (
       <>
+        {signOffModalShown && (
+          <ModalPortal>
+            <SignOffValidationModal
+              hasUpdate
+              clinicalEntities={clinicalEntities}
+              onActionClick={onSignOffApproved}
+              onCloseClick={onSignOffCanceled}
+              onCancelClick={onSignOffCanceled}
+            />
+          </ModalPortal>
+        )}
         <div
           css={css`
             display: flex;
@@ -434,6 +489,7 @@ const ClinicalSubmissionPage = ({
               onFileSelect={setSelectedClinicalEntityType}
               submissionVersion={clinicalVersion}
               programShortName={shortName}
+              refetchClinicalSubmission={refetch}
             />
           </ContentMain>
         </div>

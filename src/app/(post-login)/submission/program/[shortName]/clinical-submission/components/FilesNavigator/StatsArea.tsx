@@ -8,7 +8,7 @@ import { ComponentProps } from "react";
 
 const StarIcon = DataTableStarIcon;
 
-type RecordState = "NEW" | "NONE" | "UPDATED" | "ERROR" | "WARNING";
+export type RecordState = "NEW" | "NONE" | "UPDATED" | "ERROR" | "WARNING";
 
 type FileStat = {
   newCount: number;

@@ -17,18 +17,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from "@/__generated__/gql";
+import { gql } from "@apollo/client";
 
-const CLEAR_CLINICAL_SUBMISSION = gql(`
-  mutation ClearSubmission(
+const SIGN_OFF_SUBMISSION_MUTATION = gql(`
+  mutation SignOffSubmission(
     $programShortName: String!
     $submissionVersion: String!
-    $fileType: String
   ) {
-    clearClinicalSubmission(
+    clinicalSubmissions: commitClinicalSubmission(
       programShortName: $programShortName
       version: $submissionVersion
-      fileType: $fileType
     ) {
       programShortName # this is the ID
       state
@@ -91,4 +89,4 @@ const CLEAR_CLINICAL_SUBMISSION = gql(`
   }
 `);
 
-export default CLEAR_CLINICAL_SUBMISSION;
+export default SIGN_OFF_SUBMISSION_MUTATION;

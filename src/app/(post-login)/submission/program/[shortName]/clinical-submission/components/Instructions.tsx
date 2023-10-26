@@ -211,7 +211,7 @@ const Instructions = ({
   return (
     <div
       css={css`
-        padding: 8px 8px 0;
+        padding: 8px;
       `}
     >
       <InstructionBox
