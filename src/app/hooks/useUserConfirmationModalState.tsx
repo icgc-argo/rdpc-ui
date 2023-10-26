@@ -45,15 +45,15 @@ const useUserConfirmationModalState = (initialModalProps: ModalProps = {}) => {
       setModalProps({
         ...modalProps,
         onCancelClick: (e: SyntheticEvent<HTMLButtonElement, Event>) => {
-          if (!!modalProps.onCancelClick) modalProps.onCancelClick(e);
+          if (modalProps.onCancelClick) modalProps.onCancelClick(e);
           onCancel();
         },
         onCloseClick: (e: SyntheticEvent<HTMLButtonElement, Event>) => {
-          if (!!modalProps.onCancelClick) modalProps.onCancelClick(e);
+          if (modalProps.onCancelClick) modalProps.onCancelClick(e);
           onCancel();
         },
         onActionClick: (e: SyntheticEvent<HTMLButtonElement, Event>) => {
-          if (!!modalProps.onActionClick) modalProps.onActionClick(e);
+          if (modalProps.onActionClick) modalProps.onActionClick(e);
           onConfirmed();
         },
       });

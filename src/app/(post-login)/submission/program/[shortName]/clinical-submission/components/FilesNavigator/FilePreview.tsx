@@ -20,7 +20,7 @@
 import { useSubmissionSystemStatus } from "@/app/hooks/useSubmissionSystemStatus";
 import { css } from "@/lib/emotion";
 import { Button, Typography } from "@icgc-argo/uikit";
-import { FC, SyntheticEvent } from "react";
+import { FC } from "react";
 import { ClinicalEntity, ClinicalSubmission } from "../../types";
 import FileRecordTable from "./FileRecordTable";
 
@@ -47,11 +47,9 @@ const FilePreview: FC<FilePreviewProps> = ({
 
   const { displayName, clinicalType, fileName, creator = "", createdAt } = file;
 
-  const onClearClick =
-    (clinicalType: string) =>
-    async (e: SyntheticEvent<HTMLButtonElement, Event>) => {
-      await clearSubmission(clinicalType);
-    };
+  const onClearClick = (clinicalType: string) => async () => {
+    await clearSubmission(clinicalType);
+  };
 
   return (
     <>

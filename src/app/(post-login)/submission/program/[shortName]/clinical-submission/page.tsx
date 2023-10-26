@@ -106,13 +106,10 @@ const ClinicalSubmissionPage = ({
 
   // mutations
   const [clearClinicalSubmission] = useMutation(CLEAR_CLINICAL_SUBMISSION);
-  const [uploadClinicalSubmission, mutationStatus] = useMutation(
+  const [uploadClinicalSubmission] = useMutation(
     UPLOAD_CLINICAL_SUBMISSION_MUTATION,
     {
-      onCompleted: (d) => {
-        //setSelectedClinicalEntityType(defaultClinicalEntityType);
-      },
-      onError: (e) => {
+      onError: () => {
         commonToaster.unknownError();
       },
     },
@@ -288,9 +285,6 @@ const ClinicalSubmissionPage = ({
     const hasSomeEntity = clinicalEntities.some(
       ({ records }) => !!records.length,
     );
-
-    // Header
-    const handleSubmissionClear = async () => new Promise(() => true);
 
     /**
      * Instruction Box
