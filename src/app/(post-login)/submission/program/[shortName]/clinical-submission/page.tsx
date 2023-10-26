@@ -385,7 +385,6 @@ const ClinicalSubmissionPage = ({
         {signOffModalShown && (
           <ModalPortal>
             <SignOffValidationModal
-              //hasUpdate={hasUpdate || true}
               hasUpdate
               clinicalEntities={clinicalEntities}
               onActionClick={onSignOffApproved}
