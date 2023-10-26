@@ -65,6 +65,11 @@ const Header: FC<HeaderProps> = ({
   const { egoJwt, permissions, TokenUtils } = useAuthContext();
 
   const isDcc = useMemo(() => TokenUtils.isDccMember(permissions), [egoJwt]);
+  const isRdpc = useMemo(
+    () => (egoJwt ? TokenUtils.isRdpcMember(permissions) : false),
+    [egoJwt],
+  );
+  const isAdmin = isDcc || isRdpc;
 
   const isPendingApproval = clinicalState === "PENDING_APPROVAL";
 
@@ -162,14 +167,14 @@ const Header: FC<HeaderProps> = ({
           {isPendingApproval && (
             <Button
               id="button-reopen"
-              variant={isDcc ? "secondary" : "text"}
+              variant={isAdmin ? "secondary" : "text"}
               isAsync
               css={css`
                 margin-right: 10px;
               `}
               onClick={handleSubmissionReopen}
             >
-              {isDcc ? "reopen" : "reopen submission"}
+              {isAdmin ? "reopen" : "reopen submission"}
             </Button>
           )}
           {!isPendingApproval && (
@@ -200,7 +205,7 @@ const Header: FC<HeaderProps> = ({
               </Link>
             </>
           )}
-          {isDcc && isPendingApproval && (
+          {isAdmin && isPendingApproval && (
             <>
               <Button
                 id="button-approve"
