@@ -65,7 +65,6 @@ const FilesNavigator = ({
 
   const clearSubmission = async (fileType: string) => {
     try {
-      throw Error("aa");
       await clearClinicalEntitySubmission({
         variables: {
           programShortName: programShortName || "",
