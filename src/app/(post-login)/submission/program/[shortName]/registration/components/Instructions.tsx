@@ -17,155 +17,150 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-"use client";
+'use client';
 
-import { useAppConfigContext } from "@/app/hooks/AppProvider";
-import { CONTACT_PAGE_PATH } from "@/global/constants";
-import { css } from "@/lib/emotion";
+import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { CONTACT_PAGE_PATH } from '@/global/constants';
+import { css } from '@/lib/emotion';
 import {
-  BUTTON_SIZES,
-  BUTTON_VARIANTS,
-  Button,
-  FileSelectButton,
-  Icon,
-  InstructionBox,
-  Typography,
-  Link as UIKitLink,
-} from "@icgc-argo/uikit";
-import Link from "next/link";
-import urlJoin from "url-join";
+	BUTTON_SIZES,
+	BUTTON_VARIANTS,
+	Button,
+	FileSelectButton,
+	Icon,
+	InstructionBox,
+	Typography,
+	Link as UIKitLink,
+} from '@icgc-argo/uikit';
+import Link from 'next/link';
+import urlJoin from 'url-join';
 
 const boxButtonStyle = css`
-  margin-top: 10px;
+	margin-top: 10px;
 `;
 
 const instructionBoxButtonIconStyle = css`
-  margin-right: 5px;
+	margin-right: 5px;
 `;
 const instructionBoxButtonContentStyle = css`
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 `;
 
 const Instructions = ({
-  dictionaryVersion = "",
-  handleUpload,
-  isUploading,
-  handleRegister,
-  flags,
+	dictionaryVersion = '',
+	handleUpload,
+	isUploading,
+	handleRegister,
+	flags,
 }: {
-  dictionaryVersion: string;
-  handleUpload: (f: File) => void;
-  isUploading: boolean;
-  handleRegister: () => void;
-  flags: { uploadEnabled: boolean; registrationEnabled: boolean };
+	dictionaryVersion: string;
+	handleUpload: (f: File) => void;
+	isUploading: boolean;
+	handleRegister: () => void;
+	flags: { uploadEnabled: boolean; registrationEnabled: boolean };
 }) => {
-  const { DOCS_URL_ROOT, GATEWAY_API_ROOT } = useAppConfigContext();
-  const dictionaryPageUrl = urlJoin(DOCS_URL_ROOT, "/dictionary");
-  const dictionaryVersionDisplay = `Data Dictionary v${dictionaryVersion}.`;
+	const { DOCS_URL_ROOT, GATEWAY_API_ROOT } = useAppConfigContext();
+	const dictionaryPageUrl = urlJoin(DOCS_URL_ROOT, '/dictionary');
+	const dictionaryVersionDisplay = `Data Dictionary v${dictionaryVersion}.`;
 
-  // download template
-  const downloadFileTemplate = () =>
-    window.location.assign(
-      urlJoin(GATEWAY_API_ROOT, "/clinical/template/sample_registration.tsv"),
-    );
+	// download template
+	const downloadFileTemplate = () =>
+		window.location.assign(urlJoin(GATEWAY_API_ROOT, '/clinical/template/sample_registration.tsv'));
 
-  return (
-    <div
-      css={css`
-        padding: 8px 8px 0;
-      `}
-    >
-      <InstructionBox
-        steps={[
-          <>
-            <Typography variant="data" component="span">
-              BEFORE YOU START: Download the registration template and format it
-              using{" "}
-              <Link target="_blank" href={dictionaryPageUrl}>
-                {dictionaryVersionDisplay}
-              </Link>
-            </Typography>
-            <Button
-              variant={BUTTON_VARIANTS.SECONDARY}
-              size={BUTTON_SIZES.SM}
-              css={boxButtonStyle}
-              onClick={downloadFileTemplate}
-            >
-              <span css={instructionBoxButtonContentStyle}>
-                <Icon
-                  name="download"
-                  fill="accent2_dark"
-                  height="12px"
-                  css={instructionBoxButtonIconStyle}
-                />{" "}
-                File Template
-              </span>
-            </Button>
-          </>,
-          <>
-            <Typography variant="data" component="span">
-              1. Upload your formatted registration TSV file.
-            </Typography>
-            <FileSelectButton
-              css={boxButtonStyle}
-              isAsync
-              variant={BUTTON_VARIANTS.SECONDARY}
-              size={BUTTON_SIZES.SM}
-              isLoading={isUploading}
-              onFilesSelect={async (files) => {
-                if (files[0]) await handleUpload(files[0]);
-              }}
-              disabled={!flags.uploadEnabled}
-            >
-              <span css={instructionBoxButtonContentStyle}>
-                <Icon
-                  name="upload"
-                  height="12px"
-                  fill={flags.uploadEnabled ? "accent2_dark" : "white"}
-                  css={instructionBoxButtonIconStyle}
-                />{" "}
-                Upload File
-              </span>
-            </FileSelectButton>
-          </>,
-          <>
-            <Typography variant="data" component="span">
-              2. When your sample list is valid and QC is complete, submit your
-              registration.
-            </Typography>
-            <Button
-              css={boxButtonStyle}
-              variant={BUTTON_VARIANTS.PRIMARY}
-              size={BUTTON_SIZES.SM}
-              disabled={!flags.registrationEnabled}
-              onClick={handleRegister}
-            >
-              Register Samples
-            </Button>
-          </>,
-        ]}
-        footer={
-          <div
-            css={css`
-              text-align: center;
-              width: 100%;
-              padding-bottom: 10px;
-              padding-top: 8px;
-            `}
-          >
-            <Typography variant="data">
-              If you have any changes to previously registered data, please{" "}
-              {` `}
-              <Link href={CONTACT_PAGE_PATH}>
-                <UIKitLink>contact the DCC</UIKitLink>
-              </Link>
-            </Typography>
-          </div>
-        }
-      />
-    </div>
-  );
+	return (
+		<div
+			css={css`
+				padding: 8px;
+			`}
+		>
+			<InstructionBox
+				steps={[
+					<>
+						<Typography variant="data" component="span">
+							BEFORE YOU START: Download the registration template and format it using{' '}
+							<Link target="_blank" href={dictionaryPageUrl}>
+								{dictionaryVersionDisplay}
+							</Link>
+						</Typography>
+						<Button
+							variant={BUTTON_VARIANTS.SECONDARY}
+							size={BUTTON_SIZES.SM}
+							css={boxButtonStyle}
+							onClick={downloadFileTemplate}
+						>
+							<span css={instructionBoxButtonContentStyle}>
+								<Icon
+									name="download"
+									fill="accent2_dark"
+									height="12px"
+									css={instructionBoxButtonIconStyle}
+								/>{' '}
+								File Template
+							</span>
+						</Button>
+					</>,
+					<>
+						<Typography variant="data" component="span">
+							1. Upload your formatted registration TSV file.
+						</Typography>
+						<FileSelectButton
+							css={boxButtonStyle}
+							isAsync
+							variant={BUTTON_VARIANTS.SECONDARY}
+							size={BUTTON_SIZES.SM}
+							isLoading={isUploading}
+							onFilesSelect={async (files) => {
+								if (files[0]) await handleUpload(files[0]);
+							}}
+							disabled={!flags.uploadEnabled}
+						>
+							<span css={instructionBoxButtonContentStyle}>
+								<Icon
+									name="upload"
+									height="12px"
+									fill={flags.uploadEnabled ? 'accent2_dark' : 'white'}
+									css={instructionBoxButtonIconStyle}
+								/>{' '}
+								Upload File
+							</span>
+						</FileSelectButton>
+					</>,
+					<>
+						<Typography variant="data" component="span">
+							2. When your sample list is valid and QC is complete, submit your registration.
+						</Typography>
+						<Button
+							css={boxButtonStyle}
+							variant={BUTTON_VARIANTS.PRIMARY}
+							size={BUTTON_SIZES.SM}
+							disabled={!flags.registrationEnabled}
+							onClick={handleRegister}
+						>
+							Register Samples
+						</Button>
+					</>,
+				]}
+				footer={
+					<div
+						css={css`
+							text-align: center;
+							width: 100%;
+							padding-bottom: 10px;
+							padding-top: 8px;
+						`}
+					>
+						<Typography variant="data">
+							If you have any changes to previously registered data, please {` `}
+							<Link href={CONTACT_PAGE_PATH}>
+								<UIKitLink>contact the DCC</UIKitLink>
+							</Link>
+						</Typography>
+					</div>
+				}
+			/>
+		</div>
+	);
 };
 
 export default Instructions;
