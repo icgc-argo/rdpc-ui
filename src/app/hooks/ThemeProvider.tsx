@@ -17,80 +17,89 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Global, ThemeProvider as UIKitThemeProvider, css, defaultTheme } from '@/lib/emotion';
-import { mapValues } from 'lodash';
-import { Work_Sans } from 'next/font/google';
+import {
+  Global,
+  ThemeProvider as UIKitThemeProvider,
+  css,
+  defaultTheme,
+} from "@/lib/emotion";
+import { mapValues } from "lodash";
+import { Work_Sans } from "next/font/google";
 
 /**
  * Load font using Next apis
  * merge this font style with default theme typography
  * apply complete theme to project using ThemeProvider
  */
-const workSans = Work_Sans({ subsets: ['latin'] });
+const workSans = Work_Sans({ subsets: ["latin"] });
 const typography = mapValues(defaultTheme.typography, (typography) => ({
-	...typography,
-	fontFamily: workSans.style.fontFamily,
+  ...typography,
+  fontFamily: workSans.style.fontFamily,
 }));
 const theme = { ...defaultTheme, typography };
 
-export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-	return (
-		<>
-			<Global
-				styles={css`
-					*,
-					*::before,
-					*::after {
-						box-sizing: border-box;
-					}
+export default function ThemeProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <>
+      <Global
+        styles={css`
+          *,
+          *::before,
+          *::after {
+            box-sizing: border-box;
+          }
 
-					* {
-						margin: 0;
-					}
+          * {
+            margin: 0;
+          }
 
-					:root {
-						font-size: 62.5%;
-					}
+          :root {
+            font-size: 62.5%;
+          }
 
-					body {
-						line-height: 1.5;
-						font-family: ${workSans.style.fontFamily};
-					}
+          body {
+            line-height: 1.5;
+            font-family: ${workSans.style.fontFamily};
+          }
 
-					input,
-					button,
-					textarea,
-					select {
-						font: inherit;
-					}
+          input,
+          button,
+          textarea,
+          select {
+            font: inherit;
+          }
 
-					p,
-					h1,
-					h2,
-					h3,
-					h4,
-					h5,
-					h6 {
-						overflow-wrap: break-word;
-					}
+          p,
+          h1,
+          h2,
+          h3,
+          h4,
+          h5,
+          h6 {
+            overflow-wrap: break-word;
+          }
 
-					#root,
-					#__next {
-						isolation: isolate;
-					}
+          #root,
+          #__next {
+            isolation: isolate;
+          }
 
-					// react-table override
-					.rt-table-container {
-						.rt-th-wrapper,
-						.rt-td-wrapper {
-							font-family: inherit;
-						}
-						.rt-table {
-						}
-					}
-				`}
-			/>
-			<UIKitThemeProvider theme={theme}>{children}</UIKitThemeProvider>
-		</>
-	);
+          // react-table override
+          .rt-table-container {
+            .rt-th-wrapper,
+            .rt-td-wrapper {
+              font-family: inherit;
+            }
+            .rt-table {
+            }
+          }
+        `}
+      />
+      <UIKitThemeProvider theme={theme}>{children}</UIKitThemeProvider>
+    </>
+  );
 }

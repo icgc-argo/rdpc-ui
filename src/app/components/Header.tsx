@@ -16,113 +16,115 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
+"use client";
 
-import { useAuthContext } from '@/global/utils/auth';
-import { css, useTheme } from '@/lib/emotion';
-import { AppBarMenuItem, DnaLoader, Link, NavElement } from '@icgc-argo/uikit';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
-import LoginButton from './LoginButton';
-import ProfileMenu from './ProfileMenu';
-import argoLogo from '/public/argo-logo.svg';
+import { useAuthContext } from "@/global/utils/auth";
+import { css, useTheme } from "@/lib/emotion";
+import { AppBarMenuItem, DnaLoader, Link, NavElement } from "@icgc-argo/uikit";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import LoginButton from "./LoginButton";
+import ProfileMenu from "./ProfileMenu";
+import argoLogo from "/public/argo-logo.svg";
 
-export const HEADER_HEIGHT_PX = '58';
+export const HEADER_HEIGHT_PX = "58";
 
 const Header = () => {
-	const [isDropdownOpen, setDropdownOpen] = useState(false);
-	const { egoJwt, authLoading, logOut } = useAuthContext();
-	const path = usePathname();
-	const theme = useTheme();
-	const onProfilePage = path === '/landing-page';
-	const profileActive = onProfilePage && !!egoJwt.length && !authLoading;
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const { egoJwt, authLoading, logOut } = useAuthContext();
+  const path = usePathname();
+  const theme = useTheme();
+  const onProfilePage = path === "/landing-page";
+  const profileActive = onProfilePage && !!egoJwt.length && !authLoading;
 
-	const profileNavDetails: Array<NavElement> = [
-		{
-			active: profileActive,
-			href: '/landing-page',
-			name: 'Profile & Token',
-			LinkComp: Link,
-		},
-		{
-			isLink: false,
-			onClick: () => {
-				setDropdownOpen(false);
-				logOut();
-			},
-			name: 'Logout',
-			active: false,
-			href: '',
-			LinkComp: Link,
-		},
-	];
+  const profileNavDetails: Array<NavElement> = [
+    {
+      active: profileActive,
+      href: "/landing-page",
+      name: "Profile & Token",
+      LinkComp: Link,
+    },
+    {
+      isLink: false,
+      onClick: () => {
+        setDropdownOpen(false);
+        logOut();
+      },
+      name: "Logout",
+      active: false,
+      href: "",
+      LinkComp: Link,
+    },
+  ];
 
-	return (
-		<header
-			css={css`
-				width: 100%;
-				display: flex;
-				flex-direction: row;
-				justify-content: space-between;
-				align-items: center;
-				height: ${HEADER_HEIGHT_PX}px;
-				background-color: ${theme.colors.primary};
-				border-bottom: none;
-				position: sticky;
-				top: 0px;
-				z-index: 2;
-			`}
-		>
-			<div
-				css={css`
-					margin-left: 18px;
-					height: 30px;
-					width: 208px;
-					position: relative;
-				`}
-			>
-				<Link href="/">
-					<Image alt="ICGC ARGO" src={argoLogo} fill />
-				</Link>
-			</div>
+  return (
+    <header
+      css={css`
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        height: ${HEADER_HEIGHT_PX}px;
+        background-color: ${theme.colors.primary};
+        border-bottom: none;
+        position: sticky;
+        top: 0px;
+        z-index: 2;
+      `}
+    >
+      <div
+        css={css`
+          margin-left: 18px;
+          height: 30px;
+          width: 208px;
+          position: relative;
+        `}
+      >
+        <Link href="/">
+          <Image alt="ICGC ARGO" src={argoLogo} fill />
+        </Link>
+      </div>
 
-			{/** "right-aligned" **/}
-			<div
-				css={css`
-					display: flex;
-					height: 100%;
-					flex-direction: row;
-					& > div {
-						border-left: 1px solid ${theme.colors.grey};
-					}
-				`}
-			>
-				{authLoading ? (
-					<DnaLoader />
-				) : !egoJwt ? (
-					<LoginButton />
-				) : (
-					<AppBarMenuItem
-						active={profileActive}
-						css={css`
-							border-bottom: ${profileActive ? `solid 3px ${theme.colors.accent1}` : ''};
-						`}
-					>
-						<ProfileMenu
-							isDropdownOpen={isDropdownOpen}
-							onProfilePage={onProfilePage}
-							onClick={() => {
-								setDropdownOpen(!isDropdownOpen);
-							}}
-							profileNavDetails={profileNavDetails}
-							theme={theme}
-						/>
-					</AppBarMenuItem>
-				)}
-			</div>
-		</header>
-	);
+      {/** "right-aligned" **/}
+      <div
+        css={css`
+          display: flex;
+          height: 100%;
+          flex-direction: row;
+          & > div {
+            border-left: 1px solid ${theme.colors.grey};
+          }
+        `}
+      >
+        {authLoading ? (
+          <DnaLoader />
+        ) : !egoJwt ? (
+          <LoginButton />
+        ) : (
+          <AppBarMenuItem
+            active={profileActive}
+            css={css`
+              border-bottom: ${profileActive
+                ? `solid 3px ${theme.colors.accent1}`
+                : ""};
+            `}
+          >
+            <ProfileMenu
+              isDropdownOpen={isDropdownOpen}
+              onProfilePage={onProfilePage}
+              onClick={() => {
+                setDropdownOpen(!isDropdownOpen);
+              }}
+              profileNavDetails={profileNavDetails}
+              theme={theme}
+            />
+          </AppBarMenuItem>
+        )}
+      </div>
+    </header>
+  );
 };
 
 export default Header;

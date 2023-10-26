@@ -17,68 +17,70 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Modal, ModalContainer, Typography } from '@icgc-argo/uikit';
-import { ComponentProps, ComponentType, ReactNode } from 'react';
-import SubmissionSummaryTable from './SubmissionSummaryTable';
+import { css, Modal, ModalContainer, Typography } from "@icgc-argo/uikit";
+import { ComponentProps, ComponentType, ReactNode } from "react";
+import SubmissionSummaryTable from "./SubmissionSummaryTable";
 
-const SignOffModalCont: ComponentType<{ children?: ReactNode }> = ({ children }) => (
-	<ModalContainer
-		css={css`
-			max-width: 1120px;
-		`}
-	>
-		{children}
-	</ModalContainer>
+const SignOffModalCont: ComponentType<{ children?: ReactNode }> = ({
+  children,
+}) => (
+  <ModalContainer
+    css={css`
+      max-width: 1120px;
+    `}
+  >
+    {children}
+  </ModalContainer>
 );
 
 const SignOffValidationModal = ({
-	clinicalEntities,
-	onCloseClick,
-	onActionClick,
-	onCancelClick,
-	hasUpdate,
+  clinicalEntities,
+  onCloseClick,
+  onActionClick,
+  onCancelClick,
+  hasUpdate,
 }: {
-	clinicalEntities: any;
-	hasUpdate: boolean;
-	onCloseClick: ComponentProps<typeof Modal>['onCloseClick'];
-	onActionClick: ComponentProps<typeof Modal>['onActionClick'];
-	onCancelClick: ComponentProps<typeof Modal>['onCancelClick'];
+  clinicalEntities: any;
+  hasUpdate: boolean;
+  onCloseClick: ComponentProps<typeof Modal>["onCloseClick"];
+  onActionClick: ComponentProps<typeof Modal>["onActionClick"];
+  onCancelClick: ComponentProps<typeof Modal>["onCancelClick"];
 }) => {
-	return (
-		<Modal
-			actionButtonText="yes, sign off"
-			actionButtonId="modal-confirm-sign-off"
-			title={
-				<span
-					css={css`
-						padding-right: 20px;
-					`}
-				>
-					Are you sure you want to sign-off your clinical submission?
-				</span>
-			}
-			onCloseClick={onCloseClick}
-			onActionClick={onActionClick}
-			onCancelClick={onCancelClick}
-			ContainerEl={SignOffModalCont}
-		>
-			<div>
-				{hasUpdate
-					? 'The DCC will be notified of the following updates to previously released data and your submission will be locked until approval.'
-					: 'The following clinical data will be submitted.'}
-			</div>
-			<div
-				css={css`
-					margin: 10px 5px;
-				`}
-			>
-				<Typography color="secondary" bold variant="sectionHeader">
-					Clinical Submission Summary
-				</Typography>
-			</div>
-			<SubmissionSummaryTable clinicalEntities={clinicalEntities} />
-		</Modal>
-	);
+  return (
+    <Modal
+      actionButtonText="yes, sign off"
+      actionButtonId="modal-confirm-sign-off"
+      title={
+        <span
+          css={css`
+            padding-right: 20px;
+          `}
+        >
+          Are you sure you want to sign-off your clinical submission?
+        </span>
+      }
+      onCloseClick={onCloseClick}
+      onActionClick={onActionClick}
+      onCancelClick={onCancelClick}
+      ContainerEl={SignOffModalCont}
+    >
+      <div>
+        {hasUpdate
+          ? "The DCC will be notified of the following updates to previously released data and your submission will be locked until approval."
+          : "The following clinical data will be submitted."}
+      </div>
+      <div
+        css={css`
+          margin: 10px 5px;
+        `}
+      >
+        <Typography color="secondary" bold variant="sectionHeader">
+          Clinical Submission Summary
+        </Typography>
+      </div>
+      <SubmissionSummaryTable clinicalEntities={clinicalEntities} />
+    </Modal>
+  );
 };
 
 export default SignOffValidationModal;

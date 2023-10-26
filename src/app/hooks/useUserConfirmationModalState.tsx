@@ -17,62 +17,62 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Modal } from '@icgc-argo/uikit';
-import { ComponentProps, SyntheticEvent, useState } from 'react';
+import { Modal } from "@icgc-argo/uikit";
+import { ComponentProps, SyntheticEvent, useState } from "react";
 
 type ModalProps = ComponentProps<typeof Modal>;
 
 const useUserConfirmationModalState = (initialModalProps: ModalProps = {}) => {
-	const [isModalShown, setModalShown] = useState(false);
-	const [modalProps, setModalProps] = useState<ModalProps>(initialModalProps);
-	const [{ onConfirmed, onCancel }, setSignOffFlow] = useState({
-		onConfirmed: () => setModalShown(false),
-		onCancel: () => setModalShown(false),
-	});
+  const [isModalShown, setModalShown] = useState(false);
+  const [modalProps, setModalProps] = useState<ModalProps>(initialModalProps);
+  const [{ onConfirmed, onCancel }, setSignOffFlow] = useState({
+    onConfirmed: () => setModalShown(false),
+    onCancel: () => setModalShown(false),
+  });
 
-	const getUserConfirmation = (modalProps: ModalProps = {}): Promise<boolean> =>
-		new Promise((resolve) => {
-			const onConfirmed = () => {
-				setModalShown(false);
-				resolve(true);
-			};
+  const getUserConfirmation = (modalProps: ModalProps = {}): Promise<boolean> =>
+    new Promise((resolve) => {
+      const onConfirmed = () => {
+        setModalShown(false);
+        resolve(true);
+      };
 
-			const onCancel = () => {
-				setModalShown(false);
-				resolve(false);
-			};
+      const onCancel = () => {
+        setModalShown(false);
+        resolve(false);
+      };
 
-			setModalProps({
-				...modalProps,
-				onCancelClick: (e: SyntheticEvent<HTMLButtonElement, Event>) => {
-					if (modalProps.onCancelClick) modalProps.onCancelClick(e);
-					onCancel();
-				},
-				onCloseClick: (e: SyntheticEvent<HTMLButtonElement, Event>) => {
-					if (modalProps.onCancelClick) modalProps.onCancelClick(e);
-					onCancel();
-				},
-				onActionClick: (e: SyntheticEvent<HTMLButtonElement, Event>) => {
-					if (modalProps.onActionClick) modalProps.onActionClick(e);
-					onConfirmed();
-				},
-			});
+      setModalProps({
+        ...modalProps,
+        onCancelClick: (e: SyntheticEvent<HTMLButtonElement, Event>) => {
+          if (modalProps.onCancelClick) modalProps.onCancelClick(e);
+          onCancel();
+        },
+        onCloseClick: (e: SyntheticEvent<HTMLButtonElement, Event>) => {
+          if (modalProps.onCancelClick) modalProps.onCancelClick(e);
+          onCancel();
+        },
+        onActionClick: (e: SyntheticEvent<HTMLButtonElement, Event>) => {
+          if (modalProps.onActionClick) modalProps.onActionClick(e);
+          onConfirmed();
+        },
+      });
 
-			setModalShown(true);
+      setModalShown(true);
 
-			setSignOffFlow({
-				onConfirmed,
-				onCancel,
-			});
-		});
+      setSignOffFlow({
+        onConfirmed,
+        onCancel,
+      });
+    });
 
-	return {
-		isModalShown,
-		getUserConfirmation,
-		onConfirmed,
-		onCancel,
-		modalProps,
-	};
+  return {
+    isModalShown,
+    getUserConfirmation,
+    onConfirmed,
+    onCancel,
+    modalProps,
+  };
 };
 
 export default useUserConfirmationModalState;
