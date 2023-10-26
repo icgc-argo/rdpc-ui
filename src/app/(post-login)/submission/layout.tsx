@@ -16,40 +16,40 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
+"use client";
 
-import { HEADER_HEIGHT_PX } from '@/app/components/Header';
-import { css, useTheme } from '@/lib/emotion';
-import { ReactNode, useState } from 'react';
-import SideMenu from './components/SideMenu/Menu';
+import { HEADER_HEIGHT_PX } from "@/app/components/Header";
+import { css, useTheme } from "@/lib/emotion";
+import { ReactNode, useState } from "react";
+import SideMenu from "./components/SideMenu/Menu";
 
 export default function AppLayout({ children }: { children: ReactNode }) {
-	const theme = useTheme();
+  const theme = useTheme();
 
-	const [isSidebarActive, setSidebarActive] = useState<boolean>(true);
+  const [isSidebarActive, setSidebarActive] = useState<boolean>(true);
 
-	return (
-		<div
-			css={css`
-				display: grid;
-				grid-template-columns: ${isSidebarActive ? '248px' : '40px'} 1fr;
-				transition: 300ms;
-				background: ${theme.colors.grey_4};
-			`}
-		>
-			<div
-				css={css`
-					height: calc(100vh - ${HEADER_HEIGHT_PX}px);
-					z-index: 1;
-					box-shadow: ${theme.shadows.pageElement};
-				`}
-			>
-				<SideMenu
-					isActive={isSidebarActive}
-					onToggle={() => setSidebarActive((active) => !active)}
-				/>
-			</div>
-			<>{children}</>
-		</div>
-	);
+  return (
+    <div
+      css={css`
+        display: grid;
+        grid-template-columns: ${isSidebarActive ? "248px 83vw" : "40px 97vw"};
+        transition: 300ms;
+        background: ${theme.colors.grey_4};
+      `}
+    >
+      <div
+        css={css`
+          height: calc(100vh - ${HEADER_HEIGHT_PX}px);
+          z-index: 1;
+          box-shadow: ${theme.shadows.pageElement};
+        `}
+      >
+        <SideMenu
+          isActive={isSidebarActive}
+          onToggle={() => setSidebarActive((active) => !active)}
+        />
+      </div>
+      <>{children}</>
+    </div>
+  );
 }
