@@ -77,10 +77,6 @@ const parseGQLResp = (data: SideMenuQuery) => {
   };
 };
 
-const SubmitClinical = () => (
-  <StatusMenuItem>Submit Clinical Data </StatusMenuItem>
-);
-
 const ProgramMenu = ({ searchQuery }: { searchQuery: string }) => {
   const params = useParams();
   const pathname = usePathname();
@@ -152,6 +148,8 @@ const ProgramMenu = ({ searchQuery }: { searchQuery: string }) => {
           }
         >
           <MenuItem level={3}>{shortName}</MenuItem>
+
+          {/** Register Samples */}
           <Link href={`/submission/program/${shortName}/registration`}>
             <MenuItem
               level={3}
@@ -169,9 +167,13 @@ const ProgramMenu = ({ searchQuery }: { searchQuery: string }) => {
               }
               selected={pathnameLastSegment === "registration"}
             />
+          </Link>
+
+          {/** Submit clinical data */}
+          <Link href={`/submission/program/${shortName}/clinical-submission`}>
             <MenuItem
               level={3}
-              content={<SubmitClinical />}
+              content={<StatusMenuItem>Submit Clinical Data </StatusMenuItem>}
               selected={pathnameLastSegment === "clinical-submission"}
             />
           </Link>
