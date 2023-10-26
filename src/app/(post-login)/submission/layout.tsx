@@ -32,7 +32,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     <div
       css={css`
         display: grid;
-        grid-template-columns: ${isSidebarActive ? "248px 83vw" : "40px 97vw"};
+        grid-template-columns: ${isSidebarActive ? "248px 86vw" : "40px 98vw"};
         transition: 300ms;
         background: ${theme.colors.grey_4};
       `}
