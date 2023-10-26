@@ -17,80 +17,86 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { notNull } from '@/global/utils';
-import { css } from '@/lib/emotion';
-import { Icon, VerticalTabs } from '@icgc-argo/uikit';
-import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { FC, useCallback } from 'react';
-import { ClinicalEntity } from '../../types';
+import { notNull } from "@/global/utils";
+import { css } from "@/lib/emotion";
+import { Icon, VerticalTabs } from "@icgc-argo/uikit";
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
+import { FC, useCallback } from "react";
+import { ClinicalEntity } from "../../types";
 
 export const VerticalTabsSection: FC<{
-	fileStates: ClinicalEntity[];
-	selectedFile: ClinicalEntity | undefined;
-	onFileSelect: (clinicalType: string) => void;
+  fileStates: ClinicalEntity[];
+  selectedFile: ClinicalEntity | undefined;
+  onFileSelect: (clinicalType: string) => void;
 }> = ({ fileStates, selectedFile, onFileSelect }) => {
-	// handler
-	const onFileClick = (clinicalType: string) => () => onFileSelect(clinicalType);
+  // handler
+  const onFileClick = (clinicalType: string) => () =>
+    onFileSelect(clinicalType);
 
-	const pathname = usePathname();
-	const searchParams = useSearchParams();
-	const createURL = useCallback(
-		(value: string) => {
-			const params = new URLSearchParams(searchParams);
-			params.set('tab', value);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const createURL = useCallback(
+    (value: string) => {
+      const params = new URLSearchParams(searchParams);
+      params.set("tab", value);
 
-			return pathname + '?' + params.toString();
-		},
-		[searchParams, pathname],
-	);
+      return pathname + "?" + params.toString();
+    },
+    [searchParams, pathname],
+  );
 
-	return (
-		<div
-			css={css`
-				width: 170px;
-				max-width: 170px;
-				min-width: 170px;
-				overflow: visible;
-			`}
-		>
-			<VerticalTabs
-				css={css`
-					height: 100%;
-				`}
-			>
-				{fileStates?.filter(notNull).map((fileState, index) => (
-					<Link href={createURL(fileState.clinicalType)} key={index}>
-						<VerticalTabs.Item
-							key={fileState.clinicalType}
-							active={selectedFile?.clinicalType === fileState.clinicalType}
-							onClick={onFileClick(fileState.clinicalType)}
-						>
-							<div
-								css={css`
-									text-align: left;
-								`}
-							>
-								{fileState.displayName}
-							</div>
-							{!!fileState.recordsCount &&
-								fileState.status !== 'NONE' &&
-								fileState.status !== 'ERROR' && (
-									<VerticalTabs.Tag variant={fileState.status}>
-										{fileState.recordsCount}
-									</VerticalTabs.Tag>
-								)}
-							{fileState.status === 'ERROR' && (
-								<VerticalTabs.Tag variant="ERROR">
-									<Icon name="exclamation" fill="#fff" height="10px" width="10px" />
-								</VerticalTabs.Tag>
-							)}
-						</VerticalTabs.Item>
-					</Link>
-				))}
-			</VerticalTabs>
-		</div>
-	);
+  return (
+    <div
+      css={css`
+        width: 170px;
+        max-width: 170px;
+        min-width: 170px;
+        overflow: visible;
+      `}
+    >
+      <VerticalTabs
+        css={css`
+          height: 100%;
+        `}
+      >
+        {fileStates?.filter(notNull).map((fileState, index) => (
+          <Link href={createURL(fileState.clinicalType)} key={index}>
+            <VerticalTabs.Item
+              key={fileState.clinicalType}
+              active={selectedFile?.clinicalType === fileState.clinicalType}
+              onClick={onFileClick(fileState.clinicalType)}
+            >
+              <div
+                css={css`
+                  text-align: left;
+                `}
+              >
+                {fileState.displayName}
+              </div>
+              {!!fileState.recordsCount &&
+                fileState.status !== "NONE" &&
+                fileState.status !== "ERROR" && (
+                  <VerticalTabs.Tag variant={fileState.status}>
+                    {fileState.recordsCount}
+                  </VerticalTabs.Tag>
+                )}
+              {fileState.status === "ERROR" && (
+                <VerticalTabs.Tag variant="ERROR">
+                  <Icon
+                    name="exclamation"
+                    fill="#fff"
+                    height="10px"
+                    width="10px"
+                  />
+                </VerticalTabs.Tag>
+              )}
+            </VerticalTabs.Item>
+          </Link>
+        ))}
+      </VerticalTabs>
+    </div>
+  );
 };
 
 export default VerticalTabsSection;
