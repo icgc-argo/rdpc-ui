@@ -169,6 +169,10 @@ const ProgramMenu = ({ searchQuery }: { searchQuery: string }) => {
               }
               selected={pathnameLastSegment === "registration"}
             />
+          </Link>
+          <Link
+            href={`/submission/program/${shortName}/clinical-submission?tab=donor`}
+          >
             <MenuItem
               level={3}
               content={<SubmitClinical />}
