@@ -16,23 +16,23 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { format as formatDate } from "date-fns";
+import { format as formatDate } from 'date-fns';
 
 export const toDisplayRowIndex = (index: number | string) => Number(index) + 2;
 export const toDisplayError = <Err extends { row: number }>(err: Err): Err => ({
-  ...err,
-  row: toDisplayRowIndex(err.row),
+	...err,
+	row: toDisplayRowIndex(err.row),
 });
 
 export const formatFileName = (fileName: string): string => {
-  return fileName.length > 40 ? `${fileName.substr(0, 39)}...` : fileName;
+	return fileName.length > 40 ? `${fileName.substr(0, 39)}...` : fileName;
 };
 
-const dateTimeFormat = { date: "MMMM d, yyyy", time: "h:mm a" };
+const dateTimeFormat = { date: 'MMMM d, yyyy', time: 'h:mm a' };
 export const displayDateAndTime = (date: string | Date) => {
-  if (!date) return "";
-  const jsDate = typeof date === "string" ? new Date(date) : date;
-  const formattedDate = formatDate(jsDate, dateTimeFormat.date);
-  const formattedTime = formatDate(jsDate, dateTimeFormat.time);
-  return `${formattedDate} at ${formattedTime}`;
+	if (!date) return '';
+	const jsDate = typeof date === 'string' ? new Date(date) : date;
+	const formattedDate = formatDate(jsDate, dateTimeFormat.date);
+	const formattedTime = formatDate(jsDate, dateTimeFormat.time);
+	return `${formattedDate} at ${formattedTime}`;
 };

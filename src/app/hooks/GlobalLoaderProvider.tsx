@@ -17,22 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { FadingDiv } from "@/app/components/FadingDiv";
-import {
-  fillAvailableHeight,
-  fillAvailableWidth,
-} from "@/app/components/Modal";
-import { DnaLoader, Modal, css } from "@icgc-argo/uikit";
-import {
-  FC,
-  ReactNode,
-  createContext,
-  createRef,
-  useContext,
-  useState,
-} from "react";
-import ReactDOM from "react-dom";
-import { CSSTransition } from "react-transition-group";
+import { FadingDiv } from '@/app/components/FadingDiv';
+import { fillAvailableHeight, fillAvailableWidth } from '@/app/components/Modal';
+import { DnaLoader, Modal, css } from '@icgc-argo/uikit';
+import { FC, ReactNode, createContext, createRef, useContext, useState } from 'react';
+import ReactDOM from 'react-dom';
+import { CSSTransition } from 'react-transition-group';
 
 /*
  * ############################################################################
@@ -52,69 +42,53 @@ export const GLOBAL_LOADING_DEFAULT = false;
 
 export const loaderPortalRef = createRef<HTMLDivElement>();
 
-const GlobalLoaderView = ({
-  isGlobalLoading,
-}: {
-  isGlobalLoading: IsGlobalLoading;
-}) => {
-  const ref = loaderPortalRef.current;
-  const fadeIn = 400;
-  const fadeOut = 600;
+const GlobalLoaderView = ({ isGlobalLoading }: { isGlobalLoading: IsGlobalLoading }) => {
+	const ref = loaderPortalRef.current;
+	const fadeIn = 400;
+	const fadeOut = 600;
 
-  return ref
-    ? ReactDOM.createPortal(
-        <CSSTransition
-          in={isGlobalLoading}
-          timeout={fadeIn}
-          classNames="on"
-          unmountOnExit
-        >
-          {() => (
-            <FadingDiv
-              enterAnimationLength={fadeIn}
-              exitAnimationLength={fadeOut}
-            >
-              <Modal.Overlay
-                css={css`
-                  ${fillAvailableWidth}
-                  ${fillAvailableHeight}
+	return ref
+		? ReactDOM.createPortal(
+				<CSSTransition in={isGlobalLoading} timeout={fadeIn} classNames="on" unmountOnExit>
+					{() => (
+						<FadingDiv enterAnimationLength={fadeIn} exitAnimationLength={fadeOut}>
+							<Modal.Overlay
+								css={css`
+									${fillAvailableWidth}
+									${fillAvailableHeight}
                   @media (min-width: 768px) {
-                    width: 100vw;
-                    height: 100vh;
-                  }
-                `}
-              >
-                <DnaLoader />
-              </Modal.Overlay>
-            </FadingDiv>
-          )}
-        </CSSTransition>,
-        ref,
-      )
-    : null;
+										width: 100vw;
+										height: 100vh;
+									}
+								`}
+							>
+								<DnaLoader />
+							</Modal.Overlay>
+						</FadingDiv>
+					)}
+				</CSSTransition>,
+				ref,
+		  )
+		: null;
 };
 
 const GlobalLoadingContext = createContext({
-  isGlobalLoading: GLOBAL_LOADING_DEFAULT,
-  // eslint-disable-next-line
-  setGlobalLoading: (isGlobalLoading: IsGlobalLoading) => {},
+	isGlobalLoading: GLOBAL_LOADING_DEFAULT,
+	// eslint-disable-next-line
+	setGlobalLoading: (isGlobalLoading: IsGlobalLoading) => {},
 });
 
 export const useGlobalLoader = () => useContext(GlobalLoadingContext);
 
-export const GlobalLoaderProvider: FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const [isGlobalLoading, setGlobalLoading] = useState(GLOBAL_LOADING_DEFAULT);
+export const GlobalLoaderProvider: FC<{ children: ReactNode }> = ({ children }) => {
+	const [isGlobalLoading, setGlobalLoading] = useState(GLOBAL_LOADING_DEFAULT);
 
-  return (
-    <GlobalLoadingContext.Provider
-      value={{ isGlobalLoading, setGlobalLoading }}
-    >
-      {children}
-      <GlobalLoaderView isGlobalLoading={isGlobalLoading} />
-    </GlobalLoadingContext.Provider>
-  );
+	return (
+		<GlobalLoadingContext.Provider value={{ isGlobalLoading, setGlobalLoading }}>
+			{children}
+			<GlobalLoaderView isGlobalLoading={isGlobalLoading} />
+		</GlobalLoadingContext.Provider>
+	);
 };
 
 export default GlobalLoaderProvider;

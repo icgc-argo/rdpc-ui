@@ -18,85 +18,79 @@
  */
 
 import {
-  ColumnDef,
-  NOTIFICATION_VARIANTS,
-  NotificationVariant,
-  ReactTableCustomProps,
-  Table,
-} from "@icgc-argo/uikit";
+	ColumnDef,
+	NOTIFICATION_VARIANTS,
+	NotificationVariant,
+	ReactTableCustomProps,
+	Table,
+} from '@icgc-argo/uikit';
 
 export type ErrorNotificationDefaultColumns = {
-  donorId: string;
-  field: string;
-  message: string;
-  row: number;
-  value: string;
+	donorId: string;
+	field: string;
+	message: string;
+	row: number;
+	value: string;
 };
 
 // use these props for tables used in ErrorNotification
 export const errorNotificationTableProps: ReactTableCustomProps = {
-  enableColumnResizing: true,
-  enableSorting: true,
-  withHeaders: true,
-  withRowHighlight: true,
-  withStripes: true,
+	enableColumnResizing: true,
+	enableSorting: true,
+	withHeaders: true,
+	withRowHighlight: true,
+	withStripes: true,
 };
 
 export const getDefaultErrorTableColumns = (
-  level: NotificationVariant,
+	level: NotificationVariant,
 ): {
-  accessorKey: keyof ErrorNotificationDefaultColumns;
-  header: string;
-  maxSize?: number;
+	accessorKey: keyof ErrorNotificationDefaultColumns;
+	header: string;
+	maxSize?: number;
 }[] => {
-  const variant = level === NOTIFICATION_VARIANTS.ERROR ? "Error" : "Warning";
-  return [
-    { accessorKey: "row", header: "Line #", maxSize: 70 },
-    {
-      accessorKey: "donorId",
-      header: "Submitter Donor ID",
-      maxSize: 160,
-    },
-    {
-      accessorKey: "field",
-      header: `Field with ${variant}`,
-      maxSize: 200,
-    },
-    {
-      accessorKey: "value",
-      header: `${variant} Value`,
-      maxSize: 130,
-    },
-    {
-      accessorKey: "message",
-      header: `${variant} Description`,
-    },
-  ];
+	const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
+	return [
+		{ accessorKey: 'row', header: 'Line #', maxSize: 70 },
+		{
+			accessorKey: 'donorId',
+			header: 'Submitter Donor ID',
+			maxSize: 160,
+		},
+		{
+			accessorKey: 'field',
+			header: `Field with ${variant}`,
+			maxSize: 200,
+		},
+		{
+			accessorKey: 'value',
+			header: `${variant} Value`,
+			maxSize: 130,
+		},
+		{
+			accessorKey: 'message',
+			header: `${variant} Description`,
+		},
+	];
 };
 
 export const getDefaultErrorReportColumns = (level: NotificationVariant) =>
-  getDefaultErrorTableColumns(level).map(({ accessorKey, header }) => ({
-    header,
-    id: accessorKey,
-  }));
+	getDefaultErrorTableColumns(level).map(({ accessorKey, header }) => ({
+		header,
+		id: accessorKey,
+	}));
 
 const ErrorNotificationDefaultTable = ({
-  data,
-  level,
+	data,
+	level,
 }: {
-  data: ErrorNotificationDefaultColumns[];
-  level: NotificationVariant;
+	data: ErrorNotificationDefaultColumns[];
+	level: NotificationVariant;
 }) => {
-  const tableColumns: ColumnDef<ErrorNotificationDefaultColumns>[] =
-    getDefaultErrorTableColumns(level);
+	const tableColumns: ColumnDef<ErrorNotificationDefaultColumns>[] =
+		getDefaultErrorTableColumns(level);
 
-  return (
-    <Table
-      columns={tableColumns}
-      data={data}
-      {...errorNotificationTableProps}
-    />
-  );
+	return <Table columns={tableColumns} data={data} {...errorNotificationTableProps} />;
 };
 
 export default ErrorNotificationDefaultTable;

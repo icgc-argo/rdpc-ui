@@ -17,120 +17,107 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import ModalPortal from "@/app/components/Modal";
-import COMMIT_CLINICAL_REGISTRATION_MUTATION from "@/app/gql/COMMIT_CLINICAL_REGISTRATION_MUTATION";
-import GET_REGISTRATION_QUERY from "@/app/gql/GET_REGISTRATION_QUERY";
-import { useGlobalLoader } from "@/app/hooks/GlobalLoaderProvider";
-import { useToaster } from "@/app/hooks/ToastProvider";
+import ModalPortal from '@/app/components/Modal';
+import COMMIT_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/COMMIT_CLINICAL_REGISTRATION_MUTATION';
+import GET_REGISTRATION_QUERY from '@/app/gql/GET_REGISTRATION_QUERY';
+import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
+import { useToaster } from '@/app/hooks/ToastProvider';
 import {
-  CONTACT_PAGE_PATH,
-  PROGRAM_DASHBOARD_PATH,
-  PROGRAM_SHORT_NAME_PATH,
-} from "@/global/constants";
-import { sleep } from "@/global/utils";
-import { useMutation } from "@apollo/client";
-import {
-  Modal,
-  TOAST_VARIANTS,
-  Typography,
-  Link as UIKitLink,
-} from "@icgc-argo/uikit";
-import { get } from "lodash";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import pluralize from "pluralize";
+	CONTACT_PAGE_PATH,
+	PROGRAM_DASHBOARD_PATH,
+	PROGRAM_SHORT_NAME_PATH,
+} from '@/global/constants';
+import { sleep } from '@/global/utils';
+import { useMutation } from '@apollo/client';
+import { Modal, TOAST_VARIANTS, Typography, Link as UIKitLink } from '@icgc-argo/uikit';
+import { get } from 'lodash';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import pluralize from 'pluralize';
 
 export default function RegisterSamplesModal({
-  onCancelClick: handleCancelClick,
-  shortName,
-  registrationId,
+	onCancelClick: handleCancelClick,
+	shortName,
+	registrationId,
 }: {
-  onCancelClick: () => void;
-  shortName: string;
-  registrationId: string;
+	onCancelClick: () => void;
+	shortName: string;
+	registrationId: string;
 }) {
-  const [commitRegistration] = useMutation(
-    COMMIT_CLINICAL_REGISTRATION_MUTATION,
-    {
-      variables: {
-        shortName,
-        registrationId,
-      },
-      // update side menu status
-      refetchQueries: [
-        {
-          query: GET_REGISTRATION_QUERY,
-          variables: { shortName },
-        },
-      ],
-    },
-  );
+	const [commitRegistration] = useMutation(COMMIT_CLINICAL_REGISTRATION_MUTATION, {
+		variables: {
+			shortName,
+			registrationId,
+		},
+		// update side menu status
+		refetchQueries: [
+			{
+				query: GET_REGISTRATION_QUERY,
+				variables: { shortName },
+			},
+		],
+	});
 
-  const { setGlobalLoading } = useGlobalLoader();
+	const { setGlobalLoading } = useGlobalLoader();
 
-  const toaster = useToaster();
-  const router = useRouter();
+	const toaster = useToaster();
+	const router = useRouter();
 
-  const handleActionClick = async () => {
-    handleCancelClick();
+	const handleActionClick = async () => {
+		handleCancelClick();
 
-    setGlobalLoading(true);
-    await sleep();
+		setGlobalLoading(true);
+		await sleep();
 
-    await commitRegistration()
-      .then(async ({ data, errors }) => {
-        await sleep();
+		await commitRegistration()
+			.then(async ({ data, errors }) => {
+				await sleep();
 
-        const num = get(data, "commitClinicalRegistration.length", 0);
-        router.push(
-          PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, shortName),
-        );
+				const num = get(data, 'commitClinicalRegistration.length', 0);
+				router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, shortName));
 
-        toaster.addToast({
-          interactionType: "CLOSE",
-          title: `${num.toLocaleString()} new registered ${pluralize(
-            "sample",
-            num,
-          )}`,
-          variant: TOAST_VARIANTS.SUCCESS,
-          content: (
-            <Typography>
-              You will see the updates on your dashboard shortly. If you have
-              any changes to this registered sample data, please{" "}
-              <Link href={CONTACT_PAGE_PATH} passHref legacyBehavior>
-                <UIKitLink>contact the DCC.</UIKitLink>
-              </Link>
-            </Typography>
-          ),
-        });
-      })
-      .catch((error) => {
-        toaster.addToast({
-          interactionType: "CLOSE",
-          title: "",
-          variant: TOAST_VARIANTS.ERROR,
-          content: error.toString(),
-        });
-      });
-    setGlobalLoading(false);
-  };
+				toaster.addToast({
+					interactionType: 'CLOSE',
+					title: `${num.toLocaleString()} new registered ${pluralize('sample', num)}`,
+					variant: TOAST_VARIANTS.SUCCESS,
+					content: (
+						<Typography>
+							You will see the updates on your dashboard shortly. If you have any changes to this
+							registered sample data, please{' '}
+							<Link href={CONTACT_PAGE_PATH} passHref legacyBehavior>
+								<UIKitLink>contact the DCC.</UIKitLink>
+							</Link>
+						</Typography>
+					),
+				});
+			})
+			.catch((error) => {
+				toaster.addToast({
+					interactionType: 'CLOSE',
+					title: '',
+					variant: TOAST_VARIANTS.ERROR,
+					content: error.toString(),
+				});
+			});
+		setGlobalLoading(false);
+	};
 
-  return (
-    <ModalPortal>
-      <Modal
-        title="Are you sure you want to register samples?"
-        actionButtonText="YES, REGISTER SAMPLES"
-        actionButtonId="modal-confirm-register"
-        buttonSize="sm"
-        onActionClick={handleActionClick}
-        onCancelClick={handleCancelClick}
-        onCloseClick={handleCancelClick}
-      >
-        <div>
-          Once these samples are registered, you can submit clinical and
-          molecular data for the donors associated with those samples.
-        </div>
-      </Modal>
-    </ModalPortal>
-  );
+	return (
+		<ModalPortal>
+			<Modal
+				title="Are you sure you want to register samples?"
+				actionButtonText="YES, REGISTER SAMPLES"
+				actionButtonId="modal-confirm-register"
+				buttonSize="sm"
+				onActionClick={handleActionClick}
+				onCancelClick={handleCancelClick}
+				onCloseClick={handleCancelClick}
+			>
+				<div>
+					Once these samples are registered, you can submit clinical and molecular data for the
+					donors associated with those samples.
+				</div>
+			</Modal>
+		</ModalPortal>
+	);
 }

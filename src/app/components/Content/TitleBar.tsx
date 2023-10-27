@@ -16,48 +16,48 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-"use client";
+'use client';
 
-import { css, useTheme } from "@/lib/emotion";
-import { TitleBar as TitleBarComp } from "@icgc-argo/uikit";
+import { css, useTheme } from '@/lib/emotion';
+import { TitleBar as TitleBarComp } from '@icgc-argo/uikit';
 
 const TitleBar = () => {
-  const theme = useTheme();
-  return (
-    <div
-      css={css`
-        display: flex;
-        padding: 0 20px;
-        background-color: ${theme.colors.white};
-      `}
-    >
-      <TitleBarComp
-        css={css`
-          margin-right: 10px;
-        `}
-      >
-        <>All Programs</>
-      </TitleBarComp>
-      <div
-        id="progress-bar"
-        css={css`
-          display: none;
-        `}
-      >
-        future work
-      </div>
+	const theme = useTheme();
+	return (
+		<div
+			css={css`
+				display: flex;
+				padding: 0 20px;
+				background-color: ${theme.colors.white};
+			`}
+		>
+			<TitleBarComp
+				css={css`
+					margin-right: 10px;
+				`}
+			>
+				<>All Programs</>
+			</TitleBarComp>
+			<div
+				id="progress-bar"
+				css={css`
+					display: none;
+				`}
+			>
+				future work
+			</div>
 
-      <div
-        css={css`
-          margin-left: auto;
-          display: none;
-        `}
-        id="col-buttons"
-      >
-        future work
-      </div>
-    </div>
-  );
+			<div
+				css={css`
+					margin-left: auto;
+					display: none;
+				`}
+				id="col-buttons"
+			>
+				future work
+			</div>
+		</div>
+	);
 };
 
 export default TitleBar;

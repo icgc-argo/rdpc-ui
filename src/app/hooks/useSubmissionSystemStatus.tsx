@@ -16,11 +16,11 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { useQuery } from "@apollo/client";
-import CLINICAL_SUBMISSION_SYSTEM_STATUS_QUERY from "../gql/CLINICAL_SUBMISSION_SYSTEM_STATUS";
+import { useQuery } from '@apollo/client';
+import CLINICAL_SUBMISSION_SYSTEM_STATUS_QUERY from '../gql/CLINICAL_SUBMISSION_SYSTEM_STATUS';
 
 export const useSubmissionSystemStatus = () => {
-  const { data } = useQuery(CLINICAL_SUBMISSION_SYSTEM_STATUS_QUERY);
+	const { data } = useQuery(CLINICAL_SUBMISSION_SYSTEM_STATUS_QUERY);
 
-  return { isDisabled: !!data?.clinicalSubmissionSystemDisabled };
+	return { isDisabled: !!data?.clinicalSubmissionSystemDisabled };
 };

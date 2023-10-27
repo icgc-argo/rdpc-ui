@@ -23,4 +23,4 @@
  * future proofing these functions in a single file
  * we can change them here instead of every single file that imports them
  */
-export { defaultTheme, ThemeProvider, css, useTheme, styled, Global } from '@icgc-argo/uikit';
+export { Global, ThemeProvider, css, defaultTheme, styled, useTheme } from '@icgc-argo/uikit';
