@@ -59,10 +59,10 @@ const Header: FC<HeaderProps> = ({
 	// docs url
 	const { DOCS_URL_ROOT } = useAppConfigContext();
 	const helpUrl = urlJoin(DOCS_URL_ROOT, '/docs/submission/submitting-clinical-data');
-	const { egoJwt, permissions, TokenUtils } = useAuthContext();
+	const { permissions, TokenUtils } = useAuthContext();
 
-	const isDcc = useMemo(() => TokenUtils.isDccMember(permissions), [egoJwt]);
-	const isRdpc = useMemo(() => (egoJwt ? TokenUtils.isRdpcMember(permissions) : false), [egoJwt]);
+	const isDcc = useMemo(() => TokenUtils.isDccMember(permissions), [permissions]);
+	const isRdpc = useMemo(() => TokenUtils.isRdpcMember(permissions), [permissions]);
 	const isAdmin = isDcc || isRdpc;
 
 	const isPendingApproval = clinicalState === 'PENDING_APPROVAL';
