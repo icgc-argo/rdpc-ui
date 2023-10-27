@@ -17,79 +17,79 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import {
-  ClinicalRecord,
-  ClinicalRegistrationData,
-  GetRegistrationQuery,
-  Maybe,
-} from "@/__generated__/graphql";
-import { get, union } from "lodash";
-import FileTable from "./FileTable";
+	ClinicalRecord,
+	ClinicalRegistrationData,
+	GetRegistrationQuery,
+	Maybe,
+} from '@/__generated__/graphql';
+import { get, union } from 'lodash';
+import FileTable from './FileTable';
 
 export type FileTableData = ClinicalRegistrationData & {
-  row: number;
-  isNew: boolean;
+	row: number;
+	isNew: boolean;
 };
 
 const recordsToFileTable = (
-  records: Maybe<ClinicalRecord>[],
-  newRows: Array<number>,
+	records: Maybe<ClinicalRecord>[],
+	newRows: Array<number>,
 ): FileTableData[] =>
-  records.map((record) => {
-    const fields = get(record, "fields") || [];
-    const data = fields.reduce(
-      (acc, cur) => ({
-        ...acc,
-        [cur.name]: cur.value,
-      }),
-      {} as any,
-    );
+	records.map((record) => {
+		const fields = get(record, 'fields') || [];
+		const data = fields.reduce(
+			(acc, cur) => ({
+				...acc,
+				[cur.name]: cur.value,
+			}),
+			{} as any,
+		);
 
-    return {
-      ...data,
-      row: record?.row,
-      isNew: newRows.includes(record?.row || -1),
-    };
-  });
+		return {
+			...data,
+			row: record?.row,
+			isNew: newRows.includes(record?.row || -1),
+		};
+	});
 
 const FilePreview = ({
-  registration,
+	registration,
 }: {
-  registration: GetRegistrationQuery["clinicalRegistration"];
+	registration: GetRegistrationQuery['clinicalRegistration'];
 }) => {
-  const fileRecords = get(registration, "records");
+	const fileRecords = get(registration, 'records');
 
-  const {
-    createdAt = "",
-    creator = "",
-    fileName = "",
-    alreadyRegistered: { count: alreadyRegisteredCount = 0 },
-    newDonors: { rows: newDonors },
-    newSamples: { rows: newSamples },
-    newSpecimens: { rows: newSpecimens },
-  } = registration;
+	const {
+		createdAt = '',
+		creator = '',
+		fileName = '',
+		alreadyRegistered: { count: alreadyRegisteredCount = 0 },
+		newDonors: { rows: newDonors },
+		newSamples: { rows: newSamples },
+		newSpecimens: { rows: newSpecimens },
+	} = registration;
 
-  const submissionInfo = { createdAt, creator, fileName };
-  const newRows = union(newDonors, newSamples, newSpecimens) as number[];
-  const stats = {
-    newCount: newRows.length,
-    existingCount: alreadyRegisteredCount,
-  };
+	const submissionInfo = { createdAt, creator, fileName };
+	const newRows = union(newDonors, newSamples, newSpecimens) as number[];
+	const stats = {
+		newCount: newRows.length,
+		existingCount: alreadyRegisteredCount,
+	};
 
-  const records = recordsToFileTable(fileRecords, newRows);
+	const records = recordsToFileTable(fileRecords, newRows);
 
-  return (
-    <FileTable
-      records={records}
-      stats={stats}
-      submissionInfo={
-        submissionInfo as {
-          createdAt: string;
-          creator: string;
-          fileName: string;
-        }
-      }
-    />
-  );
+	return (
+		<FileTable
+			records={records}
+			stats={stats}
+			submissionInfo={
+				submissionInfo as {
+					createdAt: string;
+					creator: string;
+					fileName: string;
+				}
+			}
+		/>
+	);
 };
 
 export default FilePreview;
