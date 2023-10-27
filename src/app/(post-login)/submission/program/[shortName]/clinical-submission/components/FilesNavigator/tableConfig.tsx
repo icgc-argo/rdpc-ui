@@ -17,184 +17,171 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { CellContentCenter, DataTableStarIcon } from '@/app/components/Table/common';
+import { toDisplayRowIndex } from '@/global/utils';
+import { ColumnDef, Row, css } from '@icgc-argo/uikit';
 import {
-  CellContentCenter,
-  DataTableStarIcon,
-} from "@/app/components/Table/common";
-import { toDisplayRowIndex } from "@/global/utils";
-import { ColumnDef, Row, css } from "@icgc-argo/uikit";
-import {
-  ClinicalEntity,
-  ClinicalSubmissionError,
-  ClinicalSubmissionRecord,
-  Stats,
-} from "../../types";
-import { FILE_STATE_COLORS } from "./StatsArea";
-import {
-  CellStatusDisplay,
-  DataFieldCell,
-  StatusColumnCell,
-} from "./TableCells";
-import { FileRecord } from "./types";
+	ClinicalEntity,
+	ClinicalSubmissionError,
+	ClinicalSubmissionRecord,
+	Stats,
+} from '../../types';
+import { FILE_STATE_COLORS } from './StatsArea';
+import { CellStatusDisplay, DataFieldCell, StatusColumnCell } from './TableCells';
+import { FileRecord } from './types';
 
 type FileRecordTableProps = { row: { original: FileRecord } };
 
 // util
 export const recordHasError = (original: FileRecord, stats: Stats) =>
-  stats?.errorsFound.some((row) => row === original.rowIndex);
+	stats?.errorsFound.some((row) => row === original.rowIndex);
 
 export const rowHasUpdate = (original: FileRecord, stats: Stats) =>
-  stats?.updated.some((row) => row === original.rowIndex);
+	stats?.updated.some((row) => row === original.rowIndex);
 
 export const cellHasUpdate = ({
-  original,
-  field,
-  dataUpdates,
+	original,
+	field,
+	dataUpdates,
 }: {
-  original: FileRecord;
-  field: string;
-  dataUpdates: any;
+	original: FileRecord;
+	field: string;
+	dataUpdates: any;
 }) =>
-  Array.isArray(dataUpdates) &&
-  dataUpdates.some(
-    (update) => update.field === field && update.row === original.rowIndex,
-  );
+	Array.isArray(dataUpdates) &&
+	dataUpdates.some((update) => update.field === field && update.row === original.rowIndex);
 
-export const recordHasWarning = (
-  original: FileRecord,
-  dataWarnings: ClinicalSubmissionError[],
-) =>
-  Array.isArray(dataWarnings) &&
-  dataWarnings.some((warning) => warning.row === original.rowIndex);
+export const recordHasWarning = (original: FileRecord, dataWarnings: ClinicalSubmissionError[]) =>
+	Array.isArray(dataWarnings) && dataWarnings.some((warning) => warning.row === original.rowIndex);
 
 type GetTableColumns = (
-  file: ClinicalEntity,
-  isPendingApproval: boolean,
-  isSubmissionValidated: boolean,
-  isDiffPreview: boolean,
+	file: ClinicalEntity,
+	isPendingApproval: boolean,
+	isSubmissionValidated: boolean,
+	isDiffPreview: boolean,
 ) => ColumnDef<FileRecord>[];
 export const getTableColumns: GetTableColumns = (
-  file,
-  isPendingApproval,
-  isSubmissionValidated,
-  isDiffPreview,
+	file,
+	isPendingApproval,
+	isSubmissionValidated,
+	isDiffPreview,
 ) => {
-  const { stats, records, dataUpdates } = file;
+	const { stats, records, dataUpdates } = file;
 
-  const fields = records.length ? records[0].fields : [];
-  const directlyMappedFields = fields.map(({ name: fieldName }) => ({
-    accessorKey: fieldName,
-    header: fieldName,
-    cell: ({ row: { original } }: FileRecordTableProps) => (
-      <CellStatusDisplay original={original} field={fieldName}>
-        <DataFieldCell
-          original={original}
-          fieldName={fieldName}
-          isDiffPreview={isDiffPreview}
-          file={file}
-          stats={stats}
-        />
-      </CellStatusDisplay>
-    ),
-  }));
+	const fields = records.length ? records[0].fields : [];
+	const directlyMappedFields = fields.map(({ name: fieldName }) => ({
+		accessorKey: fieldName,
+		header: fieldName,
+		cell: ({ row: { original } }: FileRecordTableProps) => (
+			<CellStatusDisplay original={original} field={fieldName}>
+				<DataFieldCell
+					original={original}
+					fieldName={fieldName}
+					isDiffPreview={isDiffPreview}
+					file={file}
+					stats={stats}
+				/>
+			</CellStatusDisplay>
+		),
+	}));
 
-  const cols: ColumnDef<FileRecord>[] = [
-    {
-      accessorKey: "rowIndex",
-      cell: ({ row: { original } }: FileRecordTableProps) => (
-        <CellStatusDisplay
-          original={original}
-          isPendingApproval={isPendingApproval}
-          stats={stats}
-          dataUpdates={dataUpdates}
-        >
-          <CellContentCenter
-            css={
-              rowHasUpdate(original, stats) &&
-              css`
-                justify-content: flex-start;
-                padding-top: 5px;
-              `
-            }
-          >
-            {toDisplayRowIndex(original.rowIndex)}
-          </CellContentCenter>
-        </CellStatusDisplay>
-      ),
+	const cols: ColumnDef<FileRecord>[] = [
+		{
+			accessorKey: 'rowIndex',
+			cell: ({ row: { original } }: FileRecordTableProps) => (
+				<CellStatusDisplay
+					original={original}
+					isPendingApproval={isPendingApproval}
+					stats={stats}
+					dataUpdates={dataUpdates}
+				>
+					<CellContentCenter
+						css={
+							rowHasUpdate(original, stats) &&
+							css`
+								justify-content: flex-start;
+								padding-top: 5px;
+							`
+						}
+					>
+						{toDisplayRowIndex(original.rowIndex)}
+					</CellContentCenter>
+				</CellStatusDisplay>
+			),
 
-      enableResizing: false,
-      header: "Line #",
-      size: 70,
-    },
-    {
-      id: "status",
-      accessorKey: "status",
-      cell: ({ row: { original } }: FileRecordTableProps) => (
-        <CellStatusDisplay original={original} field="status">
-          <StatusColumnCell
-            original={original}
-            stats={stats}
-            isDiffPreview={isDiffPreview}
-            isSubmissionValidated={isSubmissionValidated}
-          />
-        </CellStatusDisplay>
-      ),
-      enableResizing: false,
+			enableResizing: false,
+			header: 'Line #',
+			size: 70,
+		},
+		{
+			id: 'status',
+			accessorKey: 'status',
+			cell: ({ row: { original } }: FileRecordTableProps) => (
+				<CellStatusDisplay original={original} field="status">
+					<StatusColumnCell
+						original={original}
+						stats={stats}
+						isDiffPreview={isDiffPreview}
+						isSubmissionValidated={isSubmissionValidated}
+					/>
+				</CellStatusDisplay>
+			),
+			enableResizing: false,
 
-      header: () => (
-        <CellContentCenter>
-          <DataTableStarIcon fill={FILE_STATE_COLORS.NONE} />
-        </CellContentCenter>
-      ),
-      size: 50,
-      sortingFn: (a: Row<FileRecord>, b: Row<FileRecord>) => {
-        const sortA = a.original.status;
-        const sortB = b.original.status;
-        const priorities: { [k in FileRecord["status"]]: number } = {
-          ERROR: 1,
-          UPDATE: 2,
-          NEW: 3,
-          NONE: 4,
-        };
-        return priorities[sortA] - priorities[sortB];
-      },
-    },
-    ...directlyMappedFields,
-  ].map((column) => ({
-    ...column,
-    meta: {
-      customCell: true,
-    },
-  }));
-  return cols;
+			header: () => (
+				<CellContentCenter>
+					<DataTableStarIcon fill={FILE_STATE_COLORS.NONE} />
+				</CellContentCenter>
+			),
+			size: 50,
+			sortingFn: (a: Row<FileRecord>, b: Row<FileRecord>) => {
+				const sortA = a.original.status;
+				const sortB = b.original.status;
+				const priorities: { [k in FileRecord['status']]: number } = {
+					ERROR: 1,
+					UPDATE: 2,
+					NEW: 3,
+					NONE: 4,
+				};
+				return priorities[sortA] - priorities[sortB];
+			},
+		},
+		...directlyMappedFields,
+	].map((column) => ({
+		...column,
+		meta: {
+			customCell: true,
+		},
+	}));
+	return cols;
 };
 
 const getStatus = (record: ClinicalSubmissionRecord, stats: Stats) => {
-  if (stats.updated.some((i) => i === record.row)) {
-    return "UPDATE";
-  } else if (stats.errorsFound.some((i) => i === record.row)) {
-    return "ERROR";
-  } else if (stats.new.some((i) => i === record.row)) {
-    return "NEW";
-  } else {
-    return "NONE";
-  }
+	if (stats.updated.some((i) => i === record.row)) {
+		return 'UPDATE';
+	} else if (stats.errorsFound.some((i) => i === record.row)) {
+		return 'ERROR';
+	} else if (stats.new.some((i) => i === record.row)) {
+		return 'NEW';
+	} else {
+		return 'NONE';
+	}
 };
 
 type GetTableData = (file: ClinicalEntity) => FileRecord[];
 export const getTableData: GetTableData = (file) => {
-  const { stats, records } = file;
-  return records.map((record) => {
-    const recordFields = record.fields.reduce((acc, { name, value }) => ({
-      ...acc,
-      [name]: value,
-    }));
-    const { row } = record;
-    const status = getStatus(record, stats);
-    return {
-      rowIndex: row,
-      status,
-      ...recordFields,
-    };
-  });
+	const { stats, records } = file;
+	return records.map((record) => {
+		const recordFields = record.fields.reduce((acc, { name, value }) => ({
+			...acc,
+			[name]: value,
+		}));
+		const { row } = record;
+		const status = getStatus(record, stats);
+		return {
+			rowIndex: row,
+			status,
+			...recordFields,
+		};
+	});
 };

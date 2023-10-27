@@ -17,113 +17,108 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import CLEAR_CLINICAL_SUBMISSION from "@/app/gql/CLEAR_CLINICAL_SUBMISSION";
-import { useToaster } from "@/app/hooks/ToastProvider";
-import useCommonToasters from "@/app/hooks/useCommonToasters";
-import { css } from "@/lib/emotion";
-import { useMutation } from "@apollo/client";
-import { Col } from "react-grid-system";
-import { ClinicalEntity, ClinicalSubmission } from "../../types";
-import FilePreview from "./FilePreview";
-import VerticalTabsSection from "./Tabs";
-import { ErrorBox, NoContentPlaceholder } from "./ui";
+import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/CLEAR_CLINICAL_SUBMISSION';
+import { useToaster } from '@/app/hooks/ToastProvider';
+import useCommonToasters from '@/app/hooks/useCommonToasters';
+import { css } from '@/lib/emotion';
+import { useMutation } from '@apollo/client';
+import { Col } from 'react-grid-system';
+import { ClinicalEntity, ClinicalSubmission } from '../../types';
+import FilePreview from './FilePreview';
+import VerticalTabsSection from './Tabs';
+import { ErrorBox, NoContentPlaceholder } from './ui';
 
 const FilesNavigator = ({
-  fileStates,
-  clearDataError,
-  submissionState,
-  selectedClinicalEntityType,
-  onFileSelect,
-  programShortName,
-  submissionVersion,
-  refetchClinicalSubmission,
+	fileStates,
+	clearDataError,
+	submissionState,
+	selectedClinicalEntityType,
+	onFileSelect,
+	programShortName,
+	submissionVersion,
+	refetchClinicalSubmission,
 }: {
-  submissionState: ClinicalSubmission["clinicalState"];
-  fileStates: ClinicalEntity[];
-  clearDataError: (file: ClinicalEntity) => void;
-  selectedClinicalEntityType: string;
-  onFileSelect: (clinicalEntityType: string) => void;
-  submissionVersion: ClinicalSubmission["clinicalVersion"];
-  programShortName: string;
-  refetchClinicalSubmission: () => void;
+	submissionState: ClinicalSubmission['clinicalState'];
+	fileStates: ClinicalEntity[];
+	clearDataError: (file: ClinicalEntity) => void;
+	selectedClinicalEntityType: string;
+	onFileSelect: (clinicalEntityType: string) => void;
+	submissionVersion: ClinicalSubmission['clinicalVersion'];
+	programShortName: string;
+	refetchClinicalSubmission: () => void;
 }) => {
-  // toasts
-  const commonToaster = useCommonToasters();
-  const toaster = useToaster();
+	// toasts
+	const commonToaster = useCommonToasters();
+	const toaster = useToaster();
 
-  // queries
-  const [clearClinicalEntitySubmission] = useMutation(
-    CLEAR_CLINICAL_SUBMISSION,
-  );
+	// queries
+	const [clearClinicalEntitySubmission] = useMutation(CLEAR_CLINICAL_SUBMISSION);
 
-  // state
-  const selectedFile = fileStates.find(
-    (file) => file && file.clinicalType === selectedClinicalEntityType,
-  );
+	// state
+	const selectedFile = fileStates.find(
+		(file) => file && file.clinicalType === selectedClinicalEntityType,
+	);
 
-  const schemaErrors = selectedFile?.schemaErrors;
+	const schemaErrors = selectedFile?.schemaErrors;
 
-  const clearSubmission = async (fileType: string) => {
-    try {
-      await clearClinicalEntitySubmission({
-        variables: {
-          programShortName: programShortName || "",
-          submissionVersion: submissionVersion || "",
-          fileType,
-        },
-      });
-      toaster.addToast({
-        variant: "SUCCESS",
-        interactionType: "CLOSE",
-        title: "Cleared",
-        content: `Uploaded ${fileType.toUpperCase()} file has been cleared.`,
-      });
-    } catch (err) {
-      await refetchClinicalSubmission();
-      commonToaster.unknownErrorWithReloadMessage();
-    }
-  };
+	const clearSubmission = async (fileType: string) => {
+		try {
+			await clearClinicalEntitySubmission({
+				variables: {
+					programShortName: programShortName || '',
+					submissionVersion: submissionVersion || '',
+					fileType,
+				},
+			});
+			toaster.addToast({
+				variant: 'SUCCESS',
+				interactionType: 'CLOSE',
+				title: 'Cleared',
+				content: `Uploaded ${fileType.toUpperCase()} file has been cleared.`,
+			});
+		} catch (err) {
+			await refetchClinicalSubmission();
+			commonToaster.unknownErrorWithReloadMessage();
+		}
+	};
 
-  const setSelectedClinicalEntityType = () => null;
+	const setSelectedClinicalEntityType = () => null;
 
-  const onErrorClearClick = () => {
-    if (selectedFile) {
-      clearDataError(selectedFile);
-    }
-  };
+	const onErrorClearClick = () => {
+		if (selectedFile) {
+			clearDataError(selectedFile);
+		}
+	};
 
-  return (
-    <div
-      css={css`
-        position: relative;
-        width: 100%;
-        display: flex;
-      `}
-    >
-      <VerticalTabsSection
-        fileStates={fileStates}
-        selectedFile={selectedFile}
-        onFileSelect={setSelectedClinicalEntityType}
-      />
+	return (
+		<div
+			css={css`
+				position: relative;
+				width: 100%;
+				display: flex;
+			`}
+		>
+			<VerticalTabsSection
+				fileStates={fileStates}
+				selectedFile={selectedFile}
+				onFileSelect={setSelectedClinicalEntityType}
+			/>
 
-      <Col style={{ position: "relative", overflow: "hidden" }}>
-        {schemaErrors?.length ? (
-          <ErrorBox
-            data={schemaErrors}
-            selectedFile={selectedFile}
-            onClearClick={onErrorClearClick}
-          />
-        ) : selectedFile?.records.length ? (
-          <FilePreview
-            file={selectedFile}
-            {...{ clearSubmission, submissionState }}
-          />
-        ) : (
-          <NoContentPlaceholder />
-        )}
-      </Col>
-    </div>
-  );
+			<Col style={{ position: 'relative', overflow: 'hidden' }}>
+				{schemaErrors?.length ? (
+					<ErrorBox
+						data={schemaErrors}
+						selectedFile={selectedFile}
+						onClearClick={onErrorClearClick}
+					/>
+				) : selectedFile?.records.length ? (
+					<FilePreview file={selectedFile} {...{ clearSubmission, submissionState }} />
+				) : (
+					<NoContentPlaceholder />
+				)}
+			</Col>
+		</div>
+	);
 };
 
 export default FilesNavigator;

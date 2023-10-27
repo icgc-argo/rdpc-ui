@@ -17,59 +17,59 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ContentPlaceholder } from "@/app/components/ContentPlaceholder";
-import ErrorNotification from "@/app/components/ErrorNotification";
+import { ContentPlaceholder } from '@/app/components/ContentPlaceholder';
+import ErrorNotification from '@/app/components/ErrorNotification';
 import ErrorNotificationDefaultTable, {
-  getDefaultErrorReportColumns,
-} from "@/app/components/ErrorNotification/ErrorNotificationDefaultTable";
-import { toDisplayError } from "@/global/utils";
-import { css } from "@/lib/emotion";
-import { NOTIFICATION_VARIANTS } from "@icgc-argo/uikit";
+	getDefaultErrorReportColumns,
+} from '@/app/components/ErrorNotification/ErrorNotificationDefaultTable';
+import { toDisplayError } from '@/global/utils';
+import { css } from '@/lib/emotion';
+import { NOTIFICATION_VARIANTS } from '@icgc-argo/uikit';
 
 export const NoContentPlaceholder = () => (
-  <div
-    css={css`
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-    `}
-  >
-    <ContentPlaceholder
-      title="You do not have any data uploaded."
-      subtitle="Follow the instructions above to get started."
-    />
-  </div>
+	<div
+		css={css`
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100%;
+		`}
+	>
+		<ContentPlaceholder
+			title="You do not have any data uploaded."
+			subtitle="Follow the instructions above to get started."
+		/>
+	</div>
 );
 
 type ErrorBoxProps = {
-  onClearClick: () => void;
-  data: any;
-  selectedFile: any;
+	onClearClick: () => void;
+	data: any;
+	selectedFile: any;
 };
 export const ErrorBox = ({ onClearClick, selectedFile }: ErrorBoxProps) => {
-  const level = NOTIFICATION_VARIANTS.ERROR;
-  const data = selectedFile.schemaErrors.map(toDisplayError);
-  return (
-    <div
-      id="error-submit-clinical-data"
-      css={css`
-        padding: 16px;
-      `}
-    >
-      <ErrorNotification
-        level={level}
-        onClearClick={onClearClick}
-        reportColumns={getDefaultErrorReportColumns(level)}
-        reportData={data}
-        subtitle={
-          "Your file cannot be processed. Please correct the following errors and reupload your file."
-        }
-        tableComponent={<ErrorNotificationDefaultTable {...{ data, level }} />}
-        title={`${
-          selectedFile.schemaErrors.length
-        } error(s) found in uploaded ${selectedFile.displayName.toLowerCase()} file`}
-      />
-    </div>
-  );
+	const level = NOTIFICATION_VARIANTS.ERROR;
+	const data = selectedFile.schemaErrors.map(toDisplayError);
+	return (
+		<div
+			id="error-submit-clinical-data"
+			css={css`
+				padding: 16px;
+			`}
+		>
+			<ErrorNotification
+				level={level}
+				onClearClick={onClearClick}
+				reportColumns={getDefaultErrorReportColumns(level)}
+				reportData={data}
+				subtitle={
+					'Your file cannot be processed. Please correct the following errors and reupload your file.'
+				}
+				tableComponent={<ErrorNotificationDefaultTable {...{ data, level }} />}
+				title={`${
+					selectedFile.schemaErrors.length
+				} error(s) found in uploaded ${selectedFile.displayName.toLowerCase()} file`}
+			/>
+		</div>
+	);
 };

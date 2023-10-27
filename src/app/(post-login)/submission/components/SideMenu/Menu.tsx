@@ -16,38 +16,38 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-"use client";
+'use client';
 
-import { css, useTheme } from "@/lib/emotion";
-import SideMenuContent from "./Content";
-import SideMenuToggle, { TOGGLE_HEIGHT_PX } from "./Toggle";
-import { SideMenuProps } from "./types";
+import { css, useTheme } from '@/lib/emotion';
+import SideMenuContent from './Content';
+import SideMenuToggle, { TOGGLE_HEIGHT_PX } from './Toggle';
+import { SideMenuProps } from './types';
 
 const SideMenu = ({ onToggle, isActive }: SideMenuProps) => {
-  const theme = useTheme();
+	const theme = useTheme();
 
-  return (
-    <div
-      css={css`
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        background-color: ${theme.colors.white};
-      `}
-    >
-      <div
-        css={css`
-          height: calc(100vh - ${TOGGLE_HEIGHT_PX}px);
-          overflow-y: auto;
-          visibility: ${isActive ? "visible" : "hidden"};
-        `}
-      >
-        <SideMenuContent />
-      </div>
-      <SideMenuToggle onToggle={onToggle} open={isActive} />
-    </div>
-  );
+	return (
+		<div
+			css={css`
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				background-color: ${theme.colors.white};
+			`}
+		>
+			<div
+				css={css`
+					height: calc(100vh - ${TOGGLE_HEIGHT_PX}px);
+					overflow-y: auto;
+					visibility: ${isActive ? 'visible' : 'hidden'};
+				`}
+			>
+				<SideMenuContent />
+			</div>
+			<SideMenuToggle onToggle={onToggle} open={isActive} />
+		</div>
+	);
 };
 
 export default SideMenu;
