@@ -16,108 +16,107 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { notNull } from "@/global/utils";
-import { capitalize, orderBy } from "lodash";
-import { ClinicalSubmission, clinicalStatuses } from "./types";
+import { notNull } from '@/global/utils';
+import { capitalize, orderBy } from 'lodash';
+import { ClinicalSubmission, clinicalStatuses } from './types';
 
 const CLINICAL_FILE_ORDER = [
-  "donor",
-  "specimen",
-  "primary_diagnosis",
-  "treatment",
-  "chemotherapy",
-  "hormone_therapy",
-  "immunotherapy",
-  "radiation",
-  "surgery",
-  "follow_up",
-  "family_history",
-  "exposure",
-  "comorbidity",
-  "biomarker",
+	'donor',
+	'specimen',
+	'primary_diagnosis',
+	'treatment',
+	'chemotherapy',
+	'hormone_therapy',
+	'immunotherapy',
+	'radiation',
+	'surgery',
+	'follow_up',
+	'family_history',
+	'exposure',
+	'comorbidity',
+	'biomarker',
 ];
 
 // parse out nulls, undefined, provide sensible defaults so type checking isnt a scattered nightmare
 export const parseGQLResp: (v: any) => ClinicalSubmission = (gqlData) => {
-  const clinicalState = gqlData?.clinicalSubmissions.state;
-  const clinicalVersion = gqlData?.clinicalSubmissions.version || "";
+	const clinicalState = gqlData?.clinicalSubmissions.state;
+	const clinicalVersion = gqlData?.clinicalSubmissions.version || '';
 
-  const fileErrors = gqlData?.clinicalSubmissions.fileErrors;
+	const fileErrors = gqlData?.clinicalSubmissions.fileErrors;
 
-  const isSubmissionValidated =
-    clinicalState === "INVALID" ||
-    clinicalState === "VALID" ||
-    clinicalState === "PENDING_APPROVAL";
+	const isSubmissionValidated =
+		clinicalState === 'INVALID' ||
+		clinicalState === 'VALID' ||
+		clinicalState === 'PENDING_APPROVAL';
 
-  const isPendingApproval = clinicalState === "PENDING_APPROVAL";
+	const isPendingApproval = clinicalState === 'PENDING_APPROVAL';
 
-  const filteredEntities =
-    gqlData?.clinicalSubmissions.clinicalEntities.filter(notNull) || [];
-  const orderedEntities = orderBy(filteredEntities, (entity) =>
-    CLINICAL_FILE_ORDER.indexOf(entity ? entity.clinicalType : ""),
-  );
-  const clinicalEntities = orderedEntities.map((entity) => {
-    const stats = {
-      errorsFound: [],
-      new: [],
-      noUpdate: [],
-      updated: [],
-      ...(entity.stats || {}),
-    };
+	const filteredEntities = gqlData?.clinicalSubmissions.clinicalEntities.filter(notNull) || [];
+	const orderedEntities = orderBy(filteredEntities, (entity) =>
+		CLINICAL_FILE_ORDER.indexOf(entity ? entity.clinicalType : ''),
+	);
+	const clinicalEntities = orderedEntities.map((entity) => {
+		const stats = {
+			errorsFound: [],
+			new: [],
+			noUpdate: [],
+			updated: [],
+			...(entity.stats || {}),
+		};
 
-    const {
-      createdAt,
-      creator,
-      batchName,
-      schemaErrors,
-      dataErrors,
-      dataUpdates,
-      dataWarnings,
-      clinicalType,
-      records,
-    } = entity;
+		const {
+			createdAt,
+			creator,
+			batchName,
+			schemaErrors,
+			dataErrors,
+			dataUpdates,
+			dataWarnings,
+			clinicalType,
+			records,
+		} = entity;
 
-    const hasSchemaError = !!schemaErrors.length;
-    const hasDataError = !!dataErrors.length;
-    const hasUpdate = !!stats.updated.length;
+		const hasSchemaError = !!schemaErrors.length;
+		const hasDataError = !!dataErrors.length;
+		const hasUpdate = !!stats.updated.length;
 
-    const displayName = capitalize((clinicalType || "").split("_").join(" "));
+		const displayName = capitalize((clinicalType || '').split('_').join(' '));
 
-    const status = isPendingApproval
-      ? hasUpdate
-        ? clinicalStatuses.UPDATE
-        : clinicalStatuses.SUCCESS
-      : hasSchemaError || hasDataError
-      ? clinicalStatuses.ERROR
-      : records.length
-      ? isSubmissionValidated
-        ? clinicalStatuses.SUCCESS
-        : clinicalStatuses.WARNING
-      : clinicalStatuses.NONE;
+		const status = isPendingApproval
+			? hasUpdate
+				? clinicalStatuses.UPDATE
+				: clinicalStatuses.SUCCESS
+			: hasSchemaError || hasDataError
+			? clinicalStatuses.ERROR
+			: records.length
+			? isSubmissionValidated
+				? clinicalStatuses.SUCCESS
+				: clinicalStatuses.WARNING
+			: clinicalStatuses.NONE;
 
-    return {
-      stats,
-      createdAt: createdAt || "",
-      creator: creator || "",
-      fileName: batchName,
-      schemaErrors,
-      dataErrors,
-      dataUpdates,
-      dataWarnings,
-      displayName,
-      clinicalType,
-      records,
-      recordsCount: records.length,
-      status,
-    };
-  });
+		return {
+			stats,
+			createdAt: createdAt || '',
+			creator: creator || '',
+			fileName: batchName,
+			schemaErrors,
+			dataErrors,
+			dataUpdates,
+			dataWarnings,
+			displayName,
+			clinicalType,
+			records,
+			recordsCount: records.length,
+			status,
+		};
+	});
 
-  return {
-    clinicalState,
-    clinicalVersion,
-    clinicalFileErrors: fileErrors,
-    clinicalEntities,
-    isPendingApproval,
-    isSubmissionValidated,
-  };
+	return {
+		clinicalState,
+		clinicalVersion,
+		clinicalFileErrors: fileErrors,
+		clinicalEntities,
+		isPendingApproval,
+		isSubmissionValidated,
+	};
 };

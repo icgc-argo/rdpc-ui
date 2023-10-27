@@ -68,10 +68,5 @@
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
-  },
-  "prettier": {
-    "plugins": [
-      "prettier-plugin-organize-imports"
-    ]
   }
 }
