@@ -16,52 +16,52 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { css } from "@/lib/emotion";
-import { Typography } from "@icgc-argo/uikit";
-import { FC, ReactNode } from "react";
+import { css } from '@/lib/emotion';
+import { Typography } from '@icgc-argo/uikit';
+import { FC, ReactNode } from 'react';
 
 type CardProps = {
-  title?: string;
-  action?: ReactNode;
-  fill?: boolean;
-  children: ReactNode;
+	title?: string;
+	action?: ReactNode;
+	fill?: boolean;
+	children: ReactNode;
 };
 const Card: FC<CardProps> = ({ title, action, fill = false, children }) => (
-  <div
-    css={css`
-      ${fill &&
-      css`
-        flex: 1 0 auto;
-      `}
-      padding: 9px;
-    `}
-  >
-    {(title || action) && (
-      <div
-        css={css`
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 2px;
-        `}
-      >
-        <Typography
-          css={css`
-            margin: 0 0 8px 0;
-          `}
-          color="primary"
-          variant="subtitle2"
-          component="h2"
-        >
-          {title}
-        </Typography>
-        {action}
-      </div>
-    )}
+	<div
+		css={css`
+			${fill &&
+			css`
+				flex: 1 0 auto;
+			`}
+			padding: 9px;
+		`}
+	>
+		{(title || action) && (
+			<div
+				css={css`
+					display: flex;
+					flex-direction: row;
+					justify-content: space-between;
+					align-items: center;
+					margin-bottom: 2px;
+				`}
+			>
+				<Typography
+					css={css`
+						margin: 0 0 8px 0;
+					`}
+					color="primary"
+					variant="subtitle2"
+					component="h2"
+				>
+					{title}
+				</Typography>
+				{action}
+			</div>
+		)}
 
-    {children}
-  </div>
+		{children}
+	</div>
 );
 
 export default Card;

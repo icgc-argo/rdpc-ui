@@ -16,59 +16,59 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { css, styled } from "@/lib/emotion";
-import { Typography } from "@icgc-argo/uikit";
-import Image from "next/image";
-import { FC, ReactNode } from "react";
-import noDataSvg from "../../../public/assets/no-data.svg";
+import { css, styled } from '@/lib/emotion';
+import { Typography } from '@icgc-argo/uikit';
+import Image from 'next/image';
+import { FC, ReactNode } from 'react';
+import noDataSvg from '../../../public/assets/no-data.svg';
 
-const Container = styled("div")`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 80px 0;
+const Container = styled('div')`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 80px 0;
 `;
 
 type ContentPlaceholderProps = {
-  title?: string;
-  subtitle?: string;
-  link?: ReactNode;
-  children?: ReactNode;
+	title?: string;
+	subtitle?: string;
+	link?: ReactNode;
+	children?: ReactNode;
 };
 
 export const ContentPlaceholder: FC<ContentPlaceholderProps> = ({
-  children = <Image alt="no data found" src={noDataSvg} />,
-  title = "No Data Found.",
-  subtitle,
-  link,
-  ...rest
+	children = <Image alt="no data found" src={noDataSvg} />,
+	title = 'No Data Found.',
+	subtitle,
+	link,
+	...rest
 }) => (
-  <Container {...rest}>
-    {children}
-    <Typography
-      css={css`
-        margin-top: 14px;
-        margin-bottom: 0;
-      `}
-      color="grey"
-      variant="navigation"
-      as="p"
-      bold
-    >
-      {title}
-    </Typography>
-    <Typography
-      css={css`
-        margin-top: 10px;
-        margin-bottom: 0;
-      `}
-      color="grey"
-      variant="data"
-      as="p"
-    >
-      {subtitle}
-    </Typography>
-    {link}
-  </Container>
+	<Container {...rest}>
+		{children}
+		<Typography
+			css={css`
+				margin-top: 14px;
+				margin-bottom: 0;
+			`}
+			color="grey"
+			variant="navigation"
+			as="p"
+			bold
+		>
+			{title}
+		</Typography>
+		<Typography
+			css={css`
+				margin-top: 10px;
+				margin-bottom: 0;
+			`}
+			color="grey"
+			variant="data"
+			as="p"
+		>
+			{subtitle}
+		</Typography>
+		{link}
+	</Container>
 );

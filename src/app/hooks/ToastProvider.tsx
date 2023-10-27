@@ -17,79 +17,70 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from "@/lib/emotion";
+import { css } from '@/lib/emotion';
 import {
-  NOTIFICATION_INTERACTION_EVENTS,
-  NotificationInteraction,
-  NotificationInteractionEvent,
-  NotificationVariant,
-  TOAST_VARIANTS,
-  ToastStack,
-} from "@icgc-argo/uikit";
-import omit from "lodash/omit";
-import { FC, ReactNode, createContext, useContext, useState } from "react";
+	NOTIFICATION_INTERACTION_EVENTS,
+	NotificationInteraction,
+	NotificationInteractionEvent,
+	NotificationVariant,
+	TOAST_VARIANTS,
+	ToastStack,
+} from '@icgc-argo/uikit';
+import omit from 'lodash/omit';
+import { FC, ReactNode, createContext, useContext, useState } from 'react';
 
 type ToastEventPayload = { type: NotificationInteractionEvent; event: any };
 type ToastConfig = {
-  variant?: NotificationVariant;
-  interactionType?: NotificationInteraction;
-  title: ReactNode;
-  content: ReactNode;
-  onInteraction?: (e: ToastEventPayload) => void;
+	variant?: NotificationVariant;
+	interactionType?: NotificationInteraction;
+	title: ReactNode;
+	content: ReactNode;
+	onInteraction?: (e: ToastEventPayload) => void;
 };
 export const useToastState = () => {
-  const DEFAULT_TIMEOUT = 8000;
-  const [toastStack, setToastStack] = useState<
-    (ToastConfig & { id: string })[]
-  >([]);
+	const DEFAULT_TIMEOUT = 8000;
+	const [toastStack, setToastStack] = useState<(ToastConfig & { id: string })[]>([]);
 
-  const addToast = (toast: ToastConfig & { timeout?: number }) => {
-    const id = String(Math.random());
-    const DEFAULT_TOAST_CONFIGS: Partial<ToastConfig> = {
-      variant: TOAST_VARIANTS.INFO as ToastConfig["variant"],
-      onInteraction: (e) => e,
-      interactionType: undefined, // the Toast component internally has its default, no need to cover this
-    };
-    setToastStack((toastStack) => [
-      ...toastStack,
-      { ...DEFAULT_TOAST_CONFIGS, ...omit(toast, "timeout"), id },
-    ]);
-    if (toast.timeout !== Infinity) {
-      setTimeout(() => {
-        removeToast(id);
-      }, toast.timeout || DEFAULT_TIMEOUT);
-    }
-    return id;
-  };
+	const addToast = (toast: ToastConfig & { timeout?: number }) => {
+		const id = String(Math.random());
+		const DEFAULT_TOAST_CONFIGS: Partial<ToastConfig> = {
+			variant: TOAST_VARIANTS.INFO as ToastConfig['variant'],
+			onInteraction: (e) => e,
+			interactionType: undefined, // the Toast component internally has its default, no need to cover this
+		};
+		setToastStack((toastStack) => [
+			...toastStack,
+			{ ...DEFAULT_TOAST_CONFIGS, ...omit(toast, 'timeout'), id },
+		]);
+		if (toast.timeout !== Infinity) {
+			setTimeout(() => {
+				removeToast(id);
+			}, toast.timeout || DEFAULT_TIMEOUT);
+		}
+		return id;
+	};
 
-  const removeToast = (_id: string) => {
-    setToastStack((toastStack) => toastStack.filter(({ id }) => id !== _id));
-    return _id;
-  };
+	const removeToast = (_id: string) => {
+		setToastStack((toastStack) => toastStack.filter(({ id }) => id !== _id));
+		return _id;
+	};
 
-  const onInteraction = ({
-    id: _id,
-    payload,
-  }: {
-    id: string;
-    payload: ToastEventPayload;
-  }) => {
-    if (
-      [
-        NOTIFICATION_INTERACTION_EVENTS.CLOSE,
-        NOTIFICATION_INTERACTION_EVENTS.DISMISS,
-      ].includes(payload.type)
-    ) {
-      removeToast(_id);
-    }
-  };
+	const onInteraction = ({ id: _id, payload }: { id: string; payload: ToastEventPayload }) => {
+		if (
+			[NOTIFICATION_INTERACTION_EVENTS.CLOSE, NOTIFICATION_INTERACTION_EVENTS.DISMISS].includes(
+				payload.type,
+			)
+		) {
+			removeToast(_id);
+		}
+	};
 
-  return {
-    toastStack,
-    addToast,
-    removeToast,
-    onInteraction,
-  };
+	return {
+		toastStack,
+		addToast,
+		removeToast,
+		onInteraction,
+	};
 };
 type Toaster = ReturnType<typeof useToastState>;
 
@@ -98,33 +89,30 @@ export const ToasterContext = createContext<Toaster>();
 export const useToaster = () => useContext<Toaster>(ToasterContext);
 
 const ToastProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const toaster = useToastState();
-  return (
-    <ToasterContext.Provider value={toaster}>
-      {children}
-      <div
-        className="toastStackContainer"
-        css={css`
-          position: fixed;
-          z-index: 9999;
-          right: 0px;
-          top: 80px;
-        `}
-      >
-        <div
-          css={css`
-            margin-right: 20px;
-            margin-left: 20px;
-          `}
-        >
-          <ToastStack
-            toastConfigs={toaster.toastStack}
-            onInteraction={toaster.onInteraction}
-          />
-        </div>
-      </div>
-    </ToasterContext.Provider>
-  );
+	const toaster = useToastState();
+	return (
+		<ToasterContext.Provider value={toaster}>
+			{children}
+			<div
+				className="toastStackContainer"
+				css={css`
+					position: fixed;
+					z-index: 9999;
+					right: 0px;
+					top: 80px;
+				`}
+			>
+				<div
+					css={css`
+						margin-right: 20px;
+						margin-left: 20px;
+					`}
+				>
+					<ToastStack toastConfigs={toaster.toastStack} onInteraction={toaster.onInteraction} />
+				</div>
+			</div>
+		</ToasterContext.Provider>
+	);
 };
 
 export default ToastProvider;

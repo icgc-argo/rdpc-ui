@@ -17,63 +17,63 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ClinicalInput } from "@/__generated__/graphql";
+import { ClinicalInput } from '@/__generated__/graphql';
 
 export const aliasSortNames = {
-  donor_id: "donorId",
-  program_id: "programId",
-  submitter_id: "submitterId",
-  DO: "donorId",
-  PD: "primaryDiagnoses",
-  NS: "specimens",
-  TS: "familyHistory",
-  TR: "treatments",
-  FO: "followUps",
+	donor_id: 'donorId',
+	program_id: 'programId',
+	submitter_id: 'submitterId',
+	DO: 'donorId',
+	PD: 'primaryDiagnoses',
+	NS: 'specimens',
+	TS: 'familyHistory',
+	TR: 'treatments',
+	FO: 'followUps',
 };
 
 export const aliasedEntityNames = {
-  donor: "donor",
-  sampleRegistration: "sample_registration",
-  specimens: "specimen",
-  primaryDiagnoses: "primary_diagnosis",
-  familyHistory: "family_history",
-  treatment: "treatment",
-  chemotherapy: "chemotherapy",
-  immunotherapy: "immunotherapy",
-  surgery: "surgery",
-  radiation: "radiation",
-  followUps: "follow_up",
-  hormoneTherapy: "hormone_therapy",
-  exposure: "exposure",
-  comorbidity: "comorbidity",
-  biomarker: "biomarker",
+	donor: 'donor',
+	sampleRegistration: 'sample_registration',
+	specimens: 'specimen',
+	primaryDiagnoses: 'primary_diagnosis',
+	familyHistory: 'family_history',
+	treatment: 'treatment',
+	chemotherapy: 'chemotherapy',
+	immunotherapy: 'immunotherapy',
+	surgery: 'surgery',
+	radiation: 'radiation',
+	followUps: 'follow_up',
+	hormoneTherapy: 'hormone_therapy',
+	exposure: 'exposure',
+	comorbidity: 'comorbidity',
+	biomarker: 'biomarker',
 };
 
 export const clinicalEntityFields = Object.keys(aliasedEntityNames);
 
 export type ClinicalFilter = {
-  entityTypes: string[];
-  page: number;
-  pageSize: number;
-  donorIds?: string[];
-  submitterDonorIds?: string[];
-  completionState?: CompletionStates;
-  sort?: string;
+	entityTypes: string[];
+	page: number;
+	pageSize: number;
+	donorIds?: string[];
+	submitterDonorIds?: string[];
+	completionState?: CompletionStates;
+	sort?: string;
 };
 
 export enum CompletionStates {
-  all = "all",
-  invalid = "invalid",
-  complete = "complete",
-  incomplete = "incomplete",
+	all = 'all',
+	invalid = 'invalid',
+	complete = 'complete',
+	incomplete = 'incomplete',
 }
 
 export const defaultClinicalEntityFilters: ClinicalInput = {
-  entityTypes: clinicalEntityFields,
-  page: 0,
-  pageSize: 20,
-  donorIds: [],
-  submitterDonorIds: [],
-  completionState: CompletionStates["all"],
-  sort: aliasSortNames.donor_id,
+	entityTypes: clinicalEntityFields,
+	page: 0,
+	pageSize: 20,
+	donorIds: [],
+	submitterDonorIds: [],
+	completionState: CompletionStates['all'],
+	sort: aliasSortNames.donor_id,
 };

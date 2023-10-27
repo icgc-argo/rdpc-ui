@@ -17,32 +17,30 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { TOAST_VARIANTS } from "@icgc-argo/uikit";
-import { useToaster } from "./ToastProvider";
+import { TOAST_VARIANTS } from '@icgc-argo/uikit';
+import { useToaster } from './ToastProvider';
 
 export default function useCommonToasters() {
-  const toaster = useToaster();
-  return {
-    unknownError: () =>
-      toaster.addToast({
-        title: "",
-        variant: TOAST_VARIANTS.ERROR,
-        content:
-          "Something went wrong, please try again later or contact us for assistance.",
-      }),
-    unknownErrorWithReloadMessage: () =>
-      toaster.addToast({
-        variant: "ERROR",
-        title: "Something went wrong",
-        content:
-          "Uh oh! It looks like something went wrong. This page has been reloaded.",
-      }),
-    onSave: () =>
-      toaster.addToast({
-        title: "Success!",
-        variant: TOAST_VARIANTS.SUCCESS,
-        content: "Your changes have been saved.",
-        interactionType: "CLOSE",
-      }),
-  };
+	const toaster = useToaster();
+	return {
+		unknownError: () =>
+			toaster.addToast({
+				title: '',
+				variant: TOAST_VARIANTS.ERROR,
+				content: 'Something went wrong, please try again later or contact us for assistance.',
+			}),
+		unknownErrorWithReloadMessage: () =>
+			toaster.addToast({
+				variant: 'ERROR',
+				title: 'Something went wrong',
+				content: 'Uh oh! It looks like something went wrong. This page has been reloaded.',
+			}),
+		onSave: () =>
+			toaster.addToast({
+				title: 'Success!',
+				variant: TOAST_VARIANTS.SUCCESS,
+				content: 'Your changes have been saved.',
+				interactionType: 'CLOSE',
+			}),
+	};
 }

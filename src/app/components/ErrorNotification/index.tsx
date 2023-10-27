@@ -17,126 +17,125 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { exportToTsv } from "@/global/utils";
+import { exportToTsv } from '@/global/utils';
 import {
-  Button,
-  Icon,
-  NOTIFICATION_VARIANTS,
-  Notification,
-  NotificationVariant,
-  css,
-} from "@icgc-argo/uikit";
-import union from "lodash/union";
-import { ComponentProps, ReactNode, createRef } from "react";
+	Button,
+	Icon,
+	NOTIFICATION_VARIANTS,
+	Notification,
+	NotificationVariant,
+	css,
+} from '@icgc-argo/uikit';
+import union from 'lodash/union';
+import { ComponentProps, ReactNode, createRef } from 'react';
 
 export type ErrorReportColumns = { header: string; id: string };
 
 const ErrorNotification = <T extends { [k: string]: any }>({
-  level,
-  onClearClick,
-  reportColumns = [],
-  reportData = [],
-  subtitle,
-  tableComponent = <></>,
-  title,
-  tsvExcludeCols = [],
+	level,
+	onClearClick,
+	reportColumns = [],
+	reportData = [],
+	subtitle,
+	tableComponent = <></>,
+	title,
+	tsvExcludeCols = [],
 }: {
-  level: NotificationVariant;
-  onClearClick?: ComponentProps<typeof Button>["onClick"];
-  reportColumns: ErrorReportColumns[];
-  reportData: Array<T>;
-  subtitle: ReactNode;
-  tableComponent?: JSX.Element;
-  title: string;
-  tsvExcludeCols?: Array<keyof T>;
+	level: NotificationVariant;
+	onClearClick?: ComponentProps<typeof Button>['onClick'];
+	reportColumns: ErrorReportColumns[];
+	reportData: Array<T>;
+	subtitle: ReactNode;
+	tableComponent?: JSX.Element;
+	title: string;
+	tsvExcludeCols?: Array<keyof T>;
 }) => {
-  const onDownloadClick = () => {
-    exportToTsv(reportData, {
-      exclude: union(tsvExcludeCols, ["__typename"]),
-      order: reportColumns.map((entry) => entry.id),
-      fileName: `${level}_report.tsv`,
-      headerDisplays: reportColumns.reduce(
-        (acc, { header, id }) => ({
-          ...acc,
-          [id]: header,
-        }),
-        {},
-      ),
-    });
-  };
+	const onDownloadClick = () => {
+		exportToTsv(reportData, {
+			exclude: union(tsvExcludeCols, ['__typename']),
+			order: reportColumns.map((entry) => entry.id),
+			fileName: `${level}_report.tsv`,
+			headerDisplays: reportColumns.reduce(
+				(acc, { header, id }) => ({
+					...acc,
+					[id]: header,
+				}),
+				{},
+			),
+		});
+	};
 
-  return (
-    <Notification
-      variant={level}
-      interactionType="NONE"
-      title={
-        <div
-          css={css`
-            display: flex;
-            justify-content: space-between;
-          `}
-        >
-          {title}
-          <div
-            css={css`
-              display: flex;
-            `}
-          >
-            <Button variant="secondary" size="sm" onClick={onDownloadClick}>
-              <span
-                css={css`
-                  display: flex;
-                  align-items: center;
-                `}
-              >
-                <Icon
-                  name="download"
-                  fill="accent2_dark"
-                  height="12px"
-                  css={css`
-                    margin-right: 5px;
-                  `}
-                />
-                {level === NOTIFICATION_VARIANTS.ERROR ? `Error` : `Warning`}{" "}
-                Report
-              </span>
-            </Button>
-            {!!onClearClick && (
-              <Button
-                isAsync
-                id="button-clear-selected-file-upload"
-                variant="text"
-                size="sm"
-                onClick={onClearClick}
-              >
-                Clear
-              </Button>
-            )}
-          </div>
-        </div>
-      }
-      contentProps={{
-        css: css`
-          overflow: hidden;
-        `,
-      }}
-      content={(() => {
-        const containerRef = createRef<HTMLDivElement>();
-        return (
-          <div
-            ref={containerRef}
-            css={css`
-              margin-top: 10px;
-              width: 100%;
-            `}
-          >
-            <div>{subtitle}</div>
-            {tableComponent}
-          </div>
-        );
-      })()}
-    />
-  );
+	return (
+		<Notification
+			variant={level}
+			interactionType="NONE"
+			title={
+				<div
+					css={css`
+						display: flex;
+						justify-content: space-between;
+					`}
+				>
+					{title}
+					<div
+						css={css`
+							display: flex;
+						`}
+					>
+						<Button variant="secondary" size="sm" onClick={onDownloadClick}>
+							<span
+								css={css`
+									display: flex;
+									align-items: center;
+								`}
+							>
+								<Icon
+									name="download"
+									fill="accent2_dark"
+									height="12px"
+									css={css`
+										margin-right: 5px;
+									`}
+								/>
+								{level === NOTIFICATION_VARIANTS.ERROR ? `Error` : `Warning`} Report
+							</span>
+						</Button>
+						{!!onClearClick && (
+							<Button
+								isAsync
+								id="button-clear-selected-file-upload"
+								variant="text"
+								size="sm"
+								onClick={onClearClick}
+							>
+								Clear
+							</Button>
+						)}
+					</div>
+				</div>
+			}
+			contentProps={{
+				css: css`
+					overflow: hidden;
+				`,
+			}}
+			content={(() => {
+				const containerRef = createRef<HTMLDivElement>();
+				return (
+					<div
+						ref={containerRef}
+						css={css`
+							margin-top: 10px;
+							width: 100%;
+						`}
+					>
+						<div>{subtitle}</div>
+						{tableComponent}
+					</div>
+				);
+			})()}
+		/>
+	);
 };
 
 export default ErrorNotification;
