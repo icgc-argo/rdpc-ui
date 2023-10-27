@@ -23,7 +23,7 @@ import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus
 import { css } from '@/lib/emotion';
 import { Progress, ProgressStatus } from '@icgc-argo/uikit';
 import { isEmpty } from 'lodash';
-import { FC } from 'react';
+import { PropsWithChildren } from 'react';
 import { ClinicalSubmission } from '../types';
 
 const checkEntities = (clinicalEntities: ProgressBarProps['clinicalEntities']) => {
@@ -44,11 +44,11 @@ type ProgressBarProps = {
 	approvalBarWidth?: number;
 };
 
-const ProgressBar: FC<ProgressBarProps> = ({
+const ProgressBar = ({
 	clinicalEntities,
 	clinicalState,
 	approvalBarWidth,
-}) => {
+}: PropsWithChildren<ProgressBarProps>) => {
 	const { isDisabled: isSubmissionSystemDisabled } = useSubmissionSystemStatus();
 
 	const { hasDataError, hasSchemaError, hasSomeEntity } = checkEntities(clinicalEntities);

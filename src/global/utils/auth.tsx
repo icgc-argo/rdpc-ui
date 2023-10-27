@@ -51,8 +51,8 @@ const AuthContext = createContext<AuthContextValue>({
 	setEgoJwt: () => '',
 	authLoading: false,
 	setAuthLoading: () => false,
-	logIn: () => {},
-	logOut: () => {},
+	logIn: () => undefined,
+	logOut: () => undefined,
 	permissions: [],
 	TokenUtils: createEgoUtils(''),
 });
