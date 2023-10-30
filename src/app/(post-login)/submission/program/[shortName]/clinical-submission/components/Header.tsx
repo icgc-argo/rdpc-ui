@@ -26,11 +26,12 @@ import { useToaster } from '@/app/hooks/ToastProvider';
 import useCommonToasters from '@/app/hooks/useCommonToasters';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
 import { sleep } from '@/global/utils';
+import { useAuthContext } from '@/global/utils/auth';
 import { css, useTheme } from '@/lib/emotion';
 import { useMutation } from '@apollo/client';
 import { Button, TitleBar, Link as UIKitLink } from '@icgc-argo/uikit';
 import Link from 'next/link';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { Row } from 'react-grid-system';
 import urlJoin from 'url-join';
 import ProgressBar from './ProgressBar';
@@ -58,8 +59,11 @@ const Header: FC<HeaderProps> = ({
 	// docs url
 	const { DOCS_URL_ROOT } = useAppConfigContext();
 	const helpUrl = urlJoin(DOCS_URL_ROOT, '/docs/submission/submitting-clinical-data');
+	const { permissions, TokenUtils } = useAuthContext();
 
-	const isDcc = false;
+	const isDcc = useMemo(() => TokenUtils.isDccMember(permissions), [permissions]);
+	const isRdpc = useMemo(() => TokenUtils.isRdpcMember(permissions), [permissions]);
+	const isAdmin = isDcc || isRdpc;
 
 	const isPendingApproval = clinicalState === 'PENDING_APPROVAL';
 
@@ -125,7 +129,8 @@ const Header: FC<HeaderProps> = ({
 					display: flex;
 					height: 56px;
 					padding: 0 30px;
-					background-color: ${theme.colors.white};
+					background-color: ${isPendingApproval ? theme.colors.accent3_4 : theme.colors.white};
+					border-bottom: 1px solid ${theme.colors.grey_2};
 					justify-content: space-between;
 					align-items: center;
 					width: 100%;
@@ -150,14 +155,14 @@ const Header: FC<HeaderProps> = ({
 					{isPendingApproval && (
 						<Button
 							id="button-reopen"
-							variant={isDcc ? 'secondary' : 'text'}
+							variant={isAdmin ? 'secondary' : 'text'}
 							isAsync
 							css={css`
 								margin-right: 10px;
 							`}
 							onClick={handleSubmissionReopen}
 						>
-							{isDcc ? 'reopen' : 'reopen submission'}
+							{isAdmin ? 'reopen' : 'reopen submission'}
 						</Button>
 					)}
 					{!isPendingApproval && (
@@ -188,7 +193,7 @@ const Header: FC<HeaderProps> = ({
 							</Link>
 						</>
 					)}
-					{isDcc && isPendingApproval && (
+					{isAdmin && isPendingApproval && (
 						<>
 							<Button id="button-approve" size="sm" isAsync onClick={handleSubmissionApproval}>
 								approve

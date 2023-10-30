@@ -20,9 +20,10 @@
 
 import { ClinicalSubmissionQuery } from '@/__generated__/graphql';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
+import { css } from '@/lib/emotion';
 import { Progress, ProgressStatus } from '@icgc-argo/uikit';
 import { isEmpty } from 'lodash';
-import { FC } from 'react';
+import { PropsWithChildren } from 'react';
 import { ClinicalSubmission } from '../types';
 
 const checkEntities = (clinicalEntities: ProgressBarProps['clinicalEntities']) => {
@@ -40,9 +41,14 @@ const checkEntities = (clinicalEntities: ProgressBarProps['clinicalEntities']) =
 type ProgressBarProps = {
 	clinicalEntities: ClinicalSubmission['clinicalEntities'] | undefined;
 	clinicalState: ClinicalSubmissionQuery['clinicalSubmissions']['state'] | undefined;
+	approvalBarWidth?: number;
 };
 
-const ProgressBar: FC<ProgressBarProps> = ({ clinicalEntities, clinicalState }) => {
+const ProgressBar = ({
+	clinicalEntities,
+	clinicalState,
+	approvalBarWidth,
+}: PropsWithChildren<ProgressBarProps>) => {
 	const { isDisabled: isSubmissionSystemDisabled } = useSubmissionSystemStatus();
 
 	const { hasDataError, hasSchemaError, hasSomeEntity } = checkEntities(clinicalEntities);
@@ -81,11 +87,22 @@ const ProgressBar: FC<ProgressBarProps> = ({ clinicalEntities, clinicalState }) 
 			? 'success'
 			: 'disabled',
 	};
+	const pendingApprovalWidth = `${approvalBarWidth || 100}px`;
+
 	return (
 		<Progress>
 			<Progress.Item state={progressStates.upload} text="Upload" />
 			<Progress.Item state={progressStates.validate} text="Validate" />
 			<Progress.Item state={progressStates.signOff} text="Sign Off" />
+			{isPendingApproval && (
+				<Progress.Item
+					css={css`
+						width: ${pendingApprovalWidth};
+					`}
+					text="Pending Approval"
+					state="locked"
+				/>
+			)}
 		</Progress>
 	);
 };
