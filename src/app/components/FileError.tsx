@@ -16,45 +16,49 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { Progress, ProgressStatus } from "@icgc-argo/uikit";
-import { FC } from "react";
+import { css } from '@/lib/emotion';
+import {
+	Notification,
+	NotificationInteraction,
+	NotificationInteractionEvent,
+} from '@icgc-argo/uikit';
+import { FC } from 'react';
 
-type ProgressBarProps = {
-  isSubmissionSystemDisabled: boolean;
-  hasClinicalRegistration: boolean;
-  hasErrors: boolean;
+type FileErrorProps = {
+	fileError: { message: string; title: string };
+	index: number;
+	onClose: (
+		i: number,
+	) => ({
+		type,
+		event,
+	}: {
+		type: NotificationInteraction;
+		event: NotificationInteractionEvent;
+	}) => void;
+};
+const FileError: FC<FileErrorProps> = ({ fileError, index, onClose }) => {
+	return (
+		<div
+			className="error"
+			css={css`
+				> div {
+					border: none;
+					background: inherit;
+				}
+			`}
+		>
+			<Notification
+				key={index}
+				size="SM"
+				variant="ERROR"
+				interactionType="CLOSE"
+				title={fileError.title}
+				content={fileError.message}
+				onInteraction={onClose(index)}
+			/>
+		</div>
+	);
 };
 
-const ProgressBar: FC<ProgressBarProps> = ({
-  isSubmissionSystemDisabled,
-  hasClinicalRegistration,
-  hasErrors,
-}) => {
-  const progressStates: {
-    upload: ProgressStatus;
-    register: ProgressStatus;
-  } = {
-    upload: isSubmissionSystemDisabled
-      ? "locked"
-      : hasClinicalRegistration
-      ? "success"
-      : hasErrors
-      ? "error"
-      : "disabled",
-    register: isSubmissionSystemDisabled
-      ? "locked"
-      : hasClinicalRegistration
-      ? "pending"
-      : hasErrors
-      ? "disabled"
-      : "disabled",
-  };
-  return (
-    <Progress>
-      <Progress.Item state={progressStates.upload} text="Upload" />
-      <Progress.Item state={progressStates.register} text="Register" />
-    </Progress>
-  );
-};
-
-export default ProgressBar;
+export default FileError;

@@ -16,56 +16,65 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-"use client";
+'use client';
 
-import { ApolloClient, ApolloLink, InMemoryCache } from "@apollo/client";
-import { createUploadLink } from "apollo-upload-client";
-export { gql } from "@/__generated__/gql";
+import { ApolloClient, ApolloLink, InMemoryCache } from '@apollo/client';
+import { onError } from '@apollo/client/link/error';
+import { createUploadLink } from 'apollo-upload-client';
+export { gql } from '@/__generated__/gql';
 
 const createInMemoryCache = () =>
-  new InMemoryCache({
-    typePolicies: {
-      // define cache IDs. default is item.id
-      Program: {
-        keyFields: ["shortName"],
-      },
-      ClinicalRegistrationData: {
-        keyFields: ["programShortName"],
-      },
-      ClinicalSubmissionData: {
-        keyFields: ["programShortName"],
-      },
-    },
-  });
+	new InMemoryCache({
+		typePolicies: {
+			// define cache IDs. default is item.id
+			Program: {
+				keyFields: ['shortName'],
+			},
+			ClinicalRegistrationData: {
+				keyFields: ['programShortName'],
+			},
+			ClinicalSubmissionData: {
+				keyFields: ['programShortName'],
+			},
+		},
+	});
 
 type Config = {
-  gateway: string;
-  jwt: string;
+	gateway: string;
+	jwt: string;
 };
 export const createApolloClient = (config: Config) => {
-  const clientSideCache = createInMemoryCache();
+	const clientSideCache = createInMemoryCache();
 
-  const httpLink = createUploadLink({
-    uri: config.gateway,
-  });
+	const httpLink = createUploadLink({
+		uri: config.gateway,
+	});
 
-  const jwt = config.jwt;
+	const jwt = config.jwt;
 
-  const authLink = new ApolloLink((operation, forward) => {
-    operation.setContext(({ headers }: { headers: any }) => ({
-      headers: {
-        authorization: `Bearer ${jwt}`,
-        ...headers,
-      },
-    }));
-    return forward(operation);
-  });
+	const authLink = new ApolloLink((operation, forward) => {
+		operation.setContext(({ headers }: { headers: any }) => ({
+			headers: {
+				authorization: `Bearer ${jwt}`,
+				...headers,
+			},
+		}));
+		return forward(operation);
+	});
 
-  const additiveLink = ApolloLink.from([authLink, httpLink]);
+	const errorLink = onError(({ graphQLErrors, networkError }) => {
+		if (graphQLErrors)
+			graphQLErrors.forEach(({ message, locations, path }) =>
+				console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`),
+			);
+		if (networkError) console.log(`[Network error]: ${networkError}`);
+	});
 
-  return new ApolloClient({
-    link: additiveLink,
-    cache: clientSideCache,
-    connectToDevTools: true,
-  });
+	const additiveLink = ApolloLink.from([authLink, errorLink, httpLink]);
+
+	return new ApolloClient({
+		link: additiveLink,
+		cache: clientSideCache,
+		connectToDevTools: true,
+	});
 };

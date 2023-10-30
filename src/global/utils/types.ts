@@ -18,7 +18,7 @@
  */
 
 export function notNull<T>(value: T): value is NonNullable<T> {
-  return value != null;
+	return value != null && value != undefined;
 }
 
 // dev helper type to expand tooltip types

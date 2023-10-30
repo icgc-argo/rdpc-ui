@@ -17,63 +17,63 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from "@/lib/emotion";
-import { Modal } from "@icgc-argo/uikit";
-import { createRef, PropsWithChildren, useEffect, useState } from "react";
-import ReactDOM from "react-dom";
+import { css } from '@/lib/emotion';
+import { Modal } from '@icgc-argo/uikit';
+import { createRef, PropsWithChildren, useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
 
 export const fillAvailableWidth = css`
-  width: -webkit-fill-available;
-  width: -moz-available;
-  min-width: -webkit-fill-available;
-  min-width: -moz-available;
+	width: -webkit-fill-available;
+	width: -moz-available;
+	min-width: -webkit-fill-available;
+	min-width: -moz-available;
 `;
 
 export const fillAvailableHeight = css`
-  height: -webkit-fill-available;
-  height: -moz-available;
-  min-height: -webkit-fill-available;
-  min-height: -moz-available;
+	height: -webkit-fill-available;
+	height: -moz-available;
+	min-height: -webkit-fill-available;
+	min-height: -moz-available;
 `;
 
 export const modalPortalRef = createRef<HTMLDivElement>();
 
 const useMounted = () => {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  return mounted;
+	const [mounted, setMounted] = useState(false);
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+	return mounted;
 };
 
 const ModalPortal = ({ children }: PropsWithChildren) => {
-  const ref = modalPortalRef.current;
-  const mounted = useMounted();
-  return ref
-    ? ReactDOM.createPortal(
-        <div
-          id="modalContainer"
-          css={css`
-            transition: all 0.2s;
-            opacity: ${mounted ? 1 : 0};
-          `}
-        >
-          <Modal.Overlay
-            css={css`
-              ${fillAvailableWidth}
-              ${fillAvailableHeight}
+	const ref = modalPortalRef.current;
+	const mounted = useMounted();
+	return ref
+		? ReactDOM.createPortal(
+				<div
+					id="modalContainer"
+					css={css`
+						transition: all 0.2s;
+						opacity: ${mounted ? 1 : 0};
+					`}
+				>
+					<Modal.Overlay
+						css={css`
+							${fillAvailableWidth}
+							${fillAvailableHeight}
               @media (min-width: 768px) {
-                width: 100vw;
-                height: 100vh;
-              }
-            `}
-          >
-            {children}
-          </Modal.Overlay>
-        </div>,
-        ref,
-      )
-    : null;
+								width: 100vw;
+								height: 100vh;
+							}
+						`}
+					>
+						{children}
+					</Modal.Overlay>
+				</div>,
+				ref,
+		  )
+		: null;
 };
 
 export default ModalPortal;

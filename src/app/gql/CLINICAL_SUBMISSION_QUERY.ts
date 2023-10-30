@@ -16,49 +16,71 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { css } from "@/lib/emotion";
-import {
-  Notification,
-  NotificationInteraction,
-  NotificationInteractionEvent,
-} from "@icgc-argo/uikit";
-import { FC } from "react";
 
-type FileErrorProps = {
-  fileError: { message: string; fileNames: string[] };
-  index: number;
-  onClose: (
-    i: number,
-  ) => ({
-    type,
-    event,
-  }: {
-    type: NotificationInteraction;
-    event: NotificationInteractionEvent;
-  }) => void;
-};
-const FileError: FC<FileErrorProps> = ({ fileError, index, onClose }) => {
-  return (
-    <div
-      className="error"
-      css={css`
-        > div {
-          border: none;
-          background: inherit;
+import { gql } from '@/__generated__/gql';
+
+const CLINICAL_SUBMISSION_QUERY = gql(`
+  query ClinicalSubmission($shortName: String!) {
+    clinicalSubmissions(programShortName: $shortName) {
+      programShortName
+      state
+      version
+      updatedAt
+      updatedBy
+      clinicalEntities {
+        clinicalType
+        batchName
+        creator
+        createdAt
+        stats {
+          noUpdate
+          new
+          updated
+          errorsFound
         }
-      `}
-    >
-      <Notification
-        key={index}
-        size="SM"
-        variant="ERROR"
-        interactionType="CLOSE"
-        title={`File failed to upload: ${fileError?.fileNames.join(", ")}`}
-        content={fileError.message}
-        onInteraction={onClose(index)}
-      />
-    </div>
-  );
-};
+        records {
+          row
+          fields {
+            name
+            value
+          }
+        }
+        dataUpdates {
+          row
+          field
+          newValue
+          oldValue
+          donorId
+        }
+        dataWarnings {
+          message
+          row
+          field
+          value
+          donorId
+        }
+        dataErrors {
+          message
+          row
+          field
+          value
+          donorId
+        }
+        schemaErrors {
+          message
+          row
+          field
+          value
+          donorId
+        }
+      }
+      fileErrors {
+        message
+        fileNames
+        code
+      }
+    }
+  }
+`);
 
-export default FileError;
+export default CLINICAL_SUBMISSION_QUERY;

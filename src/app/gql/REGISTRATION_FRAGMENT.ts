@@ -17,54 +17,54 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 const REGISTRATION_FRAGMENT = gql`
-  fragment Registration on ClinicalRegistrationData {
-    id
-    programShortName
-    creator
-    fileName
-    createdAt
-    records {
-      row
-      fields {
-        name
-        value
-      }
-    }
-    errors {
-      type
-      message
-      row
-      field
-      value
-      sampleId
-      donorId
-      specimenId
-    }
-    fileErrors {
-      message
-      fileNames
-      code
-    }
-    newDonors {
-      count
-      rows
-    }
-    newSpecimens {
-      count
-      rows
-    }
-    newSamples {
-      count
-      rows
-    }
-    alreadyRegistered {
-      count
-      rows
-    }
-  }
+	fragment Registration on ClinicalRegistrationData {
+		id
+		programShortName
+		creator
+		fileName
+		createdAt
+		records {
+			row
+			fields {
+				name
+				value
+			}
+		}
+		errors {
+			type
+			message
+			row
+			field
+			value
+			sampleId
+			donorId
+			specimenId
+		}
+		fileErrors {
+			message
+			fileNames
+			code
+		}
+		newDonors {
+			count
+			rows
+		}
+		newSpecimens {
+			count
+			rows
+		}
+		newSamples {
+			count
+			rows
+		}
+		alreadyRegistered {
+			count
+			rows
+		}
+	}
 `;
 
 export default REGISTRATION_FRAGMENT;

@@ -19,6 +19,8 @@
 'use client';
 
 import Header from '@/app/components/Header';
+import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import createEgoUtils from '@icgc-argo/ego-token-utils';
 import { DnaLoader } from '@icgc-argo/uikit';
 import Cookies from 'js-cookie';
 import { usePathname, useRouter } from 'next/navigation';
@@ -40,6 +42,8 @@ type AuthContextValue = {
 	setAuthLoading: Dispatch<SetStateAction<boolean>>;
 	logIn: (newToken: string) => void;
 	logOut: () => void;
+	permissions: string[];
+	TokenUtils: ReturnType<typeof createEgoUtils>;
 };
 
 const AuthContext = createContext<AuthContextValue>({
@@ -49,6 +53,8 @@ const AuthContext = createContext<AuthContextValue>({
 	setAuthLoading: () => false,
 	logIn: () => undefined,
 	logOut: () => undefined,
+	permissions: [],
+	TokenUtils: createEgoUtils(''),
 });
 
 export const getStoredToken = () => Cookies.get(EGO_JWT_KEY);
@@ -58,8 +64,10 @@ export const storeToken = (egoToken: string) => {
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+	const config = useAppConfigContext();
 	const storedToken = getStoredToken();
 	const [egoJwt, setEgoJwt] = useState(storedToken || '');
+	const TokenUtils = createEgoUtils(config.EGO_PUBLIC_KEY);
 	const router = useRouter();
 	const path = usePathname();
 	const loginStateOnPageLoad = path === '/logging-in' && !egoJwt.length;
@@ -80,7 +88,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		setAuthLoading(false);
 	};
 
-	const value: AuthContextValue = { egoJwt, setEgoJwt, authLoading, setAuthLoading, logIn, logOut };
+	const permissions = TokenUtils.getPermissionsFromToken(egoJwt);
+
+	const value: AuthContextValue = {
+		egoJwt,
+		setEgoJwt,
+		authLoading,
+		setAuthLoading,
+		logIn,
+		logOut,
+		permissions,
+		TokenUtils,
+	};
 
 	return (
 		<AuthContext.Provider value={value}>

@@ -17,217 +17,209 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { ClinicalRegistrationError, GetRegistrationQuery } from '@/__generated__/graphql';
+import TableHeader from '@/app/(post-login)/submission/program-table/Header';
+import { exportToTsv, notNull, toDisplayError } from '@/global/utils';
+import { css, useTheme } from '@/lib/emotion';
 import {
-  ClinicalRegistrationError,
-  GetRegistrationQuery,
-} from "@/__generated__/graphql";
-import TableHeader from "@/app/(post-login)/submission/program-table/Header";
-import { exportToTsv, notNull, toDisplayError } from "@/global/utils";
-import { css, useTheme } from "@/lib/emotion";
-import {
-  Button,
-  ColumnDef,
-  Icon,
-  NOTIFICATION_VARIANTS,
-  Notification,
-  NotificationVariant,
-  Table,
-} from "@icgc-argo/uikit";
-import union from "lodash/union";
-import { ComponentProps, FC, ReactNode, createRef } from "react";
+	Button,
+	ColumnDef,
+	Icon,
+	NOTIFICATION_VARIANTS,
+	Notification,
+	NotificationVariant,
+	Table,
+} from '@icgc-argo/uikit';
+import union from 'lodash/union';
+import { ComponentProps, FC, ReactNode, createRef } from 'react';
 
 type UploadColumn = {
-  type: string;
-  row: number;
-  field: string;
-  value: string;
-  message: string;
-  sampleId?: string | null;
-  donorId: string;
-  specimenId?: string | null;
+	type: string;
+	row: number;
+	field: string;
+	value: string;
+	message: string;
+	sampleId?: string | null;
+	donorId: string;
+	specimenId?: string | null;
 };
 
 type Cols = Array<
-  ColumnDef<UploadColumn> & {
-    accessorKey: keyof ClinicalRegistrationError;
-  }
+	ColumnDef<UploadColumn> & {
+		accessorKey: keyof ClinicalRegistrationError;
+	}
 >;
 
 const getDefaultColumns = (variantText: string): Cols => {
-  return [
-    {
-      accessorKey: "row",
-      header: () => <TableHeader>Line #</TableHeader>,
-      maxSize: 70,
-    },
-    {
-      accessorKey: "donorId",
-      header: () => <TableHeader> Submitter Donor ID</TableHeader>,
-      maxSize: 160,
-    },
-    {
-      accessorKey: "field",
-      header: () => <TableHeader>{`Field with ${variantText}`}</TableHeader>,
-      maxSize: 200,
-    },
-    {
-      accessorKey: "value",
-      header: () => <TableHeader>{`${variantText} Value`}</TableHeader>,
-      maxSize: 130,
-    },
-    {
-      accessorKey: "message",
-      header: () => <TableHeader>{`${variantText} Description`}</TableHeader>,
-    },
-  ];
+	return [
+		{
+			accessorKey: 'row',
+			header: () => <TableHeader>Line #</TableHeader>,
+			maxSize: 70,
+		},
+		{
+			accessorKey: 'donorId',
+			header: () => <TableHeader> Submitter Donor ID</TableHeader>,
+			maxSize: 160,
+		},
+		{
+			accessorKey: 'field',
+			header: () => <TableHeader>{`Field with ${variantText}`}</TableHeader>,
+			maxSize: 200,
+		},
+		{
+			accessorKey: 'value',
+			header: () => <TableHeader>{`${variantText} Value`}</TableHeader>,
+			maxSize: 130,
+		},
+		{
+			accessorKey: 'message',
+			header: () => <TableHeader>{`${variantText} Description`}</TableHeader>,
+		},
+	];
 };
 
 type DownloadHandlerProps = {
-  errors: ClinicalDataErrors;
-  excludeCols: Array<keyof ClinicalRegistrationError>;
-  level: string;
-  columnConfig: Cols;
+	errors: ClinicalDataErrors;
+	excludeCols: Array<keyof ClinicalRegistrationError>;
+	level: string;
+	columnConfig: Cols;
 };
+
 const createDownloadHandler =
-  ({ errors, excludeCols, columnConfig, level }: DownloadHandlerProps) =>
-  () => {
-    const filteredErrors = errors.filter(notNull);
-    return exportToTsv(filteredErrors, {
-      exclude: union(excludeCols, ["__typename"]),
-      order: columnConfig.map((entry) => entry.accessorKey),
-      fileName: `${level}_report.tsv`,
-      headerDisplays: columnConfig.reduce(
-        (acc, { accessorKey, header }) => ({
-          ...acc,
-          [accessorKey]: header,
-        }),
-        {},
-      ),
-    });
-  };
+	({ errors, excludeCols, columnConfig, level }: DownloadHandlerProps) =>
+	() => {
+		const filteredErrors = errors.filter(notNull);
+		return exportToTsv(filteredErrors, {
+			exclude: union(excludeCols, ['__typename']),
+			order: columnConfig.map((entry) => entry.accessorKey),
+			fileName: `${level}_report.tsv`,
+			headerDisplays: columnConfig.reduce(
+				(acc, { accessorKey, header }) => ({
+					...acc,
+					[accessorKey]: header,
+				}),
+				{},
+			),
+		});
+	};
 
-type ClinicalDataErrors =
-  GetRegistrationQuery["clinicalRegistration"]["errors"];
+type ClinicalDataErrors = GetRegistrationQuery['clinicalRegistration']['errors'];
+
 type UploadErrorProps = {
-  level: NotificationVariant;
-  title: string;
-  subtitle: ReactNode;
-  errors: ClinicalDataErrors;
-  onClearClick?: ComponentProps<typeof Button>["onClick"];
-  tsvExcludeCols?: Array<keyof Error>;
+	level: NotificationVariant;
+	title: string;
+	subtitle: ReactNode;
+	errors: ClinicalDataErrors;
+	onClearClick?: ComponentProps<typeof Button>['onClick'];
+	tsvExcludeCols?: Array<keyof Error>;
 };
-const UploadError: FC<UploadErrorProps> = ({
-  level,
-  title,
-  errors,
-  subtitle,
-  onClearClick,
-}) => {
-  const theme = useTheme();
 
-  const formattedErrors = errors.filter(notNull).map((error) => {
-    if (!notNull(error.sampleId)) error.sampleId = "";
-    return toDisplayError(error);
-  });
+const UploadError: FC<UploadErrorProps> = ({ level, title, errors, subtitle, onClearClick }) => {
+	const theme = useTheme();
 
-  const variantText =
-    level === NOTIFICATION_VARIANTS.ERROR ? "Error" : "Warning";
+	const formattedErrors = errors.filter(notNull).map((error) => {
+		if (!notNull(error.sampleId)) error.sampleId = '';
+		return toDisplayError(error);
+	});
 
-  const columnConfig = getDefaultColumns(variantText);
+	const variantText = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
 
-  const containerRef = createRef<HTMLDivElement>();
+	const columnConfig = getDefaultColumns(variantText);
 
-  const downloadHandler = createDownloadHandler({
-    columnConfig,
-    errors,
-    excludeCols: ["type", "specimenId", "sampleId"],
-    level: variantText,
-  });
+	const containerRef = createRef<HTMLDivElement>();
 
-  return (
-    <div
-      css={css`
+	const downloadHandler = createDownloadHandler({
+		columnConfig,
+		errors,
+		excludeCols: ['type', 'specimenId', 'sampleId'],
+		level: variantText,
+	});
+
+	return (
+		<div
+			css={css`
         borderRadius: 8px;
         boxShadow:  0 2px 4px 0 ${theme.colors.grey_2}
         border: solid 1px ${theme.colors.error_2};
         background-color: ${theme.colors.error_4};
       `}
-    >
-      <Notification
-        variant={level}
-        interactionType="NONE"
-        title={
-          <div
-            css={css`
-              display: flex;
-              justify-content: space-between;
-            `}
-          >
-            {title}
-            <div
-              css={css`
-                display: flex;
-              `}
-            >
-              <Button variant="secondary" size="sm" onClick={downloadHandler}>
-                <span
-                  css={css`
-                    display: flex;
-                    align-items: center;
-                  `}
-                >
-                  <Icon
-                    name="download"
-                    fill="accent2_dark"
-                    height="12px"
-                    css={css`
-                      marginright: 5px;
-                    `}
-                  />
-                  {`${variantText} `}
-                  Report
-                </span>
-              </Button>
-              {!!onClearClick && (
-                <Button
-                  isAsync
-                  id="button-clear-selected-file-upload"
-                  variant="text"
-                  size="sm"
-                  onClick={onClearClick}
-                >
-                  Clear
-                </Button>
-              )}
-            </div>
-          </div>
-        }
-        contentProps={{
-          css: css`
-            overflow: hidden;
-          `,
-        }}
-        content={
-          <div
-            ref={containerRef}
-            css={css`
-              margin-top: 10px;
-              width: 100%;
-            `}
-          >
-            <div>{subtitle}</div>
-            <Table
-              columns={columnConfig}
-              data={formattedErrors}
-              withPagination
-              showPageSizeOptions
-              withHeaders
-            />
-          </div>
-        }
-      />
-    </div>
-  );
+		>
+			<Notification
+				variant={level}
+				interactionType="NONE"
+				title={
+					<div
+						css={css`
+							display: flex;
+							justify-content: space-between;
+						`}
+					>
+						{title}
+						<div
+							css={css`
+								display: flex;
+							`}
+						>
+							<Button variant="secondary" size="sm" onClick={downloadHandler}>
+								<span
+									css={css`
+										display: flex;
+										align-items: center;
+									`}
+								>
+									<Icon
+										name="download"
+										fill="accent2_dark"
+										height="12px"
+										css={css`
+											marginright: 5px;
+										`}
+									/>
+									{`${variantText} `}
+									Report
+								</span>
+							</Button>
+							{!!onClearClick && (
+								<Button
+									isAsync
+									id="button-clear-selected-file-upload"
+									variant="text"
+									size="sm"
+									onClick={onClearClick}
+								>
+									Clear
+								</Button>
+							)}
+						</div>
+					</div>
+				}
+				contentProps={{
+					css: css`
+						overflow: hidden;
+					`,
+				}}
+				content={
+					<div
+						ref={containerRef}
+						css={css`
+							margin-top: 10px;
+							width: 100%;
+						`}
+					>
+						<div>{subtitle}</div>
+						<Table
+							columns={columnConfig}
+							data={formattedErrors}
+							withPagination
+							showPageSizeOptions
+							withHeaders
+						/>
+					</div>
+				}
+			/>
+		</div>
+	);
 };
 
 export default UploadError;
