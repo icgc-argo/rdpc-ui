@@ -2,23 +2,15 @@
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = {
-	[K in keyof T]: T[K];
-};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-	[SubKey in K]?: Maybe<T[SubKey]>;
-};
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-	[SubKey in K]: Maybe<T[SubKey]>;
-};
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = {
 	[_ in K]?: never;
 };
 export type Incremental<T> =
 	| T
-	| {
-			[P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
-	  };
+	| { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
 	ID: { input: string; output: string };
@@ -2476,11 +2468,7 @@ export type ClearSubmissionMutation = {
 			records: Array<{
 				__typename?: 'ClinicalRecord';
 				row: number;
-				fields: Array<{
-					__typename?: 'ClinicalRecordField';
-					name: string;
-					value?: string | null;
-				}>;
+				fields: Array<{ __typename?: 'ClinicalRecordField'; name: string; value?: string | null }>;
 			} | null>;
 			dataUpdates: Array<{
 				__typename?: 'ClinicalSubmissionUpdate';
@@ -2524,9 +2512,7 @@ export type ClearSubmissionMutation = {
 	};
 };
 
-export type ClinicalSchemaVersionQueryVariables = Exact<{
-	[key: string]: never;
-}>;
+export type ClinicalSchemaVersionQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ClinicalSchemaVersionQuery = {
 	__typename?: 'Query';
@@ -2556,11 +2542,7 @@ export type ClinicalSubmissionFragmentFragment = {
 		records: Array<{
 			__typename?: 'ClinicalRecord';
 			row: number;
-			fields: Array<{
-				__typename?: 'ClinicalRecordField';
-				name: string;
-				value?: string | null;
-			}>;
+			fields: Array<{ __typename?: 'ClinicalRecordField'; name: string; value?: string | null }>;
 		} | null>;
 		dataUpdates: Array<{
 			__typename?: 'ClinicalSubmissionUpdate';
@@ -2632,11 +2614,7 @@ export type ClinicalSubmissionQuery = {
 			records: Array<{
 				__typename?: 'ClinicalRecord';
 				row: number;
-				fields: Array<{
-					__typename?: 'ClinicalRecordField';
-					name: string;
-					value?: string | null;
-				}>;
+				fields: Array<{ __typename?: 'ClinicalRecordField'; name: string; value?: string | null }>;
 			} | null>;
 			dataUpdates: Array<{
 				__typename?: 'ClinicalSubmissionUpdate';
@@ -2680,9 +2658,7 @@ export type ClinicalSubmissionQuery = {
 	};
 };
 
-export type ClinicalSubmissionSystemDisabledQueryVariables = Exact<{
-	[key: string]: never;
-}>;
+export type ClinicalSubmissionSystemDisabledQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ClinicalSubmissionSystemDisabledQuery = {
 	__typename?: 'Query';
@@ -2715,11 +2691,7 @@ export type GetRegistrationQuery = {
 		records: Array<{
 			__typename?: 'ClinicalRecord';
 			row: number;
-			fields: Array<{
-				__typename?: 'ClinicalRecordField';
-				name: string;
-				value?: string | null;
-			}>;
+			fields: Array<{ __typename?: 'ClinicalRecordField'; name: string; value?: string | null }>;
 		} | null>;
 		errors: Array<{
 			__typename?: 'ClinicalRegistrationError';
@@ -2795,11 +2767,7 @@ export type RegistrationFragment = {
 	records: Array<{
 		__typename?: 'ClinicalRecord';
 		row: number;
-		fields: Array<{
-			__typename?: 'ClinicalRecordField';
-			name: string;
-			value?: string | null;
-		}>;
+		fields: Array<{ __typename?: 'ClinicalRecordField'; name: string; value?: string | null }>;
 	} | null>;
 	errors: Array<{
 		__typename?: 'ClinicalRegistrationError';
@@ -2870,11 +2838,7 @@ export type ReopenSubmissionMutation = {
 			records: Array<{
 				__typename?: 'ClinicalRecord';
 				row: number;
-				fields: Array<{
-					__typename?: 'ClinicalRecordField';
-					name: string;
-					value?: string | null;
-				}>;
+				fields: Array<{ __typename?: 'ClinicalRecordField'; name: string; value?: string | null }>;
 			} | null>;
 			dataUpdates: Array<{
 				__typename?: 'ClinicalSubmissionUpdate';
@@ -2935,10 +2899,7 @@ export type SideMenuQuery = {
 			message: string;
 			code: string;
 		} | null> | null;
-		errors: Array<{
-			__typename?: 'ClinicalRegistrationError';
-			type: string;
-		} | null>;
+		errors: Array<{ __typename?: 'ClinicalRegistrationError'; type: string } | null>;
 	};
 	clinicalSubmissions: {
 		__typename?: 'ClinicalSubmissionData';
@@ -2946,19 +2907,13 @@ export type SideMenuQuery = {
 		state?: SubmissionState | null;
 		clinicalEntities: Array<{
 			__typename?: 'ClinicalSubmissionEntity';
-			schemaErrors: Array<{
-				__typename?: 'ClinicalSubmissionSchemaError';
-				row: number;
-			} | null>;
+			schemaErrors: Array<{ __typename?: 'ClinicalSubmissionSchemaError'; row: number } | null>;
 		} | null>;
 	};
 	clinicalData: {
 		__typename?: 'ClinicalData';
 		programShortName: string;
-		clinicalEntities: Array<{
-			__typename?: 'ClinicalDataEntities';
-			entityName: string;
-		} | null>;
+		clinicalEntities: Array<{ __typename?: 'ClinicalDataEntities'; entityName: string } | null>;
 		clinicalErrors: Array<{
 			__typename?: 'ClinicalErrors';
 			errors?: Array<{
@@ -2999,11 +2954,7 @@ export type SignOffSubmissionMutation = {
 			records: Array<{
 				__typename?: 'ClinicalRecord';
 				row: number;
-				fields: Array<{
-					__typename?: 'ClinicalRecordField';
-					name: string;
-					value?: string | null;
-				}>;
+				fields: Array<{ __typename?: 'ClinicalRecordField'; name: string; value?: string | null }>;
 			} | null>;
 			dataUpdates: Array<{
 				__typename?: 'ClinicalSubmissionUpdate';
@@ -3077,11 +3028,7 @@ export type UploadClinicalSubmissionMutation = {
 			records: Array<{
 				__typename?: 'ClinicalRecord';
 				row: number;
-				fields: Array<{
-					__typename?: 'ClinicalRecordField';
-					name: string;
-					value?: string | null;
-				}>;
+				fields: Array<{ __typename?: 'ClinicalRecordField'; name: string; value?: string | null }>;
 			} | null>;
 			dataUpdates: Array<{
 				__typename?: 'ClinicalSubmissionUpdate';
@@ -3142,11 +3089,7 @@ export type UploadRegistrationMutation = {
 		records: Array<{
 			__typename?: 'ClinicalRecord';
 			row: number;
-			fields: Array<{
-				__typename?: 'ClinicalRecordField';
-				name: string;
-				value?: string | null;
-			}>;
+			fields: Array<{ __typename?: 'ClinicalRecordField'; name: string; value?: string | null }>;
 		} | null>;
 		errors: Array<{
 			__typename?: 'ClinicalRegistrationError';
@@ -3218,11 +3161,7 @@ export type ValidateSubmissionMutation = {
 			records: Array<{
 				__typename?: 'ClinicalRecord';
 				row: number;
-				fields: Array<{
-					__typename?: 'ClinicalRecordField';
-					name: string;
-					value?: string | null;
-				}>;
+				fields: Array<{ __typename?: 'ClinicalRecordField'; name: string; value?: string | null }>;
 			} | null>;
 			dataUpdates: Array<{
 				__typename?: 'ClinicalSubmissionUpdate';
@@ -3272,10 +3211,7 @@ export const ClinicalSubmissionFragmentFragmentDoc = {
 		{
 			kind: 'FragmentDefinition',
 			name: { kind: 'Name', value: 'ClinicalSubmissionFragment' },
-			typeCondition: {
-				kind: 'NamedType',
-				name: { kind: 'Name', value: 'ClinicalSubmissionData' },
-			},
+			typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'ClinicalSubmissionData' } },
 			selectionSet: {
 				kind: 'SelectionSet',
 				selections: [
@@ -3290,10 +3226,7 @@ export const ClinicalSubmissionFragmentFragmentDoc = {
 						selectionSet: {
 							kind: 'SelectionSet',
 							selections: [
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'clinicalType' },
-								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'clinicalType' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'batchName' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'creator' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
@@ -3303,19 +3236,10 @@ export const ClinicalSubmissionFragmentFragmentDoc = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'noUpdate' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'noUpdate' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'new' } },
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'updated' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'errorsFound' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'updated' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'errorsFound' } },
 										],
 									},
 								},
@@ -3332,14 +3256,8 @@ export const ClinicalSubmissionFragmentFragmentDoc = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'name' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
 													],
 												},
 											},
@@ -3354,18 +3272,9 @@ export const ClinicalSubmissionFragmentFragmentDoc = {
 										selections: [
 											{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'newValue' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'oldValue' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'donorId' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'newValue' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'oldValue' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 										],
 									},
 								},
@@ -3375,17 +3284,11 @@ export const ClinicalSubmissionFragmentFragmentDoc = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'message' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'donorId' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 										],
 									},
 								},
@@ -3395,17 +3298,11 @@ export const ClinicalSubmissionFragmentFragmentDoc = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'message' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'donorId' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 										],
 									},
 								},
@@ -3415,17 +3312,11 @@ export const ClinicalSubmissionFragmentFragmentDoc = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'message' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'donorId' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 										],
 									},
 								},
@@ -3576,30 +3467,18 @@ export const ApproveSubmissionDocument = {
 			variableDefinitions: [
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'programShortName' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'submissionVersion' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'submissionVersion' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 			],
@@ -3613,18 +3492,12 @@ export const ApproveSubmissionDocument = {
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'programShortName' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
 							},
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'version' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'submissionVersion' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'submissionVersion' } },
 							},
 						],
 					},
@@ -3643,30 +3516,18 @@ export const ClearClinicalRegistrationDocument = {
 			variableDefinitions: [
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'shortName' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'shortName' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'registrationId' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'registrationId' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 			],
@@ -3680,18 +3541,12 @@ export const ClearClinicalRegistrationDocument = {
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'shortName' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'shortName' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'shortName' } },
 							},
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'registrationId' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'registrationId' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'registrationId' } },
 							},
 						],
 					},
@@ -3713,38 +3568,23 @@ export const ClearSubmissionDocument = {
 			variableDefinitions: [
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'programShortName' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'submissionVersion' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'submissionVersion' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'fileType' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'fileType' } },
 					type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 				},
 			],
@@ -3758,35 +3598,23 @@ export const ClearSubmissionDocument = {
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'programShortName' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
 							},
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'version' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'submissionVersion' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'submissionVersion' } },
 							},
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'fileType' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'fileType' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'fileType' } },
 							},
 						],
 						selectionSet: {
 							kind: 'SelectionSet',
 							selections: [
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'state' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'version' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
@@ -3797,44 +3625,20 @@ export const ClearSubmissionDocument = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'clinicalType' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'batchName' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'creator' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'createdAt' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'clinicalType' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'batchName' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'creator' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
 											{
 												kind: 'Field',
 												name: { kind: 'Name', value: 'stats' },
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'noUpdate' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'new' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'updated' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'errorsFound' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'noUpdate' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'new' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'updated' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'errorsFound' } },
 													],
 												},
 											},
@@ -3844,24 +3648,15 @@ export const ClearSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
 														{
 															kind: 'Field',
 															name: { kind: 'Name', value: 'fields' },
 															selectionSet: {
 																kind: 'SelectionSet',
 																selections: [
-																	{
-																		kind: 'Field',
-																		name: { kind: 'Name', value: 'name' },
-																	},
-																	{
-																		kind: 'Field',
-																		name: { kind: 'Name', value: 'value' },
-																	},
+																	{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
 																],
 															},
 														},
@@ -3874,26 +3669,11 @@ export const ClearSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'newValue' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'oldValue' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'newValue' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'oldValue' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -3903,26 +3683,11 @@ export const ClearSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -3932,26 +3697,11 @@ export const ClearSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -3961,26 +3711,11 @@ export const ClearSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -3993,14 +3728,8 @@ export const ClearSubmissionDocument = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'message' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'fileNames' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'fileNames' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'code' } },
 										],
 									},
@@ -4023,10 +3752,7 @@ export const ClinicalSchemaVersionDocument = {
 			selectionSet: {
 				kind: 'SelectionSet',
 				selections: [
-					{
-						kind: 'Field',
-						name: { kind: 'Name', value: 'clinicalSubmissionSchemaVersion' },
-					},
+					{ kind: 'Field', name: { kind: 'Name', value: 'clinicalSubmissionSchemaVersion' } },
 				],
 			},
 		},
@@ -4042,16 +3768,10 @@ export const ClinicalSubmissionDocument = {
 			variableDefinitions: [
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'shortName' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'shortName' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 			],
@@ -4065,19 +3785,13 @@ export const ClinicalSubmissionDocument = {
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'programShortName' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'shortName' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'shortName' } },
 							},
 						],
 						selectionSet: {
 							kind: 'SelectionSet',
 							selections: [
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'state' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'version' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
@@ -4088,44 +3802,20 @@ export const ClinicalSubmissionDocument = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'clinicalType' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'batchName' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'creator' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'createdAt' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'clinicalType' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'batchName' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'creator' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
 											{
 												kind: 'Field',
 												name: { kind: 'Name', value: 'stats' },
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'noUpdate' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'new' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'updated' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'errorsFound' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'noUpdate' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'new' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'updated' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'errorsFound' } },
 													],
 												},
 											},
@@ -4135,24 +3825,15 @@ export const ClinicalSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
 														{
 															kind: 'Field',
 															name: { kind: 'Name', value: 'fields' },
 															selectionSet: {
 																kind: 'SelectionSet',
 																selections: [
-																	{
-																		kind: 'Field',
-																		name: { kind: 'Name', value: 'name' },
-																	},
-																	{
-																		kind: 'Field',
-																		name: { kind: 'Name', value: 'value' },
-																	},
+																	{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
 																],
 															},
 														},
@@ -4165,26 +3846,11 @@ export const ClinicalSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'newValue' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'oldValue' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'newValue' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'oldValue' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -4194,26 +3860,11 @@ export const ClinicalSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -4223,26 +3874,11 @@ export const ClinicalSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -4252,26 +3888,11 @@ export const ClinicalSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -4284,14 +3905,8 @@ export const ClinicalSubmissionDocument = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'message' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'fileNames' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'fileNames' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'code' } },
 										],
 									},
@@ -4314,10 +3929,7 @@ export const ClinicalSubmissionSystemDisabledDocument = {
 			selectionSet: {
 				kind: 'SelectionSet',
 				selections: [
-					{
-						kind: 'Field',
-						name: { kind: 'Name', value: 'clinicalSubmissionSystemDisabled' },
-					},
+					{ kind: 'Field', name: { kind: 'Name', value: 'clinicalSubmissionSystemDisabled' } },
 				],
 			},
 		},
@@ -4336,30 +3948,18 @@ export const CommitClinicalRegistrationDocument = {
 			variableDefinitions: [
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'shortName' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'shortName' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'registrationId' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'registrationId' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 			],
@@ -4373,18 +3973,12 @@ export const CommitClinicalRegistrationDocument = {
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'shortName' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'shortName' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'shortName' } },
 							},
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'registrationId' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'registrationId' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'registrationId' } },
 							},
 						],
 					},
@@ -4406,16 +4000,10 @@ export const GetRegistrationDocument = {
 			variableDefinitions: [
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'shortName' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'shortName' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 			],
@@ -4429,20 +4017,14 @@ export const GetRegistrationDocument = {
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'shortName' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'shortName' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'shortName' } },
 							},
 						],
 						selectionSet: {
 							kind: 'SelectionSet',
 							selections: [
 								{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'creator' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'fileName' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
@@ -4459,14 +4041,8 @@ export const GetRegistrationDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'name' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
 													],
 												},
 											},
@@ -4480,25 +4056,13 @@ export const GetRegistrationDocument = {
 										kind: 'SelectionSet',
 										selections: [
 											{ kind: 'Field', name: { kind: 'Name', value: 'type' } },
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'message' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'sampleId' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'donorId' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'specimenId' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'sampleId' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'specimenId' } },
 										],
 									},
 								},
@@ -4508,14 +4072,8 @@ export const GetRegistrationDocument = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'message' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'fileNames' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'fileNames' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'code' } },
 										],
 									},
@@ -4592,22 +4150,10 @@ export const ProgramsListDocument = {
 								{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'cancerTypes' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'countries' } },
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'membershipType' },
-								},
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'genomicDonors' },
-								},
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'submittedDonors' },
-								},
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'commitmentDonors' },
-								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'membershipType' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'genomicDonors' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'submittedDonors' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'commitmentDonors' } },
 								{
 									kind: 'Field',
 									name: { kind: 'Name', value: 'users' },
@@ -4615,14 +4161,8 @@ export const ProgramsListDocument = {
 										kind: 'SelectionSet',
 										selections: [
 											{ kind: 'Field', name: { kind: 'Name', value: 'email' } },
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'firstName' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'lastName' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'role' } },
 										],
 									},
@@ -4645,30 +4185,18 @@ export const ReopenSubmissionDocument = {
 			variableDefinitions: [
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'programShortName' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'submissionVersion' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'submissionVersion' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 			],
@@ -4683,27 +4211,18 @@ export const ReopenSubmissionDocument = {
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'programShortName' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
 							},
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'version' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'submissionVersion' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'submissionVersion' } },
 							},
 						],
 						selectionSet: {
 							kind: 'SelectionSet',
 							selections: [
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'state' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'version' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
@@ -4714,44 +4233,20 @@ export const ReopenSubmissionDocument = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'clinicalType' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'batchName' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'creator' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'createdAt' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'clinicalType' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'batchName' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'creator' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
 											{
 												kind: 'Field',
 												name: { kind: 'Name', value: 'stats' },
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'noUpdate' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'new' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'updated' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'errorsFound' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'noUpdate' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'new' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'updated' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'errorsFound' } },
 													],
 												},
 											},
@@ -4761,24 +4256,15 @@ export const ReopenSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
 														{
 															kind: 'Field',
 															name: { kind: 'Name', value: 'fields' },
 															selectionSet: {
 																kind: 'SelectionSet',
 																selections: [
-																	{
-																		kind: 'Field',
-																		name: { kind: 'Name', value: 'name' },
-																	},
-																	{
-																		kind: 'Field',
-																		name: { kind: 'Name', value: 'value' },
-																	},
+																	{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
 																],
 															},
 														},
@@ -4791,26 +4277,11 @@ export const ReopenSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'newValue' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'oldValue' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'newValue' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'oldValue' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -4820,26 +4291,11 @@ export const ReopenSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -4849,26 +4305,11 @@ export const ReopenSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -4878,26 +4319,11 @@ export const ReopenSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -4910,14 +4336,8 @@ export const ReopenSubmissionDocument = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'message' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'fileNames' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'fileNames' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'code' } },
 										],
 									},
@@ -4940,30 +4360,18 @@ export const SideMenuDocument = {
 			variableDefinitions: [
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'activeProgramName' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'activeProgramName' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'filters' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'filters' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'ClinicalInput' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'ClinicalInput' } },
 					},
 				},
 			],
@@ -4985,29 +4393,20 @@ export const SideMenuDocument = {
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'shortName' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'activeProgramName' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'activeProgramName' } },
 							},
 						],
 						selectionSet: {
 							kind: 'SelectionSet',
 							selections: [
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
 								{
 									kind: 'Field',
 									name: { kind: 'Name', value: 'fileErrors' },
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'message' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'code' } },
 										],
 									},
@@ -5031,19 +4430,13 @@ export const SideMenuDocument = {
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'programShortName' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'activeProgramName' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'activeProgramName' } },
 							},
 						],
 						selectionSet: {
 							kind: 'SelectionSet',
 							selections: [
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'state' } },
 								{
 									kind: 'Field',
@@ -5056,12 +4449,7 @@ export const SideMenuDocument = {
 												name: { kind: 'Name', value: 'schemaErrors' },
 												selectionSet: {
 													kind: 'SelectionSet',
-													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-													],
+													selections: [{ kind: 'Field', name: { kind: 'Name', value: 'row' } }],
 												},
 											},
 										],
@@ -5077,38 +4465,24 @@ export const SideMenuDocument = {
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'programShortName' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'activeProgramName' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'activeProgramName' } },
 							},
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'filters' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'filters' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'filters' } },
 							},
 						],
 						selectionSet: {
 							kind: 'SelectionSet',
 							selections: [
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
 								{
 									kind: 'Field',
 									name: { kind: 'Name', value: 'clinicalEntities' },
 									selectionSet: {
 										kind: 'SelectionSet',
-										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'entityName' },
-											},
-										],
+										selections: [{ kind: 'Field', name: { kind: 'Name', value: 'entityName' } }],
 									},
 								},
 								{
@@ -5123,10 +4497,7 @@ export const SideMenuDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'entityName' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'entityName' } },
 													],
 												},
 											},
@@ -5151,30 +4522,18 @@ export const SignOffSubmissionDocument = {
 			variableDefinitions: [
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'programShortName' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'submissionVersion' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'submissionVersion' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 			],
@@ -5189,27 +4548,18 @@ export const SignOffSubmissionDocument = {
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'programShortName' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
 							},
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'version' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'submissionVersion' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'submissionVersion' } },
 							},
 						],
 						selectionSet: {
 							kind: 'SelectionSet',
 							selections: [
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'state' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'version' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
@@ -5220,44 +4570,20 @@ export const SignOffSubmissionDocument = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'clinicalType' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'batchName' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'creator' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'createdAt' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'clinicalType' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'batchName' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'creator' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
 											{
 												kind: 'Field',
 												name: { kind: 'Name', value: 'stats' },
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'noUpdate' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'new' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'updated' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'errorsFound' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'noUpdate' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'new' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'updated' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'errorsFound' } },
 													],
 												},
 											},
@@ -5267,24 +4593,15 @@ export const SignOffSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
 														{
 															kind: 'Field',
 															name: { kind: 'Name', value: 'fields' },
 															selectionSet: {
 																kind: 'SelectionSet',
 																selections: [
-																	{
-																		kind: 'Field',
-																		name: { kind: 'Name', value: 'name' },
-																	},
-																	{
-																		kind: 'Field',
-																		name: { kind: 'Name', value: 'value' },
-																	},
+																	{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
 																],
 															},
 														},
@@ -5297,26 +4614,11 @@ export const SignOffSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'newValue' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'oldValue' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'newValue' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'oldValue' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -5326,26 +4628,11 @@ export const SignOffSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -5355,26 +4642,11 @@ export const SignOffSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -5384,26 +4656,11 @@ export const SignOffSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -5416,14 +4673,8 @@ export const SignOffSubmissionDocument = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'message' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'fileNames' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'fileNames' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'code' } },
 										],
 									},
@@ -5446,32 +4697,20 @@ export const UploadClinicalSubmissionDocument = {
 			variableDefinitions: [
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'programShortName' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'files' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'files' } },
 					type: {
 						kind: 'ListType',
 						type: {
 							kind: 'NonNullType',
-							type: {
-								kind: 'NamedType',
-								name: { kind: 'Name', value: 'Upload' },
-							},
+							type: { kind: 'NamedType', name: { kind: 'Name', value: 'Upload' } },
 						},
 					},
 				},
@@ -5486,27 +4725,18 @@ export const UploadClinicalSubmissionDocument = {
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'programShortName' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
 							},
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'clinicalFiles' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'files' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'files' } },
 							},
 						],
 						selectionSet: {
 							kind: 'SelectionSet',
 							selections: [
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'state' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'version' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
@@ -5517,44 +4747,20 @@ export const UploadClinicalSubmissionDocument = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'clinicalType' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'batchName' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'creator' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'createdAt' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'clinicalType' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'batchName' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'creator' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
 											{
 												kind: 'Field',
 												name: { kind: 'Name', value: 'stats' },
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'noUpdate' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'new' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'updated' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'errorsFound' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'noUpdate' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'new' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'updated' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'errorsFound' } },
 													],
 												},
 											},
@@ -5564,24 +4770,15 @@ export const UploadClinicalSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
 														{
 															kind: 'Field',
 															name: { kind: 'Name', value: 'fields' },
 															selectionSet: {
 																kind: 'SelectionSet',
 																selections: [
-																	{
-																		kind: 'Field',
-																		name: { kind: 'Name', value: 'name' },
-																	},
-																	{
-																		kind: 'Field',
-																		name: { kind: 'Name', value: 'value' },
-																	},
+																	{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
 																],
 															},
 														},
@@ -5594,26 +4791,11 @@ export const UploadClinicalSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'newValue' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'oldValue' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'newValue' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'oldValue' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -5623,26 +4805,11 @@ export const UploadClinicalSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -5652,26 +4819,11 @@ export const UploadClinicalSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -5681,26 +4833,11 @@ export const UploadClinicalSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -5713,14 +4850,8 @@ export const UploadClinicalSubmissionDocument = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'message' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'fileNames' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'fileNames' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'code' } },
 										],
 									},
@@ -5746,30 +4877,18 @@ export const UploadRegistrationDocument = {
 			variableDefinitions: [
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'shortName' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'shortName' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'registrationFile' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'registrationFile' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'Upload' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'Upload' } },
 					},
 				},
 			],
@@ -5783,28 +4902,19 @@ export const UploadRegistrationDocument = {
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'shortName' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'shortName' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'shortName' } },
 							},
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'registrationFile' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'registrationFile' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'registrationFile' } },
 							},
 						],
 						selectionSet: {
 							kind: 'SelectionSet',
 							selections: [
 								{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'creator' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'fileName' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
@@ -5821,14 +4931,8 @@ export const UploadRegistrationDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'name' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
 													],
 												},
 											},
@@ -5842,25 +4946,13 @@ export const UploadRegistrationDocument = {
 										kind: 'SelectionSet',
 										selections: [
 											{ kind: 'Field', name: { kind: 'Name', value: 'type' } },
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'message' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'sampleId' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'donorId' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'specimenId' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'sampleId' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'specimenId' } },
 										],
 									},
 								},
@@ -5870,14 +4962,8 @@ export const UploadRegistrationDocument = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'message' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'fileNames' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'fileNames' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'code' } },
 										],
 									},
@@ -5944,30 +5030,18 @@ export const ValidateSubmissionDocument = {
 			variableDefinitions: [
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'programShortName' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 				{
 					kind: 'VariableDefinition',
-					variable: {
-						kind: 'Variable',
-						name: { kind: 'Name', value: 'submissionVersion' },
-					},
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'submissionVersion' } },
 					type: {
 						kind: 'NonNullType',
-						type: {
-							kind: 'NamedType',
-							name: { kind: 'Name', value: 'String' },
-						},
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
 					},
 				},
 			],
@@ -5981,27 +5055,18 @@ export const ValidateSubmissionDocument = {
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'programShortName' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
 							},
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'version' },
-								value: {
-									kind: 'Variable',
-									name: { kind: 'Name', value: 'submissionVersion' },
-								},
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'submissionVersion' } },
 							},
 						],
 						selectionSet: {
 							kind: 'SelectionSet',
 							selections: [
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'programShortName' },
-								},
+								{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'state' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'version' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
@@ -6012,44 +5077,20 @@ export const ValidateSubmissionDocument = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'clinicalType' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'batchName' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'creator' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'createdAt' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'clinicalType' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'batchName' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'creator' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
 											{
 												kind: 'Field',
 												name: { kind: 'Name', value: 'stats' },
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'noUpdate' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'new' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'updated' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'errorsFound' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'noUpdate' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'new' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'updated' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'errorsFound' } },
 													],
 												},
 											},
@@ -6059,24 +5100,15 @@ export const ValidateSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
 														{
 															kind: 'Field',
 															name: { kind: 'Name', value: 'fields' },
 															selectionSet: {
 																kind: 'SelectionSet',
 																selections: [
-																	{
-																		kind: 'Field',
-																		name: { kind: 'Name', value: 'name' },
-																	},
-																	{
-																		kind: 'Field',
-																		name: { kind: 'Name', value: 'value' },
-																	},
+																	{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
 																],
 															},
 														},
@@ -6089,26 +5121,11 @@ export const ValidateSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'newValue' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'oldValue' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'newValue' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'oldValue' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -6118,26 +5135,11 @@ export const ValidateSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -6147,26 +5149,11 @@ export const ValidateSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -6176,26 +5163,11 @@ export const ValidateSubmissionDocument = {
 												selectionSet: {
 													kind: 'SelectionSet',
 													selections: [
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'message' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'row' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'field' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'value' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'donorId' },
-														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'row' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'field' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 													],
 												},
 											},
@@ -6208,14 +5180,8 @@ export const ValidateSubmissionDocument = {
 									selectionSet: {
 										kind: 'SelectionSet',
 										selections: [
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'message' },
-											},
-											{
-												kind: 'Field',
-												name: { kind: 'Name', value: 'fileNames' },
-											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'fileNames' } },
 											{ kind: 'Field', name: { kind: 'Name', value: 'code' } },
 										],
 									},
