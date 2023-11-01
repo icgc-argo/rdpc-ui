@@ -293,6 +293,7 @@ const ClinicalSubmissionPage = ({ params: { shortName } }: { params: { shortName
 
 					if (newData.clinicalSubmissions.state === null) {
 						router.push(PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, shortName));
+						setGlobalLoading(false);
 
 						toaster.addToast({
 							variant: 'SUCCESS',
