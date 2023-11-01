@@ -105,10 +105,6 @@ export default function Register({ params: { shortName } }: { params: { shortNam
 	);
 
 	const [uploadClinicalSubmission, mutationStatus] = useMutation(UPLOAD_REGISTRATION_MUTATION, {
-		onCompleted: (d) => {
-			console.log('d', d);
-			//setSelectedClinicalEntityType(defaultClinicalEntityType);
-		},
 		onError: (e) => {
 			commonToaster.unknownError();
 		},
