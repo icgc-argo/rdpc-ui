@@ -27,7 +27,6 @@ import NoDataMessage from '@/app/components/NoData';
 import CLEAR_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/CLEAR_CLINICAL_REGISTRATION_MUTATION';
 import CLINICAL_SCHEMA_VERSION_QUERY from '@/app/gql/CLINICAL_SCHEMA_VERSION_QUERY';
 import GET_REGISTRATION_QUERY from '@/app/gql/GET_REGISTRATION_QUERY';
-import UPLOAD_CLINICAL_SUBMISSION_MUTATION from '@/app/gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION';
 import UPLOAD_REGISTRATION_MUTATION from '@/app/gql/UPLOAD_REGISTRATION_MUTATION';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useToaster } from '@/app/hooks/ToastProvider';
@@ -105,21 +104,15 @@ export default function Register({ params: { shortName } }: { params: { shortNam
 		},
 	);
 
-	const [uploadClinicalSubmission, mutationStatus] = useMutation(
-		UPLOAD_CLINICAL_SUBMISSION_MUTATION,
-		{
-			onCompleted: (d) => {
-				//setSelectedClinicalEntityType(defaultClinicalEntityType);
-			},
-			onError: (e) => {
-				commonToaster.unknownError();
-			},
+	const [uploadClinicalSubmission, mutationStatus] = useMutation(UPLOAD_REGISTRATION_MUTATION, {
+		onError: (e) => {
+			commonToaster.unknownError();
 		},
-	);
+	});
 
 	const handleUpload = (file: File) =>
 		uploadClinicalSubmission({
-			variables: { programShortName: shortName, files: file },
+			variables: { shortName, registrationFile: file },
 		});
 
 	const handleRegister = () => {
