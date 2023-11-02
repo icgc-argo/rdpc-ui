@@ -455,7 +455,7 @@ const ClinicalSubmissionPage = ({ params: { shortName } }): any => {
 const Page = ({ Component, acceptedRole, params }) => {
 	const { egoJwt } = useAuthContext();
 	const userRoles = useUserRole(egoJwt, params.params.shortName);
-	console.log('p', params, egoJwt, acceptedRole);
+	console.log('p', params, egoJwt, acceptedRole, userRoles);
 	if (true) {
 		return <Component {...params} />;
 	}

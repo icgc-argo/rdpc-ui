@@ -17,11 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import createEgoUtils from '@icgc-argo/ego-token-utils';
-import {
-	canWriteToRdpc,
-	isDccMember,
-	isRdpcAdmin,
-} from '@icgc-argo/ego-token-utils/dist/argoRoleChecks';
 import { useAppConfigContext } from './AppProvider';
 
 export type UserRoleList = {
@@ -34,18 +29,17 @@ export type UserRoleList = {
 
 const useUserRole = (egoJwt: string, programId: string): UserRoleList => {
 	const { EGO_PUBLIC_KEY } = useAppConfigContext();
-	const TokenUtils = createEgoUtils(EGO_PUBLIC_KEY);
-
-	const canReadProgram = (args: { permissions: string[]; programId: string }): boolean =>
-		TokenUtils.canReadProgram(args);
-
-	const canReadProgramData: (args: { permissions: string[]; programId: string }) => boolean = (
-		args,
-	) => TokenUtils.canReadProgramData(args);
-
-	const canWriteProgramData: (args: { permissions: string[]; programId: string }) => boolean = (
-		args,
-	) => TokenUtils.canWriteProgramData(args);
+	const {
+		canReadProgram,
+		canWriteProgramData,
+		isValidJwt,
+		getPermissionsFromToken,
+		canReadProgramData,
+		canWriteToRdpc,
+		isRdpcAdmin,
+		isProgramAdmin,
+		isDccMember,
+	} = createEgoUtils(EGO_PUBLIC_KEY);
 
 	const isCollaborator: (args: { permissions: string[]; programId: string }) => boolean = ({
 		permissions,
@@ -61,14 +55,12 @@ const useUserRole = (egoJwt: string, programId: string): UserRoleList => {
 	}) =>
 		canWriteProgramData({ permissions, programId }) && canReadProgram({ permissions, programId });
 
-	const isValidJwt = !!egoJwt && TokenUtils.isValidJwt(egoJwt);
-
-	const permissions = (isValidJwt && TokenUtils.getPermissionsFromToken(egoJwt)) || [];
+	const permissions = (isValidJwt(egoJwt) && getPermissionsFromToken(egoJwt)) || [];
 
 	return {
 		isRDPCAdmin: isRdpcAdmin(permissions) && canWriteToRdpc({ permissions, rdpcCode: programId }),
 		isDCCAdmin: isDccMember(permissions),
-		isProgramAdmin: TokenUtils.isProgramAdmin({
+		isProgramAdmin: isProgramAdmin({
 			permissions,
 			programId,
 		}),
