@@ -51,7 +51,7 @@ import FilePreview from './components/FilePreview';
 import RegisterSamplesModal from './components/RegisterSampleModal';
 import UploadError from './components/UploadError';
 
-export default function Register({ params: { shortName } }: { params: { shortName: string } }) {
+const Register = ({ params: { shortName } }: { params: { shortName: string } }) => {
 	const {
 		data,
 		refetch,
@@ -244,4 +244,6 @@ export default function Register({ params: { shortName } }: { params: { shortNam
 			)}
 		</>
 	);
-}
+};
+
+export default Register;
