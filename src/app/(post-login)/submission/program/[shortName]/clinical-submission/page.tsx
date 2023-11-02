@@ -19,6 +19,7 @@
 'use client';
 
 import { ClinicalSubmissionEntity } from '@/__generated__/graphql';
+import Error403Page from '@/app/403';
 import ContentMain from '@/app/components/Content/ContentMain';
 import ErrorNotification, { ErrorReportColumns } from '@/app/components/ErrorNotification';
 import {
@@ -456,11 +457,11 @@ const Page = ({ Component, acceptedRole, params }) => {
 	const { egoJwt } = useAuthContext();
 	const userRoles = useUserRole(egoJwt, params.params.shortName);
 	console.log('p', params, egoJwt, acceptedRole, userRoles);
-	if (true) {
+	if (false) {
 		return <Component {...params} />;
 	}
 
-	return <div>Not auth</div>;
+	return <Error403Page />;
 };
 
 // returns Comp or unauthorized based on acceptedRole
