@@ -37,8 +37,9 @@ import useCommonToasters from '@/app/hooks/useCommonToasters';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
 import useUrlQueryState from '@/app/hooks/useURLQueryState';
 import useUserConfirmationModalState from '@/app/hooks/useUserConfirmationModalState';
+import useUserRole from '@/app/hooks/useUserRole';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from '@/global/constants';
-import { sleep, toDisplayError } from '@/global/utils';
+import { sleep, toDisplayError, useAuthContext } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import { useMutation, useQuery } from '@apollo/client';
 import {
@@ -63,7 +64,7 @@ import {
 	ErrorTableColumns,
 } from './types';
 
-const ClinicalSubmissionPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
+const ClinicalSubmissionPage = ({ params: { shortName } }): any => {
 	const URL_QUERY_KEY = 'tab';
 	const commonToaster = useCommonToasters();
 	const [query] = useUrlQueryState(URL_QUERY_KEY);
@@ -451,4 +452,22 @@ const ClinicalSubmissionPage = ({ params: { shortName } }: { params: { shortName
 	}
 };
 
-export default ClinicalSubmissionPage;
+const Page = ({ Component, acceptedRole, params }) => {
+	const { egoJwt } = useAuthContext();
+	const userRoles = useUserRole(egoJwt, params.params.shortName);
+	console.log('p', params, egoJwt, acceptedRole);
+	if (true) {
+		return <Component {...params} />;
+	}
+
+	return <div>Not auth</div>;
+};
+
+// returns Comp or unauthorized based on acceptedRole
+const pageWithPermissions = (Component, acceptedRole) => (params) => {
+	const props = { Component, acceptedRole, params };
+	// needs to be Component or hook because we use hooks to check for auth/roles
+	return <Page {...props} />;
+};
+
+export default pageWithPermissions(ClinicalSubmissionPage, 'admin');
