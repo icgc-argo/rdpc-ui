@@ -38,7 +38,7 @@ import useCommonToasters from '@/app/hooks/useCommonToasters';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
 import useUrlQueryState from '@/app/hooks/useURLQueryState';
 import useUserConfirmationModalState from '@/app/hooks/useUserConfirmationModalState';
-import useUserRole from '@/app/hooks/useUserRole';
+import useUserRole, { UserRoleList } from '@/app/hooks/useUserRole';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from '@/global/constants';
 import { sleep, toDisplayError, useAuthContext } from '@/global/utils';
 import { css } from '@/lib/emotion';
@@ -51,7 +51,7 @@ import {
 	Table,
 } from '@icgc-argo/uikit';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import FileError from '../../../../../components/FileError';
 import FilesNavigator from './components/FilesNavigator';
 import Header from './components/Header';
@@ -453,11 +453,19 @@ const ClinicalSubmissionPage = ({ params: { shortName } }): any => {
 	}
 };
 
-const Page = ({ Component, acceptedRole, params }) => {
+type AcceptedRole = keyof UserRoleList;
+type PageProps = {
+	Component: FunctionComponent;
+	acceptedRole: AcceptedRole;
+	params: any;
+};
+const Page = ({ Component, acceptedRole, params }: PageProps) => {
 	const { egoJwt } = useAuthContext();
 	const userRoles = useUserRole(egoJwt, params.params.shortName);
-	console.log('p', params, egoJwt, acceptedRole, userRoles);
-	if (false) {
+	console.log('user roles', userRoles);
+	const isAuthorized = userRoles[acceptedRole];
+
+	if (isAuthorized) {
 		return <Component {...params} />;
 	}
 
@@ -465,10 +473,10 @@ const Page = ({ Component, acceptedRole, params }) => {
 };
 
 // returns Comp or unauthorized based on acceptedRole
-const pageWithPermissions = (Component, acceptedRole) => (params) => {
+const pageWithPermissions = (Component, acceptedRole: AcceptedRole) => (params) => {
 	const props = { Component, acceptedRole, params };
 	// needs to be Component or hook because we use hooks to check for auth/roles
 	return <Page {...props} />;
 };
 
-export default pageWithPermissions(ClinicalSubmissionPage, 'admin');
+export default pageWithPermissions(ClinicalSubmissionPage, 'isProgramAdmin');
