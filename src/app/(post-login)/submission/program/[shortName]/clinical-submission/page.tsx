@@ -19,7 +19,6 @@
 'use client';
 
 import { ClinicalSubmissionEntity } from '@/__generated__/graphql';
-import Error403Page from '@/app/403';
 import ContentMain from '@/app/components/Content/ContentMain';
 import ErrorNotification, { ErrorReportColumns } from '@/app/components/ErrorNotification';
 import {
@@ -27,6 +26,7 @@ import {
 	getDefaultErrorTableColumns,
 } from '@/app/components/ErrorNotification/ErrorNotificationDefaultTable';
 import ModalPortal from '@/app/components/Modal';
+import { pageWithPermissions } from '@/app/components/Page';
 import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/CLEAR_CLINICAL_SUBMISSION';
 import CLINICAL_SUBMISSION_QUERY from '@/app/gql/CLINICAL_SUBMISSION_QUERY';
 import SIGN_OFF_SUBMISSION_MUTATION from '@/app/gql/SIGN_OFF_SUBMISSION_MUTATION';
@@ -38,9 +38,8 @@ import useCommonToasters from '@/app/hooks/useCommonToasters';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
 import useUrlQueryState from '@/app/hooks/useURLQueryState';
 import useUserConfirmationModalState from '@/app/hooks/useUserConfirmationModalState';
-import useUserRole, { UserRoleList } from '@/app/hooks/useUserRole';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from '@/global/constants';
-import { sleep, toDisplayError, useAuthContext } from '@/global/utils';
+import { sleep, toDisplayError } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import { useMutation, useQuery } from '@apollo/client';
 import {
@@ -51,7 +50,7 @@ import {
 	Table,
 } from '@icgc-argo/uikit';
 import { usePathname, useRouter } from 'next/navigation';
-import { FunctionComponent, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import FileError from '../../../../../components/FileError';
 import FilesNavigator from './components/FilesNavigator';
 import Header from './components/Header';
@@ -65,7 +64,7 @@ import {
 	ErrorTableColumns,
 } from './types';
 
-const ClinicalSubmissionPage = ({ params: { shortName } }): any => {
+const ClinicalSubmissionPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
 	const URL_QUERY_KEY = 'tab';
 	const commonToaster = useCommonToasters();
 	const [query] = useUrlQueryState(URL_QUERY_KEY);
@@ -451,32 +450,6 @@ const ClinicalSubmissionPage = ({ params: { shortName } }): any => {
 			</>
 		);
 	}
-};
-
-type AcceptedRole = keyof UserRoleList;
-type PageProps = {
-	Component: FunctionComponent;
-	acceptedRole: AcceptedRole;
-	params: any;
-};
-const Page = ({ Component, acceptedRole, params }: PageProps) => {
-	const { egoJwt } = useAuthContext();
-	const userRoles = useUserRole(egoJwt, params.params.shortName);
-	console.log('user roles', userRoles);
-	const isAuthorized = userRoles[acceptedRole];
-
-	if (isAuthorized) {
-		return <Component {...params} />;
-	}
-
-	return <Error403Page />;
-};
-
-// returns Comp or unauthorized based on acceptedRole
-const pageWithPermissions = (Component, acceptedRole: AcceptedRole) => (params) => {
-	const props = { Component, acceptedRole, params };
-	// needs to be Component or hook because we use hooks to check for auth/roles
-	return <Page {...props} />;
 };
 
 export default pageWithPermissions(ClinicalSubmissionPage, 'isProgramAdmin');
