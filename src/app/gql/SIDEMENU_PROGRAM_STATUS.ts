@@ -19,12 +19,40 @@
 
 import { gql } from '@/__generated__/gql';
 
-const SIDEMENU_PROGRAMS = gql(`
-	query SideMenu {
-		programs {
-			shortName
+const SIDEMENU_PROGRAM_STATUS = gql(`
+	query SideMenuProgramStatus($activeProgramName: String!, $filters: ClinicalInput!) {
+	 clinicalRegistration(shortName: $activeProgramName) {
+      programShortName
+      fileErrors {
+        message
+        code
+      }
+      fileName
+      errors {
+        type
+      }
 		}
+    clinicalSubmissions(programShortName: $activeProgramName) {
+      programShortName
+      state
+      clinicalEntities {
+        schemaErrors {
+          row
+        }
+      }
+    }
+    clinicalData(programShortName: $activeProgramName, filters: $filters) {
+      programShortName
+      clinicalEntities {
+        entityName
+      }
+      clinicalErrors {
+        errors {
+          entityName
+        }
+      }
+    } 
   }
 `);
 
-export default SIDEMENU_PROGRAMS;
+export default SIDEMENU_PROGRAM_STATUS;
