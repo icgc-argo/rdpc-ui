@@ -22,6 +22,7 @@ export const LOGIN_NONCE = 'LOGIN_NONCE';
 
 export const BUILD_TIME_VARIABLES = {
 	RUNTIME_CONFIG_URL: process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL || '',
+	RUNTIME_AUTH_URL: process.env.NEXT_PUBLIC_RUNTIME_AUTH_URL || '',
 };
 
 export const CONTACT_PAGE_PATH = '/contact';

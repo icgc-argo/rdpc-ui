@@ -16,6 +16,17 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-export * from './clinical';
-export * from './misc';
-export * from './types';
+
+import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
+
+export async function POST() {
+	const reqCookies = cookies();
+	const jwt = reqCookies.get('EGO_JWT')?.value;
+
+	if (jwt) {
+		cookies().set('EGO_JWT', jwt);
+	}
+
+	return NextResponse.json(jwt);
+}
