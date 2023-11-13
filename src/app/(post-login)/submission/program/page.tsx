@@ -20,12 +20,12 @@
 'use client';
 
 export default function Submission() {
-	//const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
+	// const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
 
-	//const programs = data?.programs?.filter(notNull) || [];
+	// const programs = data?.programs?.filter(notNull) || [];
 
 	// if (loading) return <Loader />;
 	// if (error) notFound();
-	//return <ProgramList programs={programs} />;
+	// return <ProgramList programs={programs} />;
 	return <div>programs</div>;
 }

@@ -19,33 +19,37 @@
 'use client';
 
 import { useAuthContext } from '@/global/utils';
-import { FunctionComponent } from 'react';
-import Error403Page from '../403';
+import { redirect } from 'next/navigation';
 import useUserRole, { UserRoleList } from '../hooks/useUserRole';
 
 type AcceptedRole = keyof UserRoleList;
 type PageProps = {
-	Component: FunctionComponent;
-	acceptedRole: AcceptedRole;
-	params: any;
+	Component: React.ComponentType;
+	acceptedRoles: AcceptedRole[];
+	// Nextjs dynamic routing params
+	urlParams: any;
 };
 
-const Page = ({ Component, acceptedRole, params }: PageProps) => {
+const Page = ({ Component, acceptedRoles, urlParams }: PageProps) => {
 	const { egoJwt } = useAuthContext();
-	const userRoles = useUserRole(egoJwt, params.params.shortName);
+	const programName = urlParams.params.shortName;
+	const userRoles = useUserRole(egoJwt, programName);
 
-	const isAuthorized = userRoles[acceptedRole];
+	const isAuthorized = acceptedRoles.some((roleKey) => userRoles[roleKey]);
 
 	if (isAuthorized) {
-		return <Component {...params} />;
+		return <Component {...urlParams} />;
 	}
 
-	return <Error403Page />;
+	redirect('/403');
 };
 
-// returns Comp or unauthorized based on acceptedRole
-export const pageWithPermissions = (Component, acceptedRole: AcceptedRole) => (params) => {
-	const props = { Component, acceptedRole, params };
-	// needs to be Component or hook because we use hooks to check for auth/roles
-	return <Page {...props} />;
-};
+// returns Comp or unauthorized based on acceptedRoles
+// params value and types are based on dynamic route of page
+export const pageWithPermissions =
+	// eslint-disable-next-line react/display-name
+	(Component: React.ComponentType, acceptedRoles: AcceptedRole[]) => (params: any) => {
+		const props = { Component, acceptedRoles, urlParams: params };
+		// needs to be Component or hook because we use hooks to check for auth/roles
+		return <Page {...props} />;
+	};

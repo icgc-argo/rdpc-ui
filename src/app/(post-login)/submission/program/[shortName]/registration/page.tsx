@@ -24,6 +24,7 @@ import Card from '@/app/components/Card';
 import ContentHeader from '@/app/components/Content/ContentHeader';
 import ContentMain from '@/app/components/Content/ContentMain';
 import NoDataMessage from '@/app/components/NoData';
+import { pageWithPermissions } from '@/app/components/Page';
 import CLEAR_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/CLEAR_CLINICAL_REGISTRATION_MUTATION';
 import CLINICAL_SCHEMA_VERSION_QUERY from '@/app/gql/CLINICAL_SCHEMA_VERSION_QUERY';
 import GET_REGISTRATION_QUERY from '@/app/gql/GET_REGISTRATION_QUERY';
@@ -246,4 +247,9 @@ const Register = ({ params: { shortName } }: { params: { shortName: string } }) 
 	);
 };
 
-export default Register;
+export default pageWithPermissions(Register as React.ComponentType, [
+	'isRDPCAdmin',
+	'isDCCAdmin',
+	'isProgramAdmin',
+	'isDataSubmitter',
+]);

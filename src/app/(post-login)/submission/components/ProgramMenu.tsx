@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { SideMenuQuery } from '@/__generated__/graphql';
+import { SideMenuProgramStatusQuery } from '@/__generated__/graphql';
 import Loader from '@/app/components/Loader';
 import SIDEMENU_PROGRAMS from '@/app/gql/SIDEMENU_PROGRAMS';
 import SIDEMENU_PROGRAM_STATUS from '@/app/gql/SIDEMENU_PROGRAM_STATUS';
@@ -47,33 +47,6 @@ const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
 	);
 };
 
-const parseGQLResp = (data: SideMenuQuery) => {
-	const clinicalErrors = data.clinicalData.clinicalErrors;
-	const clinicalDataHasErrors = (clinicalErrors && clinicalErrors.length > 0) || false;
-
-	const clinicalRegistration = data && data.clinicalRegistration;
-
-	const clinicalRegistrationHasError =
-		clinicalRegistration &&
-		(!!clinicalRegistration.errors.length || !!clinicalRegistration.fileErrors?.length);
-
-	const clinicalRegistrationInProgress = clinicalRegistration && !!clinicalRegistration.fileName;
-
-	const clinicalSubmissionHasSchemaErrors = data
-		? data.clinicalSubmissions.clinicalEntities.some(
-				(entity) => entity && !!entity.schemaErrors.length,
-		  )
-		: false;
-
-	return {
-		clinicalDataHasErrors,
-		clinicalRegistration,
-		clinicalRegistrationHasError,
-		clinicalSubmissionHasSchemaErrors,
-		clinicalRegistrationInProgress,
-	};
-};
-
 const ProgramMenu = ({ searchQuery }: { searchQuery: string }) => {
 	const params = useParams();
 	const pathname = usePathname();
@@ -84,10 +57,11 @@ const ProgramMenu = ({ searchQuery }: { searchQuery: string }) => {
 
 	const [activeProgramIndex, setActiveProgramIndex] = useState(-1);
 
-	//const programs = gqlData?.programs?.filter(notNull) || [];
 	const filteredPrograms = !searchQuery.length
 		? programs
-		: programs.filter(({ shortName }) => shortName.search(new RegExp(searchQuery, 'i')) > -1);
+		: programs.filter(
+				(program) => program && program.shortName.search(new RegExp(searchQuery, 'i')) > -1,
+		  );
 
 	const setActiveProgram =
 		(index: number): MouseEventHandler =>
@@ -113,23 +87,26 @@ const ProgramMenu = ({ searchQuery }: { searchQuery: string }) => {
 				/>
 			</Link>
 
-			{filteredPrograms.map(({ shortName }, programIndex) => (
-				<MenuItem
-					level={2}
-					key={shortName}
-					content={shortName}
-					onClick={setActiveProgram(programIndex)}
-					selected={programIndex === activeProgramIndex || activeProgramName === shortName}
-				>
-					<MenuItem level={3}>{shortName}</MenuItem>
-					<MenuContent programName={shortName} />
-				</MenuItem>
-			))}
+			{filteredPrograms.map((program, programIndex) => {
+				const shortName = program?.shortName || '';
+				return (
+					<MenuItem
+						level={2}
+						key={shortName}
+						content={shortName}
+						onClick={setActiveProgram(programIndex)}
+						selected={programIndex === activeProgramIndex || activeProgramName === shortName}
+					>
+						<MenuItem level={3}>{shortName}</MenuItem>
+						<MenuContent programName={shortName} />
+					</MenuItem>
+				);
+			})}
 		</>
 	);
 };
 
-const parseProgramStatusGQLResp = (data) => {
+const parseProgramStatusGQLResp = (data: SideMenuProgramStatusQuery | undefined) => {
 	if (!data) return null;
 
 	const clinicalErrors = data.clinicalData.clinicalErrors;
@@ -158,7 +135,7 @@ const parseProgramStatusGQLResp = (data) => {
 	};
 };
 
-const MenuContent = ({ programName }) => {
+const MenuContent = ({ programName }: { programName: string }) => {
 	const pathname = usePathname();
 	const pathnameLastSegment = pathname.split('/')[-1];
 
