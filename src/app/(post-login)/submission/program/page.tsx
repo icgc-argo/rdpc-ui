@@ -19,13 +19,20 @@
 
 'use client';
 
+import PROGRAMS_LIST_QUERY from '@/app/gql/PROGRAMS_LIST_QUERY';
+import { notNull } from '@/global/utils';
+import { useQuery } from '@apollo/client';
+import { Loader } from '@icgc-argo/uikit';
+import { notFound } from 'next/navigation';
+import ProgramList from '../components/ProgramList';
+
 export default function Submission() {
-	// const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
+	const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
 
-	// const programs = data?.programs?.filter(notNull) || [];
+	const programs = data?.programs?.filter(notNull) || [];
 
-	// if (loading) return <Loader />;
-	// if (error) notFound();
-	// return <ProgramList programs={programs} />;
-	return <div>programs</div>;
+	if (loading) return <Loader />;
+	if (error) notFound();
+
+	return <ProgramList programs={programs} />;
 }
