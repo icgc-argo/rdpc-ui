@@ -449,10 +449,12 @@ const ClinicalSubmissionPage = ({ params: { shortName } }: { params: { shortName
 				</div>
 			</>
 		);
+	} else {
+		return <></>;
 	}
 };
 
-export default pageWithPermissions(ClinicalSubmissionPage as React.ComponentType, [
+export default pageWithPermissions(ClinicalSubmissionPage, [
 	'isProgramAdmin',
 	'isDataSubmitter',
 	'isRDPCAdmin',

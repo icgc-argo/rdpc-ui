@@ -19,12 +19,13 @@
 'use client';
 
 import { useAuthContext } from '@/global/utils';
+import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { redirect } from 'next/navigation';
 import useUserRole, { UserRoleList } from '../hooks/useUserRole';
 
 type AcceptedRole = keyof UserRoleList;
 type PageProps = {
-	Component: React.ComponentType;
+	Component: Component;
 	acceptedRoles: AcceptedRole[];
 	// Nextjs dynamic routing params
 	urlParams: any;
@@ -44,12 +45,16 @@ const Page = ({ Component, acceptedRoles, urlParams }: PageProps) => {
 	redirect('/403');
 };
 
+// Component type for this project because we use the Emotion compiler
+type Component = (...args: any[]) => EmotionJSX.Element;
+
 // returns Comp or unauthorized based on acceptedRoles
 // params value and types are based on dynamic route of page
 export const pageWithPermissions =
 	// eslint-disable-next-line react/display-name
-	(Component: React.ComponentType, acceptedRoles: AcceptedRole[]) => (params: any) => {
+	(Component: Component, acceptedRoles: AcceptedRole[]) => (params: any) => {
 		const props = { Component, acceptedRoles, urlParams: params };
+
 		// needs to be Component or hook because we use hooks to check for auth/roles
 		return <Page {...props} />;
 	};

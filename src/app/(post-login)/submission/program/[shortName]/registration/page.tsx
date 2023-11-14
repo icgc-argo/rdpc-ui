@@ -247,7 +247,7 @@ const Register = ({ params: { shortName } }: { params: { shortName: string } }) 
 	);
 };
 
-export default pageWithPermissions(Register as React.ComponentType, [
+export default pageWithPermissions(Register, [
 	'isRDPCAdmin',
 	'isDCCAdmin',
 	'isProgramAdmin',
