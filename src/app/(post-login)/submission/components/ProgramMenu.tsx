@@ -150,6 +150,14 @@ const MenuContent = ({ programName }: { programName: string }) => {
 
 	const programStatusData = parseProgramStatusGQLResp(gqlData);
 
+	const statusIcon = isSubmissionSystemDisabled ? (
+		<Icon name="lock" fill="accent3_dark" width="15px" />
+	) : programStatusData?.clinicalRegistrationHasError ? (
+		<Icon name="exclamation" fill="error" width="15px" />
+	) : programStatusData?.clinicalRegistrationInProgress ? (
+		<Icon name="ellipses" fill="warning" width="15px" />
+	) : null;
+
 	return (
 		<>
 			{/** Register Samples */}
@@ -159,13 +167,7 @@ const MenuContent = ({ programName }: { programName: string }) => {
 					content={
 						<StatusMenuItem>
 							Register Samples
-							{isSubmissionSystemDisabled ? (
-								<Icon name="lock" fill="accent3_dark" width="15px" />
-							) : programStatusData?.clinicalRegistrationHasError ? (
-								<Icon name="exclamation" fill="error" width="15px" />
-							) : programStatusData?.clinicalRegistrationInProgress ? (
-								<Icon name="ellipses" fill="warning" width="15px" />
-							) : null}
+							{statusIcon}
 						</StatusMenuItem>
 					}
 					selected={pathnameLastSegment === 'registration'}
