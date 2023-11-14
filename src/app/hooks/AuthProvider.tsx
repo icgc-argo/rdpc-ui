@@ -19,7 +19,7 @@
 'use client';
 
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { BUILD_TIME_VARIABLES, EGO_JWT_KEY, LOGIN_NONCE } from '@/global/constants';
+import { EGO_JWT_KEY, LOGIN_NONCE } from '@/global/constants';
 import createEgoUtils from '@icgc-argo/ego-token-utils';
 import Cookies from 'js-cookie';
 import { usePathname, useRouter } from 'next/navigation';
@@ -75,9 +75,6 @@ export function AuthProvider({ children, jwt }: { children: ReactNode; jwt: stri
 	const logIn = async (newToken: string) => {
 		storeToken(newToken);
 		setEgoJwt(newToken);
-		const authResp = await fetch(BUILD_TIME_VARIABLES.RUNTIME_AUTH_URL, {
-			method: 'POST',
-		});
 		setAuthLoading(false);
 	};
 
