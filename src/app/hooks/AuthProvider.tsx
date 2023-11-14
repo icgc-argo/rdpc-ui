@@ -61,10 +61,10 @@ export const storeToken = (egoToken: string) => {
 	Cookies.set(EGO_JWT_KEY, egoToken);
 };
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function AuthProvider({ children, jwt }: { children: ReactNode; jwt: string | undefined }) {
 	const config = useAppConfigContext();
 	// undefined on server
-	const storedToken = getStoredToken();
+	const storedToken = jwt || getStoredToken();
 	const [egoJwt, setEgoJwt] = useState(storedToken || '');
 	const TokenUtils = createEgoUtils(config.EGO_PUBLIC_KEY);
 	const router = useRouter();
@@ -78,7 +78,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		const authResp = await fetch(BUILD_TIME_VARIABLES.RUNTIME_AUTH_URL, {
 			method: 'POST',
 		});
-		console.log(authResp);
 		setAuthLoading(false);
 	};
 

@@ -59,11 +59,19 @@ PortalParent.displayName = 'PortalParent';
 const ModalPortalParent = () => <PortalParent ref={modalPortalRef} />;
 const GlobalLoaderParent = () => <PortalParent ref={loaderPortalRef} />;
 
-const App = ({ children, config }: { children: ReactNode; config: any }) => (
+const App = ({
+	children,
+	config,
+	jwt,
+}: {
+	children: ReactNode;
+	config: any;
+	jwt?: typeof document.cookie;
+}) => (
 	<ThemeProvider>
 		<QueryClientProvider client={queryClient}>
 			<AppProvider config={config}>
-				<AuthProvider>
+				<AuthProvider jwt={jwt}>
 					<ApolloProvider>
 						<ToastProvider>
 							<ModalPortalParent />
