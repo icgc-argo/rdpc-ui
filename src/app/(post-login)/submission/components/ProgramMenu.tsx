@@ -137,7 +137,7 @@ const parseProgramStatusGQLResp = (data: SideMenuProgramStatusQuery | undefined)
 
 const MenuContent = ({ programName }: { programName: string }) => {
 	const pathname = usePathname();
-	const pathnameLastSegment = pathname.split('/')[-1];
+	const pathnameLastSegment = pathname.split('/').at(-1);
 
 	const { isDisabled: isSubmissionSystemDisabled } = useSubmissionSystemStatus();
 
