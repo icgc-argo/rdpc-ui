@@ -20,25 +20,36 @@
 
 import { useAuthContext } from '@/global/utils';
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import useUserRole, { UserRoleList } from '../hooks/useUserRole';
+
+// Nextjs dynamic routing params
+type URLParams = {
+	params: { [key: string]: string | string[] | undefined } | undefined;
+	searchParams: { [key: string]: string | string[] | undefined } | undefined;
+};
 
 type AcceptedRole = keyof UserRoleList;
 type PageProps = {
 	Component: Component;
 	acceptedRoles: AcceptedRole[];
-	// Nextjs dynamic routing params
-	urlParams: any;
+	urlParams: URLParams;
 };
 
 const Page = ({ Component, acceptedRoles, urlParams }: PageProps) => {
 	const { egoJwt } = useAuthContext();
-	const programName = urlParams.params.shortName;
+	const programParam = urlParams?.params?.shortName;
+
+	const programName = typeof programParam === 'string' ? programParam : '';
+
 	const userRoles = useUserRole(egoJwt, programName);
 
 	const isAuthorized = acceptedRoles.some((roleKey) => userRoles[roleKey]);
 
-	if (isAuthorized) {
+	if (Array.isArray(programName)) {
+		// a url with multiple program names is invalid
+		notFound();
+	} else if (isAuthorized) {
 		return <Component {...urlParams} />;
 	}
 
