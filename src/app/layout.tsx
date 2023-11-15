@@ -20,8 +20,7 @@
 /** @jsxImportSource react */
 // ^ force default jsx runtime, @emotion/jsx doesn't play nice with server components
 
-import { BUILD_TIME_VARIABLES, EGO_JWT_KEY } from '@/global/constants';
-import { cookies } from 'next/headers';
+import { BUILD_TIME_VARIABLES } from '@/global/constants';
 import { ReactNode } from 'react';
 import App from './App';
 
@@ -47,13 +46,10 @@ async function getAppConfig() {
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
 	const appConfig = await getAppConfig();
-	const jwt = cookies().get(EGO_JWT_KEY)?.toString();
 	return (
 		<html lang="en">
 			<body>
-				<App config={appConfig} jwt={jwt}>
-					{children}
-				</App>
+				<App config={appConfig}>{children}</App>
 			</body>
 		</html>
 	);

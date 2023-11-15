@@ -63,9 +63,9 @@ export const storeToken = (egoToken: string) => {
 	Cookies.set(EGO_JWT_KEY, egoToken);
 };
 
-export function AuthProvider({ children, jwt }: { children: ReactNode; jwt: string | undefined }) {
+export function AuthProvider({ children }: { children: ReactNode }) {
 	const config = useAppConfigContext();
-	const storedToken = jwt || getStoredToken();
+	const storedToken = getStoredToken();
 	const [egoJwt, setEgoJwt] = useState(storedToken || '');
 	const TokenUtils = createEgoUtils(config.EGO_PUBLIC_KEY);
 	const router = useRouter();
