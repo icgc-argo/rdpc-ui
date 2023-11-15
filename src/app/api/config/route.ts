@@ -17,10 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { getAppConfig } from './config';
 
 export async function GET() {
+	// Headers used to insure config is not cached
+	headers();
 	const appConfig = getAppConfig(process.env);
 
 	return NextResponse.json(appConfig);
