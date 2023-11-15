@@ -21,10 +21,10 @@
 
 import { ApolloProvider } from '@/app/hooks/ApolloProvider';
 import { AppProvider } from '@/app/hooks/AppProvider';
+import { AuthProvider } from '@/app/hooks/AuthProvider';
 import GlobalLoaderProvider, { loaderPortalRef } from '@/app/hooks/GlobalLoaderProvider';
 import ThemeProvider from '@/app/hooks/ThemeProvider';
 import ToastProvider from '@/app/hooks/ToastProvider';
-import { AuthProvider } from '@/global/utils/auth';
 import { css } from '@/lib/emotion';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 import { ReactNode, forwardRef } from 'react';

@@ -22,6 +22,7 @@ import { NextResponse } from 'next/server';
 import { getAppConfig } from './config';
 
 export async function GET() {
+	// Headers used to insure config is not cached
 	headers();
 	const appConfig = getAppConfig(process.env);
 
