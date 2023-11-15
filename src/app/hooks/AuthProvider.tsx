@@ -24,7 +24,7 @@ import { EGO_JWT_KEY, LOGIN_NONCE } from '@/global/constants';
 import createEgoUtils from '@icgc-argo/ego-token-utils';
 import { DnaLoader } from '@icgc-argo/uikit';
 import Cookies from 'js-cookie';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
 	Dispatch,
 	ReactNode,
@@ -32,6 +32,7 @@ import {
 	Suspense,
 	createContext,
 	useContext,
+	useEffect,
 	useState,
 } from 'react';
 
@@ -66,11 +67,17 @@ export const storeToken = (egoToken: string) => {
 export function AuthProvider({ children }: { children: ReactNode }) {
 	const config = useAppConfigContext();
 	const storedToken = getStoredToken();
-	const [egoJwt, setEgoJwt] = useState(storedToken || '');
+	const [egoJwt, setEgoJwt] = useState('');
+	useEffect(() => {
+		if (storedToken) {
+			setEgoJwt(storedToken);
+			setAuthLoading(false);
+		}
+	}, [storedToken]);
+
 	const TokenUtils = createEgoUtils(config.EGO_PUBLIC_KEY);
 	const router = useRouter();
-	const path = usePathname();
-	const loginStateOnPageLoad = path === '/logging-in' && !egoJwt.length;
+	const loginStateOnPageLoad = !egoJwt?.length;
 	const [authLoading, setAuthLoading] = useState(loginStateOnPageLoad);
 
 	const logIn = (newToken: string) => {
