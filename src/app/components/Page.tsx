@@ -46,7 +46,9 @@ const Page = ({ Component, acceptedRoles, urlParams }: PageProps) => {
 
 	const isAuthorized = acceptedRoles.some((roleKey) => userRoles[roleKey]);
 
-	if (Array.isArray(programName)) {
+	if (!egoJwt) {
+		return <div>Loader</div>;
+	} else if (Array.isArray(programName)) {
 		// a url with multiple program names is invalid
 		notFound();
 	} else if (isAuthorized) {
