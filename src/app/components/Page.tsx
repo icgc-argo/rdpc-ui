@@ -20,6 +20,7 @@
 
 import { useAuthContext } from '@/global/utils';
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
+import { DnaLoader, css } from '@icgc-argo/uikit';
 import { notFound, redirect } from 'next/navigation';
 import useUserRole, { UserRoleList } from '../hooks/useUserRole';
 
@@ -47,7 +48,17 @@ const Page = ({ Component, acceptedRoles, urlParams }: PageProps) => {
 	const isAuthorized = acceptedRoles.some((roleKey) => userRoles[roleKey]);
 
 	if (!egoJwt) {
-		return <div>Loader</div>;
+		return (
+			<div
+				css={css`
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				`}
+			>
+				<DnaLoader />
+			</div>
+		);
 	} else if (Array.isArray(programName)) {
 		// a url with multiple program names is invalid
 		notFound();
