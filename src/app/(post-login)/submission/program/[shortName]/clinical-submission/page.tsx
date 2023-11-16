@@ -64,7 +64,7 @@ import {
 	ErrorTableColumns,
 } from './types';
 
-const ClinicalSubmissionPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
+const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 	const URL_QUERY_KEY = 'tab';
 	const commonToaster = useCommonToasters();
 	const [query] = useUrlQueryState(URL_QUERY_KEY);
@@ -454,9 +454,12 @@ const ClinicalSubmissionPage = ({ params: { shortName } }: { params: { shortName
 	}
 };
 
-export default pageWithPermissions(ClinicalSubmissionPage, [
-	'isProgramAdmin',
-	'isDataSubmitter',
-	'isRDPCAdmin',
-	'isDCCAdmin',
-]);
+const ClinicalSubmissionPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
+	const Page = pageWithPermissions(ClinicalSubmission, {
+		acceptedRoles: ['isProgramAdmin', 'isDataSubmitter', 'isRDPCAdmin', 'isDCCAdmin'],
+		programShortName: shortName,
+	});
+	return <Page shortName={shortName} />;
+};
+
+export default ClinicalSubmissionPage;

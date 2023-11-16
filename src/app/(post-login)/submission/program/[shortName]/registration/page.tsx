@@ -52,7 +52,7 @@ import FilePreview from './components/FilePreview';
 import RegisterSamplesModal from './components/RegisterSampleModal';
 import UploadError from './components/UploadError';
 
-const Register = ({ params: { shortName } }: { params: { shortName: string } }) => {
+const Register = ({ shortName }: { shortName: string }) => {
 	const {
 		data,
 		refetch,
@@ -247,9 +247,12 @@ const Register = ({ params: { shortName } }: { params: { shortName: string } }) 
 	);
 };
 
-export default pageWithPermissions(Register, [
-	'isRDPCAdmin',
-	'isDCCAdmin',
-	'isProgramAdmin',
-	'isDataSubmitter',
-]);
+const RegisterPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
+	const RegisterWithPermissions = pageWithPermissions(Register, {
+		acceptedRoles: ['isRDPCAdmin', 'isDCCAdmin', 'isProgramAdmin', 'isDataSubmitter'],
+		programShortName: shortName,
+	});
+	return <RegisterWithPermissions shortName={shortName} />;
+};
+
+export default RegisterPage;

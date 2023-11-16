@@ -21,64 +21,51 @@
 import { useAuthContext } from '@/global/utils';
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { DnaLoader, css } from '@icgc-argo/uikit';
-import { notFound, redirect } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import useUserRole, { UserRoleList } from '../hooks/useUserRole';
 
-// Nextjs dynamic routing params
-type URLParams = {
-	params: { [key: string]: string | string[] | undefined } | undefined;
-	searchParams: { [key: string]: string | string[] | undefined } | undefined;
-};
+export type PageWithPermissionProps = { permissions: { shortName?: string } };
 
 type AcceptedRole = keyof UserRoleList;
-type PageProps = {
-	Component: Component;
-	acceptedRoles: AcceptedRole[];
-	urlParams: URLParams;
-};
-
-const Page = ({ Component, acceptedRoles, urlParams }: PageProps) => {
-	const { egoJwt } = useAuthContext();
-	const programParam = urlParams?.params?.shortName;
-
-	const programName = typeof programParam === 'string' ? programParam : '';
-
-	const userRoles = useUserRole(egoJwt, programName);
-
-	const isAuthorized = acceptedRoles.some((roleKey) => userRoles[roleKey]);
-
-	if (!egoJwt) {
-		return (
-			<div
-				css={css`
-					display: flex;
-					align-items: center;
-					justify-content: center;
-				`}
-			>
-				<DnaLoader />
-			</div>
-		);
-	} else if (Array.isArray(programName)) {
-		// a url with multiple program names is invalid
-		notFound();
-	} else if (isAuthorized) {
-		return <Component {...urlParams} />;
-	}
-
-	redirect('/403');
-};
 
 // Component type for this project because we use the Emotion compiler
-type Component = (...args: any[]) => EmotionJSX.Element;
+type JSXComponent<T extends object> = (args: T) => EmotionJSX.Element;
 
 // returns Comp or unauthorized based on acceptedRoles
 // params value and types are based on dynamic route of page
 export const pageWithPermissions =
 	// eslint-disable-next-line react/display-name
-	(Component: Component, acceptedRoles: AcceptedRole[]) => (params: any) => {
-		const props = { Component, acceptedRoles, urlParams: params };
+	function <T extends object>(
+		Component: JSXComponent<T>,
+		permissions: { acceptedRoles: AcceptedRole[]; programShortName?: string },
+	) {
+		return function PageWithPermissions(props: T) {
+			const { authLoading, egoJwt } = useAuthContext();
 
-		// needs to be Component or hook because we use hooks to check for auth/roles
-		return <Page {...props} />;
+			const programName = permissions.programShortName ?? '';
+
+			const userRoles = useUserRole(egoJwt, programName);
+
+			const isAuthorized = permissions.acceptedRoles.some((roleKey) => userRoles[roleKey]);
+
+			if (authLoading) {
+				return (
+					<div
+						css={css`
+							display: flex;
+							align-items: center;
+							justify-content: center;
+						`}
+					>
+						<DnaLoader />
+					</div>
+				);
+			}
+
+			if (isAuthorized) {
+				return <Component {...props} />;
+			} else {
+				redirect('/403');
+			}
+		};
 	};
