@@ -68,11 +68,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	const config = useAppConfigContext();
 	const storedToken = getStoredToken();
 	const [egoJwt, setEgoJwt] = useState('');
+
 	useEffect(() => {
 		if (storedToken) {
 			setEgoJwt(storedToken);
-			setAuthLoading(false);
 		}
+		setAuthLoading(false);
 	}, [storedToken]);
 
 	const TokenUtils = createEgoUtils(config.EGO_PUBLIC_KEY);
