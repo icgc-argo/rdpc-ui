@@ -26,6 +26,7 @@ import {
 	getDefaultErrorTableColumns,
 } from '@/app/components/ErrorNotification/ErrorNotificationDefaultTable';
 import ModalPortal from '@/app/components/Modal';
+import { pageWithPermissions } from '@/app/components/Page';
 import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/CLEAR_CLINICAL_SUBMISSION';
 import CLINICAL_SUBMISSION_QUERY from '@/app/gql/CLINICAL_SUBMISSION_QUERY';
 import SIGN_OFF_SUBMISSION_MUTATION from '@/app/gql/SIGN_OFF_SUBMISSION_MUTATION';
@@ -63,7 +64,7 @@ import {
 	ErrorTableColumns,
 } from './types';
 
-const ClinicalSubmissionPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
+const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 	const URL_QUERY_KEY = 'tab';
 	const commonToaster = useCommonToasters();
 	const [query] = useUrlQueryState(URL_QUERY_KEY);
@@ -448,7 +449,17 @@ const ClinicalSubmissionPage = ({ params: { shortName } }: { params: { shortName
 				</div>
 			</>
 		);
+	} else {
+		return <></>;
 	}
+};
+
+const ClinicalSubmissionPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
+	const Page = pageWithPermissions(ClinicalSubmission, {
+		acceptedRoles: ['isProgramAdmin', 'isDataSubmitter', 'isRDPCAdmin', 'isDCCAdmin'],
+		programShortName: shortName,
+	});
+	return <Page shortName={shortName} />;
 };
 
 export default ClinicalSubmissionPage;

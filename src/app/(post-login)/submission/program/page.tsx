@@ -19,10 +19,10 @@
 
 'use client';
 
-import Loader from '@/app/components/Loader';
 import PROGRAMS_LIST_QUERY from '@/app/gql/PROGRAMS_LIST_QUERY';
-import { notNull } from '@/global/utils/types';
+import { notNull } from '@/global/utils';
 import { useQuery } from '@apollo/client';
+import { Loader } from '@icgc-argo/uikit';
 import { notFound } from 'next/navigation';
 import ProgramList from '../components/ProgramList';
 
@@ -33,5 +33,6 @@ export default function Submission() {
 
 	if (loading) return <Loader />;
 	if (error) notFound();
+
 	return <ProgramList programs={programs} />;
 }

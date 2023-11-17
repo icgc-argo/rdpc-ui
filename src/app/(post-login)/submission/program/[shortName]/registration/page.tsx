@@ -24,6 +24,7 @@ import Card from '@/app/components/Card';
 import ContentHeader from '@/app/components/Content/ContentHeader';
 import ContentMain from '@/app/components/Content/ContentMain';
 import NoDataMessage from '@/app/components/NoData';
+import { pageWithPermissions } from '@/app/components/Page';
 import CLEAR_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/CLEAR_CLINICAL_REGISTRATION_MUTATION';
 import CLINICAL_SCHEMA_VERSION_QUERY from '@/app/gql/CLINICAL_SCHEMA_VERSION_QUERY';
 import GET_REGISTRATION_QUERY from '@/app/gql/GET_REGISTRATION_QUERY';
@@ -51,7 +52,7 @@ import FilePreview from './components/FilePreview';
 import RegisterSamplesModal from './components/RegisterSampleModal';
 import UploadError from './components/UploadError';
 
-export default function Register({ params: { shortName } }: { params: { shortName: string } }) {
+const Register = ({ shortName }: { shortName: string }) => {
 	const {
 		data,
 		refetch,
@@ -244,4 +245,14 @@ export default function Register({ params: { shortName } }: { params: { shortNam
 			)}
 		</>
 	);
-}
+};
+
+const RegisterPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
+	const RegisterWithPermissions = pageWithPermissions(Register, {
+		acceptedRoles: ['isRDPCAdmin', 'isDCCAdmin', 'isProgramAdmin', 'isDataSubmitter'],
+		programShortName: shortName,
+	});
+	return <RegisterWithPermissions shortName={shortName} />;
+};
+
+export default RegisterPage;

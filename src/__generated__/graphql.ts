@@ -2882,14 +2882,20 @@ export type ReopenSubmissionMutation = {
 	};
 };
 
-export type SideMenuQueryVariables = Exact<{
-	activeProgramName: Scalars['String']['input'];
-	filters: ClinicalInput;
-}>;
+export type SideMenuQueryVariables = Exact<{ [key: string]: never }>;
 
 export type SideMenuQuery = {
 	__typename?: 'Query';
 	programs?: Array<{ __typename?: 'Program'; shortName: string } | null> | null;
+};
+
+export type SideMenuProgramStatusQueryVariables = Exact<{
+	activeProgramName: Scalars['String']['input'];
+	filters: ClinicalInput;
+}>;
+
+export type SideMenuProgramStatusQuery = {
+	__typename?: 'Query';
 	clinicalRegistration: {
 		__typename?: 'ClinicalRegistrationData';
 		programShortName?: string | null;
@@ -4357,6 +4363,29 @@ export const SideMenuDocument = {
 			kind: 'OperationDefinition',
 			operation: 'query',
 			name: { kind: 'Name', value: 'SideMenu' },
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'programs' },
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [{ kind: 'Field', name: { kind: 'Name', value: 'shortName' } }],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<SideMenuQuery, SideMenuQueryVariables>;
+export const SideMenuProgramStatusDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'SideMenuProgramStatus' },
 			variableDefinitions: [
 				{
 					kind: 'VariableDefinition',
@@ -4378,14 +4407,6 @@ export const SideMenuDocument = {
 			selectionSet: {
 				kind: 'SelectionSet',
 				selections: [
-					{
-						kind: 'Field',
-						name: { kind: 'Name', value: 'programs' },
-						selectionSet: {
-							kind: 'SelectionSet',
-							selections: [{ kind: 'Field', name: { kind: 'Name', value: 'shortName' } }],
-						},
-					},
 					{
 						kind: 'Field',
 						name: { kind: 'Name', value: 'clinicalRegistration' },
@@ -4511,7 +4532,7 @@ export const SideMenuDocument = {
 			},
 		},
 	],
-} as unknown as DocumentNode<SideMenuQuery, SideMenuQueryVariables>;
+} as unknown as DocumentNode<SideMenuProgramStatusQuery, SideMenuProgramStatusQueryVariables>;
 export const SignOffSubmissionDocument = {
 	kind: 'Document',
 	definitions: [

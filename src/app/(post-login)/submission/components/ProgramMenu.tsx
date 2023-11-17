@@ -18,11 +18,11 @@
  */
 'use client';
 
-import { SideMenuQuery } from '@/__generated__/graphql';
+import { SideMenuProgramStatusQuery } from '@/__generated__/graphql';
 import Loader from '@/app/components/Loader';
 import SIDEMENU_PROGRAMS from '@/app/gql/SIDEMENU_PROGRAMS';
+import SIDEMENU_PROGRAM_STATUS from '@/app/gql/SIDEMENU_PROGRAM_STATUS';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
-import { notNull } from '@/global/utils/types';
 import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
 import { Icon, MenuItem } from '@icgc-argo/uikit';
@@ -47,7 +47,68 @@ const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
 	);
 };
 
-const parseGQLResp = (data: SideMenuQuery) => {
+const ProgramMenu = ({ searchQuery }: { searchQuery: string }) => {
+	const params = useParams();
+	const pathname = usePathname();
+	const activeProgramName = typeof params.shortName !== 'string' ? '' : params.shortName;
+
+	const { data: programsData, loading, error } = useQuery(SIDEMENU_PROGRAMS);
+	const programs = programsData?.programs || [];
+
+	const [activeProgramIndex, setActiveProgramIndex] = useState(-1);
+
+	const filteredPrograms = !searchQuery.length
+		? programs
+		: programs.filter(
+				(program) => program && program.shortName.search(new RegExp(searchQuery, 'i')) > -1,
+		  );
+
+	const setActiveProgram =
+		(index: number): MouseEventHandler =>
+		() =>
+			setActiveProgramIndex(index);
+
+	if (loading) return <Loader />;
+	if (error) notFound();
+
+	return (
+		<>
+			<Link
+				href="/submission"
+				css={css`
+					text-decoration: none !important;
+				`}
+			>
+				<MenuItem
+					level={2}
+					content="All Programs"
+					onClick={setActiveProgram(-1)}
+					selected={pathname === '/submission'}
+				/>
+			</Link>
+
+			{filteredPrograms.map((program, programIndex) => {
+				const shortName = program?.shortName || '';
+				return (
+					<MenuItem
+						level={2}
+						key={shortName}
+						content={shortName}
+						onClick={setActiveProgram(programIndex)}
+						selected={programIndex === activeProgramIndex || activeProgramName === shortName}
+					>
+						<MenuItem level={3}>{shortName}</MenuItem>
+						<MenuContent programName={shortName} />
+					</MenuItem>
+				);
+			})}
+		</>
+	);
+};
+
+const parseProgramStatusGQLResp = (data: SideMenuProgramStatusQuery | undefined) => {
+	if (!data) return null;
+
 	const clinicalErrors = data.clinicalData.clinicalErrors;
 	const clinicalDataHasErrors = (clinicalErrors && clinicalErrors.length > 0) || false;
 
@@ -74,101 +135,53 @@ const parseGQLResp = (data: SideMenuQuery) => {
 	};
 };
 
-const ProgramMenu = ({ searchQuery }: { searchQuery: string }) => {
-	const params = useParams();
+const MenuContent = ({ programName }: { programName: string }) => {
 	const pathname = usePathname();
-	const activeProgramName = typeof params.shortName !== 'string' ? '' : params.shortName;
+	const pathnameLastSegment = pathname.split('/').at(-1);
 
-	const pathnameLastSegment = pathname.split('/').findLast(Boolean);
+	const { isDisabled: isSubmissionSystemDisabled } = useSubmissionSystemStatus();
 
-	const {
-		data: gqlData,
-		loading,
-		error,
-	} = useQuery(SIDEMENU_PROGRAMS, {
+	const { data: gqlData } = useQuery(SIDEMENU_PROGRAM_STATUS, {
 		variables: {
-			activeProgramName,
+			activeProgramName: programName,
 			filters: defaultClinicalEntityFilters,
 		},
 	});
 
-	const data = gqlData ? parseGQLResp(gqlData) : null;
+	const programStatusData = parseProgramStatusGQLResp(gqlData);
 
-	const [activeProgramIndex, setActiveProgramIndex] = useState(-1);
-
-	const programs = gqlData?.programs?.filter(notNull) || [];
-	const filteredPrograms = !searchQuery.length
-		? programs
-		: programs.filter(({ shortName }) => shortName.search(new RegExp(searchQuery, 'i')) > -1);
-
-	const { isDisabled: isSubmissionSystemDisabled } = useSubmissionSystemStatus();
-
-	const setActiveProgram =
-		(index: number): MouseEventHandler =>
-		() =>
-			setActiveProgramIndex(index);
-
-	if (loading) return <Loader />;
-	if (error || data === null) notFound();
-
-	const { clinicalRegistrationHasError, clinicalRegistrationInProgress } = data;
+	const statusIcon = isSubmissionSystemDisabled ? (
+		<Icon name="lock" fill="accent3_dark" width="15px" />
+	) : programStatusData?.clinicalRegistrationHasError ? (
+		<Icon name="exclamation" fill="error" width="15px" />
+	) : programStatusData?.clinicalRegistrationInProgress ? (
+		<Icon name="ellipses" fill="warning" width="15px" />
+	) : null;
 
 	return (
 		<>
-			<Link
-				href="/submission"
-				css={css`
-					text-decoration: none !important;
-				`}
-			>
+			{/** Register Samples */}
+			<Link href={`/submission/program/${programName}/registration`}>
 				<MenuItem
-					level={2}
-					content="All Programs"
-					onClick={setActiveProgram(-1)}
-					selected={pathname === '/submission'}
+					level={3}
+					content={
+						<StatusMenuItem>
+							Register Samples
+							{statusIcon}
+						</StatusMenuItem>
+					}
+					selected={pathnameLastSegment === 'registration'}
 				/>
 			</Link>
 
-			{filteredPrograms.map(({ shortName }, programIndex) => (
+			{/** Submit clinical data */}
+			<Link href={`/submission/program/${programName}/clinical-submission`}>
 				<MenuItem
-					level={2}
-					key={shortName}
-					content={shortName}
-					onClick={setActiveProgram(programIndex)}
-					selected={programIndex === activeProgramIndex || activeProgramName === shortName}
-				>
-					<MenuItem level={3}>{shortName}</MenuItem>
-
-					{/** Register Samples */}
-					<Link href={`/submission/program/${shortName}/registration`}>
-						<MenuItem
-							level={3}
-							content={
-								<StatusMenuItem>
-									Register Samples
-									{isSubmissionSystemDisabled ? (
-										<Icon name="lock" fill="accent3_dark" width="15px" />
-									) : clinicalRegistrationHasError ? (
-										<Icon name="exclamation" fill="error" width="15px" />
-									) : clinicalRegistrationInProgress ? (
-										<Icon name="ellipses" fill="warning" width="15px" />
-									) : null}
-								</StatusMenuItem>
-							}
-							selected={pathnameLastSegment === 'registration'}
-						/>
-					</Link>
-
-					{/** Submit clinical data */}
-					<Link href={`/submission/program/${shortName}/clinical-submission`}>
-						<MenuItem
-							level={3}
-							content={<StatusMenuItem>Submit Clinical Data </StatusMenuItem>}
-							selected={pathnameLastSegment === 'clinical-submission'}
-						/>
-					</Link>
-				</MenuItem>
-			))}
+					level={3}
+					content={<StatusMenuItem>Submit Clinical Data </StatusMenuItem>}
+					selected={pathnameLastSegment === 'clinical-submission'}
+				/>
+			</Link>
 		</>
 	);
 };

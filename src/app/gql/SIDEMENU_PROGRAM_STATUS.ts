@@ -16,22 +16,43 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
 
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { gql } from '@/__generated__/gql';
 
-export default function LandingPage() {
-	const { EGO_CLIENT_ID } = useAppConfigContext();
+const SIDEMENU_PROGRAM_STATUS = gql(`
+	query SideMenuProgramStatus($activeProgramName: String!, $filters: ClinicalInput!) {
+	 clinicalRegistration(shortName: $activeProgramName) {
+      programShortName
+      fileErrors {
+        message
+        code
+      }
+      fileName
+      errors {
+        type
+      }
+		}
+    clinicalSubmissions(programShortName: $activeProgramName) {
+      programShortName
+      state
+      clinicalEntities {
+        schemaErrors {
+          row
+        }
+      }
+    }
+    clinicalData(programShortName: $activeProgramName, filters: $filters) {
+      programShortName
+      clinicalEntities {
+        entityName
+      }
+      clinicalErrors {
+        errors {
+          entityName
+        }
+      }
+    } 
+  }
+`);
 
-	return (
-		<main>
-			<div>
-				<p>
-					Get started by editing&nbsp;
-					<code>src/app/files/page.tsx</code>
-				</p>
-			</div>
-			<h1>Welcome! {EGO_CLIENT_ID}</h1>
-		</main>
-	);
-}
+export default SIDEMENU_PROGRAM_STATUS;
