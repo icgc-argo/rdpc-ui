@@ -48,7 +48,7 @@ export const pageWithPermissions =
 
 			const isAuthorized = permissions.acceptedRoles.some((roleKey) => userRoles[roleKey]);
 
-			if (authLoading) {
+			if (authLoading || !egoJwt) {
 				return (
 					<div
 						css={css`
