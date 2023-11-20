@@ -51,13 +51,9 @@ const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
 const ProgramMenu = ({ searchQuery }: { searchQuery: string }) => {
 	const params = useParams();
 	const pathname = usePathname();
-	const { permissions, TokenUtils } = useAuthContext();
+	const { userPrograms } = useAuthContext();
 
 	const activeProgramName = typeof params.shortName !== 'string' ? '' : params.shortName;
-	const userPrograms = [
-		...TokenUtils.getReadableProgramDataNames(permissions),
-		...TokenUtils.getWritableProgramDataNames(permissions),
-	];
 
 	const { data: programsData, loading, error } = useQuery(SIDEMENU_PROGRAMS);
 	const programs =

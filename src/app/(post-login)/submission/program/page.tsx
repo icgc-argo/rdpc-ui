@@ -29,12 +29,8 @@ import ProgramList from '../components/ProgramList';
 
 export default function Submission() {
 	const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
-	const { permissions, TokenUtils } = useAuthContext();
+	const { userPrograms } = useAuthContext();
 
-	const userPrograms = [
-		...TokenUtils.getReadableProgramDataNames(permissions),
-		...TokenUtils.getWritableProgramDataNames(permissions),
-	];
 	const programs =
 		data?.programs?.filter(notNull).filter((program) => userPrograms.includes(program.shortName)) ||
 		[];

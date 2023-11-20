@@ -45,6 +45,7 @@ type AuthContextValue = {
 	logOut: () => void;
 	permissions: string[];
 	TokenUtils: ReturnType<typeof createEgoUtils>;
+	userPrograms: string[];
 };
 
 const AuthContext = createContext<AuthContextValue>({
@@ -56,6 +57,7 @@ const AuthContext = createContext<AuthContextValue>({
 	logOut: () => undefined,
 	permissions: [],
 	TokenUtils: createEgoUtils(''),
+	userPrograms: [],
 });
 
 export const getStoredToken = () => Cookies.get(EGO_JWT_KEY);
@@ -97,7 +99,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		setAuthLoading(false);
 	};
 
-	const permissions = TokenUtils.getPermissionsFromToken(egoJwt);
+	const permissions =
+		(TokenUtils.isValidJwt(egoJwt) && TokenUtils.getPermissionsFromToken(egoJwt)) || [];
+
+	const userPrograms = [
+		...TokenUtils.getReadableProgramDataNames(permissions),
+		...TokenUtils.getWritableProgramDataNames(permissions),
+	];
 
 	const value: AuthContextValue = {
 		egoJwt,
@@ -108,6 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		logOut,
 		permissions,
 		TokenUtils,
+		userPrograms,
 	};
 
 	return (
