@@ -406,6 +406,23 @@ export type CoreCompletionStatusCount = {
 	noData: Scalars['Int']['output'];
 };
 
+export type DataCenter = {
+	__typename?: 'DataCenter';
+	analysisScoreUrl?: Maybe<Scalars['String']['output']>;
+	analysisSongCode?: Maybe<Scalars['String']['output']>;
+	analysisSongUrl?: Maybe<Scalars['String']['output']>;
+	email?: Maybe<Scalars['String']['output']>;
+	gatewayUrl?: Maybe<Scalars['String']['output']>;
+	id?: Maybe<Scalars['ID']['output']>;
+	name?: Maybe<Scalars['String']['output']>;
+	organization?: Maybe<Scalars['String']['output']>;
+	shortName: Scalars['String']['output'];
+	submissionScoreUrl?: Maybe<Scalars['String']['output']>;
+	submissionSongCode?: Maybe<Scalars['String']['output']>;
+	submissionSongUrl?: Maybe<Scalars['String']['output']>;
+	uiUrl?: Maybe<Scalars['String']['output']>;
+};
+
 export type DataSubmissionStatus = {
 	__typename?: 'DataSubmissionStatus';
 	dataSubmitted: Scalars['Int']['output'];
@@ -818,6 +835,7 @@ export type Program = {
 	cancerTypes?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
 	commitmentDonors?: Maybe<Scalars['Int']['output']>;
 	countries?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+	dataCenter?: Maybe<DataCenter>;
 	description?: Maybe<Scalars['String']['output']>;
 	genomicDonors?: Maybe<Scalars['Int']['output']>;
 	institutions?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
@@ -1087,6 +1105,8 @@ export type Query = {
 	clinicalSubmissionTypesList?: Maybe<Array<Scalars['String']['output']>>;
 	/** Retrieve current stored Clinical Submission data for a program */
 	clinicalSubmissions: ClinicalSubmissionData;
+	/** retrieve all DataCenters */
+	dataCenters?: Maybe<Array<Maybe<DataCenter>>>;
 	file?: Maybe<File>;
 	/** retrieve join program invitation by id */
 	joinProgramInvite?: Maybe<JoinProgramInvite>;
@@ -1105,10 +1125,6 @@ export type Query = {
 	self?: Maybe<Profile>;
 	sets?: Maybe<Sets>;
 	systemAlerts?: Maybe<Array<Maybe<SystemAlert>>>;
-	/** retrieve User data by id */
-	user?: Maybe<User>;
-	/** retrieve paginated list of user data */
-	users?: Maybe<Array<Maybe<User>>>;
 };
 
 export type QueryClinicalDataArgs = {
@@ -1132,6 +1148,10 @@ export type QueryClinicalSearchResultsArgs = {
 
 export type QueryClinicalSubmissionsArgs = {
 	programShortName: Scalars['String']['input'];
+};
+
+export type QueryDataCentersArgs = {
+	shortName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryJoinProgramInviteArgs = {
@@ -1165,18 +1185,6 @@ export type QueryProgramDonorSummaryArgs = {
 export type QueryQueryArgs = {
 	query?: InputMaybe<Scalars['String']['input']>;
 	types?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-};
-
-export type QueryUserArgs = {
-	id: Scalars['String']['input'];
-};
-
-export type QueryUsersArgs = {
-	groups?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-	limit?: InputMaybe<Scalars['Int']['input']>;
-	pageNum?: InputMaybe<Scalars['Int']['input']>;
-	query?: InputMaybe<Scalars['String']['input']>;
-	sort?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryResults = {
@@ -2747,6 +2755,7 @@ export type ProgramsListQuery = {
 		genomicDonors?: number | null;
 		submittedDonors?: number | null;
 		commitmentDonors?: number | null;
+		dataCenter?: { __typename?: 'DataCenter'; shortName: string } | null;
 		users?: Array<{
 			__typename?: 'ProgramUser';
 			email: string;
@@ -4156,6 +4165,14 @@ export const ProgramsListDocument = {
 								{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'cancerTypes' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'countries' } },
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'dataCenter' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [{ kind: 'Field', name: { kind: 'Name', value: 'shortName' } }],
+									},
+								},
 								{ kind: 'Field', name: { kind: 'Name', value: 'membershipType' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'genomicDonors' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'submittedDonors' } },

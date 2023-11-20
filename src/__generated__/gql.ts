@@ -33,7 +33,7 @@ const documents = {
 		types.CommitClinicalRegistrationDocument,
 	'\n  query GetRegistration($shortName: String!) {\n    clinicalRegistration(shortName: $shortName) {\n      id\n      programShortName\n      creator\n      fileName\n      createdAt\n      records {\n        row\n        fields {\n          name\n          value\n        }\n      }\n      errors {\n        type\n        message\n        row\n        field\n        value\n        sampleId\n        donorId\n        specimenId\n      }\n      fileErrors {\n        message\n        fileNames\n        code\n      }\n      newDonors {\n        count\n        rows\n      }\n      newSpecimens {\n        count\n        rows\n      }\n      newSamples {\n        count\n        rows\n      }\n      alreadyRegistered {\n        count\n        rows\n      }\n    }\n  }\n':
 		types.GetRegistrationDocument,
-	'\n\tquery ProgramsList {\n\t\tprograms {\n\t\t\tshortName\n\t\t\tname\n\t\t\tcancerTypes\n\t\t\tcountries\n\t\t\tmembershipType\n\t\t\tgenomicDonors\n\t\t\tsubmittedDonors\n\t\t\tcommitmentDonors\n\t\t\tusers {\n\t\t\t\temail\n\t\t\t\tfirstName\n\t\t\t\tlastName\n\t\t\t\trole\n\t\t\t}\n\t\t}\n\t}\n':
+	'\n\tquery ProgramsList {\n\t\tprograms {\n\t\t\tshortName\n\t\t\tname\n\t\t\tcancerTypes\n\t\t\tcountries\n\t\t\tdataCenter {\n\t\t\t\tshortName\n\t\t\t}\n\t\t\tmembershipType\n\t\t\tgenomicDonors\n\t\t\tsubmittedDonors\n\t\t\tcommitmentDonors\n\t\t\tusers {\n\t\t\t\temail\n\t\t\t\tfirstName\n\t\t\t\tlastName\n\t\t\t\trole\n\t\t\t}\n\t\t}\n\t}\n':
 		types.ProgramsListDocument,
 	'\n\tfragment Registration on ClinicalRegistrationData {\n\t\tid\n\t\tprogramShortName\n\t\tcreator\n\t\tfileName\n\t\tcreatedAt\n\t\trecords {\n\t\t\trow\n\t\t\tfields {\n\t\t\t\tname\n\t\t\t\tvalue\n\t\t\t}\n\t\t}\n\t\terrors {\n\t\t\ttype\n\t\t\tmessage\n\t\t\trow\n\t\t\tfield\n\t\t\tvalue\n\t\t\tsampleId\n\t\t\tdonorId\n\t\t\tspecimenId\n\t\t}\n\t\tfileErrors {\n\t\t\tmessage\n\t\t\tfileNames\n\t\t\tcode\n\t\t}\n\t\tnewDonors {\n\t\t\tcount\n\t\t\trows\n\t\t}\n\t\tnewSpecimens {\n\t\t\tcount\n\t\t\trows\n\t\t}\n\t\tnewSamples {\n\t\t\tcount\n\t\t\trows\n\t\t}\n\t\talreadyRegistered {\n\t\t\tcount\n\t\t\trows\n\t\t}\n\t}\n':
 		types.RegistrationFragmentDoc,
@@ -130,8 +130,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-	source: '\n\tquery ProgramsList {\n\t\tprograms {\n\t\t\tshortName\n\t\t\tname\n\t\t\tcancerTypes\n\t\t\tcountries\n\t\t\tmembershipType\n\t\t\tgenomicDonors\n\t\t\tsubmittedDonors\n\t\t\tcommitmentDonors\n\t\t\tusers {\n\t\t\t\temail\n\t\t\t\tfirstName\n\t\t\t\tlastName\n\t\t\t\trole\n\t\t\t}\n\t\t}\n\t}\n',
-): (typeof documents)['\n\tquery ProgramsList {\n\t\tprograms {\n\t\t\tshortName\n\t\t\tname\n\t\t\tcancerTypes\n\t\t\tcountries\n\t\t\tmembershipType\n\t\t\tgenomicDonors\n\t\t\tsubmittedDonors\n\t\t\tcommitmentDonors\n\t\t\tusers {\n\t\t\t\temail\n\t\t\t\tfirstName\n\t\t\t\tlastName\n\t\t\t\trole\n\t\t\t}\n\t\t}\n\t}\n'];
+	source: '\n\tquery ProgramsList {\n\t\tprograms {\n\t\t\tshortName\n\t\t\tname\n\t\t\tcancerTypes\n\t\t\tcountries\n\t\t\tdataCenter {\n\t\t\t\tshortName\n\t\t\t}\n\t\t\tmembershipType\n\t\t\tgenomicDonors\n\t\t\tsubmittedDonors\n\t\t\tcommitmentDonors\n\t\t\tusers {\n\t\t\t\temail\n\t\t\t\tfirstName\n\t\t\t\tlastName\n\t\t\t\trole\n\t\t\t}\n\t\t}\n\t}\n',
+): (typeof documents)['\n\tquery ProgramsList {\n\t\tprograms {\n\t\t\tshortName\n\t\t\tname\n\t\t\tcancerTypes\n\t\t\tcountries\n\t\t\tdataCenter {\n\t\t\t\tshortName\n\t\t\t}\n\t\t\tmembershipType\n\t\t\tgenomicDonors\n\t\t\tsubmittedDonors\n\t\t\tcommitmentDonors\n\t\t\tusers {\n\t\t\t\temail\n\t\t\t\tfirstName\n\t\t\t\tlastName\n\t\t\t\trole\n\t\t\t}\n\t\t}\n\t}\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

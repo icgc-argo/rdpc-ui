@@ -26,6 +26,9 @@ const PROGRAMS_LIST_QUERY = gql(`
 			name
 			cancerTypes
 			countries
+			dataCenter {
+				shortName
+			}
 			membershipType
 			genomicDonors
 			submittedDonors
