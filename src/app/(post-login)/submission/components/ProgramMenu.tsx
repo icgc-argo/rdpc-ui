@@ -22,6 +22,7 @@ import { SideMenuProgramStatusQuery } from '@/__generated__/graphql';
 import Loader from '@/app/components/Loader';
 import SIDEMENU_PROGRAMS from '@/app/gql/SIDEMENU_PROGRAMS';
 import SIDEMENU_PROGRAM_STATUS from '@/app/gql/SIDEMENU_PROGRAM_STATUS';
+import { useAuthContext } from '@/app/hooks/AuthProvider';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
 import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
@@ -50,10 +51,19 @@ const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
 const ProgramMenu = ({ searchQuery }: { searchQuery: string }) => {
 	const params = useParams();
 	const pathname = usePathname();
+	const { permissions, TokenUtils } = useAuthContext();
+
 	const activeProgramName = typeof params.shortName !== 'string' ? '' : params.shortName;
+	const userPrograms = [
+		...TokenUtils.getReadableProgramDataNames(permissions),
+		...TokenUtils.getWritableProgramDataNames(permissions),
+	];
 
 	const { data: programsData, loading, error } = useQuery(SIDEMENU_PROGRAMS);
-	const programs = programsData?.programs || [];
+	const programs =
+		programsData?.programs?.filter(
+			(program) => program && userPrograms.includes(program.shortName),
+		) || [];
 
 	const [activeProgramIndex, setActiveProgramIndex] = useState(-1);
 
