@@ -33,39 +33,37 @@ type JSXComponent<T extends object> = (args: T) => EmotionJSX.Element;
 
 // returns Comp or unauthorized based on acceptedRoles
 // params value and types are based on dynamic route of page
-export const pageWithPermissions =
-	// eslint-disable-next-line react/display-name
-	function <T extends object>(
-		Component: JSXComponent<T>,
-		permissions: { acceptedRoles: AcceptedRole[]; programShortName?: string },
-	) {
-		return function PageWithPermissions(props: T) {
-			const { authLoading, egoJwt } = useAuthContext();
+export const pageWithPermissions = function <T extends object>(
+	Component: JSXComponent<T>,
+	permissions: { acceptedRoles: AcceptedRole[]; programShortName?: string },
+) {
+	return function PageWithPermissions(props: T) {
+		const { authLoading, egoJwt } = useAuthContext();
 
-			const programName = permissions.programShortName ?? '';
+		const programName = permissions.programShortName ?? '';
 
-			const userRoles = useUserRole(egoJwt, programName);
+		const userRoles = useUserRole(egoJwt, programName);
 
-			const isAuthorized = permissions.acceptedRoles.some((roleKey) => userRoles[roleKey]);
+		const isAuthorized = permissions.acceptedRoles.some((roleKey) => userRoles[roleKey]);
 
-			if (authLoading || !egoJwt) {
-				return (
-					<div
-						css={css`
-							display: flex;
-							align-items: center;
-							justify-content: center;
-						`}
-					>
-						<DnaLoader />
-					</div>
-				);
-			}
+		if (authLoading || !egoJwt) {
+			return (
+				<div
+					css={css`
+						display: flex;
+						align-items: center;
+						justify-content: center;
+					`}
+				>
+					<DnaLoader />
+				</div>
+			);
+		}
 
-			if (isAuthorized) {
-				return <Component {...props} />;
-			} else {
-				redirect('/403');
-			}
-		};
+		if (isAuthorized) {
+			return <Component {...props} />;
+		} else {
+			redirect('/403');
+		}
 	};
+};
