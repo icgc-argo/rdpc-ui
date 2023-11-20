@@ -27,8 +27,8 @@ import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
 import { Icon, MenuItem } from '@icgc-argo/uikit';
 import Link from 'next/link';
-import { notFound, useParams, usePathname } from 'next/navigation';
-import { FC, MouseEventHandler, ReactNode, useState } from 'react';
+import { notFound, useParams, usePathname, useRouter } from 'next/navigation';
+import { FC, MouseEventHandler, ReactNode } from 'react';
 import { defaultClinicalEntityFilters } from '../common';
 
 const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
@@ -47,63 +47,85 @@ const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
 	);
 };
 
-const ProgramMenu = ({ searchQuery }: { searchQuery: string }) => {
+/**
+ *
+ * @param url current url
+ * @param currentShortName dynamic segment of the current url
+ * @param shortName new path shortname
+ * @returns url
+ */
+const generateProgramURL = (url: string, currentShortName: string, shortName: string) =>
+	url.replace(currentShortName, shortName);
+
+/**
+ * Uses query param: shortName representing the currently selected program's shortName.
+ * Uses the URL path to identify which page from the menu is selected.
+ */
+const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string }) => {
 	const params = useParams();
 	const pathname = usePathname();
-	const activeProgramName = typeof params.shortName !== 'string' ? '' : params.shortName;
+	const router = useRouter();
+
+	// params can be arrays from dynamic routing
+	const activeProgramName = typeof params.shortName === 'string' ? params.shortName : '';
 
 	const { data: programsData, loading, error } = useQuery(SIDEMENU_PROGRAMS);
 	const programs = programsData?.programs || [];
 
-	const [activeProgramIndex, setActiveProgramIndex] = useState(-1);
-
-	const filteredPrograms = !searchQuery.length
+	const filteredPrograms = !shortNameSearchQuery.length
 		? programs
 		: programs.filter(
-				(program) => program && program.shortName.search(new RegExp(searchQuery, 'i')) > -1,
+				(program) =>
+					program && program.shortName.search(new RegExp(shortNameSearchQuery, 'i')) > -1,
 		  );
 
 	const setActiveProgram =
-		(index: number): MouseEventHandler =>
-		() =>
-			setActiveProgramIndex(index);
+		(shortName: string): MouseEventHandler =>
+		() => {
+			const url = generateProgramURL(pathname, activeProgramName, shortName);
+			router.push(url);
+		};
 
-	if (loading) return <Loader />;
-	if (error) notFound();
-
-	return (
-		<>
-			<Link
-				href="/submission"
-				css={css`
-					text-decoration: none !important;
-				`}
-			>
-				<MenuItem
-					level={2}
-					content="All Programs"
-					onClick={setActiveProgram(-1)}
-					selected={pathname === '/submission'}
-				/>
-			</Link>
-
-			{filteredPrograms.map((program, programIndex) => {
-				const shortName = program?.shortName || '';
-				return (
+	if (loading) {
+		return <Loader />;
+	} else if (error) {
+		notFound();
+	} else {
+		return (
+			<>
+				<Link
+					href="/submission"
+					css={css`
+						text-decoration: none !important;
+					`}
+				>
 					<MenuItem
 						level={2}
-						key={shortName}
-						content={shortName}
-						onClick={setActiveProgram(programIndex)}
-						selected={programIndex === activeProgramIndex || activeProgramName === shortName}
-					>
-						<MenuItem level={3}>{shortName}</MenuItem>
-						<MenuContent programName={shortName} />
-					</MenuItem>
-				);
-			})}
-		</>
-	);
+						content="All Programs"
+						onClick={setActiveProgram('')}
+						selected={pathname === '/submission'}
+					/>
+				</Link>
+
+				{filteredPrograms.map((program) => {
+					const shortName = program?.shortName || '';
+
+					return (
+						<MenuItem
+							level={2}
+							key={shortName}
+							content={shortName}
+							onClick={setActiveProgram(shortName)}
+							selected={activeProgramName === shortName}
+						>
+							<MenuItem level={3}>{shortName}</MenuItem>
+							<MenuContent programName={shortName} />
+						</MenuItem>
+					);
+				})}
+			</>
+		);
+	}
 };
 
 const parseProgramStatusGQLResp = (data: SideMenuProgramStatusQuery | undefined) => {
