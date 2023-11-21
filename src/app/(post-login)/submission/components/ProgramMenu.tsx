@@ -48,16 +48,6 @@ const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
 };
 
 /**
- *
- * @param url current url
- * @param currentShortName dynamic segment of the current url
- * @param shortName new path shortname
- * @returns url
- */
-const generateProgramURL = (url: string, currentShortName: string, shortName: string) =>
-	url.replace(currentShortName, shortName);
-
-/**
  * Uses query param: shortName representing the currently selected program's shortName.
  * Uses the URL path to identify which page from the menu is selected.
  */
@@ -82,7 +72,7 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 	const setActiveProgram =
 		(shortName: string): MouseEventHandler =>
 		() => {
-			const url = generateProgramURL(pathname, activeProgramName, shortName);
+			const url = `/submission/program/${shortName}/registration`;
 			router.push(url);
 		};
 
