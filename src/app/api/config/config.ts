@@ -26,6 +26,7 @@ export type AppConfig = {
 	EGO_CLIENT_ID: string;
 	EGO_PUBLIC_KEY: string;
 	REGION: string;
+	DATA_CENTER: string;
 	UI_VERSION: string;
 	PLATFORM_UI_ROOT: string;
 	RECAPTCHA_SITE_KEY: string;
@@ -65,6 +66,7 @@ export const getAppConfig = (serverEnv: any): AppConfig => {
 			serverEnv.NEXT_PUBLIC_EGO_PUBLIC_KEY || process.env.NEXT_PUBLIC_EGO_PUBLIC_KEY || '',
 		UI_VERSION: packageJSON.version,
 		REGION: serverEnv.NEXT_PUBLIC_REGION || process.env.NEXT_PUBLIC_REGION || '',
+		DATA_CENTER: serverEnv.NEXT_PUBLIC_DATA_CENTER || process.env.NEXT_PUBLIC_DATA_CENTER || '',
 		PLATFORM_UI_ROOT:
 			serverEnv.NEXT_PUBLIC_PLATFORM_UI_ROOT || process.env.NEXT_PUBLIC_PLATFORM_UI_ROOT || '',
 		RECAPTCHA_SITE_KEY:

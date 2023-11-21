@@ -20,8 +20,8 @@
 import { gql } from '@/__generated__/gql';
 
 const PROGRAMS_LIST_QUERY = gql(`
-	query ProgramsList {
-		programs {
+	query ProgramsList($dataCenter: String) {
+		programs(dataCenter: $dataCenter) {
 			shortName
 			name
 			cancerTypes

@@ -1182,6 +1182,10 @@ export type QueryProgramDonorSummaryArgs = {
 	sorts?: InputMaybe<Array<InputMaybe<DonorSummaryEntrySort>>>;
 };
 
+export type QueryProgramsArgs = {
+	dataCenter?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type QueryQueryArgs = {
 	query?: InputMaybe<Scalars['String']['input']>;
 	types?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
@@ -2741,7 +2745,9 @@ export type GetRegistrationQuery = {
 	};
 };
 
-export type ProgramsListQueryVariables = Exact<{ [key: string]: never }>;
+export type ProgramsListQueryVariables = Exact<{
+	dataCenter?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 export type ProgramsListQuery = {
 	__typename?: 'Query';
@@ -2891,7 +2897,9 @@ export type ReopenSubmissionMutation = {
 	};
 };
 
-export type SideMenuQueryVariables = Exact<{ [key: string]: never }>;
+export type SideMenuQueryVariables = Exact<{
+	dataCenter?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 export type SideMenuQuery = {
 	__typename?: 'Query';
@@ -4152,12 +4160,26 @@ export const ProgramsListDocument = {
 			kind: 'OperationDefinition',
 			operation: 'query',
 			name: { kind: 'Name', value: 'ProgramsList' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'dataCenter' } },
+					type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+				},
+			],
 			selectionSet: {
 				kind: 'SelectionSet',
 				selections: [
 					{
 						kind: 'Field',
 						name: { kind: 'Name', value: 'programs' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'dataCenter' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'dataCenter' } },
+							},
+						],
 						selectionSet: {
 							kind: 'SelectionSet',
 							selections: [
@@ -4380,12 +4402,26 @@ export const SideMenuDocument = {
 			kind: 'OperationDefinition',
 			operation: 'query',
 			name: { kind: 'Name', value: 'SideMenu' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'dataCenter' } },
+					type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+				},
+			],
 			selectionSet: {
 				kind: 'SelectionSet',
 				selections: [
 					{
 						kind: 'Field',
 						name: { kind: 'Name', value: 'programs' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'dataCenter' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'dataCenter' } },
+							},
+						],
 						selectionSet: {
 							kind: 'SelectionSet',
 							selections: [{ kind: 'Field', name: { kind: 'Name', value: 'shortName' } }],
