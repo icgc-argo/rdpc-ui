@@ -24,6 +24,12 @@ import SIDEMENU_PROGRAMS from '@/app/gql/SIDEMENU_PROGRAMS';
 import SIDEMENU_PROGRAM_STATUS from '@/app/gql/SIDEMENU_PROGRAM_STATUS';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
+import {
+	PROGRAM_CLINICAL_DATA_PATH,
+	PROGRAM_DASHBOARD_PATH,
+	PROGRAM_MANAGE_PATH,
+	PROGRAM_SHORT_NAME_PATH,
+} from '@/global/constants';
 import { notNull } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
@@ -181,14 +187,10 @@ const MenuContent = ({ programName }: { programName: string }) => {
 		<>
 			{/** Dashboard */}
 			<Link
-				as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+				as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programName)}
 				href={PROGRAM_DASHBOARD_PATH}
 			>
-				<MenuItem
-					level={3}
-					content="Dashboard"
-					selected={PROGRAM_DASHBOARD_PATH === pageContext.pathname && props.isCurrentlyViewed}
-				/>
+				<MenuItem level={3} content="Dashboard" selected={PROGRAM_DASHBOARD_PATH === pathname} />
 			</Link>
 
 			{/** Register Samples */}
@@ -216,10 +218,7 @@ const MenuContent = ({ programName }: { programName: string }) => {
 
 			{/** Submitted Data */}
 			<Link
-				as={`${PROGRAM_CLINICAL_DATA_PATH.replace(
-					PROGRAM_SHORT_NAME_PATH,
-					props.program.shortName,
-				)}?tab=donor`}
+				as={`${PROGRAM_CLINICAL_DATA_PATH.replace(PROGRAM_SHORT_NAME_PATH, programName)}?tab=donor`}
 				href={PROGRAM_CLINICAL_DATA_PATH}
 			>
 				<MenuItem
@@ -227,23 +226,19 @@ const MenuContent = ({ programName }: { programName: string }) => {
 					content={
 						<StatusMenuItem>
 							Submitted Data{' '}
-							{clinicalDataHasErrors && <Icon name="exclamation" fill="error" width="15px" />}
+							{/* {clinicalDataHasErrors && <Icon name="exclamation" fill="error" width="15px" />} */}
 						</StatusMenuItem>
 					}
-					selected={PROGRAM_CLINICAL_DATA_PATH === pageContext.pathname && props.isCurrentlyViewed}
+					selected={PROGRAM_CLINICAL_DATA_PATH === pathname}
 				/>
 			</Link>
 
 			{/** Manage Program */}
 			<Link
-				as={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+				as={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, programName)}
 				href={PROGRAM_MANAGE_PATH}
 			>
-				<MenuItem
-					level={3}
-					content="Manage Program"
-					selected={PROGRAM_MANAGE_PATH === pageContext.pathname && props.isCurrentlyViewed}
-				/>
+				<MenuItem level={3} content="Manage Program" selected={PROGRAM_MANAGE_PATH === pathname} />
 			</Link>
 		</>
 	);
