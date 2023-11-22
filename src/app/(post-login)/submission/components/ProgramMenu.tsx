@@ -24,9 +24,11 @@ import SIDEMENU_PROGRAMS from '@/app/gql/SIDEMENU_PROGRAMS';
 import SIDEMENU_PROGRAM_STATUS from '@/app/gql/SIDEMENU_PROGRAM_STATUS';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
+import { notNull } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
 import { Icon, MenuItem } from '@icgc-argo/uikit';
+import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import { notFound, useParams, usePathname, useRouter } from 'next/navigation';
 import { FC, MouseEventHandler, ReactNode } from 'react';
@@ -69,11 +71,14 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 	const programs = programsData?.programs || [];
 
 	const filteredPrograms = !shortNameSearchQuery.length
-		? programs
-		: programs.filter(
-				(program) =>
-					program && program.shortName.search(new RegExp(shortNameSearchQuery, 'i')) > -1,
-		  );
+		? programs.filter(notNull)
+		: programs
+				.filter(notNull)
+				.filter(
+					(program) =>
+						program && program.shortName.search(new RegExp(shortNameSearchQuery, 'i')) > -1,
+				);
+	const sortedProgramList = orderBy(filteredPrograms, 'shortName');
 
 	const setActiveProgram =
 		(shortName: string): MouseEventHandler =>
@@ -103,7 +108,7 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 					/>
 				</Link>
 
-				{filteredPrograms.map((program) => {
+				{sortedProgramList.map((program) => {
 					const shortName = program?.shortName || '';
 
 					return (
