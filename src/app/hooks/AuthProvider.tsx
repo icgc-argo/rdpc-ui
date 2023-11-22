@@ -72,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	const [egoJwt, setEgoJwt] = useState('');
 
 	useEffect(() => {
-		if (storedToken) {
+		if (storedToken && TokenUtils.isValidJwt(storedToken)) {
 			setEgoJwt(storedToken);
 		}
 		setAuthLoading(false);
