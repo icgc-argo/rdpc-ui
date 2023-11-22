@@ -22,6 +22,7 @@
 import PROGRAMS_LIST_QUERY from '@/app/gql/PROGRAMS_LIST_QUERY';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useAuthContext } from '@/app/hooks/AuthProvider';
+import { notNull } from '@/global/utils';
 import { useQuery } from '@apollo/client';
 import { Loader } from '@icgc-argo/uikit';
 import { notFound } from 'next/navigation';
@@ -34,7 +35,7 @@ export default function Submission() {
 	});
 	const { userPrograms } = useAuthContext();
 
-	const programs = data?.programs || [];
+	const programs = data?.programs?.filter(notNull) || [];
 
 	if (loading) return <Loader />;
 	if (error) notFound();
