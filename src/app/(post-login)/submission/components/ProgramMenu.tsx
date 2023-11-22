@@ -31,7 +31,7 @@ import { Icon, MenuItem } from '@icgc-argo/uikit';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import { notFound, useParams, usePathname, useRouter } from 'next/navigation';
-import { FC, MouseEventHandler, ReactNode } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import { defaultClinicalEntityFilters } from '../common';
 
 const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
@@ -74,18 +74,10 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 		? programs.filter(notNull)
 		: programs
 				.filter(notNull)
-				.filter(
-					(program) =>
-						program && program.shortName.search(new RegExp(shortNameSearchQuery, 'i')) > -1,
-				);
+				.filter((program) => program.shortName.search(new RegExp(shortNameSearchQuery, 'i')) > -1);
 	const sortedProgramList = orderBy(filteredPrograms, 'shortName');
 
-	const setActiveProgram =
-		(shortName: string): MouseEventHandler =>
-		() => {
-			const url = `/submission/program/${shortName}/registration`;
-			router.push(url);
-		};
+	const [activeProgram, setActiveProgram] = useState(activeProgramName);
 
 	if (loading) {
 		return <Loader />;
@@ -103,7 +95,9 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 					<MenuItem
 						level={2}
 						content="All Programs"
-						onClick={setActiveProgram('')}
+						onClick={() => {
+							setActiveProgram('');
+						}}
 						selected={pathname === '/submission'}
 					/>
 				</Link>
@@ -116,8 +110,10 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 							level={2}
 							key={shortName}
 							content={shortName}
-							onClick={setActiveProgram(shortName)}
-							selected={activeProgramName === shortName}
+							onClick={() => {
+								activeProgram === shortName ? setActiveProgram('') : setActiveProgram(shortName);
+							}}
+							selected={activeProgram === shortName}
 						>
 							<MenuItem level={3}>{shortName}</MenuItem>
 							<MenuContent programName={shortName} />
@@ -183,6 +179,18 @@ const MenuContent = ({ programName }: { programName: string }) => {
 
 	return (
 		<>
+			{/** Dashboard */}
+			<Link
+				as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+				href={PROGRAM_DASHBOARD_PATH}
+			>
+				<MenuItem
+					level={3}
+					content="Dashboard"
+					selected={PROGRAM_DASHBOARD_PATH === pageContext.pathname && props.isCurrentlyViewed}
+				/>
+			</Link>
+
 			{/** Register Samples */}
 			<Link href={`/submission/program/${programName}/registration`}>
 				<MenuItem
@@ -203,6 +211,38 @@ const MenuContent = ({ programName }: { programName: string }) => {
 					level={3}
 					content={<StatusMenuItem>Submit Clinical Data </StatusMenuItem>}
 					selected={pathnameLastSegment === 'clinical-submission'}
+				/>
+			</Link>
+
+			{/** Submitted Data */}
+			<Link
+				as={`${PROGRAM_CLINICAL_DATA_PATH.replace(
+					PROGRAM_SHORT_NAME_PATH,
+					props.program.shortName,
+				)}?tab=donor`}
+				href={PROGRAM_CLINICAL_DATA_PATH}
+			>
+				<MenuItem
+					level={3}
+					content={
+						<StatusMenuItem>
+							Submitted Data{' '}
+							{clinicalDataHasErrors && <Icon name="exclamation" fill="error" width="15px" />}
+						</StatusMenuItem>
+					}
+					selected={PROGRAM_CLINICAL_DATA_PATH === pageContext.pathname && props.isCurrentlyViewed}
+				/>
+			</Link>
+
+			{/** Manage Program */}
+			<Link
+				as={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+				href={PROGRAM_MANAGE_PATH}
+			>
+				<MenuItem
+					level={3}
+					content="Manage Program"
+					selected={PROGRAM_MANAGE_PATH === pageContext.pathname && props.isCurrentlyViewed}
 				/>
 			</Link>
 		</>
