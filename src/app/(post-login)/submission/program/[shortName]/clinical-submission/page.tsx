@@ -39,7 +39,7 @@ import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus
 import useUrlQueryState from '@/app/hooks/useURLQueryState';
 import useUserConfirmationModalState from '@/app/hooks/useUserConfirmationModalState';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from '@/global/constants';
-import { sleep, toDisplayError } from '@/global/utils';
+import { displayDateAndTime, sleep, toDisplayError } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import { useMutation, useQuery } from '@apollo/client';
 import {
@@ -48,6 +48,7 @@ import {
 	NOTIFICATION_VARIANTS,
 	NotificationVariant,
 	Table,
+	Typography,
 } from '@icgc-argo/uikit';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
@@ -56,6 +57,7 @@ import FilesNavigator from './components/FilesNavigator';
 import Header from './components/Header';
 import Instructions from './components/Instructions';
 import SignOffValidationModal from './components/SignOffValidationModal';
+import SubmissionSummaryTable from './components/SubmissionSummaryTable';
 import { parseGQLResp } from './data';
 import {
 	ClinicalEntity,
@@ -64,7 +66,49 @@ import {
 	ErrorTableColumns,
 } from './types';
 
+const SectionLoader = () => (
+	<div
+		css={css`
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+		`}
+	>
+		<DnaLoader />
+	</div>
+);
+
 const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
+	const {
+		data,
+		loading,
+		refetch,
+		updateQuery: updateClinicalSubmissionQuery,
+	} = useQuery(CLINICAL_SUBMISSION_QUERY, {
+		variables: {
+			shortName,
+		},
+	});
+
+	const dataHandlers = {
+		refetch,
+		updateClinicalSubmissionQuery,
+	};
+
+	return loading ? (
+		<SectionLoader />
+	) : (
+		<ClinicalSubmissionSection {...{ shortName, data, dataHandlers }} />
+	);
+};
+
+type ClinicalSubmissionSectionProps = { shortName: string; data: any; dataHandlers: any };
+const ClinicalSubmissionSection = ({
+	shortName,
+	data,
+	dataHandlers,
+}: ClinicalSubmissionSectionProps) => {
 	const URL_QUERY_KEY = 'tab';
 	const commonToaster = useCommonToasters();
 	const [query] = useUrlQueryState(URL_QUERY_KEY);
@@ -73,6 +117,7 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 	const pathname = usePathname();
 	const { setGlobalLoading } = useGlobalLoader();
 	const toaster = useToaster();
+	const { refetch, updateClinicalSubmissionQuery } = dataHandlers;
 
 	useEffect(() => {
 		const defaultQuery = '?tab=donor';
@@ -83,18 +128,6 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 			setEntityType(query);
 		}
 	}, [query]);
-
-	// page data query
-	const {
-		data: gqlData,
-		loading: isLoading,
-		refetch,
-		updateQuery: updateClinicalSubmissionQuery,
-	} = useQuery(CLINICAL_SUBMISSION_QUERY, {
-		variables: {
-			shortName,
-		},
-	});
 
 	// mutations
 	const [clearClinicalSubmission] = useMutation(CLEAR_CLINICAL_SUBMISSION);
@@ -125,8 +158,14 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 	/**
 	 * Data
 	 */
-	const { clinicalState, clinicalFileErrors, clinicalEntities, clinicalVersion } =
-		parseGQLResp(gqlData);
+	const {
+		clinicalState,
+		clinicalFileErrors,
+		clinicalEntities,
+		clinicalVersion,
+		isPendingApproval,
+		updateInfo,
+	} = parseGQLResp(data);
 
 	const allDataErrors = useMemo(
 		() =>
@@ -235,20 +274,7 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 		onCancel: onSignOffCanceled,
 	} = useUserConfirmationModalState();
 
-	if (isLoading) {
-		return (
-			<div
-				css={css`
-					display: flex;
-					justify-content: center;
-					align-items: center;
-					width: 100%;
-				`}
-			>
-				<DnaLoader />
-			</div>
-		);
-	} else if (gqlData) {
+	if (data) {
 		const hasDataWarning = !!allDataWarnings.length;
 		const hasDataError = !!allDataErrors.length;
 		const hasSchemaErrorsAfterMigration = clinicalState === 'INVALID_BY_MIGRATION';
@@ -381,6 +407,37 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 							onSignOffClick={handleSignOff}
 							clinicalTypes={clinicalEntities.map(({ clinicalType }) => clinicalType)}
 						/>
+						{true && (
+							<div
+								css={css`
+									padding: 24px;
+								`}
+							>
+								<div
+									css={css`
+										padding-bottom: 8px;
+										display: flex;
+										justify-content: space-between;
+										align-items: center;
+									`}
+								>
+									<Typography
+										variant="subtitle"
+										color="primary"
+										css={css`
+											margin: 0px;
+										`}
+									>
+										Submission Summary
+									</Typography>
+									<Typography variant="data" color="black" as="div">
+										Signed off on <strong>{displayDateAndTime(updateInfo.updatedAt)}</strong> by{' '}
+										<strong>{updateInfo.updatedBy}</strong>
+									</Typography>
+								</div>
+								<SubmissionSummaryTable clinicalEntities={clinicalEntities} />
+							</div>
+						)}
 
 						{/* File errors */}
 						{clinicalFileErrors.map(({ fileNames, message }, i) => (
@@ -459,6 +516,7 @@ const ClinicalSubmissionPage = ({ params: { shortName } }: { params: { shortName
 		acceptedRoles: ['isProgramAdmin', 'isDataSubmitter', 'isRDPCAdmin', 'isDCCAdmin'],
 		programShortName: shortName,
 	});
+
 	return <Page shortName={shortName} />;
 };
 
