@@ -97,6 +97,10 @@ export type ClinicalSubmission = {
 	clinicalEntities: ClinicalEntity[];
 	isPendingApproval: boolean;
 	isSubmissionValidated: boolean;
+	updateInfo: {
+		updatedBy: string;
+		updatedAt: string;
+	};
 };
 
 // table
