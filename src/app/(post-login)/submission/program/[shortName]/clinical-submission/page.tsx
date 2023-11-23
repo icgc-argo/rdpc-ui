@@ -25,6 +25,7 @@ import {
 	errorNotificationTableProps,
 	getDefaultErrorTableColumns,
 } from '@/app/components/ErrorNotification/ErrorNotificationDefaultTable';
+import Loader from '@/app/components/Loader';
 import ModalPortal from '@/app/components/Modal';
 import { pageWithPermissions } from '@/app/components/Page';
 import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/CLEAR_CLINICAL_SUBMISSION';
@@ -44,7 +45,6 @@ import { css } from '@/lib/emotion';
 import { useMutation, useQuery } from '@apollo/client';
 import {
 	ColumnDef,
-	DnaLoader,
 	NOTIFICATION_VARIANTS,
 	NotificationVariant,
 	Table,
@@ -66,19 +66,6 @@ import {
 	ErrorTableColumns,
 } from './types';
 
-const SectionLoader = () => (
-	<div
-		css={css`
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			width: 100%;
-		`}
-	>
-		<DnaLoader />
-	</div>
-);
-
 const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 	const {
 		data,
@@ -97,7 +84,7 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 	};
 
 	return loading ? (
-		<SectionLoader />
+		<Loader />
 	) : (
 		<ClinicalSubmissionSection {...{ shortName, data, dataHandlers }} />
 	);
