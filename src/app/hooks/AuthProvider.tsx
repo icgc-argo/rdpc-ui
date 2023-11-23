@@ -68,18 +68,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	const config = useAppConfigContext();
 	const storedToken = getStoredToken();
 	const [egoJwt, setEgoJwt] = useState('');
+	const TokenUtils = createEgoUtils(config.EGO_PUBLIC_KEY);
+	const router = useRouter();
+	const loginStateOnPageLoad = !egoJwt?.length;
+	const [authLoading, setAuthLoading] = useState(loginStateOnPageLoad);
 
 	useEffect(() => {
 		if (storedToken && TokenUtils.isValidJwt(storedToken)) {
 			setEgoJwt(storedToken);
 		}
 		setAuthLoading(false);
-	}, [storedToken]);
-
-	const TokenUtils = createEgoUtils(config.EGO_PUBLIC_KEY);
-	const router = useRouter();
-	const loginStateOnPageLoad = !egoJwt?.length;
-	const [authLoading, setAuthLoading] = useState(loginStateOnPageLoad);
+	}, [storedToken, TokenUtils]);
 
 	const logIn = (newToken: string) => {
 		setAuthLoading(true);

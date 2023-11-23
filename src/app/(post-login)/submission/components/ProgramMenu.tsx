@@ -38,7 +38,7 @@ import { useQuery } from '@apollo/client';
 import { Icon, MenuItem } from '@icgc-argo/uikit';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
-import { notFound, useParams, usePathname, useRouter } from 'next/navigation';
+import { notFound, useParams, usePathname } from 'next/navigation';
 import { FC, ReactNode, useState } from 'react';
 import { defaultClinicalEntityFilters } from '../common';
 
@@ -65,8 +65,7 @@ const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
 const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string }) => {
 	const params = useParams();
 	const pathname = usePathname();
-	const router = useRouter();
-	const { permissions, egoJwt } = useAuthContext();
+	const { egoJwt } = useAuthContext();
 	const { DATA_CENTER } = useAppConfigContext();
 
 	// params can be arrays from dynamic routing
