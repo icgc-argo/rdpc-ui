@@ -67,35 +67,6 @@ import {
 } from './types';
 
 const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
-	const {
-		data,
-		loading,
-		refetch,
-		updateQuery: updateClinicalSubmissionQuery,
-	} = useQuery(CLINICAL_SUBMISSION_QUERY, {
-		variables: {
-			shortName,
-		},
-	});
-
-	const dataHandlers = {
-		refetch,
-		updateClinicalSubmissionQuery,
-	};
-
-	return loading ? (
-		<Loader />
-	) : (
-		<ClinicalSubmissionSection {...{ shortName, data, dataHandlers }} />
-	);
-};
-
-type ClinicalSubmissionSectionProps = { shortName: string; data: any; dataHandlers: any };
-const ClinicalSubmissionSection = ({
-	shortName,
-	data,
-	dataHandlers,
-}: ClinicalSubmissionSectionProps) => {
 	const URL_QUERY_KEY = 'tab';
 	const commonToaster = useCommonToasters();
 	const [query] = useUrlQueryState(URL_QUERY_KEY);
@@ -104,7 +75,6 @@ const ClinicalSubmissionSection = ({
 	const pathname = usePathname();
 	const { setGlobalLoading } = useGlobalLoader();
 	const toaster = useToaster();
-	const { refetch, updateClinicalSubmissionQuery } = dataHandlers;
 
 	useEffect(() => {
 		const defaultQuery = '?tab=donor';
@@ -115,6 +85,18 @@ const ClinicalSubmissionSection = ({
 			setEntityType(query);
 		}
 	}, [query]);
+
+	// page data query
+	const {
+		data: gqlData,
+		loading: isLoading,
+		refetch,
+		updateQuery: updateClinicalSubmissionQuery,
+	} = useQuery(CLINICAL_SUBMISSION_QUERY, {
+		variables: {
+			shortName,
+		},
+	});
 
 	// mutations
 	const [clearClinicalSubmission] = useMutation(CLEAR_CLINICAL_SUBMISSION);
@@ -152,7 +134,7 @@ const ClinicalSubmissionSection = ({
 		clinicalVersion,
 		isPendingApproval,
 		updateInfo,
-	} = parseGQLResp(data);
+	} = parseGQLResp(gqlData);
 
 	const allDataErrors = useMemo(
 		() =>
@@ -261,7 +243,9 @@ const ClinicalSubmissionSection = ({
 		onCancel: onSignOffCanceled,
 	} = useUserConfirmationModalState();
 
-	if (data) {
+	if (isLoading) {
+		return <Loader />;
+	} else if (gqlData) {
 		const hasDataWarning = !!allDataWarnings.length;
 		const hasDataError = !!allDataErrors.length;
 		const hasSchemaErrorsAfterMigration = clinicalState === 'INVALID_BY_MIGRATION';

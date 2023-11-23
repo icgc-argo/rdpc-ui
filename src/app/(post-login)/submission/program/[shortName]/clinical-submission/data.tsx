@@ -41,10 +41,10 @@ const CLINICAL_FILE_ORDER = [
 export const parseGQLResp: (v: any) => ClinicalSubmission = (gqlData) => {
 	const clinicalSubmissions = gqlData?.clinicalSubmissions;
 
-	const clinicalState = clinicalSubmissions.state;
-	const clinicalVersion = clinicalSubmissions.version || '';
+	const clinicalState = clinicalSubmissions?.state;
+	const clinicalVersion = clinicalSubmissions?.version || '';
 
-	const fileErrors = clinicalSubmissions.fileErrors;
+	const fileErrors = clinicalSubmissions?.fileErrors;
 
 	const isSubmissionValidated =
 		clinicalState === 'INVALID' ||
@@ -53,14 +53,14 @@ export const parseGQLResp: (v: any) => ClinicalSubmission = (gqlData) => {
 
 	const isPendingApproval = clinicalState === 'PENDING_APPROVAL';
 
-	const filteredEntities = clinicalSubmissions.clinicalEntities.filter(notNull) || [];
+	const filteredEntities = clinicalSubmissions?.clinicalEntities.filter(notNull) || [];
 	const orderedEntities = orderBy(filteredEntities, (entity) =>
 		CLINICAL_FILE_ORDER.indexOf(entity ? entity.clinicalType : ''),
 	);
 
 	const updateInfo = {
-		updatedBy: clinicalSubmissions.updatedBy,
-		updatedAt: clinicalSubmissions.updatedAt,
+		updatedBy: clinicalSubmissions?.updatedBy || '',
+		updatedAt: clinicalSubmissions?.updatedAt || '',
 	};
 
 	const clinicalEntities = orderedEntities.map((entity) => {
