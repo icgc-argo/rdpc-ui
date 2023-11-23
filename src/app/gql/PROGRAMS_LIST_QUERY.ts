@@ -33,12 +33,6 @@ const PROGRAMS_LIST_QUERY = gql(`
 			genomicDonors
 			submittedDonors
 			commitmentDonors
-			users {
-				email
-				firstName
-				lastName
-				role
-			}
 		}
 	}
 `);

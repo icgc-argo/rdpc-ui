@@ -22,7 +22,6 @@
 import { Program } from '@/__generated__/graphql';
 import { ColumnDef } from '@icgc-argo/uikit';
 import { ArgoMembershipKey } from '../components/ProgramList';
-import Admins from './Admins';
 import CancerTypes from './CancerTypes';
 import Countries from './Countries';
 import DonorStatus from './DonorStatus';
@@ -70,15 +69,6 @@ export const columns: ColumnDef<Program>[] = [
 	{
 		header: () => <TableHeader>Membership</TableHeader>,
 		accessorKey: 'membershipType',
-	},
-	{
-		header: () => <TableHeader>Administrators</TableHeader>,
-		accessorKey: 'administrators',
-		cell: ({
-			row: {
-				original: { users },
-			},
-		}) => <Admins admins={users} />,
 	},
 	{
 		header: () => <TableHeader>Donor Status</TableHeader>,

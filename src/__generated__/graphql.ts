@@ -2762,6 +2762,16 @@ export type ProgramsListQuery = {
 		submittedDonors?: number | null;
 		commitmentDonors?: number | null;
 		dataCenter?: { __typename?: 'DataCenter'; shortName: string } | null;
+	} | null> | null;
+};
+
+export type ProgramsUsersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ProgramsUsersQuery = {
+	__typename?: 'Query';
+	programs?: Array<{
+		__typename?: 'Program';
+		shortName: string;
 		users?: Array<{
 			__typename?: 'ProgramUser';
 			email: string;
@@ -4199,6 +4209,31 @@ export const ProgramsListDocument = {
 								{ kind: 'Field', name: { kind: 'Name', value: 'genomicDonors' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'submittedDonors' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'commitmentDonors' } },
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<ProgramsListQuery, ProgramsListQueryVariables>;
+export const ProgramsUsersDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'ProgramsUsers' },
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'programs' },
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'shortName' } },
 								{
 									kind: 'Field',
 									name: { kind: 'Name', value: 'users' },
@@ -4219,7 +4254,7 @@ export const ProgramsListDocument = {
 			},
 		},
 	],
-} as unknown as DocumentNode<ProgramsListQuery, ProgramsListQueryVariables>;
+} as unknown as DocumentNode<ProgramsUsersQuery, ProgramsUsersQueryVariables>;
 export const ReopenSubmissionDocument = {
 	kind: 'Document',
 	definitions: [
