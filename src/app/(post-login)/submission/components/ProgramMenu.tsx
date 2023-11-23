@@ -38,8 +38,8 @@ import { useQuery } from '@apollo/client';
 import { Icon, MenuItem } from '@icgc-argo/uikit';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
-import { notFound, useParams, usePathname } from 'next/navigation';
-import { FC, ReactNode, useState } from 'react';
+import { notFound, useParams, usePathname, useRouter } from 'next/navigation';
+import { FC, MouseEventHandler, ReactNode } from 'react';
 import { defaultClinicalEntityFilters } from '../common';
 
 const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
@@ -65,6 +65,7 @@ const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
 const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string }) => {
 	const params = useParams();
 	const pathname = usePathname();
+	const router = useRouter();
 	const { egoJwt } = useAuthContext();
 	const { DATA_CENTER } = useAppConfigContext();
 
@@ -76,6 +77,7 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 		loading,
 		error,
 	} = useQuery(SIDEMENU_PROGRAMS, { variables: { dataCenter: DATA_CENTER } });
+
 	const programs = programsData?.programs || [];
 
 	const filteredPrograms = !shortNameSearchQuery.length
@@ -85,9 +87,14 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 				.filter((program) => program.shortName.search(new RegExp(shortNameSearchQuery, 'i')) > -1);
 	const sortedProgramList = orderBy(filteredPrograms, 'shortName');
 
-	const [activeProgram, setActiveProgram] = useState(activeProgramName);
+	const setActiveProgram =
+		(shortName: string): MouseEventHandler =>
+		() => {
+			const url = `/submission/program/${shortName}/registration`;
+			router.push(url);
+		};
 
-	const userRoles = useUserRole(egoJwt, activeProgram);
+	const userRoles = useUserRole(egoJwt, activeProgramName);
 
 	if (loading) {
 		return <Loader />;
@@ -120,10 +127,10 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 							level={2}
 							key={shortName}
 							content={shortName}
-							onClick={() => {
-								activeProgram === shortName ? setActiveProgram('') : setActiveProgram(shortName);
-							}}
-							selected={activeProgram === shortName}
+							onClick={
+								activeProgramName === shortName ? setActiveProgram('') : setActiveProgram(shortName)
+							}
+							selected={activeProgramName === shortName}
 						>
 							<MenuItem level={3}>{shortName}</MenuItem>
 							<MenuContent programName={shortName} userRoles={userRoles} />
@@ -203,10 +210,7 @@ const MenuContent = ({
 	return (
 		<>
 			{/** Dashboard */}
-			<Link
-				as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programName)}
-				href={PROGRAM_DASHBOARD_PATH}
-			>
+			<Link href={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programName)}>
 				<MenuItem level={3} content="Dashboard" selected={PROGRAM_DASHBOARD_PATH === pathname} />
 			</Link>
 
@@ -239,13 +243,7 @@ const MenuContent = ({
 
 			{/** Submitted Data */}
 			{userCanViewData && (
-				<Link
-					as={`${PROGRAM_CLINICAL_DATA_PATH.replace(
-						PROGRAM_SHORT_NAME_PATH,
-						programName,
-					)}?tab=donor`}
-					href={PROGRAM_CLINICAL_DATA_PATH}
-				>
+				<Link href={PROGRAM_CLINICAL_DATA_PATH.replace(PROGRAM_SHORT_NAME_PATH, programName)}>
 					<MenuItem
 						level={3}
 						content={
@@ -261,10 +259,7 @@ const MenuContent = ({
 
 			{/** Manage Program */}
 			{userCanManageProgram && (
-				<Link
-					as={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, programName)}
-					href={PROGRAM_MANAGE_PATH}
-				>
+				<Link href={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, programName)}>
 					<MenuItem
 						level={3}
 						content="Manage Program"
