@@ -407,7 +407,7 @@ const ClinicalSubmissionSection = ({
 							onSignOffClick={handleSignOff}
 							clinicalTypes={clinicalEntities.map(({ clinicalType }) => clinicalType)}
 						/>
-						{true && (
+						{isPendingApproval && (
 							<div
 								css={css`
 									padding: 24px;
