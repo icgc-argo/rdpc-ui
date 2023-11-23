@@ -18,30 +18,28 @@
  */
 'use client';
 
+import { Maybe, ProgramUser } from '@/__generated__/graphql';
+import { notNull } from '@/global/utils';
 import { Link as UIKitLink } from '@icgc-argo/uikit';
 import Link from 'next/link';
 
-type Admin = {
-	email: string;
-	firstName: string;
-	lastName: string;
-};
-
-const Admins = ({ admins = [] }: { admins: Admin[] }) => {
-	const adminLinks = admins.map((admin, idx) => (
-		<Link
-			href={`mailto: ${admin.email}`}
-			key={admin.email}
-			prefetch={false}
-			passHref
-			legacyBehavior
-		>
-			<UIKitLink>
-				{admin.firstName + ' ' + admin.lastName}
-				{idx != admins.length - 1 && ','}
-			</UIKitLink>
-		</Link>
-	));
+const Admins = ({ admins = [] }: { admins: Maybe<Array<Maybe<ProgramUser>>> | undefined }) => {
+	const adminLinks =
+		admins &&
+		admins.filter(notNull).map((admin, idx) => (
+			<Link
+				href={`mailto: ${admin.email}`}
+				key={admin.email}
+				prefetch={false}
+				passHref
+				legacyBehavior
+			>
+				<UIKitLink>
+					{admin.firstName + ' ' + admin.lastName}
+					{idx != admins.length - 1 && ','}
+				</UIKitLink>
+			</Link>
+		));
 
 	return <div>{adminLinks}</div>;
 };

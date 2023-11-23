@@ -18,15 +18,17 @@
  */
 'use client';
 
+import { Maybe } from '@/__generated__/graphql';
 import { css, useTheme } from '@/lib/emotion';
 import { Typography } from '@icgc-argo/uikit';
 
-type DonorStatusProps = { submittedDonors: number; commitmentDonors: number };
+type DonorStatusProps = { submittedDonors?: Maybe<number>; commitmentDonors?: Maybe<number> };
 
 const DonorStatus = ({ submittedDonors, commitmentDonors }: DonorStatusProps) => {
 	const theme = useTheme();
-	const numerator = submittedDonors < 0 ? 0 : submittedDonors;
-	const denominator = commitmentDonors;
+	const numerator =
+		!(typeof submittedDonors === 'number') || submittedDonors < 0 ? 0 : submittedDonors;
+	const denominator = commitmentDonors ? commitmentDonors : 0;
 
 	return (
 		<div

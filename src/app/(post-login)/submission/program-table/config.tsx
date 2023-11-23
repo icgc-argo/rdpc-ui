@@ -19,8 +19,9 @@
 
 'use client';
 
+import { Program } from '@/__generated__/graphql';
 import { ColumnDef } from '@icgc-argo/uikit';
-import { ArgoMembershipKey, ProgramData } from '../components/ProgramList';
+import { ArgoMembershipKey } from '../components/ProgramList';
 import Admins from './Admins';
 import CancerTypes from './CancerTypes';
 import Countries from './Countries';
@@ -33,7 +34,7 @@ const MembershipDisplayName: { [key in ArgoMembershipKey]: string } = {
 	ASSOCIATE: 'ASSOCIATE',
 };
 
-export const columns: ColumnDef<ProgramData>[] = [
+export const columns: ColumnDef<Program>[] = [
 	{
 		header: () => <TableHeader>Short Name</TableHeader>,
 		accessorKey: 'shortName',
@@ -75,9 +76,9 @@ export const columns: ColumnDef<ProgramData>[] = [
 		accessorKey: 'administrators',
 		cell: ({
 			row: {
-				original: { admins: administrators },
+				original: { users },
 			},
-		}) => <Admins admins={administrators} />,
+		}) => <Admins admins={users} />,
 	},
 	{
 		header: () => <TableHeader>Donor Status</TableHeader>,
