@@ -78,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 			setEgoJwt(storedToken);
 		}
 		setAuthLoading(false);
-	}, [storedToken, TokenUtils]);
+	}, [storedToken, TokenUtils.isValidJwt(storedToken)]);
 
 	const logIn = (newToken: string) => {
 		setAuthLoading(true);
@@ -96,8 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		setAuthLoading(false);
 	};
 
-	const permissions =
-		(TokenUtils.isValidJwt(egoJwt) && TokenUtils.getPermissionsFromToken(egoJwt)) || [];
+	const permissions = TokenUtils.getPermissionsFromToken(egoJwt) || [];
 
 	const value: AuthContextValue = {
 		egoJwt,
