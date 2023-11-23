@@ -39,7 +39,6 @@ const CLINICAL_FILE_ORDER = [
 
 // parse out nulls, undefined, provide sensible defaults so type checking isnt a scattered nightmare
 export const parseGQLResp: (v: any) => ClinicalSubmission = (gqlData) => {
-	console.log('parseGqlResp', gqlData);
 	const clinicalSubmissions = gqlData?.clinicalSubmissions;
 
 	const clinicalState = clinicalSubmissions.state;
