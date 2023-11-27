@@ -27,7 +27,17 @@ export type UserRoleList = {
 	isCollaborator: boolean;
 };
 
-const useUserRole = (egoJwt: string, programId: string): UserRoleList => {
+const emptyUserRoles: UserRoleList = {
+	isRDPCAdmin: false,
+	isDCCAdmin: false,
+	isProgramAdmin: false,
+	isDataSubmitter: false,
+	isCollaborator: false,
+};
+
+const useUserRole = (egoJwt: string | undefined, programId: string): UserRoleList => {
+	if (!egoJwt) return emptyUserRoles;
+
 	const { EGO_PUBLIC_KEY } = useAppConfigContext();
 	const {
 		canReadProgram,
