@@ -41,7 +41,7 @@ const createInMemoryCache = () =>
 
 type Config = {
 	gateway: string;
-	jwt: string;
+	jwt: string | undefined;
 };
 export const createApolloClient = (config: Config) => {
 	const clientSideCache = createInMemoryCache();
