@@ -26,8 +26,7 @@ type DonorStatusProps = { submittedDonors?: Maybe<number>; commitmentDonors?: Ma
 
 const DonorStatus = ({ submittedDonors, commitmentDonors }: DonorStatusProps) => {
 	const theme = useTheme();
-	const numerator =
-		!(typeof submittedDonors === 'number') || submittedDonors < 0 ? 0 : submittedDonors;
+	const numerator = submittedDonors && submittedDonors > 0 ? submittedDonors : 0;
 	const denominator = commitmentDonors ? commitmentDonors : 0;
 
 	return (
