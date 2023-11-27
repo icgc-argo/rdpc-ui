@@ -35,6 +35,7 @@ import {
 import { notNull } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
+import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { Icon, MenuItem } from '@icgc-argo/uikit';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
@@ -168,6 +169,36 @@ const parseProgramStatusGQLResp = (data: SideMenuProgramStatusQuery | undefined)
 	};
 };
 
+const renderDataSubmissionLinks = (
+	programName: string,
+	statusIcon: EmotionJSX.Element | null,
+	pathnameLastSegment?: string,
+) => (
+	<>
+		<Link href={`/submission/program/${programName}/registration`}>
+			<MenuItem
+				level={3}
+				content={
+					<StatusMenuItem>
+						Register Samples
+						{statusIcon}
+					</StatusMenuItem>
+				}
+				selected={pathnameLastSegment === 'registration'}
+			/>
+		</Link>
+
+		{/** Submit clinical data */}
+		<Link href={`/submission/program/${programName}/clinical-submission`}>
+			<MenuItem
+				level={3}
+				content={<StatusMenuItem>Submit Clinical Data </StatusMenuItem>}
+				selected={pathnameLastSegment === 'clinical-submission'}
+			/>
+		</Link>
+	</>
+);
+
 const MenuContent = ({
 	programName,
 	userRoles,
@@ -212,31 +243,7 @@ const MenuContent = ({
 			</Link>
 
 			{/** Register Samples */}
-			{userCanSubmitData && (
-				<>
-					<Link href={`/submission/program/${programName}/registration`}>
-						<MenuItem
-							level={3}
-							content={
-								<StatusMenuItem>
-									Register Samples
-									{statusIcon}
-								</StatusMenuItem>
-							}
-							selected={pathnameLastSegment === 'registration'}
-						/>
-					</Link>
-
-					{/** Submit clinical data */}
-					<Link href={`/submission/program/${programName}/clinical-submission`}>
-						<MenuItem
-							level={3}
-							content={<StatusMenuItem>Submit Clinical Data </StatusMenuItem>}
-							selected={pathnameLastSegment === 'clinical-submission'}
-						/>
-					</Link>
-				</>
-			)}
+			{userCanSubmitData && renderDataSubmissionLinks(programName, statusIcon, pathnameLastSegment)}
 
 			{/** Submitted Data */}
 			{userCanViewData && (
