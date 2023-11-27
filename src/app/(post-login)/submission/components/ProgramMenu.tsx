@@ -71,7 +71,7 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 	const { DATA_CENTER } = useAppConfigContext();
 
 	// params can be arrays from dynamic routing
-	const activeProgramName = typeof params.shortName === 'string' ? params.shortName : '';
+	let activeProgramName = typeof params.shortName === 'string' ? params.shortName : '';
 
 	const {
 		data: programsData,
@@ -86,10 +86,14 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 	const sortedProgramList = orderBy(programs, 'shortName');
 
 	const setActiveProgram =
-		(shortName: string): MouseEventHandler =>
+		(shortName?: string): MouseEventHandler =>
 		() => {
-			const url = `/submission/program/${shortName}/registration`;
-			router.push(url);
+			if (shortName) {
+				const url = `/submission/program/${shortName}/registration`;
+				router.push(url);
+			} else {
+				activeProgramName = '';
+			}
 		};
 
 	const userRoles = useUserRole(egoJwt, activeProgramName);
@@ -102,7 +106,7 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 		return (
 			<>
 				<Link
-					href="/submission"
+					href="/submission/program"
 					css={css`
 						text-decoration: none !important;
 					`}
@@ -111,9 +115,9 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 						level={2}
 						content="All Programs"
 						onClick={() => {
-							setActiveProgram('');
+							setActiveProgram(undefined);
 						}}
-						selected={pathname === '/submission'}
+						selected={pathname === '/submission/program'}
 					/>
 				</Link>
 
@@ -126,7 +130,9 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 							key={shortName}
 							content={shortName}
 							onClick={
-								activeProgramName === shortName ? setActiveProgram('') : setActiveProgram(shortName)
+								activeProgramName === shortName
+									? setActiveProgram(undefined)
+									: setActiveProgram(shortName)
 							}
 							selected={activeProgramName === shortName}
 						>
