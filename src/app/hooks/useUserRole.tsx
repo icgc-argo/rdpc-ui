@@ -36,8 +36,6 @@ const emptyUserRoles: UserRoleList = {
 };
 
 const useUserRole = (egoJwt: string | undefined, programId: string): UserRoleList => {
-	if (!egoJwt) return emptyUserRoles;
-
 	const { EGO_PUBLIC_KEY } = useAppConfigContext();
 	const {
 		canReadProgram,
@@ -50,6 +48,8 @@ const useUserRole = (egoJwt: string | undefined, programId: string): UserRoleLis
 		isProgramAdmin,
 		isDccMember,
 	} = createEgoUtils(EGO_PUBLIC_KEY);
+
+	if (!egoJwt) return emptyUserRoles;
 
 	const isCollaborator: (args: { permissions: string[]; programId: string }) => boolean = ({
 		permissions,

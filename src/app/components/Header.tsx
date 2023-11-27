@@ -36,7 +36,7 @@ const Header = () => {
 	const path = usePathname();
 	const theme = useTheme();
 	const onProfilePage = path === '/landing-page';
-	const profileActive = onProfilePage && !!egoJwt.length && !authLoading;
+	const profileActive = onProfilePage && !!egoJwt && !authLoading;
 
 	const profileNavDetails: Array<NavElement> = [
 		{
