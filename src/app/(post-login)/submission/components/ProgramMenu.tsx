@@ -78,14 +78,11 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 		error,
 	} = useQuery(SIDEMENU_PROGRAMS, { variables: { dataCenter: DATA_CENTER } });
 
-	const programs = programsData?.programs || [];
+	const programs = programsData?.programs
+		?.filter(notNull)
+		.filter((program) => program.shortName.search(new RegExp(shortNameSearchQuery, 'i')) > -1);
 
-	const filteredPrograms = !shortNameSearchQuery.length
-		? programs.filter(notNull)
-		: programs
-				.filter(notNull)
-				.filter((program) => program.shortName.search(new RegExp(shortNameSearchQuery, 'i')) > -1);
-	const sortedProgramList = orderBy(filteredPrograms, 'shortName');
+	const sortedProgramList = orderBy(programs, 'shortName');
 
 	const setActiveProgram =
 		(shortName: string): MouseEventHandler =>
