@@ -28,8 +28,10 @@ import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus
 import useUserRole, { UserRoleList } from '@/app/hooks/useUserRole';
 import {
 	PROGRAM_CLINICAL_DATA_PATH,
+	PROGRAM_CLINICAL_SUBMISSION_PATH,
 	PROGRAM_DASHBOARD_PATH,
 	PROGRAM_MANAGE_PATH,
+	PROGRAM_SAMPLE_REGISTRATION_PATH,
 	PROGRAM_SHORT_NAME_PATH,
 } from '@/global/constants';
 import { notNull } from '@/global/utils';
@@ -173,12 +175,13 @@ const parseProgramStatusGQLResp = (data: SideMenuProgramStatusQuery | undefined)
 };
 
 const renderDataSubmissionLinks = (
-	programName: string,
+	registrationPath: string,
+	submissionPath: string,
 	statusIcon: ReactNode | null,
 	pathnameLastSegment?: string,
 ) => (
 	<>
-		<Link href={`/submission/program/${programName}/registration`}>
+		<Link href={registrationPath}>
 			<MenuItem
 				level={3}
 				content={
@@ -192,7 +195,7 @@ const renderDataSubmissionLinks = (
 		</Link>
 
 		{/** Submit clinical data */}
-		<Link href={`/submission/program/${programName}/clinical-submission`}>
+		<Link href={submissionPath}>
 			<MenuItem
 				level={3}
 				content={<StatusMenuItem>Submit Clinical Data </StatusMenuItem>}
@@ -211,6 +214,7 @@ const MenuContent = ({
 }) => {
 	const pathname = usePathname();
 	const pathnameLastSegment = pathname.split('/').at(-1);
+	const getProgramPath = (path: string) => path.replace(PROGRAM_SHORT_NAME_PATH, programName);
 
 	const { isDisabled: isSubmissionSystemDisabled } = useSubmissionSystemStatus();
 
@@ -241,16 +245,22 @@ const MenuContent = ({
 	return (
 		<>
 			{/** Dashboard */}
-			<Link href={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, programName)}>
-				<MenuItem level={3} content="Dashboard" selected={PROGRAM_DASHBOARD_PATH === pathname} />
+			<Link href={getProgramPath(PROGRAM_DASHBOARD_PATH)}>
+				<MenuItem level={3} content="Dashboard" selected={pathnameLastSegment === 'dashboard'} />
 			</Link>
 
 			{/** Register Samples */}
-			{userCanSubmitData && renderDataSubmissionLinks(programName, statusIcon, pathnameLastSegment)}
+			{userCanSubmitData &&
+				renderDataSubmissionLinks(
+					getProgramPath(PROGRAM_SAMPLE_REGISTRATION_PATH),
+					getProgramPath(PROGRAM_CLINICAL_SUBMISSION_PATH),
+					statusIcon,
+					pathnameLastSegment,
+				)}
 
 			{/** Submitted Data */}
 			{userCanViewData && (
-				<Link href={PROGRAM_CLINICAL_DATA_PATH.replace(PROGRAM_SHORT_NAME_PATH, programName)}>
+				<Link href={getProgramPath(PROGRAM_CLINICAL_DATA_PATH)}>
 					<MenuItem
 						level={3}
 						content={
@@ -259,18 +269,18 @@ const MenuContent = ({
 								{/* {clinicalDataHasErrors && <Icon name="exclamation" fill="error" width="15px" />} */}
 							</StatusMenuItem>
 						}
-						selected={PROGRAM_CLINICAL_DATA_PATH === pathname}
+						selected={pathnameLastSegment === 'clinical-data'}
 					/>
 				</Link>
 			)}
 
 			{/** Manage Program */}
 			{userCanManageProgram && (
-				<Link href={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, programName)}>
+				<Link href={getProgramPath(PROGRAM_MANAGE_PATH)}>
 					<MenuItem
 						level={3}
 						content="Manage Program"
-						selected={PROGRAM_MANAGE_PATH === pathname}
+						selected={pathnameLastSegment === 'manage'}
 					/>
 				</Link>
 			)}
