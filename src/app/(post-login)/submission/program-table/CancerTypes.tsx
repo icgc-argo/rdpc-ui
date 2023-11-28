@@ -18,9 +18,9 @@
  */
 'use client';
 
-import { Maybe } from '@/__generated__/graphql';
+import { Program } from '@/__generated__/graphql';
 
-const CancerTypes = ({ types }: { types: Maybe<Maybe<string>[]> | undefined }) => (
+const CancerTypes = ({ types }: { types: Program['cancerTypes'] | [] }) => (
 	<div>
 		{types?.map((cancerType, i) => (
 			<div key={cancerType}>

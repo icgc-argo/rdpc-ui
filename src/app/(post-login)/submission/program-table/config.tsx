@@ -55,7 +55,7 @@ export const columns: ColumnDef<Program>[] = [
 			row: {
 				original: { cancerTypes },
 			},
-		}) => <CancerTypes types={cancerTypes} />,
+		}) => <CancerTypes types={cancerTypes || []} />,
 	},
 	{
 		header: () => <TableHeader>Countries</TableHeader>,
