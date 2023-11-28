@@ -35,7 +35,6 @@ import {
 import { notNull } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
-import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { Icon, MenuItem } from '@icgc-argo/uikit';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
@@ -177,7 +176,7 @@ const parseProgramStatusGQLResp = (data: SideMenuProgramStatusQuery | undefined)
 
 const renderDataSubmissionLinks = (
 	programName: string,
-	statusIcon: EmotionJSX.Element | null,
+	statusIcon: ReactNode | null,
 	pathnameLastSegment?: string,
 ) => (
 	<>
