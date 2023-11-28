@@ -22,13 +22,12 @@ import { Maybe } from '@/__generated__/graphql';
 
 const CancerTypes = ({ types }: { types: Maybe<Maybe<string>[]> | undefined }) => (
 	<div>
-		{types &&
-			types.map((cancerType, i) => (
-				<div key={cancerType}>
-					{cancerType}
-					{i < types.length - 1 && ','}
-				</div>
-			))}
+		{types?.map((cancerType, i) => (
+			<div key={cancerType}>
+				{cancerType}
+				{i < types.length - 1 && ','}
+			</div>
+		))}
 	</div>
 );
 
