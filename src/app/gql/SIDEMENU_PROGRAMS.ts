@@ -20,8 +20,8 @@
 import { gql } from '@/__generated__/gql';
 
 const SIDEMENU_PROGRAMS = gql(`
-	query SideMenu {
-		programs {
+	query SideMenu ($dataCenter: String) {
+		programs(dataCenter: $dataCenter) {
 			shortName
 		}
   }

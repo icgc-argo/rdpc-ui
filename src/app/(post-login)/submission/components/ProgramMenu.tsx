@@ -22,10 +22,23 @@ import { SideMenuProgramStatusQuery, SubmissionState } from '@/__generated__/gra
 import Loader from '@/app/components/Loader';
 import SIDEMENU_PROGRAMS from '@/app/gql/SIDEMENU_PROGRAMS';
 import SIDEMENU_PROGRAM_STATUS from '@/app/gql/SIDEMENU_PROGRAM_STATUS';
+import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { useAuthContext } from '@/app/hooks/AuthProvider';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
+import useUserRole, { UserRoleList } from '@/app/hooks/useUserRole';
+import {
+	PROGRAM_CLINICAL_DATA_PATH,
+	PROGRAM_CLINICAL_SUBMISSION_PATH,
+	PROGRAM_DASHBOARD_PATH,
+	PROGRAM_MANAGE_PATH,
+	PROGRAM_SAMPLE_REGISTRATION_PATH,
+	PROGRAM_SHORT_NAME_PATH,
+} from '@/global/constants';
+import { notNull } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
 import { Icon, MenuItem } from '@icgc-argo/uikit';
+import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import { notFound, useParams, usePathname, useRouter } from 'next/navigation';
 import { FC, MouseEventHandler, ReactNode } from 'react';
@@ -55,26 +68,34 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 	const params = useParams();
 	const pathname = usePathname();
 	const router = useRouter();
+	const { egoJwt } = useAuthContext();
+	const { DATA_CENTER } = useAppConfigContext();
 
 	// params can be arrays from dynamic routing
 	const activeProgramName = typeof params.shortName === 'string' ? params.shortName : '';
 
-	const { data: programsData, loading, error } = useQuery(SIDEMENU_PROGRAMS);
-	const programs = programsData?.programs || [];
+	const {
+		data: programsData,
+		loading,
+		error,
+	} = useQuery(SIDEMENU_PROGRAMS, { variables: { dataCenter: DATA_CENTER } });
 
-	const filteredPrograms = !shortNameSearchQuery.length
-		? programs
-		: programs.filter(
-				(program) =>
-					program && program.shortName.search(new RegExp(shortNameSearchQuery, 'i')) > -1,
-		  );
+	const programs = programsData?.programs
+		?.filter(notNull)
+		.filter((program) => program.shortName.search(new RegExp(shortNameSearchQuery, 'i')) > -1);
+
+	const sortedProgramList = orderBy(programs, 'shortName');
 
 	const setActiveProgram =
-		(shortName: string): MouseEventHandler =>
+		(shortName?: string): MouseEventHandler =>
 		() => {
-			const url = `/submission/program/${shortName}/registration`;
-			router.push(url);
+			if (shortName) {
+				const url = `/submission/program/${shortName}/registration`;
+				router.push(url);
+			}
 		};
+
+	const userRoles = useUserRole(egoJwt, activeProgramName);
 
 	if (loading) {
 		return <Loader />;
@@ -84,7 +105,7 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 		return (
 			<>
 				<Link
-					href="/submission"
+					href="/submission/program"
 					css={css`
 						text-decoration: none !important;
 					`}
@@ -92,12 +113,14 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 					<MenuItem
 						level={2}
 						content="All Programs"
-						onClick={setActiveProgram('')}
-						selected={pathname === '/submission'}
+						onClick={() => {
+							setActiveProgram(undefined);
+						}}
+						selected={pathname === '/submission/program'}
 					/>
 				</Link>
 
-				{filteredPrograms.map((program) => {
+				{sortedProgramList.map((program) => {
 					const shortName = program?.shortName || '';
 
 					return (
@@ -105,11 +128,15 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 							level={2}
 							key={shortName}
 							content={shortName}
-							onClick={setActiveProgram(shortName)}
+							onClick={
+								activeProgramName === shortName
+									? setActiveProgram(undefined)
+									: setActiveProgram(shortName)
+							}
 							selected={activeProgramName === shortName}
 						>
 							<MenuItem level={3}>{shortName}</MenuItem>
-							<MenuContent programName={shortName} />
+							<MenuContent programName={shortName} userRoles={userRoles} />
 						</MenuItem>
 					);
 				})}
@@ -150,6 +177,49 @@ const parseProgramStatusGQLResp = (data: SideMenuProgramStatusQuery | undefined)
 	};
 };
 
+const renderDataSubmissionLinks = (
+	registrationPath: string,
+	submissionPath: string,
+	statusIcon: ReactNode | null,
+	isSubmissionSystemDisabled: boolean,
+	pathnameLastSegment?: string,
+	programStatusData?: ReturnType<typeof parseProgramStatusGQLResp>,
+) => (
+	<>
+		<Link href={registrationPath}>
+			<MenuItem
+				level={3}
+				content={
+					<StatusMenuItem>
+						Register Samples
+						{statusIcon}
+					</StatusMenuItem>
+				}
+				selected={pathnameLastSegment === 'registration'}
+			/>
+		</Link>
+
+		{/** Submit clinical data */}
+		<Link href={submissionPath}>
+			<MenuItem
+				level={3}
+				content={
+					<StatusMenuItem>
+						Submit Clinical Data{' '}
+						{programStatusData &&
+							renderSubmissionStatusIcon(
+								programStatusData.clinicalSubmissionState || null,
+								programStatusData.clinicalSubmissionHasSchemaErrors,
+								isSubmissionSystemDisabled,
+							)}
+					</StatusMenuItem>
+				}
+				selected={pathnameLastSegment === 'clinical-submission'}
+			/>
+		</Link>
+	</>
+);
+
 const renderSubmissionStatusIcon = (
 	status: SubmissionState | null,
 	hasSubmissionErrors: boolean,
@@ -178,9 +248,16 @@ const renderSubmissionStatusIcon = (
 	}
 };
 
-const MenuContent = ({ programName }: { programName: string }) => {
+const MenuContent = ({
+	programName,
+	userRoles,
+}: {
+	programName: string;
+	userRoles: UserRoleList;
+}) => {
 	const pathname = usePathname();
 	const pathnameLastSegment = pathname.split('/').at(-1);
+	const getProgramPath = (path: string) => path.replace(PROGRAM_SHORT_NAME_PATH, programName);
 
 	const { isDisabled: isSubmissionSystemDisabled } = useSubmissionSystemStatus();
 
@@ -190,6 +267,13 @@ const MenuContent = ({ programName }: { programName: string }) => {
 			filters: defaultClinicalEntityFilters,
 		},
 	});
+
+	const { isRDPCAdmin, isDCCAdmin, isProgramAdmin, isDataSubmitter, isCollaborator } = userRoles;
+
+	const userCanSubmitData = isDataSubmitter || isRDPCAdmin || isDCCAdmin || isProgramAdmin;
+	const userCanViewData =
+		isCollaborator || isDataSubmitter || isRDPCAdmin || isDCCAdmin || isProgramAdmin;
+	const userCanManageProgram = isDataSubmitter || isRDPCAdmin || isDCCAdmin || isProgramAdmin;
 
 	const programStatusData = parseProgramStatusGQLResp(gqlData);
 
@@ -203,38 +287,48 @@ const MenuContent = ({ programName }: { programName: string }) => {
 
 	return (
 		<>
-			{/** Register Samples */}
-			<Link href={`/submission/program/${programName}/registration`}>
-				<MenuItem
-					level={3}
-					content={
-						<StatusMenuItem>
-							Register Samples
-							{registrationStatusIcon}
-						</StatusMenuItem>
-					}
-					selected={pathnameLastSegment === 'registration'}
-				/>
+			{/** Dashboard */}
+			<Link href={getProgramPath(PROGRAM_DASHBOARD_PATH)}>
+				<MenuItem level={3} content="Dashboard" selected={pathnameLastSegment === 'dashboard'} />
 			</Link>
 
-			{/** Submit clinical data */}
-			<Link href={`/submission/program/${programName}/clinical-submission`}>
-				<MenuItem
-					level={3}
-					content={
-						<StatusMenuItem>
-							Submit Clinical Data{' '}
-							{programStatusData &&
-								renderSubmissionStatusIcon(
-									programStatusData.clinicalSubmissionState || null,
-									programStatusData.clinicalSubmissionHasSchemaErrors,
-									isSubmissionSystemDisabled,
-								)}
-						</StatusMenuItem>
-					}
-					selected={pathnameLastSegment === 'clinical-submission'}
-				/>
-			</Link>
+			{/** Register Samples */}
+			{userCanSubmitData &&
+				renderDataSubmissionLinks(
+					getProgramPath(PROGRAM_SAMPLE_REGISTRATION_PATH),
+					getProgramPath(PROGRAM_CLINICAL_SUBMISSION_PATH),
+					registrationStatusIcon,
+					isSubmissionSystemDisabled,
+					pathnameLastSegment,
+					programStatusData,
+				)}
+
+			{/** Submitted Data */}
+			{userCanViewData && (
+				<Link href={getProgramPath(PROGRAM_CLINICAL_DATA_PATH)}>
+					<MenuItem
+						level={3}
+						content={
+							<StatusMenuItem>
+								Submitted Data{' '}
+								{/* {clinicalDataHasErrors && <Icon name="exclamation" fill="error" width="15px" />} */}
+							</StatusMenuItem>
+						}
+						selected={pathnameLastSegment === 'clinical-data'}
+					/>
+				</Link>
+			)}
+
+			{/** Manage Program */}
+			{userCanManageProgram && (
+				<Link href={getProgramPath(PROGRAM_MANAGE_PATH)}>
+					<MenuItem
+						level={3}
+						content="Manage Program"
+						selected={pathnameLastSegment === 'manage'}
+					/>
+				</Link>
+			)}
 		</>
 	);
 };

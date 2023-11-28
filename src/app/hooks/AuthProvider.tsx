@@ -37,8 +37,8 @@ import {
 } from 'react';
 
 type AuthContextValue = {
-	egoJwt: string;
-	setEgoJwt: Dispatch<SetStateAction<string>>;
+	egoJwt: string | undefined;
+	setEgoJwt: Dispatch<SetStateAction<string | undefined>>;
 	authLoading: boolean;
 	setAuthLoading: Dispatch<SetStateAction<boolean>>;
 	logIn: (newToken: string) => void;
@@ -67,19 +67,20 @@ export const storeToken = (egoToken: string) => {
 export function AuthProvider({ children }: { children: ReactNode }) {
 	const config = useAppConfigContext();
 	const storedToken = getStoredToken();
-	const [egoJwt, setEgoJwt] = useState('');
+	const [egoJwt, setEgoJwt] = useState<string | undefined>(undefined);
+	const TokenUtils = createEgoUtils(config.EGO_PUBLIC_KEY);
+	const router = useRouter();
+	const isLoggedIn = !!egoJwt;
+	const [authLoading, setAuthLoading] = useState(isLoggedIn);
+
+	const tokenIsValid = !!TokenUtils.isValidJwt(storedToken);
 
 	useEffect(() => {
-		if (storedToken) {
+		if (storedToken && tokenIsValid) {
 			setEgoJwt(storedToken);
 		}
 		setAuthLoading(false);
-	}, [storedToken]);
-
-	const TokenUtils = createEgoUtils(config.EGO_PUBLIC_KEY);
-	const router = useRouter();
-	const loginStateOnPageLoad = !egoJwt?.length;
-	const [authLoading, setAuthLoading] = useState(loginStateOnPageLoad);
+	}, [storedToken, tokenIsValid]);
 
 	const logIn = (newToken: string) => {
 		setAuthLoading(true);
@@ -97,7 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		setAuthLoading(false);
 	};
 
-	const permissions = TokenUtils.getPermissionsFromToken(egoJwt);
+	const permissions = egoJwt ? TokenUtils.getPermissionsFromToken(egoJwt) : [];
 
 	const value: AuthContextValue = {
 		egoJwt,

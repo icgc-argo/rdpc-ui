@@ -29,6 +29,7 @@ const defaultContext = {
 	EGO_PUBLIC_KEY: '',
 	UI_VERSION: '',
 	REGION: '',
+	DATA_CENTER: '',
 	PLATFORM_UI_ROOT: '',
 	RECAPTCHA_SITE_KEY: '',
 	ARGO_ROOT: '',

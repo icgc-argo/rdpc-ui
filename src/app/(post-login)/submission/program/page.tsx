@@ -20,6 +20,7 @@
 'use client';
 
 import PROGRAMS_LIST_QUERY from '@/app/gql/PROGRAMS_LIST_QUERY';
+import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { notNull } from '@/global/utils';
 import { useQuery } from '@apollo/client';
 import { Loader } from '@icgc-argo/uikit';
@@ -27,7 +28,10 @@ import { notFound } from 'next/navigation';
 import ProgramList from '../components/ProgramList';
 
 export default function Submission() {
-	const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
+	const { DATA_CENTER } = useAppConfigContext();
+	const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY, {
+		variables: { dataCenter: DATA_CENTER },
+	});
 
 	const programs = data?.programs?.filter(notNull) || [];
 

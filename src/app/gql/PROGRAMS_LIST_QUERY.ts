@@ -20,22 +20,19 @@
 import { gql } from '@/__generated__/gql';
 
 const PROGRAMS_LIST_QUERY = gql(`
-	query ProgramsList {
-		programs {
+	query ProgramsList($dataCenter: String) {
+		programs(dataCenter: $dataCenter) {
 			shortName
 			name
 			cancerTypes
 			countries
+			dataCenter {
+				shortName
+			}
 			membershipType
 			genomicDonors
 			submittedDonors
 			commitmentDonors
-			users {
-				email
-				firstName
-				lastName
-				role
-			}
 		}
 	}
 `);
