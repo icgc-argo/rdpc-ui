@@ -70,7 +70,7 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 	const { DATA_CENTER } = useAppConfigContext();
 
 	// params can be arrays from dynamic routing
-	let activeProgramName = typeof params.shortName === 'string' ? params.shortName : '';
+	const activeProgramName = typeof params.shortName === 'string' ? params.shortName : '';
 
 	const {
 		data: programsData,
