@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import ModalPortal from '@/app/components/Modal';
+import { ModalPortal } from '@/app/components/Modal';
 import COMMIT_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/COMMIT_CLINICAL_REGISTRATION_MUTATION';
 import GET_REGISTRATION_QUERY from '@/app/gql/GET_REGISTRATION_QUERY';
 import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';

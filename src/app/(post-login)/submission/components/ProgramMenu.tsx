@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { SideMenuProgramStatusQuery } from '@/__generated__/graphql';
+import { SideMenuProgramStatusQuery, SubmissionState } from '@/__generated__/graphql';
 import Loader from '@/app/components/Loader';
 import SIDEMENU_PROGRAMS from '@/app/gql/SIDEMENU_PROGRAMS';
 import SIDEMENU_PROGRAM_STATUS from '@/app/gql/SIDEMENU_PROGRAM_STATUS';
@@ -165,12 +165,15 @@ const parseProgramStatusGQLResp = (data: SideMenuProgramStatusQuery | undefined)
 		  )
 		: false;
 
+	const clinicalSubmissionState = data?.clinicalSubmissions?.state;
+
 	return {
 		clinicalDataHasErrors,
 		clinicalRegistration,
 		clinicalRegistrationHasError,
 		clinicalSubmissionHasSchemaErrors,
 		clinicalRegistrationInProgress,
+		clinicalSubmissionState,
 	};
 };
 
@@ -178,7 +181,9 @@ const renderDataSubmissionLinks = (
 	registrationPath: string,
 	submissionPath: string,
 	statusIcon: ReactNode | null,
+	isSubmissionSystemDisabled: boolean,
 	pathnameLastSegment?: string,
+	programStatusData?: ReturnType<typeof parseProgramStatusGQLResp>,
 ) => (
 	<>
 		<Link href={registrationPath}>
@@ -198,12 +203,50 @@ const renderDataSubmissionLinks = (
 		<Link href={submissionPath}>
 			<MenuItem
 				level={3}
-				content={<StatusMenuItem>Submit Clinical Data </StatusMenuItem>}
+				content={
+					<StatusMenuItem>
+						Submit Clinical Data{' '}
+						{programStatusData &&
+							renderSubmissionStatusIcon(
+								programStatusData.clinicalSubmissionState || null,
+								programStatusData.clinicalSubmissionHasSchemaErrors,
+								isSubmissionSystemDisabled,
+							)}
+					</StatusMenuItem>
+				}
 				selected={pathnameLastSegment === 'clinical-submission'}
 			/>
 		</Link>
 	</>
 );
+
+const renderSubmissionStatusIcon = (
+	status: SubmissionState | null,
+	hasSubmissionErrors: boolean,
+	isSubmissionSystemDisabled: boolean,
+) => {
+	if (isSubmissionSystemDisabled) {
+		return <Icon name="lock" fill="accent3_dark" width="15px" />;
+	}
+
+	switch (status) {
+		case SubmissionState.Open:
+			return hasSubmissionErrors ? (
+				<Icon name="exclamation" fill="error" width="15px" />
+			) : (
+				<Icon name="exclamation" fill="error" width="15px" />
+			);
+		case SubmissionState.Valid:
+			return <Icon name="ellipses" fill="warning" width="15px" />;
+		case SubmissionState.Invalid:
+		case SubmissionState.InvalidByMigration:
+			return <Icon name="exclamation" fill="error" width="15px" />;
+		case SubmissionState.PendingApproval:
+			return <Icon name="lock" fill="accent3_dark" width="15px" />;
+		default:
+			return hasSubmissionErrors ? <Icon name="exclamation" fill="error" width="15px" /> : null;
+	}
+};
 
 const MenuContent = ({
 	programName,
@@ -234,7 +277,7 @@ const MenuContent = ({
 
 	const programStatusData = parseProgramStatusGQLResp(gqlData);
 
-	const statusIcon = isSubmissionSystemDisabled ? (
+	const registrationStatusIcon = isSubmissionSystemDisabled ? (
 		<Icon name="lock" fill="accent3_dark" width="15px" />
 	) : programStatusData?.clinicalRegistrationHasError ? (
 		<Icon name="exclamation" fill="error" width="15px" />
@@ -254,8 +297,10 @@ const MenuContent = ({
 				renderDataSubmissionLinks(
 					getProgramPath(PROGRAM_SAMPLE_REGISTRATION_PATH),
 					getProgramPath(PROGRAM_CLINICAL_SUBMISSION_PATH),
-					statusIcon,
+					registrationStatusIcon,
+					isSubmissionSystemDisabled,
 					pathnameLastSegment,
+					programStatusData,
 				)}
 
 			{/** Submitted Data */}
