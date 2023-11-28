@@ -90,8 +90,6 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 			if (shortName) {
 				const url = `/submission/program/${shortName}/registration`;
 				router.push(url);
-			} else {
-				activeProgramName = '';
 			}
 		};
 
