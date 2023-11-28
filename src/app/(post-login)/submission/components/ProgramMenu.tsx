@@ -153,23 +153,28 @@ const parseProgramStatusGQLResp = (data: SideMenuProgramStatusQuery | undefined)
 const renderSubmissionStatusIcon = (
 	status: SubmissionState | null,
 	hasSubmissionErrors: boolean,
+	isSubmissionSystemDisabled: boolean,
 ) => {
-	if (SubmissionState.Open === status) {
-		return hasSubmissionErrors ? (
-			<Icon name="exclamation" fill="error" width="15px" />
-		) : (
-			<Icon name="exclamation" fill="error" width="15px" />
-		);
-	} else if (SubmissionState.Valid === status) {
-		return <Icon name="ellipses" fill="warning" width="15px" />;
-	} else if (SubmissionState.Invalid === status) {
-		return <Icon name="exclamation" fill="error" width="15px" />;
-	} else if (SubmissionState.PendingApproval === status) {
+	if (isSubmissionSystemDisabled) {
 		return <Icon name="lock" fill="accent3_dark" width="15px" />;
-	} else {
-		// submission state remains as null and rejects creating open state with initial invalid upload
-		// if errors exist, error icon should still show up despite the null state
-		return hasSubmissionErrors ? <Icon name="exclamation" fill="error" width="15px" /> : null;
+	}
+
+	switch (status) {
+		case SubmissionState.Open:
+			return hasSubmissionErrors ? (
+				<Icon name="exclamation" fill="error" width="15px" />
+			) : (
+				<Icon name="exclamation" fill="error" width="15px" />
+			);
+		case SubmissionState.Valid:
+			return <Icon name="ellipses" fill="warning" width="15px" />;
+		case SubmissionState.Invalid:
+		case SubmissionState.InvalidByMigration:
+			return <Icon name="exclamation" fill="error" width="15px" />;
+		case SubmissionState.PendingApproval:
+			return <Icon name="lock" fill="accent3_dark" width="15px" />;
+		default:
+			return hasSubmissionErrors ? <Icon name="exclamation" fill="error" width="15px" /> : null;
 	}
 };
 
@@ -223,6 +228,7 @@ const MenuContent = ({ programName }: { programName: string }) => {
 								renderSubmissionStatusIcon(
 									programStatusData.clinicalSubmissionState || null,
 									programStatusData.clinicalSubmissionHasSchemaErrors,
+									isSubmissionSystemDisabled,
 								)}
 						</StatusMenuItem>
 					}
