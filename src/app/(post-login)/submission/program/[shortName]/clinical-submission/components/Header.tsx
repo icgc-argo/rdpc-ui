@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import APPROVE_SUBMISSION_MUTATION from '@/app/gql/APPROVE_SUBMISSION_MUTATION';
+import { default as ModalPortal } from '@/app/components/Modal';
 import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/CLEAR_CLINICAL_SUBMISSION';
 import REOPEN_SUBMISSION_MUTATION from '@/app/gql/REOPEN_SUBMISSION_MUTATION';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
@@ -26,10 +26,11 @@ import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
 import { useToaster } from '@/app/hooks/ToastProvider';
 import useCommonToasters from '@/app/hooks/useCommonToasters';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
+import useUserConfirmationModalState from '@/app/hooks/useUserConfirmationModalState';
 import { sleep } from '@/global/utils';
 import { css, useTheme } from '@/lib/emotion';
 import { useMutation } from '@apollo/client';
-import { Button, TitleBar, Link as UIKitLink } from '@icgc-argo/uikit';
+import { Button, Modal, TitleBar, Link as UIKitLink } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import { FC, useMemo } from 'react';
 import { Row } from 'react-grid-system';
@@ -45,6 +46,7 @@ type HeaderProps = {
 	refetch: any;
 	updateQuery: any;
 };
+
 const Header: FC<HeaderProps> = ({
 	programShortName,
 	showProgress,
@@ -55,6 +57,7 @@ const Header: FC<HeaderProps> = ({
 	updateQuery: updateClinicalSubmissionQuery,
 }) => {
 	const theme = useTheme();
+	const { modalProps, isModalShown, getUserConfirmation } = useUserConfirmationModalState();
 
 	// docs url
 	const { DOCS_URL_ROOT } = useAppConfigContext();
@@ -81,13 +84,6 @@ const Header: FC<HeaderProps> = ({
 		},
 	});
 
-	const [approveClinicalSubmission] = useMutation(APPROVE_SUBMISSION_MUTATION, {
-		variables: {
-			programShortName,
-			submissionVersion: clinicalVersion,
-		},
-	});
-
 	const [clearClinicalSubmission] = useMutation(CLEAR_CLINICAL_SUBMISSION, {
 		variables: {
 			programShortName,
@@ -96,11 +92,28 @@ const Header: FC<HeaderProps> = ({
 	});
 
 	const handleSubmissionReopen = async () => {
-		console.log('handle submission reoepn');
-	};
+		const didUserConfirm = await getUserConfirmation({
+			title: isDcc ? 'Reopen Submission?' : 'Are you sure you want to reopen your submission?',
+			children: isDcc
+				? 'Are you sure you want to reopen this clinical submission?'
+				: 'If you reopen your clinical submission it will be recalled from DCC approval and your workspace will be open for modifications.',
+			actionButtonText: isDcc ? 'Yes, Reopen' : 'Yes, Reopen Submission',
+			actionButtonId: 'modal-confirm-reopen',
+			buttonSize: 'sm',
+		});
 
-	const handleSubmissionApproval = async () => {
-		console.log('handle submission approval');
+		if (didUserConfirm) {
+			setGlobalLoading(true);
+			await sleep();
+			try {
+				await reopenSubmission();
+			} catch (err) {
+				await refetchClinicalSubmission();
+				commonToaster.unknownErrorWithReloadMessage();
+			} finally {
+				setGlobalLoading(false);
+			}
+		}
 	};
 
 	const handleSubmissionClear = async () => {
@@ -124,6 +137,11 @@ const Header: FC<HeaderProps> = ({
 
 	return (
 		<>
+			{isModalShown && (
+				<ModalPortal>
+					<Modal {...modalProps} />
+				</ModalPortal>
+			)}
 			<div
 				css={css`
 					display: flex;
@@ -152,7 +170,7 @@ const Header: FC<HeaderProps> = ({
 					</Row>
 				</TitleBar>
 				<Row nogutter align="center">
-					{isPendingApproval && (
+					{isPendingApproval && isAdmin && (
 						<Button
 							id="button-reopen"
 							variant={isAdmin ? 'secondary' : 'text'}
@@ -162,7 +180,7 @@ const Header: FC<HeaderProps> = ({
 							`}
 							onClick={handleSubmissionReopen}
 						>
-							{isAdmin ? 'reopen' : 'reopen submission'}
+							reopen submission
 						</Button>
 					)}
 					{!isPendingApproval && (
@@ -191,13 +209,6 @@ const Header: FC<HeaderProps> = ({
 									HELP
 								</UIKitLink>
 							</Link>
-						</>
-					)}
-					{isAdmin && isPendingApproval && (
-						<>
-							<Button id="button-approve" size="sm" isAsync onClick={handleSubmissionApproval}>
-								approve
-							</Button>
 						</>
 					)}
 				</Row>
