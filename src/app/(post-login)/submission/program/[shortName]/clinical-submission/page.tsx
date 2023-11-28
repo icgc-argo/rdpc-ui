@@ -26,7 +26,7 @@ import {
 	getDefaultErrorTableColumns,
 } from '@/app/components/ErrorNotification/ErrorNotificationDefaultTable';
 import Loader from '@/app/components/Loader';
-import ModalPortal from '@/app/components/Modal';
+import { ModalPortal } from '@/app/components/Modal';
 import { pageWithPermissions } from '@/app/components/Page';
 import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/CLEAR_CLINICAL_SUBMISSION';
 import CLINICAL_SUBMISSION_QUERY from '@/app/gql/CLINICAL_SUBMISSION_QUERY';
