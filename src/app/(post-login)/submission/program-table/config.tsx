@@ -20,6 +20,7 @@
 'use client';
 
 import { Program } from '@/__generated__/graphql';
+import { notNull } from '@/global/utils';
 import { ColumnDef } from '@icgc-argo/uikit';
 import { ArgoMembershipKey } from '../components/ProgramList';
 import CancerTypes from './CancerTypes';
@@ -55,7 +56,7 @@ export const columns: ColumnDef<Program>[] = [
 			row: {
 				original: { cancerTypes },
 			},
-		}) => <CancerTypes types={cancerTypes || []} />,
+		}) => <CancerTypes types={cancerTypes?.filter(notNull) || []} />,
 	},
 	{
 		header: () => <TableHeader>Countries</TableHeader>,

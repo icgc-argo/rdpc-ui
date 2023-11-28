@@ -18,9 +18,7 @@
  */
 'use client';
 
-import { Program } from '@/__generated__/graphql';
-
-const CancerTypes = ({ types }: { types: Program['cancerTypes'] | [] }) => (
+const CancerTypes = ({ types }: { types: string[] }) => (
 	<div>
 		{types?.map((cancerType, i) => (
 			<div key={cancerType}>
