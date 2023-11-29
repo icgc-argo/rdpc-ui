@@ -29,7 +29,7 @@ export const ApolloProvider = ({ children }: { children: ReactNode }) => {
 	const auth = useAuthContext();
 	const { GATEWAY_API_ROOT } = useAppConfigContext();
 	const config = {
-		jwt: auth.egoJwt,
+		jwt: auth?.egoJwt,
 		gateway: `${GATEWAY_API_ROOT}/graphql`,
 	};
 
