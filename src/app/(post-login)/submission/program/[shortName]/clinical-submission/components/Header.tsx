@@ -18,6 +18,7 @@
  */
 
 import { ModalPortal } from '@/app/components/Modal';
+import APPROVE_SUBMISSION_MUTATION from '@/app/gql/APPROVE_SUBMISSION_MUTATION';
 import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/CLEAR_CLINICAL_SUBMISSION';
 import REOPEN_SUBMISSION_MUTATION from '@/app/gql/REOPEN_SUBMISSION_MUTATION';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
@@ -32,10 +33,25 @@ import { css, useTheme } from '@/lib/emotion';
 import { useMutation } from '@apollo/client';
 import { Button, Modal, TitleBar, Link as UIKitLink } from '@icgc-argo/uikit';
 import Link from 'next/link';
+import router from 'next/router';
 import { FC, useMemo } from 'react';
 import { Row } from 'react-grid-system';
 import urlJoin from 'url-join';
 import ProgressBar from './ProgressBar';
+
+const placeholderClinicalSubmissionQueryData = (shortName: string) => ({
+	clinicalSubmissions: {
+		version: '',
+		programShortName: shortName,
+		clinicalEntities: [],
+		fileErrors: [],
+		id: '',
+		state: null,
+		updatedAt: '',
+		updatedBy: '',
+		__typename: 'ClinicalSubmissionData',
+	},
+});
 
 type HeaderProps = {
 	programShortName: string;
@@ -77,6 +93,13 @@ const Header: FC<HeaderProps> = ({
 
 	const { isDisabled: isSubmissionSystemDisabled } = useSubmissionSystemStatus();
 
+	const [approveClinicalSubmission] = useMutation(APPROVE_SUBMISSION_MUTATION, {
+		variables: {
+			programShortName,
+			submissionVersion: clinicalVersion,
+		},
+	});
+
 	const [reopenSubmission] = useMutation(REOPEN_SUBMISSION_MUTATION, {
 		variables: {
 			programShortName,
@@ -90,6 +113,43 @@ const Header: FC<HeaderProps> = ({
 			submissionVersion: clinicalVersion,
 		},
 	});
+
+	const handleSubmissionApproval: ComponentProps<typeof Button>['onClick'] = async () => {
+		const didUserConfirm = await getUserConfirmation({
+			title: 'Approve Submission?',
+			children: 'Are you sure you want to approve this clinical submission?',
+			actionButtonText: 'Yes, Approve',
+			actionButtonId: 'modal-confirm-approve',
+			buttonSize: 'sm',
+		});
+
+		if (didUserConfirm) {
+			setGlobalLoading(true);
+			await sleep();
+			try {
+				await approveClinicalSubmission();
+
+				updateClinicalSubmissionQuery((previous: any) => ({
+					...previous,
+					clinicalSubmissions:
+						placeholderClinicalSubmissionQueryData(programShortName).clinicalSubmissions,
+				}));
+
+				router.push('/');
+				toaster.addToast({
+					variant: 'SUCCESS',
+					interactionType: 'CLOSE',
+					title: 'Clinical Data is successfully approved',
+					content: `${programShortName} updated clinical data has been approved.`,
+				});
+			} catch (err) {
+				await refetchClinicalSubmission();
+				commonToaster.unknownErrorWithReloadMessage();
+			} finally {
+				setGlobalLoading(false);
+			}
+		}
+	};
 
 	const handleSubmissionReopen = async () => {
 		const didUserConfirm = await getUserConfirmation({
@@ -171,17 +231,23 @@ const Header: FC<HeaderProps> = ({
 				</TitleBar>
 				<Row nogutter align="center">
 					{isPendingApproval && isAdmin && (
-						<Button
-							id="button-reopen"
-							variant={isAdmin ? 'secondary' : 'text'}
-							isAsync
-							css={css`
-								margin-right: 10px;
-							`}
-							onClick={handleSubmissionReopen}
-						>
-							reopen submission
-						</Button>
+						<>
+							<Button
+								id="button-reopen"
+								variant={isAdmin ? 'secondary' : 'text'}
+								isAsync
+								css={css`
+									margin-right: 10px;
+								`}
+								onClick={handleSubmissionReopen}
+							>
+								reopen submission
+							</Button>
+
+							<Button id="button-approve" size="sm" isAsync onClick={handleSubmissionApproval}>
+								approve
+							</Button>
+						</>
 					)}
 					{!isPendingApproval && (
 						<>
