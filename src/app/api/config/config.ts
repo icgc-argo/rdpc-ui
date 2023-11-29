@@ -66,7 +66,7 @@ export const getAppConfig = (serverEnv: any): AppConfig => {
 			serverEnv.NEXT_PUBLIC_EGO_PUBLIC_KEY || process.env.NEXT_PUBLIC_EGO_PUBLIC_KEY || '',
 		UI_VERSION: packageJSON.version,
 		REGION: serverEnv.NEXT_PUBLIC_REGION || process.env.NEXT_PUBLIC_REGION || '',
-		DATA_CENTER: serverEnv.NEXT_PUBLIC_DATA_CENTER || process.env.NEXT_PUBLIC_DATA_CENTER || '',
+		DATA_CENTER: serverEnv.NEXT_PUBLIC_DATA_CENTER || process.env.NEXT_PUBLIC_DATA_CENTER || 'DC1',
 		PLATFORM_UI_ROOT:
 			serverEnv.NEXT_PUBLIC_PLATFORM_UI_ROOT || process.env.NEXT_PUBLIC_PLATFORM_UI_ROOT || '',
 		RECAPTCHA_SITE_KEY:
