@@ -90,7 +90,7 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 		(shortName?: string): MouseEventHandler =>
 		() => {
 			if (shortName) {
-				const url = `/submission/program/${shortName}/registration`;
+				const url = `/${shortName}/registration`;
 				router.push(url);
 			}
 		};
