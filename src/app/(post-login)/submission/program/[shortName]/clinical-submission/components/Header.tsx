@@ -33,7 +33,7 @@ import { css, useTheme } from '@/lib/emotion';
 import { useMutation } from '@apollo/client';
 import { Button, Modal, TitleBar, Link as UIKitLink } from '@icgc-argo/uikit';
 import Link from 'next/link';
-import router from 'next/router';
+import { useRouter } from 'next/navigation';
 import { FC, useMemo } from 'react';
 import { Row } from 'react-grid-system';
 import urlJoin from 'url-join';
@@ -73,6 +73,7 @@ const Header: FC<HeaderProps> = ({
 	updateQuery: updateClinicalSubmissionQuery,
 }) => {
 	const theme = useTheme();
+	const router = useRouter();
 	const { modalProps, isModalShown, getUserConfirmation } = useUserConfirmationModalState();
 
 	// docs url
@@ -114,7 +115,7 @@ const Header: FC<HeaderProps> = ({
 		},
 	});
 
-	const handleSubmissionApproval: ComponentProps<typeof Button>['onClick'] = async () => {
+	const handleSubmissionApproval = async () => {
 		const didUserConfirm = await getUserConfirmation({
 			title: 'Approve Submission?',
 			children: 'Are you sure you want to approve this clinical submission?',
