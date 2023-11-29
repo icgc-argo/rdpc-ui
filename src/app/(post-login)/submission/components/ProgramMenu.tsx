@@ -184,44 +184,41 @@ const renderDataSubmissionLinks = (
 	isSubmissionSystemDisabled: boolean,
 	pathnameLastSegment?: string,
 	programStatusData?: ReturnType<typeof parseProgramStatusGQLResp>,
-) => {
-	console.log('sub', submissionPath, 'reg', registrationPath);
-	return (
-		<>
-			<Link href={registrationPath}>
-				<MenuItem
-					level={3}
-					content={
-						<StatusMenuItem>
-							Register Samples
-							{statusIcon}
-						</StatusMenuItem>
-					}
-					selected={pathnameLastSegment === 'registration'}
-				/>
-			</Link>
+) => (
+	<>
+		<Link href={registrationPath}>
+			<MenuItem
+				level={3}
+				content={
+					<StatusMenuItem>
+						Register Samples
+						{statusIcon}
+					</StatusMenuItem>
+				}
+				selected={pathnameLastSegment === 'registration'}
+			/>
+		</Link>
 
-			{/** Submit clinical data */}
-			<Link href={submissionPath}>
-				<MenuItem
-					level={3}
-					content={
-						<StatusMenuItem>
-							Submit Clinical Data{' '}
-							{programStatusData &&
-								renderSubmissionStatusIcon(
-									programStatusData.clinicalSubmissionState || null,
-									programStatusData.clinicalSubmissionHasSchemaErrors,
-									isSubmissionSystemDisabled,
-								)}
-						</StatusMenuItem>
-					}
-					selected={pathnameLastSegment === 'clinical-submission'}
-				/>
-			</Link>
-		</>
-	);
-};
+		{/** Submit clinical data */}
+		<Link href={submissionPath}>
+			<MenuItem
+				level={3}
+				content={
+					<StatusMenuItem>
+						Submit Clinical Data{' '}
+						{programStatusData &&
+							renderSubmissionStatusIcon(
+								programStatusData.clinicalSubmissionState || null,
+								programStatusData.clinicalSubmissionHasSchemaErrors,
+								isSubmissionSystemDisabled,
+							)}
+					</StatusMenuItem>
+				}
+				selected={pathnameLastSegment === 'clinical-submission'}
+			/>
+		</Link>
+	</>
+);
 
 const renderSubmissionStatusIcon = (
 	status: SubmissionState | null,
