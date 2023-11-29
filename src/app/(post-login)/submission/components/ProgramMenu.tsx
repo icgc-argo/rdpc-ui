@@ -130,8 +130,12 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 							content={shortName}
 							onClick={
 								activeProgramName === shortName
-									? setActiveProgram(undefined)
-									: setActiveProgram(shortName)
+									? () => {
+											setActiveProgram(undefined);
+									  }
+									: () => {
+											setActiveProgram(shortName);
+									  }
 							}
 							selected={activeProgramName === shortName}
 						>
