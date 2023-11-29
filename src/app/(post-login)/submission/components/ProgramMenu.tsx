@@ -87,12 +87,10 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 	const sortedProgramList = orderBy(programs, 'shortName');
 
 	const setActiveProgram =
-		(shortName?: string): MouseEventHandler =>
+		(shortName: string): MouseEventHandler =>
 		() => {
-			if (shortName) {
-				const url = `/submission/program/${shortName}/registration`;
-				router.push(url);
-			}
+			const url = `/submission/program/${shortName}/registration`;
+			router.push(url);
 		};
 
 	const userRoles = useUserRole(egoJwt, activeProgramName);
@@ -113,9 +111,7 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 					<MenuItem
 						level={2}
 						content="All Programs"
-						onClick={() => {
-							setActiveProgram(undefined);
-						}}
+						onClick={setActiveProgram('')}
 						selected={pathname === '/submission/program'}
 					/>
 				</Link>
@@ -128,11 +124,7 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 							level={2}
 							key={shortName}
 							content={shortName}
-							onClick={
-								activeProgramName === shortName
-									? setActiveProgram(undefined)
-									: setActiveProgram(shortName)
-							}
+							onClick={setActiveProgram(shortName)}
 							selected={activeProgramName === shortName}
 						>
 							<MenuItem level={3}>{shortName}</MenuItem>
