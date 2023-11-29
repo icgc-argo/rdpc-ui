@@ -52,10 +52,12 @@ export const createApolloClient = (config: Config) => {
 
 	const jwt = config.jwt;
 
+	const authHeader = jwt ? { authorization: `Bearer ${jwt}` } : {};
+
 	const authLink = new ApolloLink((operation, forward) => {
 		operation.setContext(({ headers }: { headers: any }) => ({
 			headers: {
-				authorization: jwt ? `Bearer ${jwt}` : '',
+				...authHeader,
 				...headers,
 			},
 		}));
