@@ -40,8 +40,8 @@ import { useQuery } from '@apollo/client';
 import { Icon, MenuItem } from '@icgc-argo/uikit';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
-import { notFound, useParams, usePathname, useRouter } from 'next/navigation';
-import { FC, MouseEventHandler, ReactNode } from 'react';
+import { notFound, useParams, usePathname } from 'next/navigation';
+import { FC, ReactNode, useState } from 'react';
 import { defaultClinicalEntityFilters } from '../common';
 
 const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
@@ -67,12 +67,11 @@ const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
 const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string }) => {
 	const params = useParams();
 	const pathname = usePathname();
-	const router = useRouter();
 	const { egoJwt } = useAuthContext();
 	const { DATA_CENTER } = useAppConfigContext();
 
 	// params can be arrays from dynamic routing
-	const activeProgramName = typeof params.shortName === 'string' ? params.shortName : '';
+	const activeProgramRoute = typeof params.shortName === 'string' ? params.shortName : '';
 
 	const {
 		data: programsData,
@@ -86,16 +85,9 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 
 	const sortedProgramList = orderBy(programs, 'shortName');
 
-	const setActiveProgram =
-		(shortName?: string): MouseEventHandler =>
-		() => {
-			if (shortName) {
-				const url = `/${shortName}/registration`;
-				router.push(url);
-			}
-		};
+	const [activeProgram, setActiveProgram] = useState<string | undefined>(activeProgramRoute);
 
-	const userRoles = useUserRole(egoJwt, activeProgramName);
+	const userRoles = useUserRole(egoJwt, activeProgramRoute);
 
 	if (loading) {
 		return <Loader />;
@@ -122,25 +114,28 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 
 				{sortedProgramList.map((program) => {
 					const shortName = program?.shortName || '';
+					const isActiveProgram = activeProgram === shortName;
 
 					return (
 						<MenuItem
 							level={2}
 							key={shortName}
 							content={shortName}
-							onClick={
-								activeProgramName === shortName
-									? () => {
-											setActiveProgram(undefined);
-									  }
-									: () => {
-											setActiveProgram(shortName);
-									  }
-							}
-							selected={activeProgramName === shortName}
+							onClick={() => {
+								if (isActiveProgram) {
+									setActiveProgram(undefined);
+								} else {
+									setActiveProgram(shortName);
+								}
+							}}
+							selected={isActiveProgram}
 						>
 							<MenuItem level={3}>{shortName}</MenuItem>
-							<MenuContent programName={shortName} userRoles={userRoles} />
+							<MenuContent
+								programName={shortName}
+								userRoles={userRoles}
+								isActive={isActiveProgram}
+							/>
 						</MenuItem>
 					);
 				})}
@@ -255,9 +250,11 @@ const renderSubmissionStatusIcon = (
 const MenuContent = ({
 	programName,
 	userRoles,
+	isActive,
 }: {
 	programName: string;
 	userRoles: UserRoleList;
+	isActive: boolean;
 }) => {
 	const pathname = usePathname();
 	const pathnameLastSegment = pathname.split('/').at(-1);
