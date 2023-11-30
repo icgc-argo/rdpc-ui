@@ -40,8 +40,9 @@ import { useQuery } from '@apollo/client';
 import { Icon, MenuItem } from '@icgc-argo/uikit';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
-import { notFound, useParams, usePathname, useRouter } from 'next/navigation';
-import { FC, MouseEventHandler, ReactNode } from 'react';
+import { notFound, useParams, usePathname } from 'next/navigation';
+import { FC, ReactNode, useState } from 'react';
+import { useDetectClickOutside } from 'react-detect-click-outside';
 import { defaultClinicalEntityFilters } from '../common';
 
 const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
@@ -67,7 +68,6 @@ const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
 const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string }) => {
 	const params = useParams();
 	const pathname = usePathname();
-	const router = useRouter();
 	const { egoJwt } = useAuthContext();
 	const { DATA_CENTER } = useAppConfigContext();
 
@@ -85,13 +85,6 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 		.filter((program) => program.shortName.search(new RegExp(shortNameSearchQuery, 'i')) > -1);
 
 	const sortedProgramList = orderBy(programs, 'shortName');
-
-	const setActiveProgram =
-		(shortName: string): MouseEventHandler =>
-		() => {
-			const url = `/submission/program/${shortName}/registration`;
-			router.push(url);
-		};
 
 	const userRoles = useUserRole(egoJwt, activeProgramName);
 
@@ -111,7 +104,6 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 					<MenuItem
 						level={2}
 						content="All Programs"
-						onClick={setActiveProgram('')}
 						selected={pathname === '/submission/program'}
 					/>
 				</Link>
@@ -120,21 +112,27 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 					const shortName = program?.shortName || '';
 
 					return (
-						<MenuItem
+						<WrappedMenuItem
 							level={2}
 							key={shortName}
 							content={shortName}
-							onClick={setActiveProgram(shortName)}
 							selected={activeProgramName === shortName}
 						>
-							<MenuItem level={3}>{shortName}</MenuItem>
 							<MenuContent programName={shortName} userRoles={userRoles} />
-						</MenuItem>
+						</WrappedMenuItem>
 					);
 				})}
 			</>
 		);
 	}
+};
+
+const WrappedMenuItem = (props) => {
+	const [isOpen, setOpenState] = useState(props.selected);
+	const setOpen = (value) => () => setOpenState(value);
+	const ref = useDetectClickOutside({ onTriggered: setOpen(false) });
+
+	return <MenuItem {...props} ref={ref} onClick={setOpen(!isOpen)} selected={isOpen} />;
 };
 
 const parseProgramStatusGQLResp = (data: SideMenuProgramStatusQuery | undefined) => {
