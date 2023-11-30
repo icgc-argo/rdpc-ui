@@ -242,11 +242,11 @@ const Header: FC<HeaderProps> = ({
 								`}
 								onClick={handleSubmissionReopen}
 							>
-								reopen submission
+								REOPEN SUBMISSION
 							</Button>
 
 							<Button id="button-approve" size="sm" isAsync onClick={handleSubmissionApproval}>
-								approve
+								APPROVE
 							</Button>
 						</>
 					)}
