@@ -18,8 +18,8 @@
  */
 'use client';
 
-import Instructions from '@/app/(post-login)/submission/program/[shortName]/registration/components/Instructions';
-import ProgressBar from '@/app/(post-login)/submission/program/[shortName]/registration/components/ProgressBar';
+import Instructions from '@/app/(post-login)/submission/program/[shortName]/sample-registration/components/Instructions';
+import ProgressBar from '@/app/(post-login)/submission/program/[shortName]/sample-registration/components/ProgressBar';
 import Card from '@/app/components/Card';
 import ContentHeader from '@/app/components/Content/ContentHeader';
 import ContentMain from '@/app/components/Content/ContentMain';
