@@ -128,7 +128,7 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 							selected={isActiveProgram}
 						>
 							<MenuItem level={3}>{shortName}</MenuItem>
-							<MenuContent programName={shortName} isActive={isActiveProgram} />
+							<MenuContent programName={shortName} />
 						</MenuItem>
 					);
 				})}
@@ -240,7 +240,7 @@ const renderSubmissionStatusIcon = (
 	}
 };
 
-const MenuContent = ({ programName }: { programName: string; isActive: boolean }) => {
+const MenuContent = ({ programName }: { programName: string }) => {
 	const { egoJwt } = useAuthContext();
 	const pathname = usePathname();
 	const pathnameLastSegment = pathname.split('/').at(-1);
