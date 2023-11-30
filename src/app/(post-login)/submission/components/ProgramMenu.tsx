@@ -25,7 +25,7 @@ import SIDEMENU_PROGRAM_STATUS from '@/app/gql/SIDEMENU_PROGRAM_STATUS';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useAuthContext } from '@/app/hooks/AuthProvider';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
-import useUserRole, { UserRoleList } from '@/app/hooks/useUserRole';
+import useUserRole from '@/app/hooks/useUserRole';
 import {
 	PROGRAM_CLINICAL_DATA_PATH,
 	PROGRAM_CLINICAL_SUBMISSION_PATH,
@@ -67,7 +67,6 @@ const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
 const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string }) => {
 	const params = useParams();
 	const pathname = usePathname();
-	const { egoJwt } = useAuthContext();
 	const { DATA_CENTER } = useAppConfigContext();
 
 	// params can be arrays from dynamic routing
@@ -86,8 +85,6 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 	const sortedProgramList = orderBy(programs, 'shortName');
 
 	const [activeProgram, setActiveProgram] = useState<string | undefined>(activeProgramParam);
-
-	const userRoles = useUserRole(egoJwt, activeProgramParam);
 
 	if (loading) {
 		return <Loader />;
@@ -131,11 +128,7 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 							selected={isActiveProgram}
 						>
 							<MenuItem level={3}>{shortName}</MenuItem>
-							<MenuContent
-								programName={shortName}
-								userRoles={userRoles}
-								isActive={isActiveProgram}
-							/>
+							<MenuContent programName={shortName} />
 						</MenuItem>
 					);
 				})}
@@ -247,19 +240,15 @@ const renderSubmissionStatusIcon = (
 	}
 };
 
-const MenuContent = ({
-	programName,
-	userRoles,
-}: {
-	programName: string;
-	userRoles: UserRoleList;
-	isActive: boolean;
-}) => {
+const MenuContent = ({ programName }: { programName: string }) => {
+	const { egoJwt } = useAuthContext();
 	const pathname = usePathname();
 	const pathnameLastSegment = pathname.split('/').at(-1);
 	const getProgramPath = (path: string) => path.replace(PROGRAM_SHORT_NAME_PATH, programName);
 
 	const { isDisabled: isSubmissionSystemDisabled } = useSubmissionSystemStatus();
+
+	const userRoles = useUserRole(egoJwt, programName);
 
 	const { data: gqlData } = useQuery(SIDEMENU_PROGRAM_STATUS, {
 		variables: {
