@@ -88,7 +88,7 @@ const Hero = () => {
 					})}
 					as="h1"
 				>
-					RPDC Clinical Data Submission Portal{' '}
+					RDPC Clinical Data Submission Portal{' '}
 				</Typography>
 
 				<Typography
