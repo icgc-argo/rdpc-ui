@@ -71,7 +71,7 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 	const { DATA_CENTER } = useAppConfigContext();
 
 	// params can be arrays from dynamic routing
-	const activeProgramRoute = typeof params.shortName === 'string' ? params.shortName : '';
+	const activeProgramParam = typeof params.shortName === 'string' ? params.shortName : '';
 
 	const {
 		data: programsData,
@@ -85,9 +85,9 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 
 	const sortedProgramList = orderBy(programs, 'shortName');
 
-	const [activeProgram, setActiveProgram] = useState<string | undefined>(activeProgramRoute);
+	const [activeProgram, setActiveProgram] = useState<string | undefined>(activeProgramParam);
 
-	const userRoles = useUserRole(egoJwt, activeProgramRoute);
+	const userRoles = useUserRole(egoJwt, activeProgramParam);
 
 	if (loading) {
 		return <Loader />;
@@ -250,7 +250,6 @@ const renderSubmissionStatusIcon = (
 const MenuContent = ({
 	programName,
 	userRoles,
-	isActive,
 }: {
 	programName: string;
 	userRoles: UserRoleList;
