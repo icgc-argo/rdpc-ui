@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import { css, useTheme } from '@/lib/emotion';
-import { TitleBar, Link as UIKitLink } from '@icgc-argo/uikit';
-import Link from 'next/link';
+import { Link, TitleBar } from '@icgc-argo/uikit';
 import { FunctionComponent, ReactNode } from 'react';
 import { Row } from 'react-grid-system';
 
@@ -28,11 +27,38 @@ type ContentHeaderProps = {
 	helpUrl: string;
 };
 
-const ContentHeader: FunctionComponent<ContentHeaderProps> = ({
-	breadcrumb,
-	children,
-	helpUrl,
-}) => {
+export const BreadCrumbTitle = ({ breadcrumbs }) => {
+	return (
+		<Row nogutter align="center">
+			<TitleBar>
+				{breadcrumbs.map((breadcrumb) => (
+					<div>{breadcrumb}</div>
+				))}
+			</TitleBar>
+		</Row>
+	);
+};
+
+export const HelpLink = ({ url }) => {
+	return (
+		<Link href={helpUrl} legacyBehavior>
+			<UIKitLink
+				target="_blank"
+				css={css`
+					font-size: 14px;
+				`}
+				withChevron
+				href={helpUrl}
+				underline={false}
+				bold
+			>
+				HELP
+			</UIKitLink>
+		</Link>
+	);
+};
+
+export const PageHeader: FunctionComponent<ContentHeaderProps> = ({ leftSlot, rightSlot }) => {
 	const theme = useTheme();
 	return (
 		<div
@@ -44,41 +70,14 @@ const ContentHeader: FunctionComponent<ContentHeaderProps> = ({
 				background-color: ${theme.colors.white};
 			`}
 		>
-			<TitleBar>
-				<>{breadcrumb[0]}</>
-				<Row nogutter align="center">
-					<div
-						css={css`
-							margin-right: 20px;
-						`}
-					>
-						{breadcrumb[1]}
-					</div>
-				</Row>
-			</TitleBar>
-			{children}
+			{leftSlot}
 			<div
 				css={css`
 					margin-left: auto;
 				`}
 			>
-				<Link href={helpUrl} legacyBehavior>
-					<UIKitLink
-						target="_blank"
-						css={css`
-							font-size: 14px;
-						`}
-						withChevron
-						href={helpUrl}
-						underline={false}
-						bold
-					>
-						HELP
-					</UIKitLink>
-				</Link>
+				{rightSlot}
 			</div>
 		</div>
 	);
 };
-
-export default ContentHeader;
