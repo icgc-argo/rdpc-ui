@@ -17,7 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import { css, useTheme } from '@/lib/emotion';
-import { Link, TitleBar } from '@icgc-argo/uikit';
+import { TitleBar, Link as UIKitLink } from '@icgc-argo/uikit';
+import Link from 'next/link';
 import { FunctionComponent, ReactNode } from 'react';
 import { Row } from 'react-grid-system';
 
@@ -41,14 +42,14 @@ export const BreadCrumbTitle = ({ breadcrumbs }) => {
 
 export const HelpLink = ({ url }) => {
 	return (
-		<Link href={helpUrl} legacyBehavior>
+		<Link href={url} legacyBehavior>
 			<UIKitLink
 				target="_blank"
 				css={css`
 					font-size: 14px;
 				`}
 				withChevron
-				href={helpUrl}
+				href={url}
 				underline={false}
 				bold
 			>

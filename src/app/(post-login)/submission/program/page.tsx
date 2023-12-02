@@ -19,11 +19,14 @@
 
 'use client';
 
+import { BreadCrumbTitle, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import PROGRAMS_LIST_QUERY from '@/app/gql/PROGRAMS_LIST_QUERY';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { CREATE_PROGRAM_PAGE_PATH } from '@/global/constants';
 import { notNull } from '@/global/utils';
 import { useQuery } from '@apollo/client';
-import { Loader } from '@icgc-argo/uikit';
+import { Button, Loader } from '@icgc-argo/uikit';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import ProgramList from '../components/ProgramList';
 
@@ -38,5 +41,20 @@ export default function Submission() {
 	if (loading) return <Loader />;
 	if (error) notFound();
 
-	return <ProgramList programs={programs} />;
+	const canCreate = true;
+	return (
+		<>
+			<PageHeader
+				leftSlot={<BreadCrumbTitle breadcrumbs={['All Programs']} />}
+				rightSlot={
+					canCreate && (
+						<Link href={CREATE_PROGRAM_PAGE_PATH}>
+							<Button>Create a program</Button>
+						</Link>
+					)
+				}
+			/>
+			<ProgramList programs={programs} />
+		</>
+	);
 }
