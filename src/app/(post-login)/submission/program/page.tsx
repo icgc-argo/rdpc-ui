@@ -19,7 +19,7 @@
 
 'use client';
 
-import { BreadCrumbTitle, PageHeader } from '@/app/components/PageHeader/PageHeader';
+import { BreadcrumbTitle, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import PROGRAMS_LIST_QUERY from '@/app/gql/PROGRAMS_LIST_QUERY';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { CREATE_PROGRAM_PAGE_PATH } from '@/global/constants';
@@ -45,7 +45,7 @@ export default function Submission() {
 	return (
 		<>
 			<PageHeader
-				leftSlot={<BreadCrumbTitle breadcrumbs={['All Programs']} />}
+				leftSlot={<BreadcrumbTitle breadcrumbs={['All Programs']} />}
 				rightSlot={
 					canCreate && (
 						<Link href={CREATE_PROGRAM_PAGE_PATH}>

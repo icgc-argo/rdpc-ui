@@ -24,7 +24,7 @@ import Card from '@/app/components/Card';
 import ContentMain from '@/app/components/Content/ContentMain';
 import NoDataMessage from '@/app/components/NoData';
 import { pageWithPermissions } from '@/app/components/Page';
-import { BreadCrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
+import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import CLEAR_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/CLEAR_CLINICAL_REGISTRATION_MUTATION';
 import CLINICAL_SCHEMA_VERSION_QUERY from '@/app/gql/CLINICAL_SCHEMA_VERSION_QUERY';
 import GET_REGISTRATION_QUERY from '@/app/gql/GET_REGISTRATION_QUERY';
@@ -175,7 +175,7 @@ const Register = ({ shortName }: { shortName: string }) => {
 				<PageHeader
 					leftSlot={
 						<>
-							<BreadCrumbTitle breadcrumbs={[shortName, 'Register Samples']} />
+							<BreadcrumbTitle breadcrumbs={[shortName, 'Register Samples']} />
 							<ProgressBar
 								{...{
 									isSubmissionSystemDisabled,

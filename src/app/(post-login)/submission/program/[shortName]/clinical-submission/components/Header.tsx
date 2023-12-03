@@ -18,7 +18,7 @@
  */
 
 import { ModalPortal } from '@/app/components/Modal';
-import { BreadCrumbTitle, PageHeader } from '@/app/components/PageHeader/PageHeader';
+import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/CLEAR_CLINICAL_SUBMISSION';
 import REOPEN_SUBMISSION_MUTATION from '@/app/gql/REOPEN_SUBMISSION_MUTATION';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
@@ -31,8 +31,7 @@ import useUserConfirmationModalState from '@/app/hooks/useUserConfirmationModalS
 import { sleep } from '@/global/utils';
 import { css, useTheme } from '@/lib/emotion';
 import { useMutation } from '@apollo/client';
-import { Button, Modal, Link as UIKitLink } from '@icgc-argo/uikit';
-import Link from 'next/link';
+import { Button, Modal } from '@icgc-argo/uikit';
 import { FC, useMemo } from 'react';
 import { Row } from 'react-grid-system';
 import urlJoin from 'url-join';
@@ -143,65 +142,48 @@ const Header: FC<HeaderProps> = ({
 					<Modal {...modalProps} />
 				</ModalPortal>
 			)}
-			<div
-				css={css`
-					background-color: ${isPendingApproval ? theme.colors.accent3_4 : theme.colors.white};
-				`}
-			>
-				<PageHeader
-					leftSlot={
-						<>
-							<BreadCrumbTitle breadcrumbs={[programShortName, 'Submit Clinical Data']} />{' '}
-							<ProgressBar clinicalEntities={clinicalEntities} clinicalState={clinicalState} />
-						</>
-					}
-					rightSlot={
-						<Row nogutter align="center">
-							{isPendingApproval && isAdmin && (
+			<PageHeader
+				leftSlot={
+					<>
+						<BreadcrumbTitle breadcrumbs={[programShortName, 'Submit Clinical Data']} />{' '}
+						<ProgressBar clinicalEntities={clinicalEntities} clinicalState={clinicalState} />
+					</>
+				}
+				rightSlot={
+					<Row nogutter align="center">
+						{isPendingApproval && isAdmin && (
+							<Button
+								variant={isAdmin ? 'secondary' : 'text'}
+								isAsync
+								css={css`
+									margin-right: 10px;
+								`}
+								onClick={handleSubmissionReopen}
+							>
+								REOPEN SUBMISSION
+							</Button>
+						)}
+						{!isPendingApproval && (
+							<>
 								<Button
-									id="button-reopen"
-									variant={isAdmin ? 'secondary' : 'text'}
-									isAsync
+									variant="text"
 									css={css`
 										margin-right: 10px;
 									`}
-									onClick={handleSubmissionReopen}
+									disabled={isSubmissionSystemDisabled || !clinicalVersion}
+									onClick={handleSubmissionClear}
 								>
-									reopen submission
+									CLEAR SUBMISSION
 								</Button>
-							)}
-							{!isPendingApproval && (
-								<>
-									<Button
-										variant="text"
-										css={css`
-											margin-right: 10px;
-										`}
-										disabled={isSubmissionSystemDisabled || !clinicalVersion}
-										onClick={handleSubmissionClear}
-									>
-										Clear submission
-									</Button>
-									<Link href={helpUrl} legacyBehavior>
-										<UIKitLink
-											target="_blank"
-											css={css`
-												font-size: 14px;
-											`}
-											withChevron
-											href={helpUrl}
-											underline={false}
-											bold
-										>
-											HELP
-										</UIKitLink>
-									</Link>
-								</>
-							)}
-						</Row>
-					}
-				/>
-			</div>
+								<HelpLink url={helpUrl} />
+							</>
+						)}
+					</Row>
+				}
+				css={css`
+					background-color: ${isPendingApproval ? theme.colors.accent3_4 : theme.colors.white};
+				`}
+			/>
 		</>
 	);
 };

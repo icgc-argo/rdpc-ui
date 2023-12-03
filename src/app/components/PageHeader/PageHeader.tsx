@@ -16,33 +16,28 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 import { css, useTheme } from '@/lib/emotion';
 import { TitleBar, Link as UIKitLink } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import { FunctionComponent, ReactNode } from 'react';
 import { Row } from 'react-grid-system';
 
-type ContentHeaderProps = {
-	breadcrumb: string[];
-	children?: ReactNode;
-	helpUrl: string;
-};
-
-export const BreadCrumbTitle = ({ breadcrumbs }) => {
+export const BreadcrumbTitle = ({ breadcrumbs }: { breadcrumbs: string[] }) => {
 	return (
 		<Row nogutter align="center">
 			<TitleBar>
-				{breadcrumbs.map((breadcrumb) => (
-					<div>{breadcrumb}</div>
+				{breadcrumbs.map((breadcrumb, index) => (
+					<div key={index}>{breadcrumb}</div>
 				))}
 			</TitleBar>
 		</Row>
 	);
 };
 
-export const HelpLink = ({ url }) => {
+export const HelpLink = ({ url }: { url: string }) => {
 	return (
-		<Link href={url} legacyBehavior>
+		<Link href={url} passHref legacyBehavior>
 			<UIKitLink
 				target="_blank"
 				css={css`
@@ -59,7 +54,11 @@ export const HelpLink = ({ url }) => {
 	);
 };
 
-export const PageHeader: FunctionComponent<ContentHeaderProps> = ({ leftSlot, rightSlot }) => {
+export const PageHeader: FunctionComponent<{
+	leftSlot?: ReactNode;
+	rightSlot?: ReactNode;
+	className?: string;
+}> = ({ leftSlot = null, rightSlot = null, className }) => {
 	const theme = useTheme();
 	return (
 		<div
@@ -70,6 +69,7 @@ export const PageHeader: FunctionComponent<ContentHeaderProps> = ({ leftSlot, ri
 				align-items: center;
 				background-color: ${theme.colors.white};
 			`}
+			className={className}
 		>
 			{leftSlot}
 			<div
