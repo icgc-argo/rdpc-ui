@@ -131,7 +131,7 @@ const ActionBox: ComponentType = () => {
 						href: urlJoin(DOCS_URL_ROOT, 'docs/analysis-workflows/analysis-overview'),
 					}}
 				>
-					ARGO RPDC uniformly analyzes molecular data against the{' '}
+					ARGO RDPC uniformly analyzes molecular data against the{' '}
 					<b>GRCh38 Human Reference Genome.</b>
 				</DataCallout>
 			</div>
