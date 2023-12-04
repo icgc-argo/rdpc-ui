@@ -32,5 +32,6 @@ export const PROGRAM_MANAGE_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_N
 export const PROGRAM_SAMPLE_REGISTRATION_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/sample-registration`;
 export const PROGRAM_CLINICAL_SUBMISSION_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/clinical-submission`;
 export const PROGRAM_CLINICAL_DATA_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/clinical-data`;
+export const CREATE_PROGRAM_PAGE_PATH = `${SUBMISSION_PATH}/program/create`;
 
 export const CLINICAL_TEMPLATE_PATH = '/clinical/proxy/template';
