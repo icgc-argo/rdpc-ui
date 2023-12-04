@@ -18,34 +18,6 @@
  */
 'use client';
 
-import Loader from '@/app/components/Loader';
-import { pageWithPermissions } from '@/app/components/Page';
-import FilterBar from './FilterBar';
-import SubmittedData from './SubmittedData';
+const FilterBar = () => <div>Filter Bar</div>;
 
-const ClinicalDataPageComp = () => {
-	const isLoading = false;
-	return (
-		<div>
-			<div>app header</div>
-			{isLoading ? (
-				<Loader />
-			) : (
-				<>
-					<FilterBar />
-					<SubmittedData />
-				</>
-			)}
-		</div>
-	);
-};
-
-const ClinicalDataPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
-	const ClinicalDataWithPermissions = pageWithPermissions(ClinicalDataPageComp, {
-		acceptedRoles: ['isRDPCAdmin', 'isDCCAdmin', 'isProgramAdmin', 'isDataSubmitter'],
-		programShortName: shortName,
-	});
-	return <ClinicalDataWithPermissions />;
-};
-
-export default ClinicalDataPage;
+export default FilterBar;
