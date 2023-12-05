@@ -201,7 +201,7 @@ const renderDataSubmissionLinks = (
 						{!!programStatusData &&
 							renderSubmissionStatusIcon(
 								programStatusData?.clinicalSubmissionState || null,
-								programStatusData?.clinicalSubmissionHasSchemaErrors,
+								programStatusData?.clinicalSubmissionHasSchemaErrors || false,
 								isSubmissionSystemDisabled,
 							)}
 					</StatusMenuItem>
