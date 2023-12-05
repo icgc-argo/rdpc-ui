@@ -43,18 +43,18 @@ export default function Submission() {
 
 	const canCreate = true;
 	return (
-		<>
+		<div>
 			<PageHeader
 				leftSlot={<BreadcrumbTitle breadcrumbs={['All Programs']} />}
 				rightSlot={
 					canCreate && (
-						<Link href={CREATE_PROGRAM_PAGE_PATH}>
+						<Link href={CREATE_PROGRAM_PAGE_PATH} legacyBehavior>
 							<Button>Create a program</Button>
 						</Link>
 					)
 				}
 			/>
 			<ProgramList programs={programs} />
-		</>
+		</div>
 	);
 }
