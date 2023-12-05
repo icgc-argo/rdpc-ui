@@ -198,10 +198,10 @@ const renderDataSubmissionLinks = (
 				content={
 					<StatusMenuItem>
 						Submit Clinical Data{' '}
-						{programStatusData &&
+						{!!programStatusData &&
 							renderSubmissionStatusIcon(
-								programStatusData.clinicalSubmissionState || null,
-								programStatusData.clinicalSubmissionHasSchemaErrors,
+								programStatusData?.clinicalSubmissionState || null,
+								programStatusData?.clinicalSubmissionHasSchemaErrors,
 								isSubmissionSystemDisabled,
 							)}
 					</StatusMenuItem>
