@@ -140,22 +140,21 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 const parseProgramStatusGQLResp = (data: SideMenuProgramStatusQuery | undefined) => {
 	if (!data) return null;
 
-	const clinicalErrors = data.clinicalData.clinicalErrors;
-	const clinicalDataHasErrors = (clinicalErrors && clinicalErrors.length > 0) || false;
+	const clinicalErrors = data?.clinicalData?.clinicalErrors;
+	const clinicalDataHasErrors = clinicalErrors?.length > 0 || false;
 
-	const clinicalRegistration = data && data.clinicalRegistration;
+	const clinicalRegistration = data?.clinicalRegistration;
 
 	const clinicalRegistrationHasError =
 		clinicalRegistration &&
-		(!!clinicalRegistration.errors.length || !!clinicalRegistration.fileErrors?.length);
+		(!!clinicalRegistration?.errors?.length || !!clinicalRegistration?.fileErrors?.length);
 
-	const clinicalRegistrationInProgress = clinicalRegistration && !!clinicalRegistration.fileName;
+	const clinicalRegistrationInProgress = clinicalRegistration && !!clinicalRegistration?.fileName;
 
-	const clinicalSubmissionHasSchemaErrors = data
-		? data.clinicalSubmissions.clinicalEntities.some(
-				(entity) => entity && !!entity.schemaErrors.length,
-		  )
-		: false;
+	const clinicalSubmissionHasSchemaErrors =
+		data?.clinicalSubmissions?.clinicalEntities.some(
+			(entity) => entity && !!entity.schemaErrors.length,
+		) || false;
 
 	const clinicalSubmissionState = data?.clinicalSubmissions?.state;
 
