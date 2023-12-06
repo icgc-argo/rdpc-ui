@@ -20,14 +20,18 @@
 
 import Loader from '@/app/components/Loader';
 import { pageWithPermissions } from '@/app/components/Page';
+import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import { SetStateAction } from 'react';
 import SearchBar from './components/SearchBar/SearchBar';
 
-const ClinicalDataPageComp = () => {
+const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }) => {
 	const isLoading = false;
 	return (
 		<div>
-			<div>app header</div>
+			<PageHeader
+				leftSlot={<BreadcrumbTitle breadcrumbs={[programShortName, 'Submitted Data']} />}
+				rightSlot={<HelpLink url="" />}
+			/>
 			{isLoading ? (
 				<Loader />
 			) : (
@@ -68,7 +72,7 @@ const ClinicalDataPage = ({ params: { shortName } }: { params: { shortName: stri
 		acceptedRoles: ['isRDPCAdmin', 'isDCCAdmin', 'isProgramAdmin', 'isDataSubmitter'],
 		programShortName: shortName,
 	});
-	return <ClinicalDataWithPermissions />;
+	return <ClinicalDataWithPermissions programShortName={shortName} />;
 };
 
 export default ClinicalDataPage;
