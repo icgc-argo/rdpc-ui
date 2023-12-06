@@ -27,7 +27,6 @@ import { Button, Icon } from '@icgc-argo/uikit';
 import React from 'react';
 import { Col, Row } from 'react-grid-system';
 import urlJoin from 'url-join';
-export type TsvDownloadIds = { donorIds: number[]; submitterDonorIds: string[] };
 
 export enum CompletionStates {
 	all = 'all',
@@ -35,6 +34,7 @@ export enum CompletionStates {
 	complete = 'complete',
 	incomplete = 'incomplete',
 }
+
 const DownloadButton = ({
 	text,
 	onClick,
@@ -67,6 +67,20 @@ const DownloadButton = ({
 	</Button>
 );
 
+const entityTypes: never[] = [];
+const tsvDownloadIds = { donorIds: [], submitterDonorIds: [] };
+
+// TODO: this urlJoin case is very common, worth extracting to a hook?
+// useAppConfig in hook and just inject programName
+// const getUrl = (programShortName) => {
+// 	const url = urlJoin(
+// 		GATEWAY_API_ROOT,
+// 		`/clinical/proxy/program/`,
+// 		programShortName,
+// 		`/clinical-data-tsv`,
+// 	);
+// };
+
 const ClinicalDownloadButton = ({
 	completionState,
 	disabled = false,
@@ -74,9 +88,6 @@ const ClinicalDownloadButton = ({
 	completionState: CompletionStates;
 	disabled?: boolean;
 }) => {
-	const entityTypes: never[] = [];
-	const tsvDownloadIds = { donorIds: [], submitterDonorIds: [] };
-
 	const toaster = useCommonToasters();
 	const { GATEWAY_API_ROOT } = useAppConfigContext();
 	const p = usePageContext();
@@ -101,7 +112,6 @@ const ClinicalDownloadButton = ({
 			programShortName,
 			`/clinical-data-tsv`,
 		);
-
 		setButtonLoadingState(true);
 
 		// downloadFileWithEgoToken(url, {

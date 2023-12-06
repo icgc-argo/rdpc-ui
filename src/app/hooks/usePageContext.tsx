@@ -25,6 +25,8 @@ const usePageContext = () => {
 	const params = useParams();
 	console.log('route', params);
 
+	// resolves to a string vs string[]
+	// helps typing in consumer
 	const getSingleParam = (key: string) => {
 		const p = params[key];
 		if (typeof p === 'string') return p;
