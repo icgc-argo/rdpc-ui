@@ -21,15 +21,20 @@
 
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import useCommonToasters from '@/app/hooks/useCommonToasters';
+import usePageContext from '@/app/hooks/usePageContext';
 import { css } from '@/lib/emotion';
 import { Button, Icon } from '@icgc-argo/uikit';
-import useAuthContext from 'global/hooks/useAuthContext';
-import { usePageQuery } from 'global/hooks/usePageContext';
 import React from 'react';
 import { Col, Row } from 'react-grid-system';
 import urlJoin from 'url-join';
-import { CompletionStates, TsvDownloadIds } from './common';
+export type TsvDownloadIds = { donorIds: number[]; submitterDonorIds: string[] };
 
+export enum CompletionStates {
+	all = 'all',
+	invalid = 'invalid',
+	complete = 'complete',
+	incomplete = 'incomplete',
+}
 const DownloadButton = ({
 	text,
 	onClick,
@@ -63,23 +68,21 @@ const DownloadButton = ({
 );
 
 const ClinicalDownloadButton = ({
-	text,
-	tsvDownloadIds = { donorIds: [], submitterDonorIds: [] },
-	entityTypes = [],
 	completionState,
 	disabled = false,
 }: {
-	text?: string;
-	tsvDownloadIds: TsvDownloadIds;
-	entityTypes: string[];
 	completionState: CompletionStates;
 	disabled?: boolean;
 }) => {
+	const entityTypes: never[] = [];
+	const tsvDownloadIds = { donorIds: [], submitterDonorIds: [] };
+
 	const toaster = useCommonToasters();
 	const { GATEWAY_API_ROOT } = useAppConfigContext();
-
-	const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
-	const { downloadFileWithEgoToken } = useAuthContext();
+	const p = usePageContext();
+	const programShortName = p.getSingleParam('shortName');
+	console.log('pp', programShortName);
+	//const { downloadFileWithEgoToken } = useAuthContext();
 
 	const [buttonLoadingState, setButtonLoadingState] = React.useState(false);
 	const { donorIds, submitterDonorIds } = tsvDownloadIds;
@@ -101,25 +104,25 @@ const ClinicalDownloadButton = ({
 
 		setButtonLoadingState(true);
 
-		downloadFileWithEgoToken(url, {
-			method: 'post',
-			body: query,
-			headers: { 'Content-Type': 'application/json' },
-		})
-			.then(() => {
-				setButtonLoadingState(false);
-			})
-			.catch((error) => {
-				toaster.onDownloadError(error);
-				setButtonLoadingState(false);
-			});
+		// downloadFileWithEgoToken(url, {
+		// 	method: 'post',
+		// 	body: query,
+		// 	headers: { 'Content-Type': 'application/json' },
+		// })
+		// 	.then(() => {
+		// 		setButtonLoadingState(false);
+		// 	})
+		// 	.catch((error) => {
+		// 		toaster.onDownloadError(error);
+		// 		setButtonLoadingState(false);
+		// 	});
 	};
 
 	return (
 		<Row>
 			<Col>
 				<DownloadButton
-					text={text || 'All Clinical Data'}
+					text="Clinical Data"
 					onClick={onClickDownloadAll}
 					isLoading={buttonLoadingState}
 					disabled={disabled}
@@ -130,3 +133,10 @@ const ClinicalDownloadButton = ({
 };
 
 export default ClinicalDownloadButton;
+
+function downloadFileWithEgoToken(
+	url: string,
+	arg1: { method: string; body: string; headers: { 'Content-Type': string } },
+) {
+	throw new Error('Function not implemented.');
+}
