@@ -16,23 +16,49 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 import { css, useTheme } from '@/lib/emotion';
 import { TitleBar, Link as UIKitLink } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import { FunctionComponent, ReactNode } from 'react';
 import { Row } from 'react-grid-system';
 
-type ContentHeaderProps = {
-	breadcrumb: string[];
-	children?: ReactNode;
-	helpUrl: string;
+export const BreadcrumbTitle = ({ breadcrumbs }: { breadcrumbs: string[] }) => {
+	return (
+		<Row nogutter align="center">
+			<TitleBar>
+				{breadcrumbs.map((breadcrumb, index) => (
+					<div key={index}>{breadcrumb}</div>
+				))}
+			</TitleBar>
+		</Row>
+	);
 };
 
-const ContentHeader: FunctionComponent<ContentHeaderProps> = ({
-	breadcrumb,
-	children,
-	helpUrl,
-}) => {
+export const HelpLink = ({ url }: { url: string }) => {
+	return (
+		<Link href={url} passHref legacyBehavior>
+			<UIKitLink
+				target="_blank"
+				css={css`
+					font-size: 14px;
+				`}
+				withChevron
+				href={url}
+				underline={false}
+				bold
+			>
+				HELP
+			</UIKitLink>
+		</Link>
+	);
+};
+
+export const PageHeader: FunctionComponent<{
+	leftSlot?: ReactNode;
+	rightSlot?: ReactNode;
+	className?: string;
+}> = ({ leftSlot = null, rightSlot = null, className }) => {
 	const theme = useTheme();
 	return (
 		<div
@@ -43,42 +69,16 @@ const ContentHeader: FunctionComponent<ContentHeaderProps> = ({
 				align-items: center;
 				background-color: ${theme.colors.white};
 			`}
+			className={className}
 		>
-			<TitleBar>
-				<>{breadcrumb[0]}</>
-				<Row nogutter align="center">
-					<div
-						css={css`
-							margin-right: 20px;
-						`}
-					>
-						{breadcrumb[1]}
-					</div>
-				</Row>
-			</TitleBar>
-			{children}
+			{leftSlot}
 			<div
 				css={css`
 					margin-left: auto;
 				`}
 			>
-				<Link href={helpUrl} legacyBehavior>
-					<UIKitLink
-						target="_blank"
-						css={css`
-							font-size: 14px;
-						`}
-						withChevron
-						href={helpUrl}
-						underline={false}
-						bold
-					>
-						HELP
-					</UIKitLink>
-				</Link>
+				{rightSlot}
 			</div>
 		</div>
 	);
 };
-
-export default ContentHeader;

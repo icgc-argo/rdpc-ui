@@ -18,6 +18,7 @@
  */
 
 import { ModalPortal } from '@/app/components/Modal';
+import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import APPROVE_SUBMISSION_MUTATION from '@/app/gql/APPROVE_SUBMISSION_MUTATION';
 import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/CLEAR_CLINICAL_SUBMISSION';
 import REOPEN_SUBMISSION_MUTATION from '@/app/gql/REOPEN_SUBMISSION_MUTATION';
@@ -31,8 +32,7 @@ import useUserConfirmationModalState from '@/app/hooks/useUserConfirmationModalS
 import { sleep } from '@/global/utils';
 import { css, useTheme } from '@/lib/emotion';
 import { useMutation } from '@apollo/client';
-import { Button, Modal, TitleBar, Link as UIKitLink } from '@icgc-argo/uikit';
-import Link from 'next/link';
+import { Button, Modal } from '@icgc-argo/uikit';
 import { useRouter } from 'next/navigation';
 import { FC, useMemo } from 'react';
 import { Row } from 'react-grid-system';
@@ -203,83 +203,54 @@ const Header: FC<HeaderProps> = ({
 					<Modal {...modalProps} />
 				</ModalPortal>
 			)}
-			<div
-				css={css`
-					display: flex;
-					height: 56px;
-					padding: 0 30px;
-					background-color: ${isPendingApproval ? theme.colors.accent3_4 : theme.colors.white};
-					border-bottom: 1px solid ${theme.colors.grey_2};
-					justify-content: space-between;
-					align-items: center;
-					width: 100%;
-				`}
-			>
-				<TitleBar>
-					<>{programShortName}</>
+			<PageHeader
+				leftSlot={
+					<>
+						<BreadcrumbTitle breadcrumbs={[programShortName, 'Submit Clinical Data']} />{' '}
+						<ProgressBar clinicalEntities={clinicalEntities} clinicalState={clinicalState} />
+					</>
+				}
+				rightSlot={
 					<Row nogutter align="center">
-						<div
-							css={css`
-								margin-right: 20px;
-							`}
-						>
-							Submit Clinical Data
-						</div>
-						{showProgress && (
-							<ProgressBar clinicalEntities={clinicalEntities} clinicalState={clinicalState} />
+						{isPendingApproval && isAdmin && (
+							<>
+								<Button
+									variant={isAdmin ? 'secondary' : 'text'}
+									isAsync
+									css={css`
+										margin-right: 10px;
+									`}
+									onClick={handleSubmissionReopen}
+								>
+									REOPEN SUBMISSION
+								</Button>
+
+								<Button id="button-approve" size="sm" isAsync onClick={handleSubmissionApproval}>
+									APPROVE
+								</Button>
+							</>
+						)}
+						{!isPendingApproval && (
+							<>
+								<Button
+									variant="text"
+									css={css`
+										margin-right: 10px;
+									`}
+									disabled={isSubmissionSystemDisabled || !clinicalVersion}
+									onClick={handleSubmissionClear}
+								>
+									CLEAR SUBMISSION
+								</Button>
+								<HelpLink url={helpUrl} />
+							</>
 						)}
 					</Row>
-				</TitleBar>
-				<Row nogutter align="center">
-					{isPendingApproval && isAdmin && (
-						<>
-							<Button
-								id="button-reopen"
-								variant={isAdmin ? 'secondary' : 'text'}
-								isAsync
-								css={css`
-									margin-right: 10px;
-								`}
-								onClick={handleSubmissionReopen}
-							>
-								REOPEN SUBMISSION
-							</Button>
-
-							<Button id="button-approve" size="sm" isAsync onClick={handleSubmissionApproval}>
-								APPROVE
-							</Button>
-						</>
-					)}
-					{!isPendingApproval && (
-						<>
-							<Button
-								variant="text"
-								css={css`
-									margin-right: 10px;
-								`}
-								disabled={isSubmissionSystemDisabled || !clinicalVersion}
-								onClick={handleSubmissionClear}
-							>
-								Clear submission
-							</Button>
-							<Link href={helpUrl} legacyBehavior>
-								<UIKitLink
-									target="_blank"
-									css={css`
-										font-size: 14px;
-									`}
-									withChevron
-									href={helpUrl}
-									underline={false}
-									bold
-								>
-									HELP
-								</UIKitLink>
-							</Link>
-						</>
-					)}
-				</Row>
-			</div>
+				}
+				css={css`
+					background-color: ${isPendingApproval ? theme.colors.accent3_4 : theme.colors.white};
+				`}
+			/>
 		</>
 	);
 };
