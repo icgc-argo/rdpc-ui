@@ -20,6 +20,7 @@
     "@icgc-argo/uikit": "^3.0.1",
     "@types/url-join": "^4.0.1",
     "apollo-upload-client": "^17.0.0",
+    "browser-fs-access": "^0.35.0",
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
     "graphql": "^16.8.0",

@@ -20,8 +20,8 @@
 
 import Loader from '@/app/components/Loader';
 import { pageWithPermissions } from '@/app/components/Page';
-import FilterBar from './FilterBar';
-import SubmittedData from './SubmittedData';
+import { SetStateAction } from 'react';
+import SearchBar from './components/SearchBar/SearchBar';
 
 const ClinicalDataPageComp = () => {
 	const isLoading = false;
@@ -32,8 +32,31 @@ const ClinicalDataPageComp = () => {
 				<Loader />
 			) : (
 				<>
-					<FilterBar />
-					<SubmittedData />
+					<SearchBar
+						setModalVisible={function (value: SetStateAction<boolean>): void {
+							throw new Error('Function not implemented.');
+						}}
+						noData={false}
+						completionState={undefined}
+						setCompletionState={function (value: any): void {
+							throw new Error('Function not implemented.');
+						}}
+						programShortName={''}
+						loading={false}
+						keyword={''}
+						setKeyword={function (value: SetStateAction<string>): void {
+							throw new Error('Function not implemented.');
+						}}
+						useDefaultQuery={false}
+						currentDonors={[]}
+						setSelectedDonors={function (value: SetStateAction<string>): void {
+							throw new Error('Function not implemented.');
+						}}
+						donorSearchResults={undefined}
+						tsvDownloadIds={undefined}
+						modalVisible={false}
+					/>
+					<div>submitted data placeholder</div>
 				</>
 			)}
 		</div>

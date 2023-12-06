@@ -16,8 +16,20 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
 
-const SubmittedData = () => <div>SubmittedData </div>;
+import { gql } from '@/__generated__/gql';
 
-export default SubmittedData;
+const CLINICAL_ENTITY_SEARCH_RESULTS_QUERY = gql(`
+	query ClinicalEntitySearchResults($programShortName: String!, $filters: ClinicalInput!) {
+		clinicalSearchResults(programShortName: $programShortName, filters: $filters) {
+			programShortName
+			totalResults
+			searchResults {
+				donorId
+				submitterDonorId
+			}
+		}
+	}
+`);
+
+export default CLINICAL_ENTITY_SEARCH_RESULTS_QUERY;

@@ -16,8 +16,26 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
 
-const FilterBar = () => <div>Filter Bar</div>;
+import { css } from '@/lib/emotion';
 
-export default FilterBar;
+export default function MatchResults({ numMatched }: { numMatched: number }) {
+	return (
+		<div
+			css={css`
+				display: flex;
+				align-items: center;
+			`}
+		>
+			Matched IDs:
+			<b
+				css={css`
+					margin-left: 4px;
+					color: #0774d3;
+				`}
+			>
+				{numMatched}
+			</b>
+		</div>
+	);
+}
