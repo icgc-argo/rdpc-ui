@@ -19,6 +19,7 @@
 
 'use client';
 
+import { CompletionStates } from '@/app/(post-login)/submission/common';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import useCommonToasters from '@/app/hooks/useCommonToasters';
 import usePageContext from '@/app/hooks/usePageContext';
@@ -27,13 +28,6 @@ import { Button, Icon } from '@icgc-argo/uikit';
 import React from 'react';
 import { Col, Row } from 'react-grid-system';
 import urlJoin from 'url-join';
-
-export enum CompletionStates {
-	all = 'all',
-	invalid = 'invalid',
-	complete = 'complete',
-	incomplete = 'incomplete',
-}
 
 const DownloadButton = ({
 	text,

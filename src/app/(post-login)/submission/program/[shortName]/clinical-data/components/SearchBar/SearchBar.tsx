@@ -1,25 +1,28 @@
-// /*
-//  * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
-//  *
-//  * This program and the accompanying materials are made available under the terms of
-//  * the GNU Affero General Public License v3.0. You should have received a copy of the
-//  * GNU Affero General Public License along with this program.
-//  *  If not, see <http://www.gnu.org/licenses/>.
-//  *
-//  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
-//  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
-//  * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
-//  * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
-//  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
-//  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-//  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//  */
-// 'use client';
+/*
+ * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ *
+ * This program and the accompanying materials are made available under the terms of
+ * the GNU Affero General Public License v3.0. You should have received a copy of the
+ * GNU Affero General Public License along with this program.
+ *  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
-import ClinicalDownloadButton, { CompletionStates } from './DownloadButton';
+'use client';
 
+import { CompletionStates } from '@/app/(post-login)/submission/common';
+import { Container, Typography } from '@icgc-argo/uikit';
+import ClinicalDownloadButton from './DownloadButton';
+import { searchBackgroundStyle, searchBoldTextStyle, searchTitleParentStyle } from './style';
 // import { Button, Container, css, DropdownButton, Icon, Input, Typography } from '@icgc-argo/uikit';
 // import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
 // import { createRef, Dispatch, RefObject, SetStateAction, useEffect, useState } from 'react';
@@ -49,24 +52,24 @@ import ClinicalDownloadButton, { CompletionStates } from './DownloadButton';
 // 	searchTitleParentStyle,
 // } from './style';
 
-// const COMPLETION_OPTIONS = {
-// 	all: {
-// 		display: `All Donors`,
-// 		value: CompletionStates['all'],
-// 	},
-// 	invalid: {
-// 		display: `Invalid Donors`,
-// 		value: CompletionStates['invalid'],
-// 	},
-// 	complete: {
-// 		display: `Complete Donors`,
-// 		value: CompletionStates['complete'],
-// 	},
-// 	incomplete: {
-// 		display: `Incomplete Donors`,
-// 		value: CompletionStates['incomplete'],
-// 	},
-// };
+const COMPLETION_OPTIONS = {
+	all: {
+		display: `All Donors`,
+		value: CompletionStates['all'],
+	},
+	invalid: {
+		display: `Invalid Donors`,
+		value: CompletionStates['invalid'],
+	},
+	complete: {
+		display: `Complete Donors`,
+		value: CompletionStates['complete'],
+	},
+	incomplete: {
+		display: `Incomplete Donors`,
+		value: CompletionStates['incomplete'],
+	},
+};
 
 // const MENU_ITEMS = Object.values(COMPLETION_OPTIONS);
 
@@ -265,10 +268,33 @@ import ClinicalDownloadButton, { CompletionStates } from './DownloadButton';
 // 	);
 // }
 
-const SearchBar = () => (
-	<div>
-		<ClinicalDownloadButton completionState={CompletionStates.complete} disabled={false} />
-	</div>
-);
+type SharedStateProp<T> = { value: T; setter: () => void };
+type SearchBarProps = {
+	keyword: SharedStateProp<string>;
+	completionState: SharedStateProp<CompletionStates>;
+	searchResults: [];
+};
+const SearchBar = ({ keyword, searchResults, completionState }: SearchBarProps) => {
+	const currentDonors = ['do1', 'do2'];
+	const titleText =
+		currentDonors.length === 1
+			? `DO${currentDonors[0]}`
+			: currentDonors.length > 1
+			? `${currentDonors.length} Donors`
+			: keyword.value
+			? `${searchResults.length} Donors`
+			: COMPLETION_OPTIONS[completionState.value].display;
+
+	return (
+		<div>
+			<Container css={searchBackgroundStyle}>
+				<Typography css={searchTitleParentStyle} variant="subtitle2">
+					Clinical Data for: <b css={searchBoldTextStyle}>{titleText}</b>
+				</Typography>
+				<ClinicalDownloadButton completionState={CompletionStates.complete} disabled={false} />
+			</Container>
+		</div>
+	);
+};
 
 export default SearchBar;

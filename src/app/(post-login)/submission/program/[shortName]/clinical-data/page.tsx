@@ -21,11 +21,14 @@
 import Loader from '@/app/components/Loader';
 import { pageWithPermissions } from '@/app/components/Page';
 import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
-import { SetStateAction } from 'react';
+import { SetStateAction, useState } from 'react';
 import SearchBar from './components/SearchBar/SearchBar';
 
 const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }) => {
 	const isLoading = false;
+	const [keyword, setKeyword] = useState('');
+	const [completionState, setCompletionState] = useState(CompletionStates['all']);
+
 	return (
 		<div>
 			<PageHeader
@@ -37,20 +40,15 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 			) : (
 				<>
 					<SearchBar
+						completionStatus={{ value: completionState, setter: setCompletionState }}
+						keyword={{ value: keyword, setter: setKeyword }}
+						//
 						setModalVisible={function (value: SetStateAction<boolean>): void {
 							throw new Error('Function not implemented.');
 						}}
 						noData={false}
-						completionState={undefined}
-						setCompletionState={function (value: any): void {
-							throw new Error('Function not implemented.');
-						}}
 						programShortName={''}
 						loading={false}
-						keyword={''}
-						setKeyword={function (value: SetStateAction<string>): void {
-							throw new Error('Function not implemented.');
-						}}
 						useDefaultQuery={false}
 						currentDonors={[]}
 						setSelectedDonors={function (value: SetStateAction<string>): void {
