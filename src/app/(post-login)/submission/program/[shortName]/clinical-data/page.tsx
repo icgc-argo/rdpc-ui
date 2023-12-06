@@ -22,6 +22,7 @@ import Loader from '@/app/components/Loader';
 import { pageWithPermissions } from '@/app/components/Page';
 import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import { SetStateAction, useState } from 'react';
+import { CompletionStates } from '../../../common';
 import SearchBar from './components/SearchBar/SearchBar';
 
 const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }) => {
@@ -40,7 +41,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 			) : (
 				<>
 					<SearchBar
-						completionStatus={{ value: completionState, setter: setCompletionState }}
+						completionState={{ value: completionState, setter: setCompletionState }}
 						keyword={{ value: keyword, setter: setKeyword }}
 						//
 						setModalVisible={function (value: SetStateAction<boolean>): void {

@@ -20,9 +20,16 @@
 'use client';
 
 import { CompletionStates } from '@/app/(post-login)/submission/common';
-import { Container, Typography } from '@icgc-argo/uikit';
+import { Container, DropdownButton, Icon, Typography } from '@icgc-argo/uikit';
 import ClinicalDownloadButton from './DownloadButton';
-import { searchBackgroundStyle, searchBoldTextStyle, searchTitleParentStyle } from './style';
+import {
+	searchBackgroundStyle,
+	searchBoldTextStyle,
+	searchDownArrowStyle,
+	searchDropdownStyle,
+	searchFilterParentStyle,
+	searchTitleParentStyle,
+} from './style';
 // import { Button, Container, css, DropdownButton, Icon, Input, Typography } from '@icgc-argo/uikit';
 // import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
 // import { createRef, Dispatch, RefObject, SetStateAction, useEffect, useState } from 'react';
@@ -71,7 +78,7 @@ const COMPLETION_OPTIONS = {
 	},
 };
 
-// const MENU_ITEMS = Object.values(COMPLETION_OPTIONS);
+const MENU_ITEMS = Object.values(COMPLETION_OPTIONS);
 
 // export default function SearchBar({
 // 	setModalVisible,
@@ -268,13 +275,14 @@ const COMPLETION_OPTIONS = {
 // 	);
 // }
 
-type SharedStateProp<T> = { value: T; setter: () => void };
+type SharedStateProp<T> = { value: T; setter: (value: T) => void };
 type SearchBarProps = {
 	keyword: SharedStateProp<string>;
 	completionState: SharedStateProp<CompletionStates>;
 	searchResults: [];
 };
 const SearchBar = ({ keyword, searchResults, completionState }: SearchBarProps) => {
+	const completionStatus = completionState.value;
 	const currentDonors = ['do1', 'do2'];
 	const titleText =
 		currentDonors.length === 1
@@ -291,6 +299,21 @@ const SearchBar = ({ keyword, searchResults, completionState }: SearchBarProps) 
 				<Typography css={searchTitleParentStyle} variant="subtitle2">
 					Clinical Data for: <b css={searchBoldTextStyle}>{titleText}</b>
 				</Typography>
+				<div css={searchFilterParentStyle}>
+					<Typography variant="label">Quick Filters:</Typography>
+					<DropdownButton
+						css={searchDropdownStyle}
+						disabled={!!currentDonors.length}
+						value={completionState.value}
+						variant="secondary"
+						size="sm"
+						onItemClick={(e) => completionState.setter(e.value)}
+						menuItems={MENU_ITEMS}
+					>
+						{`Show ${COMPLETION_OPTIONS[completionStatus].display}`}
+						<Icon name="chevron_down" fill="accent2_dark" css={searchDownArrowStyle} />
+					</DropdownButton>
+				</div>
 				<ClinicalDownloadButton completionState={CompletionStates.complete} disabled={false} />
 			</Container>
 		</div>
