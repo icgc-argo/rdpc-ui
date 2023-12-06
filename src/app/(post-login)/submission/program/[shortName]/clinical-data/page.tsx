@@ -41,14 +41,14 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 			) : (
 				<>
 					<SearchBar
-						completionState={{ value: completionState, setter: setCompletionState }}
+						completionStatus={{ value: completionState, setter: setCompletionState }}
 						keyword={{ value: keyword, setter: setKeyword }}
+						searchResults={[]}
 						//
 						setModalVisible={function (value: SetStateAction<boolean>): void {
 							throw new Error('Function not implemented.');
 						}}
 						noData={false}
-						programShortName={''}
 						loading={false}
 						useDefaultQuery={false}
 						currentDonors={[]}

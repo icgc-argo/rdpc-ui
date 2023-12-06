@@ -20,16 +20,12 @@
 'use client';
 
 import { CompletionStates } from '@/app/(post-login)/submission/common';
-import { Container, DropdownButton, Icon, Typography } from '@icgc-argo/uikit';
+import { Container, Typography } from '@icgc-argo/uikit';
+import { useState } from 'react';
 import ClinicalDownloadButton from './DownloadButton';
-import {
-	searchBackgroundStyle,
-	searchBoldTextStyle,
-	searchDownArrowStyle,
-	searchDropdownStyle,
-	searchFilterParentStyle,
-	searchTitleParentStyle,
-} from './style';
+import FilterModal from './FilterModal/FilterModal';
+import QuickFilters from './QuickFilters';
+import { searchBackgroundStyle, searchBoldTextStyle, searchTitleParentStyle } from './style';
 // import { Button, Container, css, DropdownButton, Icon, Input, Typography } from '@icgc-argo/uikit';
 // import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
 // import { createRef, Dispatch, RefObject, SetStateAction, useEffect, useState } from 'react';
@@ -59,7 +55,7 @@ import {
 // 	searchTitleParentStyle,
 // } from './style';
 
-const COMPLETION_OPTIONS = {
+export const COMPLETION_OPTIONS = {
 	all: {
 		display: `All Donors`,
 		value: CompletionStates['all'],
@@ -77,8 +73,6 @@ const COMPLETION_OPTIONS = {
 		value: CompletionStates['incomplete'],
 	},
 };
-
-const MENU_ITEMS = Object.values(COMPLETION_OPTIONS);
 
 // export default function SearchBar({
 // 	setModalVisible,
@@ -276,44 +270,48 @@ const MENU_ITEMS = Object.values(COMPLETION_OPTIONS);
 // }
 
 type SharedStateProp<T> = { value: T; setter: (value: T) => void };
-type SearchBarProps = {
+export type SearchBarProps = {
 	keyword: SharedStateProp<string>;
-	completionState: SharedStateProp<CompletionStates>;
+	completionStatus: SharedStateProp<CompletionStates>;
 	searchResults: [];
 };
-const SearchBar = ({ keyword, searchResults, completionState }: SearchBarProps) => {
-	const completionStatus = completionState.value;
-	const currentDonors = ['do1', 'do2'];
+const SearchBar = ({ keyword, searchResults, completionStatus }: SearchBarProps) => {
+	const [isModalVisible, setModalVisible] = useState(false);
+
+	const donors = ['do1', 'do2'];
 	const titleText =
-		currentDonors.length === 1
-			? `DO${currentDonors[0]}`
-			: currentDonors.length > 1
-			? `${currentDonors.length} Donors`
+		donors.length === 1
+			? `DO${donors[0]}`
+			: donors.length > 1
+			? `${donors.length} Donors`
 			: keyword.value
 			? `${searchResults.length} Donors`
-			: COMPLETION_OPTIONS[completionState.value].display;
+			: COMPLETION_OPTIONS[completionStatus.value].display;
 
 	return (
 		<div>
+			{isModalVisible && (
+				<FilterModal
+					setModalVisible={setModalVisible}
+					setSelectedDonors={() => console.log('setSelectedDonors')}
+					programShortName={'programShortName'}
+				/>
+			)}
 			<Container css={searchBackgroundStyle}>
 				<Typography css={searchTitleParentStyle} variant="subtitle2">
 					Clinical Data for: <b css={searchBoldTextStyle}>{titleText}</b>
 				</Typography>
-				<div css={searchFilterParentStyle}>
-					<Typography variant="label">Quick Filters:</Typography>
-					<DropdownButton
-						css={searchDropdownStyle}
-						disabled={!!currentDonors.length}
-						value={completionState.value}
-						variant="secondary"
-						size="sm"
-						onItemClick={(e) => completionState.setter(e.value)}
-						menuItems={MENU_ITEMS}
-					>
-						{`Show ${COMPLETION_OPTIONS[completionStatus].display}`}
-						<Icon name="chevron_down" fill="accent2_dark" css={searchDownArrowStyle} />
-					</DropdownButton>
-				</div>
+				<QuickFilters
+					{...{
+						donors,
+						keyword,
+						completionStatus,
+						searchResults,
+					}}
+					onClickList={() => setModalVisible(true)}
+					onInputChange={() => null}
+					onSelectResult={() => null}
+				/>
 				<ClinicalDownloadButton completionState={CompletionStates.complete} disabled={false} />
 			</Container>
 		</div>

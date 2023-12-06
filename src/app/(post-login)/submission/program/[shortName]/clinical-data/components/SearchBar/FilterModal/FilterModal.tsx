@@ -19,12 +19,11 @@
 
 import { ModalPortal } from '@/app/components/Modal';
 import { css } from '@/lib/emotion';
-import { useQuery } from '@apollo/client';
 import { Button, Modal } from '@icgc-argo/uikit/';
 import { Textarea } from '@icgc-argo/uikit/form/Textarea';
-import React, { useEffect, useState } from 'react';
-import { ClinicalEntitySearchResultResponse, defaultClinicalEntityFilters } from '../../common';
-import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '../gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
+import React, { useState } from 'react';
+//import { ClinicalEntitySearchResultResponse, defaultClinicalEntityFilters } from '../../common';
+//import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '../gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
 import MatchResults from './MatchResults';
 import UploadButton from './UploadButton';
 
@@ -72,51 +71,51 @@ export default function FilterModal({
 		.filter(Boolean);
 
 	// enter the formatted array of string to query and return the matched strings
-	const { data: searchResultData } = useQuery<ClinicalEntitySearchResultResponse>(
-		CLINICAL_ENTITY_SEARCH_RESULTS_QUERY,
-		{
-			errorPolicy: 'all',
-			variables: {
-				programShortName,
-				filters: {
-					...defaultClinicalEntityFilters,
-					completionState: 'all',
-					donorIds: filterDonorIds,
-					submitterDonorIds: filterSubmitterIds,
-					entityTypes: ['donor'],
-				},
-			},
-		},
-	);
+	// const { data: searchResultData } = useQuery<ClinicalEntitySearchResultResponse>(
+	// 	CLINICAL_ENTITY_SEARCH_RESULTS_QUERY,
+	// 	{
+	// 		errorPolicy: 'all',
+	// 		variables: {
+	// 			programShortName,
+	// 			filters: {
+	// 				...defaultClinicalEntityFilters,
+	// 				completionState: 'all',
+	// 				donorIds: filterDonorIds,
+	// 				submitterDonorIds: filterSubmitterIds,
+	// 				entityTypes: ['donor'],
+	// 			},
+	// 		},
+	// 	},
+	// );
 
-	useEffect(() => {
-		// This set contain unique ids inputs (no duplicates)
-		const filteredTextAreaIDs = new Set();
+	// useEffect(() => {
+	// 	// This set contain unique ids inputs (no duplicates)
+	// 	const filteredTextAreaIDs = new Set();
 
-		// Queried results of ids on current submitted data page
-		const queryResults = searchResultData?.clinicalSearchResults?.searchResults || [];
-		let matchedCount = 0;
-		// Adding matching ids of queried and text field results to the Set
-		queryResults.forEach((result) => {
-			const donorIdMatch = filterDonorIds.includes(result.donorId);
-			const submitterIdMatch = filterSubmitterIds.includes(result.submitterDonorId);
+	// 	// Queried results of ids on current submitted data page
+	// 	const queryResults = searchResultData?.clinicalSearchResults?.searchResults || [];
+	// 	let matchedCount = 0;
+	// 	// Adding matching ids of queried and text field results to the Set
+	// 	queryResults.forEach((result) => {
+	// 		const donorIdMatch = filterDonorIds.includes(result.donorId);
+	// 		const submitterIdMatch = filterSubmitterIds.includes(result.submitterDonorId);
 
-			if (submitterIdMatch) {
-				matchedCount++;
-			}
-			if (donorIdMatch) {
-				matchedCount++;
-			}
-			if (donorIdMatch || submitterIdMatch) {
-				filteredTextAreaIDs.add(result.donorId);
-			}
-		});
+	// 		if (submitterIdMatch) {
+	// 			matchedCount++;
+	// 		}
+	// 		if (donorIdMatch) {
+	// 			matchedCount++;
+	// 		}
+	// 		if (donorIdMatch || submitterIdMatch) {
+	// 			filteredTextAreaIDs.add(result.donorId);
+	// 		}
+	// 	});
 
-		// Update MatchResults Component with the matched number
+	// 	// Update MatchResults Component with the matched number
 
-		setNumMatched(matchedCount);
-		setMatchedIds(Array.from(filteredTextAreaIDs).join(','));
-	}, [searchResultData]);
+	// 	setNumMatched(matchedCount);
+	// 	setMatchedIds(Array.from(filteredTextAreaIDs).join(','));
+	// }, [searchResultData]);
 
 	const handleResults = (results) => {
 		if (filterTextBox) {
