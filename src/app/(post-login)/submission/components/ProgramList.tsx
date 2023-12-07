@@ -18,14 +18,16 @@
  */
 'use client';
 
+import { Program } from '@/__generated__/graphql';
 import { css } from '@/lib/emotion';
 import { Table, Typography } from '@icgc-argo/uikit';
+import orderBy from 'lodash/orderBy';
 import { columns } from '../program-table/config';
 
-export type ProgramData = any;
 export type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 
-export default function ProgramList({ programs }: { programs: ProgramData[] }) {
+export default function ProgramList({ programs }: { programs: Program[] }) {
+	const sortedProgramList = orderBy(programs, 'name');
 	const programsArraySize = programs.length;
 
 	return (
@@ -48,7 +50,7 @@ export default function ProgramList({ programs }: { programs: ProgramData[] }) {
 				{programsArraySize.toLocaleString()} results
 			</Typography>
 			<Table
-				data={programs}
+				data={sortedProgramList}
 				columns={columns}
 				pageCount={20}
 				withSideBorders

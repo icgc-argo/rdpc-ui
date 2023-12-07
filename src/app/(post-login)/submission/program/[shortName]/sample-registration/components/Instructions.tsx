@@ -20,7 +20,7 @@
 'use client';
 
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { CONTACT_PAGE_PATH } from '@/global/constants';
+import { CLINICAL_TEMPLATE_PATH, CONTACT_PAGE_PATH } from '@/global/constants';
 import { css } from '@/lib/emotion';
 import {
 	BUTTON_SIZES,
@@ -66,7 +66,9 @@ const Instructions = ({
 
 	// download template
 	const downloadFileTemplate = () =>
-		window.location.assign(urlJoin(GATEWAY_API_ROOT, '/clinical/template/sample_registration.tsv'));
+		window.location.assign(
+			urlJoin(GATEWAY_API_ROOT, CLINICAL_TEMPLATE_PATH, 'sample_registration.tsv'),
+		);
 
 	return (
 		<div

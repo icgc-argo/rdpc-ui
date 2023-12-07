@@ -19,7 +19,7 @@
 'use client';
 
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { useAuthContext } from '@/global/utils/auth';
+import { useAuthContext } from '@/app/hooks/AuthProvider';
 import { DnaLoader, css, useTheme } from '@icgc-argo/uikit';
 import { useRouter } from 'next/navigation';
 import { useQuery } from 'react-query';
@@ -31,7 +31,7 @@ export default async function LoggingIn() {
 	const { egoJwt, authLoading, setAuthLoading, logIn } = useAuthContext();
 	const EGO_TOKEN_URL = `${EGO_API_ROOT}/api/oauth/ego-token?client_id=${EGO_CLIENT_ID}`;
 
-	if (egoJwt) router.push('/landing-page');
+	if (egoJwt) router.push('/submission/program');
 
 	if (!authLoading && !egoJwt) setAuthLoading(true);
 

@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { useAuthContext } from '@/global/utils/auth';
+import { useAuthContext } from '@/app/hooks/AuthProvider';
 import { css, useTheme } from '@/lib/emotion';
 import { AppBarMenuItem, DnaLoader, Link, NavElement } from '@icgc-argo/uikit';
 import Image from 'next/image';
@@ -36,7 +36,7 @@ const Header = () => {
 	const path = usePathname();
 	const theme = useTheme();
 	const onProfilePage = path === '/landing-page';
-	const profileActive = onProfilePage && !!egoJwt.length && !authLoading;
+	const profileActive = onProfilePage && !!egoJwt && !authLoading;
 
 	const profileNavDetails: Array<NavElement> = [
 		{

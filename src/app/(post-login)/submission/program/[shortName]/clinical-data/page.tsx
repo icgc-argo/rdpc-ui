@@ -18,32 +18,18 @@
  */
 'use client';
 
-import { Link as UIKitLink } from '@icgc-argo/uikit';
-import Link from 'next/link';
+import { pageWithPermissions } from '@/app/components/Page';
 
-type Admin = {
-	email: string;
-	firstName: string;
-	lastName: string;
+const ClinicalDataPageComp = () => {
+	return <div>clinical data</div>;
 };
 
-const Admins = ({ admins = [] }: { admins: Admin[] }) => {
-	const adminLinks = admins.map((admin, idx) => (
-		<Link
-			href={`mailto: ${admin.email}`}
-			key={admin.email}
-			prefetch={false}
-			passHref
-			legacyBehavior
-		>
-			<UIKitLink>
-				{admin.firstName + ' ' + admin.lastName}
-				{idx != admins.length - 1 && ','}
-			</UIKitLink>
-		</Link>
-	));
-
-	return <div>{adminLinks}</div>;
+const ClinicalDataPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
+	const ClinicalDataWithPermissions = pageWithPermissions(ClinicalDataPageComp, {
+		acceptedRoles: ['isRDPCAdmin', 'isDCCAdmin', 'isProgramAdmin', 'isDataSubmitter'],
+		programShortName: shortName,
+	});
+	return <ClinicalDataWithPermissions />;
 };
 
-export default Admins;
+export default ClinicalDataPage;

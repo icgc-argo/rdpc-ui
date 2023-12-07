@@ -39,10 +39,12 @@ const CLINICAL_FILE_ORDER = [
 
 // parse out nulls, undefined, provide sensible defaults so type checking isnt a scattered nightmare
 export const parseGQLResp: (v: any) => ClinicalSubmission = (gqlData) => {
-	const clinicalState = gqlData?.clinicalSubmissions.state;
-	const clinicalVersion = gqlData?.clinicalSubmissions.version || '';
+	const clinicalSubmissions = gqlData?.clinicalSubmissions;
 
-	const fileErrors = gqlData?.clinicalSubmissions.fileErrors;
+	const clinicalState = clinicalSubmissions?.state;
+	const clinicalVersion = clinicalSubmissions?.version || '';
+
+	const fileErrors = clinicalSubmissions?.fileErrors;
 
 	const isSubmissionValidated =
 		clinicalState === 'INVALID' ||
@@ -51,10 +53,16 @@ export const parseGQLResp: (v: any) => ClinicalSubmission = (gqlData) => {
 
 	const isPendingApproval = clinicalState === 'PENDING_APPROVAL';
 
-	const filteredEntities = gqlData?.clinicalSubmissions.clinicalEntities.filter(notNull) || [];
+	const filteredEntities = clinicalSubmissions?.clinicalEntities.filter(notNull) || [];
 	const orderedEntities = orderBy(filteredEntities, (entity) =>
 		CLINICAL_FILE_ORDER.indexOf(entity ? entity.clinicalType : ''),
 	);
+
+	const updateInfo = {
+		updatedBy: clinicalSubmissions?.updatedBy || '',
+		updatedAt: clinicalSubmissions?.updatedAt || '',
+	};
+
 	const clinicalEntities = orderedEntities.map((entity) => {
 		const stats = {
 			errorsFound: [],
@@ -118,5 +126,6 @@ export const parseGQLResp: (v: any) => ClinicalSubmission = (gqlData) => {
 		clinicalEntities,
 		isPendingApproval,
 		isSubmissionValidated,
+		updateInfo,
 	};
 };

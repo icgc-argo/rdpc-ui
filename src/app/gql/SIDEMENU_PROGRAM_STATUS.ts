@@ -17,21 +17,42 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-'use client';
+import { gql } from '@/__generated__/gql';
 
-import Loader from '@/app/components/Loader';
-import PROGRAMS_LIST_QUERY from '@/app/gql/PROGRAMS_LIST_QUERY';
-import { notNull } from '@/global/utils/types';
-import { useQuery } from '@apollo/client';
-import { notFound } from 'next/navigation';
-import ProgramList from './components/ProgramList';
+const SIDEMENU_PROGRAM_STATUS = gql(`
+	query SideMenuProgramStatus($activeProgramName: String!, $filters: ClinicalInput!) {
+	 clinicalRegistration(shortName: $activeProgramName) {
+      programShortName
+      fileErrors {
+        message
+        code
+      }
+      fileName
+      errors {
+        type
+      }
+		}
+    clinicalSubmissions(programShortName: $activeProgramName) {
+      programShortName
+      state
+      clinicalEntities {
+        schemaErrors {
+          row
+        }
+      }
+    }
+    clinicalData(programShortName: $activeProgramName, filters: $filters) {
+      programShortName
+      clinicalEntities {
+        entityName
+      }
+      clinicalErrors {
+        errors {
+          entityName
+        }
+      }
+    } 
+  }
+`);
 
-export default function Submission() {
-	const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY);
-
-	const programs = data?.programs?.filter(notNull) || [];
-
-	if (loading) return <Loader />;
-	if (error) notFound();
-	return <ProgramList programs={programs} />;
-}
+export default SIDEMENU_PROGRAM_STATUS;

@@ -16,22 +16,45 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 'use client';
 
+import { BreadcrumbTitle, PageHeader } from '@/app/components/PageHeader/PageHeader';
+import PROGRAMS_LIST_QUERY from '@/app/gql/PROGRAMS_LIST_QUERY';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { CREATE_PROGRAM_PAGE_PATH } from '@/global/constants';
+import { notNull } from '@/global/utils';
+import { useQuery } from '@apollo/client';
+import { Button, Loader } from '@icgc-argo/uikit';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import ProgramList from '../components/ProgramList';
 
-export default function LandingPage() {
-	const { EGO_CLIENT_ID } = useAppConfigContext();
+export default function Submission() {
+	const { DATA_CENTER } = useAppConfigContext();
+	const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY, {
+		variables: { dataCenter: DATA_CENTER },
+	});
 
+	const programs = data?.programs?.filter(notNull) || [];
+
+	if (loading) return <Loader />;
+	if (error) notFound();
+
+	const canCreate = true;
 	return (
-		<main>
-			<div>
-				<p>
-					Get started by editing&nbsp;
-					<code>src/app/files/page.tsx</code>
-				</p>
-			</div>
-			<h1>Welcome! {EGO_CLIENT_ID}</h1>
-		</main>
+		<div>
+			<PageHeader
+				leftSlot={<BreadcrumbTitle breadcrumbs={['All Programs']} />}
+				rightSlot={
+					canCreate && (
+						<Link href={CREATE_PROGRAM_PAGE_PATH} legacyBehavior>
+							<Button>Create a program</Button>
+						</Link>
+					)
+				}
+			/>
+			<ProgramList programs={programs} />
+		</div>
 	);
 }

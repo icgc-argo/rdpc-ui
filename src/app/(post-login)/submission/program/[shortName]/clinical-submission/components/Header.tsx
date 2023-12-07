@@ -17,24 +17,41 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { ModalPortal } from '@/app/components/Modal';
+import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import APPROVE_SUBMISSION_MUTATION from '@/app/gql/APPROVE_SUBMISSION_MUTATION';
 import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/CLEAR_CLINICAL_SUBMISSION';
 import REOPEN_SUBMISSION_MUTATION from '@/app/gql/REOPEN_SUBMISSION_MUTATION';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { useAuthContext } from '@/app/hooks/AuthProvider';
 import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
 import { useToaster } from '@/app/hooks/ToastProvider';
 import useCommonToasters from '@/app/hooks/useCommonToasters';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
+import useUserConfirmationModalState from '@/app/hooks/useUserConfirmationModalState';
 import { sleep } from '@/global/utils';
-import { useAuthContext } from '@/global/utils/auth';
 import { css, useTheme } from '@/lib/emotion';
 import { useMutation } from '@apollo/client';
-import { Button, TitleBar, Link as UIKitLink } from '@icgc-argo/uikit';
-import Link from 'next/link';
+import { Button, Modal } from '@icgc-argo/uikit';
+import { useRouter } from 'next/navigation';
 import { FC, useMemo } from 'react';
 import { Row } from 'react-grid-system';
 import urlJoin from 'url-join';
 import ProgressBar from './ProgressBar';
+
+const placeholderClinicalSubmissionQueryData = (shortName: string) => ({
+	clinicalSubmissions: {
+		version: '',
+		programShortName: shortName,
+		clinicalEntities: [],
+		fileErrors: [],
+		id: '',
+		state: null,
+		updatedAt: '',
+		updatedBy: '',
+		__typename: 'ClinicalSubmissionData',
+	},
+});
 
 type HeaderProps = {
 	programShortName: string;
@@ -45,6 +62,7 @@ type HeaderProps = {
 	refetch: any;
 	updateQuery: any;
 };
+
 const Header: FC<HeaderProps> = ({
 	programShortName,
 	showProgress,
@@ -55,6 +73,8 @@ const Header: FC<HeaderProps> = ({
 	updateQuery: updateClinicalSubmissionQuery,
 }) => {
 	const theme = useTheme();
+	const router = useRouter();
+	const { modalProps, isModalShown, getUserConfirmation } = useUserConfirmationModalState();
 
 	// docs url
 	const { DOCS_URL_ROOT } = useAppConfigContext();
@@ -74,14 +94,14 @@ const Header: FC<HeaderProps> = ({
 
 	const { isDisabled: isSubmissionSystemDisabled } = useSubmissionSystemStatus();
 
-	const [reopenSubmission] = useMutation(REOPEN_SUBMISSION_MUTATION, {
+	const [approveClinicalSubmission] = useMutation(APPROVE_SUBMISSION_MUTATION, {
 		variables: {
 			programShortName,
 			submissionVersion: clinicalVersion,
 		},
 	});
 
-	const [approveClinicalSubmission] = useMutation(APPROVE_SUBMISSION_MUTATION, {
+	const [reopenSubmission] = useMutation(REOPEN_SUBMISSION_MUTATION, {
 		variables: {
 			programShortName,
 			submissionVersion: clinicalVersion,
@@ -95,12 +115,66 @@ const Header: FC<HeaderProps> = ({
 		},
 	});
 
-	const handleSubmissionReopen = async () => {
-		console.log('handle submission reoepn');
+	const handleSubmissionApproval = async () => {
+		const didUserConfirm = await getUserConfirmation({
+			title: 'Approve Submission?',
+			children: 'Are you sure you want to approve this clinical submission?',
+			actionButtonText: 'Yes, Approve',
+			actionButtonId: 'modal-confirm-approve',
+			buttonSize: 'sm',
+		});
+
+		if (didUserConfirm) {
+			setGlobalLoading(true);
+			await sleep();
+			try {
+				await approveClinicalSubmission();
+
+				updateClinicalSubmissionQuery((previous: any) => ({
+					...previous,
+					clinicalSubmissions:
+						placeholderClinicalSubmissionQueryData(programShortName).clinicalSubmissions,
+				}));
+
+				router.push('/');
+				toaster.addToast({
+					variant: 'SUCCESS',
+					interactionType: 'CLOSE',
+					title: 'Clinical Data is successfully approved',
+					content: `${programShortName} updated clinical data has been approved.`,
+				});
+			} catch (err) {
+				await refetchClinicalSubmission();
+				commonToaster.unknownErrorWithReloadMessage();
+			} finally {
+				setGlobalLoading(false);
+			}
+		}
 	};
 
-	const handleSubmissionApproval = async () => {
-		console.log('handle submission approval');
+	const handleSubmissionReopen = async () => {
+		const didUserConfirm = await getUserConfirmation({
+			title: isDcc ? 'Reopen Submission?' : 'Are you sure you want to reopen your submission?',
+			children: isDcc
+				? 'Are you sure you want to reopen this clinical submission?'
+				: 'If you reopen your clinical submission it will be recalled from DCC approval and your workspace will be open for modifications.',
+			actionButtonText: isDcc ? 'Yes, Reopen' : 'Yes, Reopen Submission',
+			actionButtonId: 'modal-confirm-reopen',
+			buttonSize: 'sm',
+		});
+
+		if (didUserConfirm) {
+			setGlobalLoading(true);
+			await sleep();
+			try {
+				await reopenSubmission();
+			} catch (err) {
+				await refetchClinicalSubmission();
+				commonToaster.unknownErrorWithReloadMessage();
+			} finally {
+				setGlobalLoading(false);
+			}
+		}
 	};
 
 	const handleSubmissionClear = async () => {
@@ -124,84 +198,59 @@ const Header: FC<HeaderProps> = ({
 
 	return (
 		<>
-			<div
-				css={css`
-					display: flex;
-					height: 56px;
-					padding: 0 30px;
-					background-color: ${isPendingApproval ? theme.colors.accent3_4 : theme.colors.white};
-					border-bottom: 1px solid ${theme.colors.grey_2};
-					justify-content: space-between;
-					align-items: center;
-					width: 100%;
-				`}
-			>
-				<TitleBar>
-					<>{programShortName}</>
+			{isModalShown && (
+				<ModalPortal>
+					<Modal {...modalProps} />
+				</ModalPortal>
+			)}
+			<PageHeader
+				leftSlot={
+					<>
+						<BreadcrumbTitle breadcrumbs={[programShortName, 'Submit Clinical Data']} />{' '}
+						<ProgressBar clinicalEntities={clinicalEntities} clinicalState={clinicalState} />
+					</>
+				}
+				rightSlot={
 					<Row nogutter align="center">
-						<div
-							css={css`
-								margin-right: 20px;
-							`}
-						>
-							Submit Clinical Data
-						</div>
-						{showProgress && (
-							<ProgressBar clinicalEntities={clinicalEntities} clinicalState={clinicalState} />
+						{isPendingApproval && isAdmin && (
+							<>
+								<Button
+									variant={isAdmin ? 'secondary' : 'text'}
+									isAsync
+									css={css`
+										margin-right: 10px;
+									`}
+									onClick={handleSubmissionReopen}
+								>
+									REOPEN SUBMISSION
+								</Button>
+
+								<Button id="button-approve" size="sm" isAsync onClick={handleSubmissionApproval}>
+									APPROVE
+								</Button>
+							</>
+						)}
+						{!isPendingApproval && (
+							<>
+								<Button
+									variant="text"
+									css={css`
+										margin-right: 10px;
+									`}
+									disabled={isSubmissionSystemDisabled || !clinicalVersion}
+									onClick={handleSubmissionClear}
+								>
+									CLEAR SUBMISSION
+								</Button>
+								<HelpLink url={helpUrl} />
+							</>
 						)}
 					</Row>
-				</TitleBar>
-				<Row nogutter align="center">
-					{isPendingApproval && (
-						<Button
-							id="button-reopen"
-							variant={isAdmin ? 'secondary' : 'text'}
-							isAsync
-							css={css`
-								margin-right: 10px;
-							`}
-							onClick={handleSubmissionReopen}
-						>
-							{isAdmin ? 'reopen' : 'reopen submission'}
-						</Button>
-					)}
-					{!isPendingApproval && (
-						<>
-							<Button
-								variant="text"
-								css={css`
-									margin-right: 10px;
-								`}
-								disabled={isSubmissionSystemDisabled || !clinicalVersion}
-								onClick={handleSubmissionClear}
-							>
-								Clear submission
-							</Button>
-							<Link href={helpUrl} legacyBehavior>
-								<UIKitLink
-									target="_blank"
-									css={css`
-										font-size: 14px;
-									`}
-									withChevron
-									href={helpUrl}
-									underline={false}
-									bold
-								>
-									HELP
-								</UIKitLink>
-							</Link>
-						</>
-					)}
-					{isAdmin && isPendingApproval && (
-						<>
-							<Button id="button-approve" size="sm" isAsync onClick={handleSubmissionApproval}>
-								approve
-							</Button>
-						</>
-					)}
-				</Row>
-			</div>
+				}
+				css={css`
+					background-color: ${isPendingApproval ? theme.colors.accent3_4 : theme.colors.white};
+				`}
+			/>
 		</>
 	);
 };

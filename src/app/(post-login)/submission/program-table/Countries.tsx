@@ -18,9 +18,11 @@
  */
 'use client';
 
-const Countries = ({ countries }: { countries: string[] }) => (
+import { Maybe } from '@/__generated__/graphql';
+
+const Countries = ({ countries }: { countries: Maybe<Maybe<string>[]> | undefined }) => (
 	<div>
-		{countries.map((country, i) => (
+		{countries?.map((country, i) => (
 			<div key={country}>
 				{country}
 				{i < countries.length - 1 && ','}

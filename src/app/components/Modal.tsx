@@ -46,7 +46,7 @@ const useMounted = () => {
 	return mounted;
 };
 
-const ModalPortal = ({ children }: PropsWithChildren) => {
+export const ModalPortal = ({ children }: PropsWithChildren) => {
 	const ref = modalPortalRef.current;
 	const mounted = useMounted();
 	return ref
@@ -75,5 +75,3 @@ const ModalPortal = ({ children }: PropsWithChildren) => {
 		  )
 		: null;
 };
-
-export default ModalPortal;

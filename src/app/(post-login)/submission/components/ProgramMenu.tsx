@@ -18,17 +18,30 @@
  */
 'use client';
 
-import { SideMenuQuery } from '@/__generated__/graphql';
+import { SideMenuProgramStatusQuery, SubmissionState } from '@/__generated__/graphql';
 import Loader from '@/app/components/Loader';
 import SIDEMENU_PROGRAMS from '@/app/gql/SIDEMENU_PROGRAMS';
+import SIDEMENU_PROGRAM_STATUS from '@/app/gql/SIDEMENU_PROGRAM_STATUS';
+import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { useAuthContext } from '@/app/hooks/AuthProvider';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
-import { notNull } from '@/global/utils/types';
+import useUserRole from '@/app/hooks/useUserRole';
+import {
+	PROGRAM_CLINICAL_DATA_PATH,
+	PROGRAM_CLINICAL_SUBMISSION_PATH,
+	PROGRAM_DASHBOARD_PATH,
+	PROGRAM_MANAGE_PATH,
+	PROGRAM_SAMPLE_REGISTRATION_PATH,
+	PROGRAM_SHORT_NAME_PATH,
+} from '@/global/constants';
+import { notNull } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
 import { Icon, MenuItem } from '@icgc-argo/uikit';
+import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import { notFound, useParams, usePathname } from 'next/navigation';
-import { FC, MouseEventHandler, ReactNode, useState } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import { defaultClinicalEntityFilters } from '../common';
 
 const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
@@ -47,7 +60,86 @@ const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
 	);
 };
 
-const parseGQLResp = (data: SideMenuQuery) => {
+/**
+ * Uses query param: shortName representing the currently selected program's shortName.
+ * Uses the URL path to identify which page from the menu is selected.
+ */
+const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string }) => {
+	const params = useParams();
+	const pathname = usePathname();
+	const { DATA_CENTER } = useAppConfigContext();
+
+	// params can be arrays from dynamic routing
+	const activeProgramParam = typeof params.shortName === 'string' ? params.shortName : '';
+
+	const {
+		data: programsData,
+		loading,
+		error,
+	} = useQuery(SIDEMENU_PROGRAMS, { variables: { dataCenter: DATA_CENTER } });
+
+	const programs = programsData?.programs
+		?.filter(notNull)
+		.filter((program) => program.shortName.search(new RegExp(shortNameSearchQuery, 'i')) > -1);
+
+	const sortedProgramList = orderBy(programs, 'shortName');
+
+	const [activeProgram, setActiveProgram] = useState<string | undefined>(activeProgramParam);
+
+	if (loading) {
+		return <Loader />;
+	} else if (error) {
+		notFound();
+	} else {
+		return (
+			<>
+				<Link
+					href="/submission/program"
+					css={css`
+						text-decoration: none !important;
+					`}
+				>
+					<MenuItem
+						level={2}
+						content="All Programs"
+						onClick={() => {
+							setActiveProgram(undefined);
+						}}
+						selected={pathname === '/submission/program'}
+					/>
+				</Link>
+
+				{sortedProgramList.map((program) => {
+					const shortName = program?.shortName || '';
+					const isActiveProgram = activeProgram === shortName;
+
+					return (
+						<MenuItem
+							level={2}
+							key={shortName}
+							content={shortName}
+							onClick={() => {
+								if (isActiveProgram) {
+									setActiveProgram(undefined);
+								} else {
+									setActiveProgram(shortName);
+								}
+							}}
+							selected={isActiveProgram}
+						>
+							<MenuItem level={3}>{shortName}</MenuItem>
+							<MenuContent programName={shortName} />
+						</MenuItem>
+					);
+				})}
+			</>
+		);
+	}
+};
+
+const parseProgramStatusGQLResp = (data: SideMenuProgramStatusQuery | undefined) => {
+	if (!data) return null;
+
 	const clinicalErrors = data.clinicalData.clinicalErrors;
 	const clinicalDataHasErrors = (clinicalErrors && clinicalErrors.length > 0) || false;
 
@@ -65,110 +157,167 @@ const parseGQLResp = (data: SideMenuQuery) => {
 		  )
 		: false;
 
+	const clinicalSubmissionState = data?.clinicalSubmissions?.state;
+
 	return {
 		clinicalDataHasErrors,
 		clinicalRegistration,
 		clinicalRegistrationHasError,
 		clinicalSubmissionHasSchemaErrors,
 		clinicalRegistrationInProgress,
+		clinicalSubmissionState,
 	};
 };
 
-const ProgramMenu = ({ searchQuery }: { searchQuery: string }) => {
-	const params = useParams();
+const renderDataSubmissionLinks = (
+	registrationPath: string,
+	submissionPath: string,
+	statusIcon: ReactNode | null,
+	isSubmissionSystemDisabled: boolean,
+	pathnameLastSegment?: string,
+	programStatusData?: ReturnType<typeof parseProgramStatusGQLResp>,
+) => (
+	<>
+		<Link href={registrationPath}>
+			<MenuItem
+				level={3}
+				content={
+					<StatusMenuItem>
+						Register Samples
+						{statusIcon}
+					</StatusMenuItem>
+				}
+				selected={pathnameLastSegment === 'registration'}
+			/>
+		</Link>
+
+		{/** Submit clinical data */}
+		<Link href={submissionPath}>
+			<MenuItem
+				level={3}
+				content={
+					<StatusMenuItem>
+						Submit Clinical Data{' '}
+						{programStatusData &&
+							renderSubmissionStatusIcon(
+								programStatusData.clinicalSubmissionState || null,
+								programStatusData.clinicalSubmissionHasSchemaErrors,
+								isSubmissionSystemDisabled,
+							)}
+					</StatusMenuItem>
+				}
+				selected={pathnameLastSegment === 'clinical-submission'}
+			/>
+		</Link>
+	</>
+);
+
+const renderSubmissionStatusIcon = (
+	status: SubmissionState | null,
+	hasSubmissionErrors: boolean,
+	isSubmissionSystemDisabled: boolean,
+) => {
+	if (isSubmissionSystemDisabled) {
+		return <Icon name="lock" fill="accent3_dark" width="15px" />;
+	}
+
+	switch (status) {
+		case SubmissionState.Open:
+			return hasSubmissionErrors ? (
+				<Icon name="exclamation" fill="error" width="15px" />
+			) : (
+				<Icon name="exclamation" fill="error" width="15px" />
+			);
+		case SubmissionState.Valid:
+			return <Icon name="ellipses" fill="warning" width="15px" />;
+		case SubmissionState.Invalid:
+		case SubmissionState.InvalidByMigration:
+			return <Icon name="exclamation" fill="error" width="15px" />;
+		case SubmissionState.PendingApproval:
+			return <Icon name="lock" fill="accent3_dark" width="15px" />;
+		default:
+			return hasSubmissionErrors ? <Icon name="exclamation" fill="error" width="15px" /> : null;
+	}
+};
+
+const MenuContent = ({ programName }: { programName: string }) => {
+	const { egoJwt } = useAuthContext();
 	const pathname = usePathname();
-	const activeProgramName = typeof params.shortName !== 'string' ? '' : params.shortName;
+	const pathnameLastSegment = pathname.split('/').at(-1);
+	const getProgramPath = (path: string) => path.replace(PROGRAM_SHORT_NAME_PATH, programName);
 
-	const pathnameLastSegment = pathname.split('/').findLast(Boolean);
+	const { isDisabled: isSubmissionSystemDisabled } = useSubmissionSystemStatus();
 
-	const {
-		data: gqlData,
-		loading,
-		error,
-	} = useQuery(SIDEMENU_PROGRAMS, {
+	const userRoles = useUserRole(egoJwt, programName);
+
+	const { data: gqlData } = useQuery(SIDEMENU_PROGRAM_STATUS, {
 		variables: {
-			activeProgramName,
+			activeProgramName: programName,
 			filters: defaultClinicalEntityFilters,
 		},
 	});
 
-	const data = gqlData ? parseGQLResp(gqlData) : null;
+	const { isRDPCAdmin, isDCCAdmin, isProgramAdmin, isDataSubmitter, isCollaborator } = userRoles;
 
-	const [activeProgramIndex, setActiveProgramIndex] = useState(-1);
+	const userCanSubmitData = isDataSubmitter || isRDPCAdmin || isDCCAdmin || isProgramAdmin;
+	const userCanViewData =
+		isCollaborator || isDataSubmitter || isRDPCAdmin || isDCCAdmin || isProgramAdmin;
+	const userCanManageProgram = isDataSubmitter || isRDPCAdmin || isDCCAdmin || isProgramAdmin;
 
-	const programs = gqlData?.programs?.filter(notNull) || [];
-	const filteredPrograms = !searchQuery.length
-		? programs
-		: programs.filter(({ shortName }) => shortName.search(new RegExp(searchQuery, 'i')) > -1);
+	const programStatusData = parseProgramStatusGQLResp(gqlData);
 
-	const { isDisabled: isSubmissionSystemDisabled } = useSubmissionSystemStatus();
-
-	const setActiveProgram =
-		(index: number): MouseEventHandler =>
-		() =>
-			setActiveProgramIndex(index);
-
-	if (loading) return <Loader />;
-	if (error || data === null) notFound();
-
-	const { clinicalRegistrationHasError, clinicalRegistrationInProgress } = data;
+	const registrationStatusIcon = isSubmissionSystemDisabled ? (
+		<Icon name="lock" fill="accent3_dark" width="15px" />
+	) : programStatusData?.clinicalRegistrationHasError ? (
+		<Icon name="exclamation" fill="error" width="15px" />
+	) : programStatusData?.clinicalRegistrationInProgress ? (
+		<Icon name="ellipses" fill="warning" width="15px" />
+	) : null;
 
 	return (
 		<>
-			<Link
-				href="/submission"
-				css={css`
-					text-decoration: none !important;
-				`}
-			>
-				<MenuItem
-					level={2}
-					content="All Programs"
-					onClick={setActiveProgram(-1)}
-					selected={pathname === '/submission'}
-				/>
+			{/** Dashboard */}
+			<Link href={getProgramPath(PROGRAM_DASHBOARD_PATH)}>
+				<MenuItem level={3} content="Dashboard" selected={pathnameLastSegment === 'dashboard'} />
 			</Link>
 
-			{filteredPrograms.map(({ shortName }, programIndex) => (
-				<MenuItem
-					level={2}
-					key={shortName}
-					content={shortName}
-					onClick={setActiveProgram(programIndex)}
-					selected={programIndex === activeProgramIndex || activeProgramName === shortName}
-				>
-					<MenuItem level={3}>{shortName}</MenuItem>
+			{/** Register Samples */}
+			{userCanSubmitData &&
+				renderDataSubmissionLinks(
+					getProgramPath(PROGRAM_SAMPLE_REGISTRATION_PATH),
+					getProgramPath(PROGRAM_CLINICAL_SUBMISSION_PATH),
+					registrationStatusIcon,
+					isSubmissionSystemDisabled,
+					pathnameLastSegment,
+					programStatusData,
+				)}
 
-					{/** Register Samples */}
-					<Link href={`/submission/program/${shortName}/registration`}>
-						<MenuItem
-							level={3}
-							content={
-								<StatusMenuItem>
-									Register Samples
-									{isSubmissionSystemDisabled ? (
-										<Icon name="lock" fill="accent3_dark" width="15px" />
-									) : clinicalRegistrationHasError ? (
-										<Icon name="exclamation" fill="error" width="15px" />
-									) : clinicalRegistrationInProgress ? (
-										<Icon name="ellipses" fill="warning" width="15px" />
-									) : null}
-								</StatusMenuItem>
-							}
-							selected={pathnameLastSegment === 'registration'}
-						/>
-					</Link>
+			{/** Submitted Data */}
+			{userCanViewData && (
+				<Link href={getProgramPath(PROGRAM_CLINICAL_DATA_PATH)}>
+					<MenuItem
+						level={3}
+						content={
+							<StatusMenuItem>
+								Submitted Data{' '}
+								{/* {clinicalDataHasErrors && <Icon name="exclamation" fill="error" width="15px" />} */}
+							</StatusMenuItem>
+						}
+						selected={pathnameLastSegment === 'clinical-data'}
+					/>
+				</Link>
+			)}
 
-					{/** Submit clinical data */}
-					<Link href={`/submission/program/${shortName}/clinical-submission`}>
-						<MenuItem
-							level={3}
-							content={<StatusMenuItem>Submit Clinical Data </StatusMenuItem>}
-							selected={pathnameLastSegment === 'clinical-submission'}
-						/>
-					</Link>
-				</MenuItem>
-			))}
+			{/** Manage Program */}
+			{userCanManageProgram && (
+				<Link href={getProgramPath(PROGRAM_MANAGE_PATH)}>
+					<MenuItem
+						level={3}
+						content="Manage Program"
+						selected={pathnameLastSegment === 'manage'}
+					/>
+				</Link>
+			)}
 		</>
 	);
 };

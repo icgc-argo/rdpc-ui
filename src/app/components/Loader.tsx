@@ -24,11 +24,10 @@ import { DnaLoader } from '@icgc-argo/uikit';
 const Loader = () => (
 	<div
 		css={css`
-			width: 100%;
 			display: flex;
-			height: 100px;
-			align-items: center;
 			justify-content: center;
+			align-items: center;
+			width: 100%;
 		`}
 	>
 		<DnaLoader />
