@@ -21,7 +21,8 @@ export const EGO_JWT_KEY = 'EGO_JWT';
 export const LOGIN_NONCE = 'LOGIN_NONCE';
 
 export const BUILD_TIME_VARIABLES = {
-	RUNTIME_CONFIG_URL: process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL || '',
+	RUNTIME_CONFIG_URL:
+		process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL || 'http://localhost:3000/api/config',
 };
 
 export const CONTACT_PAGE_PATH = '/contact';
