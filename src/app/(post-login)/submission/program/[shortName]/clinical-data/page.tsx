@@ -18,10 +18,203 @@
  */
 'use client';
 
+import { ClinicalEntitySearchResultsQuery } from '@/__generated__/graphql';
 import { pageWithPermissions } from '@/app/components/Page';
+import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
+import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/app/gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
+import SUBMITTED_DATA_SIDE_MENU_QUERY from '@/app/gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
+import useUrlParamState from '@/app/hooks/useUrlParamState';
+import { notNull } from '@/global/utils';
+import { useQuery } from '@apollo/client';
+import { Loader } from '@icgc-argo/uikit';
+import { useEffect, useState } from 'react';
+import { setConfiguration } from 'react-grid-system';
+import SearchBar from './SearchBar';
+import {
+	ClinicalEntitySearchResultResponse,
+	CompletionStates,
+	TsvDownloadIds,
+	defaultClinicalEntityFilters,
+	emptyClinicalDataResponse,
+	emptySearchResponse,
+	parseDonorIdString,
+	reverseLookUpEntityAlias,
+} from './common';
 
-const ClinicalDataPageComp = () => {
-	return <div>clinical data</div>;
+setConfiguration({ gutterWidth: 9 });
+
+const defaultClinicalEntityTab = 'donor';
+
+// convert codegen automated types to definitions in existing code
+// make data object shape uniform
+const parseSearchResult = (
+	data: ClinicalEntitySearchResultsQuery | undefined,
+): ClinicalEntitySearchResultResponse => {
+	if (!data) return emptySearchResponse;
+	return {
+		clinicalSearchResults: {
+			searchResults: data.clinicalSearchResults.searchResults.map((searchResults) => ({
+				donorId: searchResults?.donorId || 0,
+				submitterDonorId: searchResults?.submitterDonorId || '',
+			})),
+			totalResults: data.clinicalSearchResults.totalResults,
+		},
+	};
+};
+
+const ClinicalDataPageComp = ({
+	programShortName,
+	donorId,
+}: {
+	programShortName: string;
+	donorId: string;
+}) => {
+	const FEATURE_SUBMITTED_DATA_ENABLED = true;
+	const isLoading = false;
+	const [keyword, setKeyword] = useState('');
+	const [completionState, setCompletionState] = useState(CompletionStates['all']);
+	const [modalVisible, setModalVisible] = useState(false);
+
+	const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
+		'tab',
+		defaultClinicalEntityTab,
+	);
+	const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', donorId);
+
+	const currentEntity = reverseLookUpEntityAlias(selectedClinicalEntityTab);
+	const urlDonorQueryStrings = selectedDonors ? selectedDonors.split(',') : [];
+	const currentDonors = urlDonorQueryStrings.length
+		? urlDonorQueryStrings.map((donorId) => parseDonorIdString(donorId))
+		: [];
+
+	// Matches multiple digits and/or digits preceded by DO, followed by a comma, space, or end of string
+	// Example: DO259138, 2579137, DASH-7, DO253290abcdef
+	// Regex will match first 2 Donor IDs, but not 3rd Submitter ID or 4th case w/ random text
+	const searchDonorIds =
+		keyword
+			.match(/(?=DO|\d)\d+(?=,| |$)/gi)
+			?.filter((match) => !!match)
+			.map((idString) => parseInt(idString)) || [];
+
+	// Matches 'D' or 'DO' exactly (case insensitive)
+	const donorPrefixSearch = keyword.match(/^(d|do)\b/gi);
+
+	const searchSubmitterIds = donorPrefixSearch
+		? []
+		: keyword.split(/, |,/).filter((word) => !!word);
+
+	// Search Result Query
+	// Populates dropdown menu; Search query populates data table if there are no URL params
+	const { data: searchResultData, loading: searchResultsLoading } = useQuery(
+		CLINICAL_ENTITY_SEARCH_RESULTS_QUERY,
+		{
+			errorPolicy: 'all',
+			variables: {
+				programShortName,
+				filters: {
+					...defaultClinicalEntityFilters,
+					completionState,
+					entityTypes: [currentEntity],
+					donorIds: searchDonorIds,
+					submitterDonorIds: searchSubmitterIds,
+				},
+			},
+		},
+	);
+
+	const parsedSearchResultData = parseSearchResult(searchResultData);
+
+	const searchResults = parsedSearchResultData?.clinicalSearchResults?.searchResults;
+	const searchResultIds = searchResults.map((result) => result?.donorId).filter(notNull);
+
+	const sideMenuQueryDonorIds =
+		urlDonorQueryStrings.length > 0
+			? currentDonors
+			: searchResults.length > 0 && keyword.length > 0
+			? searchResultIds
+			: [];
+
+	// Side Menu Query
+	// Populates Clinical Entity Table, Side Menu, Title Bar
+	const { data: sideMenuQuery, loading: sideMenuLoading } = useQuery(
+		SUBMITTED_DATA_SIDE_MENU_QUERY,
+		{
+			errorPolicy: 'all',
+			variables: {
+				programShortName,
+				filters: {
+					...defaultClinicalEntityFilters,
+					completionState,
+					donorIds: sideMenuQueryDonorIds,
+				},
+			},
+		},
+	);
+
+	useEffect(() => {
+		//setGlobalLoading(sideMenuLoading);
+		console.log('.....global loading....');
+	}, [sideMenuLoading]);
+
+	const sideMenuData =
+		sideMenuQuery == undefined || sideMenuLoading || !FEATURE_SUBMITTED_DATA_ENABLED
+			? emptyClinicalDataResponse
+			: sideMenuQuery;
+
+	const { clinicalData } = sideMenuData;
+
+	const useDefaultQuery =
+		currentDonors.length === 0 &&
+		(donorPrefixSearch || (searchDonorIds.length === 0 && searchSubmitterIds.length === 0)) &&
+		completionState === 'all';
+
+	const noSearchData = searchResultData === null || searchResultData === undefined;
+	const noData =
+		clinicalData.clinicalEntities.length === 0 && noSearchData && currentDonors.length === 0;
+
+	const entityTableDonorIds =
+		currentDonors.length > 0 ? currentDonors : searchResults.length > 0 ? searchResultIds : [];
+
+	const entityTableSubmitterDonorIds = (searchResults || [])
+		.map((searchResults) => searchResults?.submitterDonorId)
+		.filter(Boolean);
+
+	const tsvDownloadIds: TsvDownloadIds = {
+		donorIds: useDefaultQuery ? [] : entityTableDonorIds,
+		submitterDonorIds: useDefaultQuery ? [] : entityTableSubmitterDonorIds.filter(notNull),
+	};
+
+	return (
+		<div>
+			<PageHeader
+				leftSlot={<BreadcrumbTitle breadcrumbs={[programShortName, 'Submitted Data']} />}
+				rightSlot={<HelpLink url="" />}
+			/>
+			{isLoading ? (
+				<Loader />
+			) : (
+				<>
+					<SearchBar
+						setModalVisible={setModalVisible}
+						modalVisible={modalVisible}
+						completionState={completionState}
+						setCompletionState={setCompletionState}
+						programShortName={programShortName}
+						keyword={keyword}
+						loading={searchResultsLoading}
+						noData={noData}
+						useDefaultQuery={useDefaultQuery}
+						currentDonors={currentDonors}
+						setSelectedDonors={setSelectedDonors}
+						tsvDownloadIds={tsvDownloadIds}
+						donorSearchResults={parsedSearchResultData}
+						setKeyword={setKeyword}
+					/>
+					<div>submitted data placeholder</div>
+				</>
+			)}
+		</div>
+	);
 };
 
 const ClinicalDataPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
@@ -29,7 +222,7 @@ const ClinicalDataPage = ({ params: { shortName } }: { params: { shortName: stri
 		acceptedRoles: ['isRDPCAdmin', 'isDCCAdmin', 'isProgramAdmin', 'isDataSubmitter'],
 		programShortName: shortName,
 	});
-	return <ClinicalDataWithPermissions />;
+	return <ClinicalDataWithPermissions programShortName={shortName} donorId="DONOR_ID" />;
 };
 
 export default ClinicalDataPage;

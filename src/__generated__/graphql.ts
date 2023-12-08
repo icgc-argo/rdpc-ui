@@ -2524,6 +2524,25 @@ export type ClearSubmissionMutation = {
 	};
 };
 
+export type ClinicalEntitySearchResultsQueryVariables = Exact<{
+	programShortName: Scalars['String']['input'];
+	filters: ClinicalInput;
+}>;
+
+export type ClinicalEntitySearchResultsQuery = {
+	__typename?: 'Query';
+	clinicalSearchResults: {
+		__typename?: 'ClinicalSearchData';
+		programShortName: string;
+		totalResults: number;
+		searchResults: Array<{
+			__typename?: 'ClinicalSearchResults';
+			donorId: number;
+			submitterDonorId?: string | null;
+		} | null>;
+	};
+};
+
 export type ClinicalSchemaVersionQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ClinicalSchemaVersionQuery = {
@@ -2762,23 +2781,6 @@ export type ProgramsListQuery = {
 		submittedDonors?: number | null;
 		commitmentDonors?: number | null;
 		dataCenter?: { __typename?: 'DataCenter'; shortName: string } | null;
-	} | null> | null;
-};
-
-export type ProgramsUsersQueryVariables = Exact<{ [key: string]: never }>;
-
-export type ProgramsUsersQuery = {
-	__typename?: 'Query';
-	programs?: Array<{
-		__typename?: 'Program';
-		shortName: string;
-		users?: Array<{
-			__typename?: 'ProgramUser';
-			email: string;
-			firstName: string;
-			lastName: string;
-			role: UserRole;
-		} | null> | null;
 	} | null> | null;
 };
 
@@ -3028,6 +3030,27 @@ export type SignOffSubmissionMutation = {
 			fileNames: Array<string | null>;
 			code: string;
 		} | null> | null;
+	};
+};
+
+export type SubmittedDataSideMenuQueryVariables = Exact<{
+	programShortName: Scalars['String']['input'];
+	filters: ClinicalInput;
+}>;
+
+export type SubmittedDataSideMenuQuery = {
+	__typename?: 'Query';
+	clinicalData: {
+		__typename?: 'ClinicalData';
+		programShortName: string;
+		clinicalEntities: Array<{ __typename?: 'ClinicalDataEntities'; entityName: string } | null>;
+		clinicalErrors: Array<{
+			__typename?: 'ClinicalErrors';
+			errors?: Array<{
+				__typename?: 'ClinicalErrorRecord';
+				entityName?: string | null;
+			} | null> | null;
+		} | null>;
 	};
 };
 
@@ -3775,6 +3798,76 @@ export const ClearSubmissionDocument = {
 		},
 	],
 } as unknown as DocumentNode<ClearSubmissionMutation, ClearSubmissionMutationVariables>;
+export const ClinicalEntitySearchResultsDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'ClinicalEntitySearchResults' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+					},
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'filters' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'ClinicalInput' } },
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'clinicalSearchResults' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'programShortName' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+							},
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'filters' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'filters' } },
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'totalResults' } },
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'searchResults' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'submitterDonorId' } },
+										],
+									},
+								},
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<
+	ClinicalEntitySearchResultsQuery,
+	ClinicalEntitySearchResultsQueryVariables
+>;
 export const ClinicalSchemaVersionDocument = {
 	kind: 'Document',
 	definitions: [
@@ -4217,44 +4310,6 @@ export const ProgramsListDocument = {
 		},
 	],
 } as unknown as DocumentNode<ProgramsListQuery, ProgramsListQueryVariables>;
-export const ProgramsUsersDocument = {
-	kind: 'Document',
-	definitions: [
-		{
-			kind: 'OperationDefinition',
-			operation: 'query',
-			name: { kind: 'Name', value: 'ProgramsUsers' },
-			selectionSet: {
-				kind: 'SelectionSet',
-				selections: [
-					{
-						kind: 'Field',
-						name: { kind: 'Name', value: 'programs' },
-						selectionSet: {
-							kind: 'SelectionSet',
-							selections: [
-								{ kind: 'Field', name: { kind: 'Name', value: 'shortName' } },
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'users' },
-									selectionSet: {
-										kind: 'SelectionSet',
-										selections: [
-											{ kind: 'Field', name: { kind: 'Name', value: 'email' } },
-											{ kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
-											{ kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
-											{ kind: 'Field', name: { kind: 'Name', value: 'role' } },
-										],
-									},
-								},
-							],
-						},
-					},
-				],
-			},
-		},
-	],
-} as unknown as DocumentNode<ProgramsUsersQuery, ProgramsUsersQueryVariables>;
 export const ReopenSubmissionDocument = {
 	kind: 'Document',
 	definitions: [
@@ -4796,6 +4851,88 @@ export const SignOffSubmissionDocument = {
 		},
 	],
 } as unknown as DocumentNode<SignOffSubmissionMutation, SignOffSubmissionMutationVariables>;
+export const SubmittedDataSideMenuDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'SubmittedDataSideMenu' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+					},
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'filters' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'ClinicalInput' } },
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'clinicalData' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'programShortName' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+							},
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'filters' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'filters' } },
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'clinicalEntities' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [{ kind: 'Field', name: { kind: 'Name', value: 'entityName' } }],
+									},
+								},
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'clinicalErrors' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'errors' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'entityName' } },
+													],
+												},
+											},
+										],
+									},
+								},
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<SubmittedDataSideMenuQuery, SubmittedDataSideMenuQueryVariables>;
 export const UploadClinicalSubmissionDocument = {
 	kind: 'Document',
 	definitions: [
