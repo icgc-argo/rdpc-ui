@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,90 +17,39 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
-// export const getParams = (router: ReturnType<typeof useRouter>): { [k: string]: string } | null => {
-//   const queryString = router.asPath.split('?')[1] || '';
-//   const currentQueryEntries = [...new URLSearchParams(queryString).entries()];
-//   return currentQueryEntries.length
-//     ? currentQueryEntries.reduce((acc, [key, val]) => ({ ...acc, [key]: val }), {})
-//     : {};
-// };
+const mergeParams = (previousParams, newParams) => {
+	return new URLSearchParams([...previousParams, ...newParams]).toString();
+};
 
-// const getSanitizedValue = (v: string): null | undefined | string => (v ? v : null);
+const useUrlParamState = (key: string, initialValue: string, usePushNavigation?: boolean) => {
+	const params = useSearchParams();
+	const pathname = usePathname();
+	const router = useRouter();
 
-// export const useHook = <T>(
-//   key: string,
-//   initialValue: T,
-//   {
-//     pushNavigation = false,
-//     serialize,
-//     deSerialize,
-//   }: {
-//     pushNavigation?: boolean;
-//     serialize: (val: T) => string;
-//     deSerialize: (val: string | null | undefined) => T;
-//   },
-// ) => {
-//   const router = useRouter();
-//   const currentQuery = getParams(router);
-//   const [firstRender, setFirstRender] = useState<boolean>(true);
-//   const [previousQuery, setPreviousQuery] = useState<{ [key: string]: string }>(null);
+	const getUrlParamState = () => params.get(key);
+	const setUrlState = (value) => {
+		// make a mutable copy of search params and delete the value we're replacing
+		const oldParams = new URLSearchParams(params);
+		oldParams.delete(key);
 
-//   const hasQueryParms = !!router.asPath.split('?')[1];
-//   const previousValue = !hasQueryParms && previousQuery;
+		const urlParams = mergeParams(oldParams.entries(), [[key, value]]);
 
-//   useEffect(() => {
-//     const query = {
-//       [key]: serialize(initialValue),
-//       ...currentQuery,
-//     };
+		const newUrl = `${pathname}?${urlParams}`;
 
-//     setPreviousQuery(query);
+		if (usePushNavigation) {
+			router.push(newUrl);
+		} else {
+			router.replace(newUrl);
+		}
+	};
 
-//     const urlParams = new window.URLSearchParams(previousValue ? previousValue : query).toString();
-//     const newPath = `${router.asPath.split('?')[0]}?${urlParams}`;
+	useEffect(() => {
+		if (!params.has(key) && initialValue) setUrlState(initialValue);
+	}, []);
 
-//     if (firstRender) {
-//       router.replace(router.pathname, newPath).then(() => setFirstRender(false));
-//     } else if (previousValue) {
-//       router.replace(router.pathname, newPath);
-//     }
-//   }, [router.asPath]);
-
-//   const setUrlState = (value: T) => {
-//     const newPath = `${router.asPath.split('?')[0]}?${new window.URLSearchParams({
-//       ...currentQuery,
-//       [key]: serialize(value),
-//     }).toString()}`;
-//     if (pushNavigation) {
-//       router.push(router.pathname, newPath);
-//     } else {
-//       router.replace(router.pathname, newPath);
-//     }
-//   };
-
-//   const deserializeValue = (v: string) => {
-//     const sanitized = getSanitizedValue(v);
-//     return deSerialize(sanitized);
-//   };
-
-//   return [
-//     firstRender
-//       ? initialValue
-//       : previousValue
-//       ? deserializeValue(previousValue[key])
-//       : deserializeValue(currentQuery[key]),
-//     setUrlState,
-//   ] as [T, typeof setUrlState];
-// };
-
-// export default useHook;
-
-const useUrlParamState = <T>(key: string, initialValue: T, options?: any) => {
-	const params = useParams();
-	const getUrlParamState = () => params;
-	const setUrlState = () => null;
 	return [getUrlParamState(), setUrlState];
 };
 
