@@ -18,6 +18,7 @@
  */
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 const mergeParams = (previousParams, newParams) => {
 	return new URLSearchParams([...previousParams, ...newParams]).toString();
@@ -32,7 +33,7 @@ const mergeParams = (previousParams, newParams) => {
  * @param usePushNavigation
  * @returns
  */
-const useUrlParamState = (key: string, usePushNavigation?: boolean) => {
+const useUrlParamState = (key: string, initialValue: string, usePushNavigation?: boolean) => {
 	const params = useSearchParams();
 	const pathname = usePathname();
 	const router = useRouter();
@@ -53,6 +54,10 @@ const useUrlParamState = (key: string, usePushNavigation?: boolean) => {
 			router.replace(newUrl);
 		}
 	};
+
+	useEffect(() => {
+		if (!params.has(key) && initialValue) setUrlState(initialValue);
+	}, []);
 
 	return [getUrlParamState(), setUrlState];
 };
