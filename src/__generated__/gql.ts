@@ -35,8 +35,6 @@ const documents = {
 		types.GetRegistrationDocument,
 	'\n\tquery ProgramsList($dataCenter: String) {\n\t\tprograms(dataCenter: $dataCenter) {\n\t\t\tshortName\n\t\t\tname\n\t\t\tcancerTypes\n\t\t\tcountries\n\t\t\tdataCenter {\n\t\t\t\tshortName\n\t\t\t}\n\t\t\tmembershipType\n\t\t\tgenomicDonors\n\t\t\tsubmittedDonors\n\t\t\tcommitmentDonors\n\t\t}\n\t}\n':
 		types.ProgramsListDocument,
-	'\n\tquery ProgramsUsers {\n\t\tprograms {\n\t\t\tshortName\n\t\t\tusers {\n\t\t\t\temail\n\t\t\t\tfirstName\n\t\t\t\tlastName\n\t\t\t\trole\n\t\t\t}\n\t\t}\n\t}\n':
-		types.ProgramsUsersDocument,
 	'\n\tfragment Registration on ClinicalRegistrationData {\n\t\tid\n\t\tprogramShortName\n\t\tcreator\n\t\tfileName\n\t\tcreatedAt\n\t\trecords {\n\t\t\trow\n\t\t\tfields {\n\t\t\t\tname\n\t\t\t\tvalue\n\t\t\t}\n\t\t}\n\t\terrors {\n\t\t\ttype\n\t\t\tmessage\n\t\t\trow\n\t\t\tfield\n\t\t\tvalue\n\t\t\tsampleId\n\t\t\tdonorId\n\t\t\tspecimenId\n\t\t}\n\t\tfileErrors {\n\t\t\tmessage\n\t\t\tfileNames\n\t\t\tcode\n\t\t}\n\t\tnewDonors {\n\t\t\tcount\n\t\t\trows\n\t\t}\n\t\tnewSpecimens {\n\t\t\tcount\n\t\t\trows\n\t\t}\n\t\tnewSamples {\n\t\t\tcount\n\t\t\trows\n\t\t}\n\t\talreadyRegistered {\n\t\t\tcount\n\t\t\trows\n\t\t}\n\t}\n':
 		types.RegistrationFragmentDoc,
 	'\n  mutation ReopenSubmission(\n    $programShortName: String!\n    $submissionVersion: String!\n  ) {\n    clinicalSubmissions: reopenClinicalSubmission(\n      programShortName: $programShortName\n      version: $submissionVersion\n    ) {\n      programShortName # this is the ID\n      state\n      version\n      updatedAt\n      updatedBy\n      clinicalEntities {\n        clinicalType\n        batchName\n        creator\n        createdAt\n        stats {\n          noUpdate\n          new\n          updated\n          errorsFound\n        }\n        records {\n          row\n          fields {\n            name\n            value\n          }\n        }\n        dataUpdates {\n          row\n          field\n          newValue\n          oldValue\n          donorId\n        }\n        dataWarnings {\n          message\n          row\n          field\n          value\n          donorId\n        }\n        dataErrors {\n          message\n          row\n          field\n          value\n          donorId\n        }\n        schemaErrors {\n          message\n          row\n          field\n          value\n          donorId\n        }\n      }\n      fileErrors {\n        message\n        fileNames\n        code\n      }\n    }\n  }\n':
@@ -135,12 +133,6 @@ export function gql(
 export function gql(
 	source: '\n\tquery ProgramsList($dataCenter: String) {\n\t\tprograms(dataCenter: $dataCenter) {\n\t\t\tshortName\n\t\t\tname\n\t\t\tcancerTypes\n\t\t\tcountries\n\t\t\tdataCenter {\n\t\t\t\tshortName\n\t\t\t}\n\t\t\tmembershipType\n\t\t\tgenomicDonors\n\t\t\tsubmittedDonors\n\t\t\tcommitmentDonors\n\t\t}\n\t}\n',
 ): (typeof documents)['\n\tquery ProgramsList($dataCenter: String) {\n\t\tprograms(dataCenter: $dataCenter) {\n\t\t\tshortName\n\t\t\tname\n\t\t\tcancerTypes\n\t\t\tcountries\n\t\t\tdataCenter {\n\t\t\t\tshortName\n\t\t\t}\n\t\t\tmembershipType\n\t\t\tgenomicDonors\n\t\t\tsubmittedDonors\n\t\t\tcommitmentDonors\n\t\t}\n\t}\n'];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(
-	source: '\n\tquery ProgramsUsers {\n\t\tprograms {\n\t\t\tshortName\n\t\t\tusers {\n\t\t\t\temail\n\t\t\t\tfirstName\n\t\t\t\tlastName\n\t\t\t\trole\n\t\t\t}\n\t\t}\n\t}\n',
-): (typeof documents)['\n\tquery ProgramsUsers {\n\t\tprograms {\n\t\t\tshortName\n\t\t\tusers {\n\t\t\t\temail\n\t\t\t\tfirstName\n\t\t\t\tlastName\n\t\t\t\trole\n\t\t\t}\n\t\t}\n\t}\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

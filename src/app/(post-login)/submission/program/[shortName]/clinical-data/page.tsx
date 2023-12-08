@@ -19,9 +19,43 @@
 'use client';
 
 import { pageWithPermissions } from '@/app/components/Page';
+import useUrlParamState from '@/app/hooks/useUrlParamState';
+import { css } from '@emotion/react';
 
 const ClinicalDataPageComp = () => {
-	return <div>clinical data</div>;
+	const [urlState, setUrlState] = useUrlParamState('colour', 'blue');
+	return (
+		<div>
+			<div>clinical data</div>
+			<div>
+				<h1>url param state testing</h1>
+				<div
+					onClick={() => setUrlState('blue')}
+					css={css`
+						background: ${urlState === 'blue' && 'pink'};
+					`}
+				>
+					blue
+				</div>
+				<div
+					onClick={() => setUrlState('green')}
+					css={css`
+						background: ${urlState === 'green' && 'pink'};
+					`}
+				>
+					green
+				</div>
+				<div
+					onClick={() => setUrlState('red')}
+					css={css`
+						background: ${urlState === 'red' && 'pink'};
+					`}
+				>
+					red
+				</div>
+			</div>
+		</div>
+	);
 };
 
 const ClinicalDataPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
