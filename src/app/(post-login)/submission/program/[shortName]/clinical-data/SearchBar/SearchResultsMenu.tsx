@@ -62,7 +62,7 @@ const SearchResultsMenu = ({
 }: {
 	isLoading: boolean;
 	searchData: SearchMenuDataNode[];
-	onSelect: Function;
+	onSelect: (value: string) => void;
 }) => {
 	const theme = useTheme();
 

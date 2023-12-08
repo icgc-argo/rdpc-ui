@@ -22,25 +22,19 @@ import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/app/gql/CLINICAL_ENTITY_SEAR
 import { useQuery } from '@apollo/client';
 import { Button, Modal, css } from '@icgc-argo/uikit/';
 import { Textarea } from '@icgc-argo/uikit/form/Textarea';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ClinicalEntitySearchResultResponse, defaultClinicalEntityFilters } from '../../common';
 import MatchResults from './MatchResults';
 import UploadButton from './UploadButton';
 
-declare global {
-	interface Window {
-		showOpenFilePicker: any;
-	}
-}
-
-const matchDonorIds = (text) =>
+const matchDonorIds = (text: string) =>
 	text
 		.match(/(^\d)\d*|((?<=,| )|(?<=DO))\d*/gi)
 		// Remove empty strings and duplicate matches
 		?.filter((match, index, self) => !!match && self.indexOf(match) == index)
 		.map((idString) => parseInt(idString)) || [];
 
-const matchSubmitterDonorIds = (text) =>
+const matchSubmitterDonorIds = (text: string) =>
 	text
 		.split(',')
 		?.filter((match, index, self) => !!match && self.indexOf(match) == index)
@@ -52,8 +46,8 @@ export default function FilterModal({
 	setSelectedDonors,
 	programShortName,
 }: {
-	setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-	setSelectedDonors: React.Dispatch<React.SetStateAction<string>>;
+	setModalVisible: (value: boolean) => void;
+	setSelectedDonors: (value: string) => void;
 	programShortName: string;
 }) {
 	const [filterTextBox, setFilterTextBox] = useState('');
@@ -117,7 +111,7 @@ export default function FilterModal({
 		setMatchedIds(Array.from(filteredTextAreaIDs).join(','));
 	}, [searchResultData]);
 
-	const handleResults = (results) => {
+	const handleResults = (results: string) => {
 		if (filterTextBox) {
 			setFilterTextBox(filterTextBox + ', ' + results);
 		} else {

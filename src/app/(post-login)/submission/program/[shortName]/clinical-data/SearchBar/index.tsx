@@ -17,6 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { notNull } from '@/global/utils';
 import {
 	Button,
 	Container,
@@ -103,7 +104,7 @@ export default function SearchBar({
 	setKeyword: Dispatch<SetStateAction<string>>;
 	useDefaultQuery: boolean;
 	currentDonors: number[];
-	setSelectedDonors: React.Dispatch<React.SetStateAction<string>>;
+	setSelectedDonors: (value: string) => void;
 	donorSearchResults: ClinicalEntitySearchResultResponse;
 	tsvDownloadIds: TsvDownloadIds;
 	modalVisible: boolean;
@@ -111,7 +112,7 @@ export default function SearchBar({
 	const theme = useTheme();
 	const [displayText, setDisplayText] = useState('- Select an option -');
 	const [searchOpen, setSearchOpen] = useState(false);
-	const setFilterValue = (value) => {
+	const setFilterValue = (value: string) => {
 		setKeyword(value);
 		setSelectedDonors(value);
 		setSearchOpen(false);
@@ -120,7 +121,7 @@ export default function SearchBar({
 	const menuItemDropdownRef = createRef() as RefObject<HTMLDivElement>;
 	useClickAway({
 		domElementRef: menuItemDropdownRef,
-		onElementClick: setFilterValue,
+		onElementClick: () => setFilterValue(''),
 		onClickAway: () => setSearchOpen(false),
 	});
 
@@ -239,7 +240,7 @@ export default function SearchBar({
 								ref={menuItemDropdownRef}
 							/>
 							<SearchResultsMenu
-								searchData={searchResultMenuItems}
+								searchData={searchResultMenuItems.filter(notNull)}
 								isLoading={loading}
 								onSelect={setFilterValue}
 							/>

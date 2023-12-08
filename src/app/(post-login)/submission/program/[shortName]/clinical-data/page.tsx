@@ -18,17 +18,20 @@
  */
 'use client';
 
+import { ClinicalEntitySearchResultsQuery } from '@/__generated__/graphql';
 import { pageWithPermissions } from '@/app/components/Page';
 import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/app/gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from '@/app/gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import useUrlParamState from '@/app/hooks/useUrlParamState';
+import { notNull } from '@/global/utils';
 import { useQuery } from '@apollo/client';
 import { Loader } from '@icgc-argo/uikit';
 import { useEffect, useState } from 'react';
 import { setConfiguration } from 'react-grid-system';
 import SearchBar from './SearchBar';
 import {
+	ClinicalEntitySearchResultResponse,
 	CompletionStates,
 	TsvDownloadIds,
 	defaultClinicalEntityFilters,
@@ -41,6 +44,23 @@ import {
 setConfiguration({ gutterWidth: 9 });
 
 const defaultClinicalEntityTab = 'donor';
+
+// convert codegen automated types to definitions in existing code
+// make data object shape uniform
+const parseSearchResult = (
+	data: ClinicalEntitySearchResultsQuery | undefined,
+): ClinicalEntitySearchResultResponse => {
+	if (!data) return emptySearchResponse;
+	return {
+		clinicalSearchResults: {
+			searchResults: data.clinicalSearchResults.searchResults.map((searchResults) => ({
+				donorId: searchResults?.donorId || 0,
+				submitterDonorId: searchResults?.submitterDonorId || '',
+			})),
+			totalResults: data.clinicalSearchResults.totalResults,
+		},
+	};
+};
 
 const ClinicalDataPageComp = ({
 	programShortName,
@@ -85,7 +105,7 @@ const ClinicalDataPageComp = ({
 
 	// Search Result Query
 	// Populates dropdown menu; Search query populates data table if there are no URL params
-	const { data: searchResultData = emptySearchResponse, loading: searchResultsLoading } = useQuery(
+	const { data: searchResultData, loading: searchResultsLoading } = useQuery(
 		CLINICAL_ENTITY_SEARCH_RESULTS_QUERY,
 		{
 			errorPolicy: 'all',
@@ -102,8 +122,10 @@ const ClinicalDataPageComp = ({
 		},
 	);
 
-	const { searchResults } = searchResultData?.clinicalSearchResults;
-	const searchResultIds = searchResults.map((result) => result.donorId);
+	const parsedSearchResultData = parseSearchResult(searchResultData);
+
+	const searchResults = parsedSearchResultData?.clinicalSearchResults?.searchResults;
+	const searchResultIds = searchResults.map((result) => result?.donorId).filter(notNull);
 
 	const sideMenuQueryDonorIds =
 		urlDonorQueryStrings.length > 0
@@ -154,12 +176,12 @@ const ClinicalDataPageComp = ({
 		currentDonors.length > 0 ? currentDonors : searchResults.length > 0 ? searchResultIds : [];
 
 	const entityTableSubmitterDonorIds = (searchResults || [])
-		.map(({ submitterDonorId }) => submitterDonorId)
+		.map((searchResults) => searchResults?.submitterDonorId)
 		.filter(Boolean);
 
 	const tsvDownloadIds: TsvDownloadIds = {
 		donorIds: useDefaultQuery ? [] : entityTableDonorIds,
-		submitterDonorIds: useDefaultQuery ? [] : entityTableSubmitterDonorIds,
+		submitterDonorIds: useDefaultQuery ? [] : entityTableSubmitterDonorIds.filter(notNull),
 	};
 
 	return (
@@ -185,7 +207,7 @@ const ClinicalDataPageComp = ({
 						currentDonors={currentDonors}
 						setSelectedDonors={setSelectedDonors}
 						tsvDownloadIds={tsvDownloadIds}
-						donorSearchResults={searchResultData}
+						donorSearchResults={parsedSearchResultData}
 						setKeyword={setKeyword}
 					/>
 					<div>submitted data placeholder</div>

@@ -20,17 +20,24 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
-const mergeParams = (previousParams, newParams) => {
+const mergeParams = (
+	previousParams: IterableIterator<[string, string]>,
+	newParams: [[key: string, value: string]],
+) => {
 	return new URLSearchParams([...previousParams, ...newParams]).toString();
 };
 
-const useUrlParamState = (key: string, initialValue: string, usePushNavigation?: boolean) => {
+const useUrlParamState = <T extends string>(
+	key: string,
+	initialValue: T,
+	usePushNavigation?: boolean,
+) => {
 	const params = useSearchParams();
 	const pathname = usePathname();
 	const router = useRouter();
 
-	const getUrlParamState = () => params.get(key);
-	const setUrlState = (value) => {
+	const getUrlParamState = () => params.get(key) || '';
+	const setUrlState = (value: T) => {
 		// make a mutable copy of search params and delete the value we're replacing
 		const oldParams = new URLSearchParams(params);
 		oldParams.delete(key);
@@ -50,7 +57,7 @@ const useUrlParamState = (key: string, initialValue: string, usePushNavigation?:
 		if (!params.has(key) && initialValue) setUrlState(initialValue);
 	}, []);
 
-	return [getUrlParamState(), setUrlState];
+	return [getUrlParamState(), setUrlState] as [T, (value: T) => void];
 };
 
 export default useUrlParamState;
