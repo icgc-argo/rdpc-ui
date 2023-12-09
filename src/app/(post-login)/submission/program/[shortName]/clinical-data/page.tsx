@@ -25,18 +25,24 @@ import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/app/gql/CLINICAL_ENTITY_SEAR
 import SUBMITTED_DATA_SIDE_MENU_QUERY from '@/app/gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import useUrlParamState from '@/app/hooks/useUrlParamState';
 import { notNull } from '@/global/utils';
+import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
-import { Loader } from '@icgc-argo/uikit';
+import { Loader, Typography, VerticalTabs } from '@icgc-argo/uikit';
 import { useEffect, useState } from 'react';
-import { setConfiguration } from 'react-grid-system';
+import { Container, setConfiguration } from 'react-grid-system';
+import ClinicalDownloadButton from './DownloadButtons';
 import SearchBar from './SearchBar';
 import {
 	ClinicalEntitySearchResultResponse,
 	CompletionStates,
 	TsvDownloadIds,
+	aliasedEntityNames,
+	clinicalEntityDisplayNames,
+	clinicalEntityFields,
 	defaultClinicalEntityFilters,
 	emptyClinicalDataResponse,
 	emptySearchResponse,
+	hasClinicalErrors,
 	parseDonorIdString,
 	reverseLookUpEntityAlias,
 } from './common';
@@ -184,6 +190,23 @@ const ClinicalDataPageComp = ({
 		submitterDonorIds: useDefaultQuery ? [] : entityTableSubmitterDonorIds.filter(notNull),
 	};
 
+	//
+	const menuItems = clinicalEntityFields.map((entity) => (
+		<VerticalTabs.Item
+			key={entity}
+			active={selectedClinicalEntityTab === aliasedEntityNames[entity]}
+			onClick={(e) => setSelectedClinicalEntityTab(aliasedEntityNames[entity])}
+			disabled={
+				!clinicalData.clinicalEntities.some((e) => e.entityName === aliasedEntityNames[entity])
+			}
+		>
+			{clinicalEntityDisplayNames[entity]}
+			{hasClinicalErrors(clinicalData, entity) && (
+				<VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
+			)}
+		</VerticalTabs.Item>
+	));
+
 	return (
 		<div>
 			<PageHeader
@@ -210,7 +233,74 @@ const ClinicalDataPageComp = ({
 						donorSearchResults={parsedSearchResultData}
 						setKeyword={setKeyword}
 					/>
-					<div>submitted data placeholder</div>
+					<Container>
+						<div
+							css={css`
+								width: 100%;
+							`}
+						>
+							{/* Sidebar */}
+							<div
+								css={css`
+									width: 20%;
+									max-width: 170px;
+									display: inline-block;
+									border: 1px solid ${theme.colors.grey_2};
+								`}
+							>
+								<VerticalTabs>{menuItems}</VerticalTabs>
+							</div>
+							{/* Content */}
+							<div
+								css={css`
+									display: inline-block;
+									height: 100%;
+									width: calc(97% - 170px);
+									vertical-align: top;
+									padding: 8px 12px;
+								`}
+							>
+								{/* Header */}
+								<div
+									css={css`
+										width: 100%;
+										display: flex;
+										justify-content: space-between;
+									`}
+								>
+									<Typography
+										variant="subtitle2"
+										css={css`
+											margin-top: 4px;
+											margin-left: 4px;
+										`}
+									>
+										{clinicalEntityDisplayNames[currentEntity]} Data
+									</Typography>
+
+									<ClinicalDownloadButton
+										tsvDownloadIds={tsvDownloadIds}
+										text={`${clinicalEntityDisplayNames[currentEntity]} Data`}
+										entityTypes={[currentEntity]}
+										completionState={completionState}
+										disabled={noData}
+									/>
+								</div>
+								{/* DataTable */}
+								<div>
+									<ClinicalEntityDataTable
+										entityType={currentEntity}
+										program={programShortName}
+										completionState={completionState}
+										currentDonors={entityTableDonorIds}
+										donorSearchResults={searchResultData}
+										useDefaultQuery={useDefaultQuery}
+										noData={noData}
+									/>
+								</div>
+							</div>
+						</div>
+					</Container>{' '}
 				</>
 			)}
 		</div>
