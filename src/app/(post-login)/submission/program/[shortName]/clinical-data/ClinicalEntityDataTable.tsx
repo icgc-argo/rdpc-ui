@@ -834,7 +834,7 @@ const ClinicalEntityDataTable = ({
 	columns = columns.map((key) => {
 		return {
 			id: key,
-			accessor: key,
+			accessorKey: key,
 			Header: key,
 			headerStyle: {
 				borderRight: getHeaderBorder(key),
@@ -938,6 +938,8 @@ const ClinicalEntityDataTable = ({
 	const numTablePages = Math.ceil(totalDocs / pageSize);
 	const numErrorPages = Math.ceil(totalErrors / errorPageSize);
 
+	console.log('cols', columns, 'records', records);
+
 	return loading ? (
 		<DnaLoader
 			css={css`
@@ -1000,6 +1002,8 @@ const ClinicalEntityDataTable = ({
 			<Table
 				withSideBorders
 				withPagination
+				withHeaders
+				showPageSizeOptions
 				page={page}
 				pages={numTablePages}
 				pageSize={pageSize}
