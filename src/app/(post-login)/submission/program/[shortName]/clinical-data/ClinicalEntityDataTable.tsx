@@ -17,42 +17,40 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import ErrorNotification from '@/app/components/ErrorNotification';
+import { TableInfoHeaderContainer } from '@/app/components/Table/common';
+import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { useClinicalSubmissionSchemaVersion } from '@/app/hooks/useClinicalSubmissionSchemaVersion';
+import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from '@/global/constants';
 import { css } from '@/lib/emotion';
-import { useQuery } from '@apollo/client';
 import {
 	ContentPlaceholder,
 	DnaLoader,
 	Icon,
 	Link,
-	noDataSvg,
 	NOTIFICATION_VARIANTS,
 	Table,
 	Tooltip,
 	Typography,
+	noDataSvg,
 	useTheme,
 } from '@icgc-argo/uikit';
 import { ClinicalSearchResults } from 'generated/gql_types';
-import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
-import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
-import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 import memoize from 'lodash/memoize';
 import { createRef, useEffect, useState } from 'react';
-import ErrorNotification from '../../ErrorNotification';
+import urljoin from 'url-join';
 import {
-	aliasedEntityFields,
-	aliasedEntityNames,
-	aliasSortNames,
-	clinicalEntityDisplayNames,
-	clinicalEntityFields,
-	ClinicalEntityQueryResponse,
 	ClinicalEntitySearchResultResponse,
 	CompletionStates,
+	aliasSortNames,
+	aliasedEntityFields,
+	aliasedEntityNames,
+	clinicalEntityDisplayNames,
+	clinicalEntityFields,
 	defaultClinicalEntityFilters,
 	emptyClinicalDataResponse,
 	emptySearchResponse,
-	TableInfoHeaderContainer,
 } from './common';
-import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
 
 export type DonorEntry = {
 	row: string;
@@ -158,7 +156,7 @@ const validateEntityQueryName = (entityQuery) => {
 	return entities.map((entityName) => clinicalEntityFields.find((entity) => entity === entityName));
 };
 
-export const getEntityData = (
+export const useGetEntityData = (
 	program: string,
 	entityType: string | string[],
 	page: number,
@@ -167,24 +165,250 @@ export const getEntityData = (
 	completionState: CompletionStates,
 	donorIds: number[],
 	submitterDonorIds: string[],
-) =>
-	useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA_QUERY, {
-		errorPolicy: 'all',
-		fetchPolicy: 'cache-and-network',
-		variables: {
-			programShortName: program,
-			filters: {
-				...defaultClinicalEntityFilters,
-				sort,
-				page,
-				pageSize,
-				completionState,
-				donorIds,
-				submitterDonorIds,
-				entityTypes: validateEntityQueryName(entityType),
-			},
+) => {
+	const requestVariables = {
+		programShortName: program,
+		filters: {
+			...defaultClinicalEntityFilters,
+			sort,
+			page,
+			pageSize,
+			completionState,
+			donorIds,
+			submitterDonorIds,
+			entityTypes: validateEntityQueryName(entityType),
 		},
-	});
+	};
+
+	// return useQuery(CLINICAL_ENTITY_DATA_QUERY, {
+	// 	errorPolicy: 'all',
+	// 	fetchPolicy: 'cache-and-network',
+	// 	variables: requestVariables,
+	// });
+
+	const data = {
+		clinicalData: {
+			programShortName: 'CIA-IE',
+			clinicalEntities: [
+				{
+					entityName: 'donor',
+					entityFields: [
+						'donor_id',
+						'program_id',
+						'submitter_donor_id',
+						'vital_status',
+						'cause_of_death',
+						'survival_time',
+						'primary_site',
+						'height',
+						'weight',
+						'bmi',
+						'genetic_disorders',
+						'menopause_status',
+						'age_at_menarche',
+						'number_of_pregnancies',
+						'number_of_children',
+						'hrt_type',
+						'hrt_duration',
+						'contraception_type',
+						'contraception_duration',
+						'lost_to_followup_after_clinical_event_id',
+					],
+					totalDocs: 2,
+					records: [
+						[
+							{
+								name: 'donor_id',
+								value: '264723',
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'program_id',
+								value: 'CIA-IE',
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'updatedAt',
+								value: '2023-10-27T14:24:30.957Z',
+								__typename: 'ClinicalRecordField',
+							},
+						],
+						[
+							{
+								name: 'donor_id',
+								value: '264798',
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'program_id',
+								value: 'CIA-IE',
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'updatedAt',
+								value: '2023-11-30T18:14:07.399Z',
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'submitter_donor_id',
+								value: 'DO-1',
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'vital_status',
+								value: 'Deceased',
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'cause_of_death',
+								value: 'Unknown',
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'survival_time',
+								value: '1',
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'primary_site',
+								value: 'Adrenal gland',
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'height',
+								value: null,
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'weight',
+								value: null,
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'bmi',
+								value: null,
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'genetic_disorders',
+								value: null,
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'menopause_status',
+								value: null,
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'age_at_menarche',
+								value: null,
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'number_of_pregnancies',
+								value: null,
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'number_of_children',
+								value: null,
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'hrt_type',
+								value: null,
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'hrt_duration',
+								value: null,
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'contraception_type',
+								value: null,
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'contraception_duration',
+								value: null,
+								__typename: 'ClinicalRecordField',
+							},
+							{
+								name: 'lost_to_followup_after_clinical_event_id',
+								value: null,
+								__typename: 'ClinicalRecordField',
+							},
+						],
+					],
+					completionStats: [
+						{
+							coreCompletion: {
+								donor: 0,
+								specimens: 0,
+								primaryDiagnosis: 0,
+								followUps: 0,
+								treatments: 0,
+								__typename: 'CoreCompletionFields',
+							},
+							coreCompletionDate: null,
+							coreCompletionPercentage: 0,
+							overriddenCoreCompletion: [],
+							donorId: 264723,
+							entityData: {
+								specimens: {
+									coreCompletionPercentage: 0,
+									normalSpecimensPercentage: 0,
+									tumourSpecimensPercentage: 0,
+									normalRegistrations: 1,
+									normalSubmissions: 0,
+									tumourRegistrations: 0,
+									tumourSubmissions: 0,
+									__typename: 'SpecimenCoreCompletion',
+								},
+								__typename: 'CompletionEntityData',
+							},
+							__typename: 'CompletionStats',
+						},
+						{
+							coreCompletion: {
+								donor: 1,
+								specimens: 0,
+								primaryDiagnosis: 0,
+								followUps: 0,
+								treatments: 0,
+								__typename: 'CoreCompletionFields',
+							},
+							coreCompletionDate: null,
+							coreCompletionPercentage: 0.2,
+							overriddenCoreCompletion: null,
+							donorId: 264798,
+							entityData: {
+								specimens: {
+									coreCompletionPercentage: 0,
+									normalSpecimensPercentage: 0,
+									tumourSpecimensPercentage: 0,
+									normalRegistrations: 1,
+									normalSubmissions: 0,
+									tumourRegistrations: 0,
+									tumourSubmissions: 0,
+									__typename: 'SpecimenCoreCompletion',
+								},
+								__typename: 'CompletionEntityData',
+							},
+							__typename: 'CompletionStats',
+						},
+					],
+					__typename: 'ClinicalDataEntities',
+				},
+			],
+			clinicalErrors: [],
+			__typename: 'ClinicalData',
+		},
+	};
+
+	return { data, loading: false };
+};
 
 const ClinicalEntityDataTable = ({
 	entityType,
@@ -203,6 +427,9 @@ const ClinicalEntityDataTable = ({
 	useDefaultQuery: boolean;
 	noData: boolean;
 }) => {
+	const { DOCS_URL_ROOT } = useAppConfigContext();
+	const DOCS_DICTIONARY_PAGE = urljoin(DOCS_URL_ROOT, '/dictionary/');
+
 	// Init + Page Settings
 	let totalDocs = 0;
 	let showCompletionStats = false;
@@ -223,6 +450,15 @@ const ClinicalEntityDataTable = ({
 	const {
 		clinicalSearchResults: { searchResults, totalResults },
 	} = donorSearchResults || emptySearchResponse;
+
+	console.log(
+		'search result',
+		searchResults,
+		'total results',
+		totalResults,
+		'current donors',
+		currentDonors,
+	);
 
 	const nextSearchPage = (page + 1) * pageSize;
 
@@ -276,7 +512,7 @@ const ClinicalEntityDataTable = ({
 		setErrorPageSettings(defaultErrorPageSettings);
 	}, [entityType, useDefaultQuery]);
 
-	const { data: clinicalEntityData, loading } = getEntityData(
+	const { data: clinicalEntityData, loading } = useGetEntityData(
 		program,
 		entityType,
 		page,
@@ -286,11 +522,12 @@ const ClinicalEntityDataTable = ({
 		donorIds,
 		submitterDonorIds,
 	);
-
+	console.log('clinical entity data', clinicalEntityData);
 	const { clinicalData } =
 		clinicalEntityData == undefined || loading ? emptyClinicalDataResponse : clinicalEntityData;
 
 	const noTableData = noData || clinicalData.clinicalEntities.length === 0;
+	console.log('no data', noData, clinicalData);
 
 	// Collect Error Data
 	const { clinicalErrors = [] } = clinicalData;
@@ -551,7 +788,7 @@ const ClinicalEntityDataTable = ({
 					(error.errorType === 'INVALID_BY_SCRIPT' || error.errorType === 'INVALID_ENUM_VALUE') &&
 					(error.info?.value === original[id] ||
 						(error.info?.value && error.info.value[0] === original[id]) ||
-						(error.info.value === null && !Boolean(original[id]))),
+						(error.info.value === null && !original[id])),
 			);
 
 		const fieldError =
@@ -636,6 +873,7 @@ const ClinicalEntityDataTable = ({
 
 		columns = [
 			{
+				id: 'core-completion',
 				Header: (
 					<div
 						css={css`
@@ -687,6 +925,7 @@ const ClinicalEntityDataTable = ({
 				})),
 			},
 			{
+				id: 'submitted-donor-data',
 				Header: <div>SUBMITTED DONOR DATA</div>,
 				headerStyle: dataHeaderStyle,
 				columns: columns.slice(7).map((column, i) => column),
@@ -759,10 +998,8 @@ const ClinicalEntityDataTable = ({
 				}
 			/>
 			<Table
-				withOutsideBorder
-				manual
-				parentRef={containerRef}
-				showPagination={true}
+				withSideBorders
+				withPagination
 				page={page}
 				pages={numTablePages}
 				pageSize={pageSize}

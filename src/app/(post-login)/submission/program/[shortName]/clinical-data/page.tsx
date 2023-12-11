@@ -28,9 +28,11 @@ import { notNull } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
 import { useTheme } from '@emotion/react';
-import { Loader, VerticalTabs } from '@icgc-argo/uikit';
+import { Loader, Typography, VerticalTabs } from '@icgc-argo/uikit';
 import { useEffect, useState } from 'react';
 import { Container, setConfiguration } from 'react-grid-system';
+import ClinicalEntityDataTable from './ClinicalEntityDataTable';
+import ClinicalDownloadButton from './DownloadButtons';
 import SearchBar from './SearchBar';
 import {
 	ClinicalEntitySearchResultResponse,
@@ -254,6 +256,54 @@ const ClinicalDataPageComp = ({
 								<VerticalTabs>{menuItems}</VerticalTabs>
 							</div>
 							{/* Content */}
+							<div
+								css={css`
+									display: inline-block;
+									height: 100%;
+									width: calc(97% - 170px);
+									vertical-align: top;
+									padding: 8px 12px;
+								`}
+							>
+								{/* Header */}
+								<div
+									css={css`
+										width: 100%;
+										display: flex;
+										justify-content: space-between;
+									`}
+								>
+									<Typography
+										variant="subtitle2"
+										css={css`
+											margin-top: 4px;
+											margin-left: 4px;
+										`}
+									>
+										{clinicalEntityDisplayNames[currentEntity]} Data
+									</Typography>
+
+									<ClinicalDownloadButton
+										tsvDownloadIds={tsvDownloadIds}
+										text={`${clinicalEntityDisplayNames[currentEntity]} Data`}
+										entityTypes={[currentEntity]}
+										completionState={completionState}
+										disabled={noData}
+									/>
+								</div>
+								{/* DataTable */}
+								<div>
+									<ClinicalEntityDataTable
+										entityType={currentEntity}
+										program={programShortName}
+										completionState={completionState}
+										currentDonors={entityTableDonorIds}
+										donorSearchResults={searchResultData}
+										useDefaultQuery={useDefaultQuery}
+										noData={noData}
+									/>
+								</div>
+							</div>{' '}
 						</div>
 					</Container>
 				</>
