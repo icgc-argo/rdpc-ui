@@ -19,10 +19,12 @@
 
 import ErrorNotification from '@/app/components/ErrorNotification';
 import { TableInfoHeaderContainer } from '@/app/components/Table/common';
+import CLINICAL_ENTITY_DATA_QUERY from '@/app/gql/CLINICAL_ENTITY_DATA_QUERY';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useClinicalSubmissionSchemaVersion } from '@/app/hooks/useClinicalSubmissionSchemaVersion';
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from '@/global/constants';
 import { css } from '@/lib/emotion';
+import { useQuery } from '@apollo/client';
 import {
 	ContentPlaceholder,
 	DnaLoader,
@@ -180,11 +182,11 @@ export const useGetEntityData = (
 		},
 	};
 
-	// return useQuery(CLINICAL_ENTITY_DATA_QUERY, {
-	// 	errorPolicy: 'all',
-	// 	fetchPolicy: 'cache-and-network',
-	// 	variables: requestVariables,
-	// });
+	return useQuery(CLINICAL_ENTITY_DATA_QUERY, {
+		errorPolicy: 'all',
+		fetchPolicy: 'cache-and-network',
+		variables: requestVariables,
+	});
 
 	const data = {
 		clinicalData: {
