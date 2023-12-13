@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { ApolloClient, ApolloLink, InMemoryCache } from '@apollo/client';
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { createUploadLink } from 'apollo-upload-client';
 export { gql } from '@/__generated__/gql';
@@ -41,14 +41,26 @@ const createInMemoryCache = () =>
 
 type Config = {
 	gateway: string;
+	clinical: string;
 	jwt: string | undefined;
 };
+
+export const apiName = { clinical: 'clinical', gateway: 'gateway' };
+
 export const createApolloClient = (config: Config) => {
 	const clientSideCache = createInMemoryCache();
 
-	const httpLink = createUploadLink({
-		uri: config.gateway,
+	const clinicalLink = createUploadLink({
+		uri: config.clinical,
 	});
+
+	const gatewayLink = new HttpLink({ uri: config.gateway });
+
+	const dataLink = ApolloLink.split(
+		(operation) => operation.getContext().apiName === apiName.clinical,
+		clinicalLink,
+		gatewayLink,
+	);
 
 	const jwt = config.jwt;
 
@@ -70,7 +82,8 @@ export const createApolloClient = (config: Config) => {
 		if (networkError) console.log(`[Network error]: ${networkError}`);
 	});
 
-	const additiveLink = ApolloLink.from([authLink, errorLink, httpLink]);
+	// links in order of execution
+	const additiveLink = ApolloLink.from([authLink, errorLink, dataLink]);
 
 	return new ApolloClient({
 		link: additiveLink,

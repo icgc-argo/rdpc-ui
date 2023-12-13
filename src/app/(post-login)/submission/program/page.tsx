@@ -24,6 +24,7 @@ import PROGRAMS_LIST_QUERY from '@/app/gql/PROGRAMS_LIST_QUERY';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { CREATE_PROGRAM_PAGE_PATH } from '@/global/constants';
 import { notNull } from '@/global/utils';
+import { apiName } from '@/lib/gql';
 import { useQuery } from '@apollo/client';
 import { Button, Loader } from '@icgc-argo/uikit';
 import Link from 'next/link';
@@ -34,6 +35,7 @@ export default function Submission() {
 	const { DATA_CENTER } = useAppConfigContext();
 	const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY, {
 		variables: { dataCenter: DATA_CENTER },
+		context: { apiName: apiName.gateway },
 	});
 
 	const programs = data?.programs?.filter(notNull) || [];
