@@ -259,13 +259,6 @@ const MenuContent = ({ programName }: { programName: string }) => {
 		},
 	});
 
-	// const { data } = useQuery(SidemenuProgramStatusQuery.gql, {
-	// 	variables: {
-	// 		activeProgramName: programName,
-	// 		filters: defaultClinicalEntityFilters,
-	// 	},
-	// });
-
 	const { isRDPCAdmin, isDCCAdmin, isProgramAdmin, isDataSubmitter, isCollaborator } = userRoles;
 
 	const userCanSubmitData = isDataSubmitter || isRDPCAdmin || isDCCAdmin || isProgramAdmin;
