@@ -2765,23 +2765,6 @@ export type ProgramsListQuery = {
 	} | null> | null;
 };
 
-export type ProgramsUsersQueryVariables = Exact<{ [key: string]: never }>;
-
-export type ProgramsUsersQuery = {
-	__typename?: 'Query';
-	programs?: Array<{
-		__typename?: 'Program';
-		shortName: string;
-		users?: Array<{
-			__typename?: 'ProgramUser';
-			email: string;
-			firstName: string;
-			lastName: string;
-			role: UserRole;
-		} | null> | null;
-	} | null> | null;
-};
-
 export type RegistrationFragment = {
 	__typename?: 'ClinicalRegistrationData';
 	id?: string | null;
@@ -4217,44 +4200,6 @@ export const ProgramsListDocument = {
 		},
 	],
 } as unknown as DocumentNode<ProgramsListQuery, ProgramsListQueryVariables>;
-export const ProgramsUsersDocument = {
-	kind: 'Document',
-	definitions: [
-		{
-			kind: 'OperationDefinition',
-			operation: 'query',
-			name: { kind: 'Name', value: 'ProgramsUsers' },
-			selectionSet: {
-				kind: 'SelectionSet',
-				selections: [
-					{
-						kind: 'Field',
-						name: { kind: 'Name', value: 'programs' },
-						selectionSet: {
-							kind: 'SelectionSet',
-							selections: [
-								{ kind: 'Field', name: { kind: 'Name', value: 'shortName' } },
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'users' },
-									selectionSet: {
-										kind: 'SelectionSet',
-										selections: [
-											{ kind: 'Field', name: { kind: 'Name', value: 'email' } },
-											{ kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
-											{ kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
-											{ kind: 'Field', name: { kind: 'Name', value: 'role' } },
-										],
-									},
-								},
-							],
-						},
-					},
-				],
-			},
-		},
-	],
-} as unknown as DocumentNode<ProgramsUsersQuery, ProgramsUsersQueryVariables>;
 export const ReopenSubmissionDocument = {
 	kind: 'Document',
 	definitions: [

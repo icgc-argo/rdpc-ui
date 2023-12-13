@@ -16,13 +16,8 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import { useQuery } from '@apollo/client';
 
-import { gql } from '@/__generated__';
-
-const CLINICAL_SCHEMA_VERSION_QUERY = gql(`
-	query ClinicalSchemaVersion {
-		clinicalSubmissionSchemaVersion
-	}
-`);
-
-export default CLINICAL_SCHEMA_VERSION_QUERY;
+export const useApolloQuery = (query, options) => {
+	return useQuery(query.qql, { context: { apiName: query.api }, ...options });
+};

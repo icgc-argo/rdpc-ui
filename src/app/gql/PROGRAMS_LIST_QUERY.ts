@@ -18,6 +18,7 @@
  */
 
 import { gql } from '@/__generated__/gql';
+import { apiName } from '@/lib/gql';
 
 const PROGRAMS_LIST_QUERY = gql(`
 	query ProgramsList($dataCenter: String) {
@@ -37,4 +38,4 @@ const PROGRAMS_LIST_QUERY = gql(`
 	}
 `);
 
-export default PROGRAMS_LIST_QUERY;
+export const ProgramsListQuery = { gql: PROGRAMS_LIST_QUERY, api: apiName.gateway };

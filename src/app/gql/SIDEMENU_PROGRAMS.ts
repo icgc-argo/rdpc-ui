@@ -18,6 +18,7 @@
  */
 
 import { gql } from '@/__generated__/gql';
+import { apiName } from '@/lib/gql';
 
 const SIDEMENU_PROGRAMS = gql(`
 	query SideMenu ($dataCenter: String) {
@@ -27,4 +28,6 @@ const SIDEMENU_PROGRAMS = gql(`
   }
 `);
 
-export default SIDEMENU_PROGRAMS;
+const SideMenuPrograms = { query: SIDEMENU_PROGRAMS, api: apiName.gateway };
+
+export default SideMenuPrograms;
