@@ -34,6 +34,6 @@ export const useApolloQuery = <TData, TVariables>(
 	options?: QueryHookOptions<any, OperationVariables> | undefined,
 ): QueryResult<TData, TVariables> => {
 	const mergedOptions = { context: { apiName: query.api }, ...options };
-	// @ts-expect-error
+	// @ts-expect-error apollo NoInfer type isn't playing nice with the 'mergedOptions'
 	return useQuery(query.gql, mergedOptions);
 };
