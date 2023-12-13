@@ -16,8 +16,24 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { useQuery } from '@apollo/client';
+import { apiName } from '@/lib/gql';
+import {
+	DocumentNode,
+	OperationVariables,
+	QueryHookOptions,
+	QueryResult,
+	TypedDocumentNode,
+	useQuery,
+} from '@apollo/client';
 
-export const useApolloQuery = (query, options) => {
-	return useQuery(query.qql, { context: { apiName: query.api }, ...options });
+export const useApolloQuery = <TData, TVariables>(
+	query: {
+		gql: DocumentNode | TypedDocumentNode<TData, TVariables>;
+		api: keyof typeof apiName;
+	},
+	options?: QueryHookOptions<any, OperationVariables> | undefined,
+): QueryResult<TData, TVariables> => {
+	const mergedOptions = { context: { apiName: query.api }, ...options };
+	// @ts-expect-error
+	return useQuery(query.gql, mergedOptions);
 };

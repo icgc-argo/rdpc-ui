@@ -45,7 +45,7 @@ type Config = {
 	jwt: string | undefined;
 };
 
-export const apiName = { clinical: 'clinical', gateway: 'gateway' };
+export const apiName = { clinical: 'clinical', gateway: 'gateway' } as const;
 
 export const createApolloClient = (config: Config) => {
 	const clientSideCache = createInMemoryCache();

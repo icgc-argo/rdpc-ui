@@ -20,6 +20,7 @@
 
 import { SideMenuProgramStatusQuery, SubmissionState } from '@/__generated__/graphql';
 import Loader from '@/app/components/Loader';
+import { SideMenuProgramsQuery } from '@/app/gql/SIDEMENU_PROGRAMS';
 import { SidemenuProgramStatusQuery } from '@/app/gql/SIDEMENU_PROGRAM_STATUS';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useAuthContext } from '@/app/hooks/AuthProvider';
@@ -75,7 +76,7 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 		data: programsData,
 		loading,
 		error,
-	} = useApolloQuery(SidemenuProgramStatusQuery, {
+	} = useApolloQuery(SideMenuProgramsQuery, {
 		variables: { dataCenter: DATA_CENTER },
 	});
 
@@ -257,6 +258,13 @@ const MenuContent = ({ programName }: { programName: string }) => {
 			filters: defaultClinicalEntityFilters,
 		},
 	});
+
+	// const { data } = useQuery(SidemenuProgramStatusQuery.gql, {
+	// 	variables: {
+	// 		activeProgramName: programName,
+	// 		filters: defaultClinicalEntityFilters,
+	// 	},
+	// });
 
 	const { isRDPCAdmin, isDCCAdmin, isProgramAdmin, isDataSubmitter, isCollaborator } = userRoles;
 

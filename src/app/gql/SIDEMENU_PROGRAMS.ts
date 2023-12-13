@@ -28,6 +28,4 @@ const SIDEMENU_PROGRAMS = gql(`
   }
 `);
 
-const SideMenuPrograms = { query: SIDEMENU_PROGRAMS, api: apiName.gateway };
-
-export default SideMenuPrograms;
+export const SideMenuProgramsQuery = { gql: SIDEMENU_PROGRAMS, api: apiName.gateway };
