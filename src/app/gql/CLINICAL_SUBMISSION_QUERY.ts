@@ -18,7 +18,6 @@
  */
 
 import { gql } from '@/__generated__/gql';
-import { apiName } from '@/lib/gql';
 
 const CLINICAL_SUBMISSION_QUERY = gql(`
   query ClinicalSubmission($shortName: String!) {
@@ -84,4 +83,4 @@ const CLINICAL_SUBMISSION_QUERY = gql(`
   }
 `);
 
-export const ClinicalSubmissionQuery = { gql: CLINICAL_SUBMISSION_QUERY, api: apiName.clinical };
+export default CLINICAL_SUBMISSION_QUERY;

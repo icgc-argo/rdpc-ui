@@ -18,9 +18,9 @@
  */
 'use client';
 
-import { ClinicalSchemaVersionQuery } from '@/app/gql/CLINICAL_SCHEMA_VERSION';
+import CLINICAL_SCHEMA_VERSION from '@/app/gql/CLINICAL_SCHEMA_VERSION';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { useApolloQuery } from '@/app/hooks/useApolloQuery';
+import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import { CLINICAL_TEMPLATE_PATH } from '@/global/constants';
 import { css, useTheme } from '@/lib/emotion';
 import {
@@ -190,7 +190,7 @@ const Instructions = ({
 		setIsSigningOff(false);
 	};
 
-	const latestDictionaryResponse = useApolloQuery(ClinicalSchemaVersionQuery);
+	const latestDictionaryResponse = useClinicalQuery(CLINICAL_SCHEMA_VERSION);
 
 	return (
 		<div

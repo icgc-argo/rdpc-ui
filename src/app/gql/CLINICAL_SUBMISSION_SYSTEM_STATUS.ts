@@ -18,7 +18,6 @@
  */
 
 import { gql } from '@/__generated__/gql';
-import { apiName } from '@/lib/gql';
 
 const CLINICAL_SUBMISSION_SYSTEM_STATUS_QUERY = gql(`
   query ClinicalSubmissionSystemDisabled {
@@ -26,7 +25,4 @@ const CLINICAL_SUBMISSION_SYSTEM_STATUS_QUERY = gql(`
   }
 `);
 
-export const ClinicalSubmissionSystemStatus = {
-	gql: CLINICAL_SUBMISSION_SYSTEM_STATUS_QUERY,
-	api: apiName.clinical,
-};
+export default CLINICAL_SUBMISSION_SYSTEM_STATUS_QUERY;

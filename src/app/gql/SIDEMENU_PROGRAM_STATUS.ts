@@ -18,7 +18,6 @@
  */
 
 import { gql } from '@/__generated__/gql';
-import { apiName } from '@/lib/gql';
 
 const SIDEMENU_PROGRAM_STATUS = gql(`
 	query SideMenuProgramStatus($activeProgramName: String!, $filters: ClinicalInput!) {
@@ -56,4 +55,4 @@ const SIDEMENU_PROGRAM_STATUS = gql(`
   }
 `);
 
-export const SidemenuProgramStatusQuery = { gql: SIDEMENU_PROGRAM_STATUS, api: apiName.clinical };
+export default SIDEMENU_PROGRAM_STATUS;

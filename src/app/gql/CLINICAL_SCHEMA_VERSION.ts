@@ -18,7 +18,6 @@
  */
 
 import { gql } from '@/__generated__/gql';
-import { apiName } from '@/lib/gql';
 
 const CLINICAL_SCHEMA_VERSION_QUERY = gql(`
   query ClinicalSchemaVersion {
@@ -26,7 +25,4 @@ const CLINICAL_SCHEMA_VERSION_QUERY = gql(`
   }
 `);
 
-export const ClinicalSchemaVersionQuery = {
-	gql: CLINICAL_SCHEMA_VERSION_QUERY,
-	api: apiName.clinical,
-};
+export default CLINICAL_SCHEMA_VERSION_QUERY;

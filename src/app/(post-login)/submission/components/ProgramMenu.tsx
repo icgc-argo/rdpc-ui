@@ -20,11 +20,11 @@
 
 import { SideMenuProgramStatusQuery, SubmissionState } from '@/__generated__/graphql';
 import Loader from '@/app/components/Loader';
-import { SideMenuProgramsQuery } from '@/app/gql/SIDEMENU_PROGRAMS';
-import { SidemenuProgramStatusQuery } from '@/app/gql/SIDEMENU_PROGRAM_STATUS';
+import SIDEMENU_PROGRAMS from '@/app/gql/SIDEMENU_PROGRAMS';
+import SIDEMENU_PROGRAM_STATUS from '@/app/gql/SIDEMENU_PROGRAM_STATUS';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useAuthContext } from '@/app/hooks/AuthProvider';
-import { useApolloQuery } from '@/app/hooks/useApolloQuery';
+import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
 import useUserRole from '@/app/hooks/useUserRole';
 import {
@@ -76,7 +76,7 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 		data: programsData,
 		loading,
 		error,
-	} = useApolloQuery(SideMenuProgramsQuery, {
+	} = useClinicalQuery(SIDEMENU_PROGRAMS, {
 		variables: { dataCenter: DATA_CENTER },
 	});
 
@@ -252,7 +252,7 @@ const MenuContent = ({ programName }: { programName: string }) => {
 
 	const userRoles = useUserRole(egoJwt, programName);
 
-	const { data: gqlData } = useApolloQuery(SidemenuProgramStatusQuery, {
+	const { data: gqlData } = useClinicalQuery(SIDEMENU_PROGRAM_STATUS, {
 		variables: {
 			activeProgramName: programName,
 			filters: defaultClinicalEntityFilters,

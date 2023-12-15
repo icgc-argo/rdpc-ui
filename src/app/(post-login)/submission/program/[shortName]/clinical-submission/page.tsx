@@ -29,13 +29,13 @@ import Loader from '@/app/components/Loader';
 import { ModalPortal } from '@/app/components/Modal';
 import { pageWithPermissions } from '@/app/components/Page';
 import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/CLEAR_CLINICAL_SUBMISSION';
-import { ClinicalSubmissionQuery } from '@/app/gql/CLINICAL_SUBMISSION_QUERY';
+import CLINICAL_SUBMISSION_QUERY from '@/app/gql/CLINICAL_SUBMISSION_QUERY';
 import SIGN_OFF_SUBMISSION_MUTATION from '@/app/gql/SIGN_OFF_SUBMISSION_MUTATION';
 import UPLOAD_CLINICAL_SUBMISSION_MUTATION from '@/app/gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION';
 import VALIDATE_SUBMISSION_MUTATION from '@/app/gql/VALIDATE_SUBMISSION_MUTATION';
 import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
 import { useToaster } from '@/app/hooks/ToastProvider';
-import { useApolloQuery } from '@/app/hooks/useApolloQuery';
+import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import useCommonToasters from '@/app/hooks/useCommonToasters';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
 import useUrlQueryState from '@/app/hooks/useURLQueryState';
@@ -93,7 +93,7 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 		loading: isLoading,
 		refetch,
 		updateQuery: updateClinicalSubmissionQuery,
-	} = useApolloQuery(ClinicalSubmissionQuery, {
+	} = useClinicalQuery(CLINICAL_SUBMISSION_QUERY, {
 		variables: {
 			shortName,
 		},
