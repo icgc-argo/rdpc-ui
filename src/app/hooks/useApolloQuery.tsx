@@ -26,14 +26,26 @@ import {
 	useQuery,
 } from '@apollo/client';
 
-export const useApolloQuery = <TData, TVariables>(
-	query: {
-		gql: DocumentNode | TypedDocumentNode<TData, TVariables>;
-		api: keyof typeof apiName;
-	},
+const useApolloQuery = <TData, TVariables>(
+	query: DocumentNode | TypedDocumentNode<TData, TVariables>,
+	api: keyof typeof apiName,
 	options?: QueryHookOptions<any, OperationVariables> | undefined,
 ): QueryResult<TData, TVariables> => {
-	const mergedOptions = { context: { apiName: query.api }, ...options };
+	const mergedOptions = { context: { apiName: api }, ...options };
 	// @ts-expect-error apollo NoInfer type isn't playing nice with the 'mergedOptions'
-	return useQuery(query.gql, mergedOptions);
+	return useQuery(query, mergedOptions);
+};
+
+export const useGatewayQuery = <TData, TVariables>(
+	query: DocumentNode | TypedDocumentNode<TData, TVariables>,
+	options?: QueryHookOptions<any, OperationVariables> | undefined,
+) => {
+	return useApolloQuery(query, apiName.gateway, options);
+};
+
+export const useClinicalQuery = <TData, TVariables>(
+	query: DocumentNode | TypedDocumentNode<TData, TVariables>,
+	options?: QueryHookOptions<any, OperationVariables> | undefined,
+) => {
+	return useApolloQuery(query, apiName.clinical, options);
 };
