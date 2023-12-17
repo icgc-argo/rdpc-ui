@@ -24,7 +24,7 @@ import SIDEMENU_PROGRAMS from '@/app/gql/SIDEMENU_PROGRAMS';
 import SIDEMENU_PROGRAM_STATUS from '@/app/gql/SIDEMENU_PROGRAM_STATUS';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useAuthContext } from '@/app/hooks/AuthProvider';
-import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
+import { useClinicalQuery, useGatewayQuery } from '@/app/hooks/useApolloQuery';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
 import useUserRole from '@/app/hooks/useUserRole';
 import {
@@ -76,7 +76,7 @@ const ProgramMenu = ({ shortNameSearchQuery }: { shortNameSearchQuery: string })
 		data: programsData,
 		loading,
 		error,
-	} = useClinicalQuery(SIDEMENU_PROGRAMS, {
+	} = useGatewayQuery(SIDEMENU_PROGRAMS, {
 		variables: { dataCenter: DATA_CENTER },
 	});
 
