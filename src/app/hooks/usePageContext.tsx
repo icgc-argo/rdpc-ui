@@ -23,7 +23,6 @@ import { useParams } from 'next/navigation';
 
 const usePageContext = () => {
 	const params = useParams();
-	console.log('route', params);
 
 	// resolves to a string vs string[]
 	// helps typing in consumer
