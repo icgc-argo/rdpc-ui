@@ -70,13 +70,7 @@ const parseSearchResult = (
 	};
 };
 
-const ClinicalDataPageComp = ({
-	programShortName,
-	donorId,
-}: {
-	programShortName: string;
-	donorId: string;
-}) => {
+const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }) => {
 	const FEATURE_SUBMITTED_DATA_ENABLED = true;
 	const isLoading = false;
 
@@ -90,7 +84,7 @@ const ClinicalDataPageComp = ({
 		'tab',
 		defaultClinicalEntityTab,
 	);
-	const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', donorId);
+	const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', '');
 
 	const currentEntity = reverseLookUpEntityAlias(selectedClinicalEntityTab);
 	const urlDonorQueryStrings = selectedDonors ? selectedDonors.split(',') : [];
@@ -312,12 +306,12 @@ const ClinicalDataPageComp = ({
 	);
 };
 
-const ClinicalDataPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
+const ClinicalDataPage = ({ params: { shortName = '' } }: { params: { shortName: string } }) => {
 	const ClinicalDataWithPermissions = pageWithPermissions(ClinicalDataPageComp, {
 		acceptedRoles: ['isRDPCAdmin', 'isDCCAdmin', 'isProgramAdmin', 'isDataSubmitter'],
 		programShortName: shortName,
 	});
-	return <ClinicalDataWithPermissions programShortName={shortName} donorId="DONOR_ID" />;
+	return <ClinicalDataWithPermissions programShortName={shortName} />;
 };
 
 export default ClinicalDataPage;
