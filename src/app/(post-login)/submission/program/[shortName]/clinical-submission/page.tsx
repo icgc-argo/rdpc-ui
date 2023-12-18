@@ -35,6 +35,7 @@ import UPLOAD_CLINICAL_SUBMISSION_MUTATION from '@/app/gql/UPLOAD_CLINICAL_SUBMI
 import VALIDATE_SUBMISSION_MUTATION from '@/app/gql/VALIDATE_SUBMISSION_MUTATION';
 import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
 import { useToaster } from '@/app/hooks/ToastProvider';
+import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import useCommonToasters from '@/app/hooks/useCommonToasters';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
 import useUrlQueryState from '@/app/hooks/useURLQueryState';
@@ -42,7 +43,7 @@ import useUserConfirmationModalState from '@/app/hooks/useUserConfirmationModalS
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from '@/global/constants';
 import { displayDateAndTime, sleep, toDisplayError } from '@/global/utils';
 import { css } from '@/lib/emotion';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import {
 	ColumnDef,
 	NOTIFICATION_VARIANTS,
@@ -92,7 +93,7 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 		loading: isLoading,
 		refetch,
 		updateQuery: updateClinicalSubmissionQuery,
-	} = useQuery(CLINICAL_SUBMISSION_QUERY, {
+	} = useClinicalQuery(CLINICAL_SUBMISSION_QUERY, {
 		variables: {
 			shortName,
 		},

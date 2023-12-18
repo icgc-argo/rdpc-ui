@@ -22,9 +22,9 @@
 import { BreadcrumbTitle, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import PROGRAMS_LIST_QUERY from '@/app/gql/PROGRAMS_LIST_QUERY';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { useGatewayQuery } from '@/app/hooks/useApolloQuery';
 import { CREATE_PROGRAM_PAGE_PATH } from '@/global/constants';
 import { notNull } from '@/global/utils';
-import { useQuery } from '@apollo/client';
 import { Button, Loader } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -32,7 +32,7 @@ import ProgramList from '../components/ProgramList';
 
 export default function Submission() {
 	const { DATA_CENTER } = useAppConfigContext();
-	const { data, loading, error } = useQuery(PROGRAMS_LIST_QUERY, {
+	const { data, loading, error } = useGatewayQuery(PROGRAMS_LIST_QUERY, {
 		variables: { dataCenter: DATA_CENTER },
 	});
 
