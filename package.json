@@ -9,8 +9,6 @@
     "lint": "next lint",
     "prepare": "husky install",
     "test": "echo 'Add tests please :)'",
-    "gql:compile": "graphql-codegen",
-    "gql:watch": "graphql-codegen -w",
     "type-check": "tsc -p ./tsconfig.json"
   },
   "dependencies": {
