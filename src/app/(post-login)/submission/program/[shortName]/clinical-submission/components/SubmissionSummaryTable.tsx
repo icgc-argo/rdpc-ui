@@ -68,8 +68,8 @@ const SubmissionSummaryTable = ({ clinicalEntities }: { clinicalEntities: Clinic
 			size: 100,
 			cell: ({ row: { index, original } }) => {
 				const cellValue = original[FIRST_COLUMN_ACCESSOR];
-				const cellValueColourMap: keyof typeof FILE_STATE_COLORS =
-					(cellValue?.toUpperCase() as RecordState) || (FILE_STATE_COLORS.NONE as RecordState);
+				const cellValueColourMap =
+					(cellValue?.toUpperCase() as RecordState) || FILE_STATE_COLORS.NONE;
 				return (
 					<TableCellWrapper
 						css={css`

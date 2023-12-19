@@ -25,8 +25,6 @@ const documents = {
 		types.ClinicalEntitySearchResultsDocument,
 	'\n  query ClinicalSchemaVersion {\n    clinicalSubmissionSchemaVersion\n  }\n':
 		types.ClinicalSchemaVersionDocument,
-	'\n\tquery ClinicalSchemaVersion {\n\t\tclinicalSubmissionSchemaVersion\n\t}\n':
-		types.ClinicalSchemaVersionDocument,
 	'\n\tfragment ClinicalSubmissionFragment on ClinicalSubmissionData {\n\t\tprogramShortName # this is the ID\n\t\tstate\n\t\tversion\n\t\tupdatedAt\n\t\tupdatedBy\n\t\tclinicalEntities {\n\t\t\tclinicalType\n\t\t\tbatchName\n\t\t\tcreator\n\t\t\tcreatedAt\n\t\t\tstats {\n\t\t\t\tnoUpdate\n\t\t\t\tnew\n\t\t\t\tupdated\n\t\t\t\terrorsFound\n\t\t\t}\n\t\t\trecords {\n\t\t\t\trow\n\t\t\t\tfields {\n\t\t\t\t\tname\n\t\t\t\t\tvalue\n\t\t\t\t}\n\t\t\t}\n\t\t\tdataUpdates {\n\t\t\t\trow\n\t\t\t\tfield\n\t\t\t\tnewValue\n\t\t\t\toldValue\n\t\t\t\tdonorId\n\t\t\t}\n\t\t\tdataWarnings {\n\t\t\t\tmessage\n\t\t\t\trow\n\t\t\t\tfield\n\t\t\t\tvalue\n\t\t\t\tdonorId\n\t\t\t}\n\t\t\tdataErrors {\n\t\t\t\tmessage\n\t\t\t\trow\n\t\t\t\tfield\n\t\t\t\tvalue\n\t\t\t\tdonorId\n\t\t\t}\n\t\t\tschemaErrors {\n\t\t\t\tmessage\n\t\t\t\trow\n\t\t\t\tfield\n\t\t\t\tvalue\n\t\t\t\tdonorId\n\t\t\t}\n\t\t}\n\t\tfileErrors {\n\t\t\tmessage\n\t\t\tfileNames\n\t\t\tcode\n\t\t}\n\t}\n':
 		types.ClinicalSubmissionFragmentFragmentDoc,
 	'\n  query ClinicalSubmission($shortName: String!) {\n    clinicalSubmissions(programShortName: $shortName) {\n      programShortName\n      state\n      version\n      updatedAt\n      updatedBy\n      clinicalEntities {\n        clinicalType\n        batchName\n        creator\n        createdAt\n        stats {\n          noUpdate\n          new\n          updated\n          errorsFound\n        }\n        records {\n          row\n          fields {\n            name\n            value\n          }\n        }\n        dataUpdates {\n          row\n          field\n          newValue\n          oldValue\n          donorId\n        }\n        dataWarnings {\n          message\n          row\n          field\n          value\n          donorId\n        }\n        dataErrors {\n          message\n          row\n          field\n          value\n          donorId\n        }\n        schemaErrors {\n          message\n          row\n          field\n          value\n          donorId\n        }\n      }\n      fileErrors {\n        message\n        fileNames\n        code\n      }\n    }\n  }\n':
@@ -109,12 +107,6 @@ export function gql(
 export function gql(
 	source: '\n  query ClinicalSchemaVersion {\n    clinicalSubmissionSchemaVersion\n  }\n',
 ): (typeof documents)['\n  query ClinicalSchemaVersion {\n    clinicalSubmissionSchemaVersion\n  }\n'];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(
-	source: '\n\tquery ClinicalSchemaVersion {\n\t\tclinicalSubmissionSchemaVersion\n\t}\n',
-): (typeof documents)['\n\tquery ClinicalSchemaVersion {\n\t\tclinicalSubmissionSchemaVersion\n\t}\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
