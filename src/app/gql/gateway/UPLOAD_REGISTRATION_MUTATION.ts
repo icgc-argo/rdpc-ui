@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@/__generated__/gql';
+import { gql } from '@/__generated__/gateway/gql';
 
 const UPLOAD_REGISTRATION_MUTATION = gql(`
   mutation UploadRegistration($shortName: String!, $registrationFile: Upload!) {

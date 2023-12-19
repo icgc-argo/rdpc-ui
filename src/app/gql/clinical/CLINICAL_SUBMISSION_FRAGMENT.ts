@@ -17,9 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@apollo/client';
+import { gql } from '@/__generated__/clinical/gql';
 
-const CLINICAL_SUBMISSION_FRAGMENT = gql`
+const CLINICAL_SUBMISSION_FRAGMENT = gql(`
 	fragment ClinicalSubmissionFragment on ClinicalSubmissionData {
 		programShortName # this is the ID
 		state
@@ -79,6 +79,6 @@ const CLINICAL_SUBMISSION_FRAGMENT = gql`
 			code
 		}
 	}
-`;
+`);
 
 export default CLINICAL_SUBMISSION_FRAGMENT;

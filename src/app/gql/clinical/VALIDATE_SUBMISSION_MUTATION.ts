@@ -17,14 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@/__generated__/gql';
+import { gql } from '@/__generated__/clinical/gql';
 
 const VALIDATE_SUBMISSION_MUTATION = gql(`
   mutation ValidateSubmission(
     $programShortName: String!
     $submissionVersion: String!
   ) {
-    validateClinicalSubmission(
+    validateClinicalSubmissions(
       programShortName: $programShortName
       version: $submissionVersion
     ) {

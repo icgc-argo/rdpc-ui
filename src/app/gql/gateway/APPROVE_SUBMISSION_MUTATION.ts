@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@/__generated__/gql/gateway';
+import { gql } from '@/__generated__/gateway/gql';
 
 const APPROVE_SUBMISSION_MUTATION = gql(`
   mutation ApproveSubmission($programShortName: String!, $submissionVersion: String!) {

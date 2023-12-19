@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@apollo/client';
+import { gql } from '@/__generated__/clinical/gql';
 
 const SIGN_OFF_SUBMISSION_MUTATION = gql(`
   mutation SignOffSubmission(
