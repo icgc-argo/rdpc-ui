@@ -18,7 +18,6 @@
  */
 'use client';
 
-import { ClinicalEntitySearchResultsQuery } from '@/__generated__/graphql';
 import { pageWithPermissions } from '@/app/components/Page';
 import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/app/gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
@@ -51,12 +50,12 @@ import {
 
 setConfiguration({ gutterWidth: 9 });
 
-const defaultClinicalEntityTab = 'donor';
+const defaultClinicalEntityTab = aliasedEntityNames.donor;
 
 // convert codegen automated types to definitions in existing code
 // make data object shape uniform
 const parseSearchResult = (
-	data: ClinicalEntitySearchResultsQuery | undefined,
+	data: ClinicalEntitySearchResultResponse | undefined,
 ): ClinicalEntitySearchResultResponse => {
 	if (!data) return emptySearchResponse;
 	return {
@@ -84,7 +83,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 		'tab',
 		defaultClinicalEntityTab,
 	);
-	const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', '');
+	const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', 'donorId');
 
 	const currentEntity = reverseLookUpEntityAlias(selectedClinicalEntityTab);
 	const urlDonorQueryStrings = selectedDonors ? selectedDonors.split(',') : [];
