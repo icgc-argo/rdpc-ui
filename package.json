@@ -42,8 +42,6 @@
     "@emotion/styled": "^11.11.0"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^5.0.0",
-    "@graphql-codegen/client-preset": "^4.1.0",
     "@parcel/watcher": "^2.2.0",
     "@types/apollo-upload-client": "^17.0.2",
     "@types/js-cookie": "^3.0.3",
