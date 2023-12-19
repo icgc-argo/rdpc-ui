@@ -16,6 +16,7 @@
 		"jsx": "preserve",
 		"jsxImportSource": "@emotion/react",
 		"downlevelIteration": true,
+		"noErrorTruncation": true,
 		"plugins": [
 			{
 				"name": "next"
