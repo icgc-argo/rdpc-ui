@@ -18,7 +18,7 @@
  */
 'use client';
 
-import CLINICAL_SCHEMA_VERSION from '@/app/gql/CLINICAL_SCHEMA_VERSION';
+import CLINICAL_SCHEMA_VERSION from '@/app/gql/clinical/CLINICAL_SCHEMA_VERSION';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import { CLINICAL_TEMPLATE_PATH } from '@/global/constants';

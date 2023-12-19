@@ -19,9 +19,9 @@
 
 import { ModalPortal } from '@/app/components/Modal';
 import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
-import APPROVE_SUBMISSION_MUTATION from '@/app/gql/APPROVE_SUBMISSION_MUTATION';
-import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/CLEAR_CLINICAL_SUBMISSION';
-import REOPEN_SUBMISSION_MUTATION from '@/app/gql/REOPEN_SUBMISSION_MUTATION';
+import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
+import APPROVE_SUBMISSION_MUTATION from '@/app/gql/gateway/APPROVE_SUBMISSION_MUTATION';
+import REOPEN_SUBMISSION_MUTATION from '@/app/gql/gateway/REOPEN_SUBMISSION_MUTATION';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useAuthContext } from '@/app/hooks/AuthProvider';
 import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
