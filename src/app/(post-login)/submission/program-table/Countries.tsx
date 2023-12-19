@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { Maybe } from '@/__generated__/graphql';
+import { Maybe } from '@/__generated__/clinical/graphql';
 
 const Countries = ({ countries }: { countries: Maybe<Maybe<string>[]> | undefined }) => (
 	<div>

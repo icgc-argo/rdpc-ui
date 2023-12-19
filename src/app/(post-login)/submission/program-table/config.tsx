@@ -19,7 +19,7 @@
 
 'use client';
 
-import { Program } from '@/__generated__/graphql';
+import { Program } from '@/__generated__/gateway/graphql';
 import { notNull } from '@/global/utils';
 import { ColumnDef } from '@icgc-argo/uikit';
 import { ArgoMembershipKey } from '../components/ProgramList';

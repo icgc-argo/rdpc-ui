@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { SideMenuProgramStatusQuery, SubmissionState } from '@/__generated__/graphql';
+import { SideMenuProgramStatusQuery, SubmissionState } from '@/__generated__/clinical/graphql';
 import Loader from '@/app/components/Loader';
 import SIDEMENU_PROGRAM_STATUS from '@/app/gql/clinical/SIDEMENU_PROGRAM_STATUS';
 import SIDEMENU_PROGRAMS from '@/app/gql/gateway/SIDEMENU_PROGRAMS';

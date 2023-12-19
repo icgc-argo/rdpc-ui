@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ClinicalInput } from '@/__generated__/graphql';
+import { ClinicalInput } from '@/__generated__/clinical/graphql';
 
 export const aliasSortNames = {
 	donor_id: 'donorId',

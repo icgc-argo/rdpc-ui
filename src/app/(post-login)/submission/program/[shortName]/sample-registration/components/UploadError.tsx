@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ClinicalRegistrationError, GetRegistrationQuery } from '@/__generated__/graphql';
+import { ClinicalRegistrationError, GetRegistrationQuery } from '@/__generated__/clinical/graphql';
 import TableHeader from '@/app/(post-login)/submission/program-table/Header';
 import { exportToTsv, notNull, toDisplayError } from '@/global/utils';
 import { css, useTheme } from '@/lib/emotion';

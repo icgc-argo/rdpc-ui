@@ -24,7 +24,7 @@ const VALIDATE_SUBMISSION_MUTATION = gql(`
     $programShortName: String!
     $submissionVersion: String!
   ) {
-    validateClinicalSubmissions(
+    validateClinicalSubmission(
       programShortName: $programShortName
       version: $submissionVersion
     ) {

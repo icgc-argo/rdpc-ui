@@ -20,7 +20,7 @@
 'use client';
 
 import { BreadcrumbTitle, PageHeader } from '@/app/components/PageHeader/PageHeader';
-import PROGRAMS_LIST_QUERY from '@/app/gql/PROGRAMS_LIST_QUERY';
+import PROGRAMS_LIST_QUERY from '@/app/gql/gateway/PROGRAMS_LIST_QUERY';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useGatewayQuery } from '@/app/hooks/useApolloQuery';
 import { CREATE_PROGRAM_PAGE_PATH } from '@/global/constants';

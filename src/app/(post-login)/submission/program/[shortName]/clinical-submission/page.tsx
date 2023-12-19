@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { ClinicalSubmissionEntity } from '@/__generated__/graphql';
+import { ClinicalSubmissionEntity } from '@/__generated__/clinical/graphql';
 import ContentMain from '@/app/components/Content/ContentMain';
 import ErrorNotification, { ErrorReportColumns } from '@/app/components/ErrorNotification';
 import {
