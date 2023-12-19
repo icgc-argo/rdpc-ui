@@ -18,8 +18,8 @@
  */
 
 import { ModalPortal } from '@/app/components/Modal';
-import COMMIT_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/COMMIT_CLINICAL_REGISTRATION_MUTATION';
-import GET_REGISTRATION_QUERY from '@/app/gql/GET_REGISTRATION_QUERY';
+import COMMIT_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/clinical/COMMIT_CLINICAL_REGISTRATION_MUTATION';
+import GET_REGISTRATION_QUERY from '@/app/gql/clinical/GET_REGISTRATION_QUERY';
 import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
 import { useToaster } from '@/app/hooks/ToastProvider';
 import {

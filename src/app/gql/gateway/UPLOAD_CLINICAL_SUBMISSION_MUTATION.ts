@@ -17,18 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@/__generated__/gql';
+import { gql } from '@/__generated__/gateway/gql';
 
-const VALIDATE_SUBMISSION_MUTATION = gql(`
-  mutation ValidateSubmission(
-    $programShortName: String!
-    $submissionVersion: String!
-  ) {
-    validateClinicalSubmissions(
+const UPLOAD_CLINICAL_SUBMISSION_MUTATION = gql(`
+  mutation UploadClinicalSubmission($programShortName: String!, $files: [Upload!]) {
+    uploadClinicalSubmissions(
       programShortName: $programShortName
-      version: $submissionVersion
+      clinicalFiles: $files
     ) {
-      programShortName
+      programShortName # this is the ID
       state
       version
       updatedAt
@@ -84,10 +81,9 @@ const VALIDATE_SUBMISSION_MUTATION = gql(`
         message
         fileNames
         code
-      }    
+      }
     }
-    
   }
 `);
 
-export default VALIDATE_SUBMISSION_MUTATION;
+export default UPLOAD_CLINICAL_SUBMISSION_MUTATION;

@@ -17,13 +17,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@/__generated__/gql';
+import { gql } from '@/__generated__/gateway/gql';
 
-const UPLOAD_CLINICAL_SUBMISSION_MUTATION = gql(`
-  mutation UploadClinicalSubmission($programShortName: String!, $files: [Upload!]) {
-    uploadClinicalSubmissions(
+const REOPEN_SUBMISSION_MUTATION = gql(`
+  mutation ReopenSubmission(
+    $programShortName: String!
+    $submissionVersion: String!
+  ) {
+    clinicalSubmissions: reopenClinicalSubmission(
       programShortName: $programShortName
-      clinicalFiles: $files
+      version: $submissionVersion
     ) {
       programShortName # this is the ID
       state
@@ -86,4 +89,4 @@ const UPLOAD_CLINICAL_SUBMISSION_MUTATION = gql(`
   }
 `);
 
-export default UPLOAD_CLINICAL_SUBMISSION_MUTATION;
+export default REOPEN_SUBMISSION_MUTATION;

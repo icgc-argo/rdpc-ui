@@ -17,18 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@/__generated__/gql';
+import { gql } from '@/__generated__/clinical/gql';
 
-const COMMIT_CLINICAL_REGISTRATION_MUTATION = gql(`
-  mutation CommitClinicalRegistration(
-    $shortName: String!
-    $registrationId: String!
-  ) {
-    commitClinicalRegistration(
-      shortName: $shortName
-      registrationId: $registrationId
-    )
+const CLINICAL_SUBMISSION_SYSTEM_STATUS_QUERY = gql(`
+  query ClinicalSubmissionSystemDisabled {
+    clinicalSubmissionSystemDisabled
   }
 `);
 
-export default COMMIT_CLINICAL_REGISTRATION_MUTATION;
+export default CLINICAL_SUBMISSION_SYSTEM_STATUS_QUERY;

@@ -17,68 +17,54 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@apollo/client';
+import { gql } from '@/__generated__/clinical/gql';
 
-const CLINICAL_SUBMISSION_FRAGMENT = gql`
-	fragment ClinicalSubmissionFragment on ClinicalSubmissionData {
-		programShortName # this is the ID
-		state
-		version
-		updatedAt
-		updatedBy
-		clinicalEntities {
-			clinicalType
-			batchName
-			creator
-			createdAt
-			stats {
-				noUpdate
-				new
-				updated
-				errorsFound
-			}
-			records {
-				row
-				fields {
-					name
-					value
-				}
-			}
-			dataUpdates {
-				row
-				field
-				newValue
-				oldValue
-				donorId
-			}
-			dataWarnings {
-				message
-				row
-				field
+const REGISTRATION_FRAGMENT = gql(`
+	fragment Registration on ClinicalRegistrationData {
+		id
+		programShortName
+		creator
+		fileName
+		createdAt
+		records {
+			row
+			fields {
+				name
 				value
-				donorId
 			}
-			dataErrors {
-				message
-				row
-				field
-				value
-				donorId
-			}
-			schemaErrors {
-				message
-				row
-				field
-				value
-				donorId
-			}
+		}
+		errors {
+			type
+			message
+			row
+			field
+			value
+			sampleId
+			donorId
+			specimenId
 		}
 		fileErrors {
 			message
 			fileNames
 			code
 		}
+		newDonors {
+			count
+			rows
+		}
+		newSpecimens {
+			count
+			rows
+		}
+		newSamples {
+			count
+			rows
+		}
+		alreadyRegistered {
+			count
+			rows
+		}
 	}
-`;
+`);
 
-export default CLINICAL_SUBMISSION_FRAGMENT;
+export default REGISTRATION_FRAGMENT;

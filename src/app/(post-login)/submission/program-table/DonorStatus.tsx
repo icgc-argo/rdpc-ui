@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { Maybe } from '@/__generated__/graphql';
+import { Maybe } from '@/__generated__/clinical/graphql';
 import { css, useTheme } from '@/lib/emotion';
 import { Typography } from '@icgc-argo/uikit';
 
