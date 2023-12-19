@@ -16,13 +16,36 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import { apiName } from '@/lib/gql';
+import {
+	DocumentNode,
+	OperationVariables,
+	QueryHookOptions,
+	QueryResult,
+	TypedDocumentNode,
+	useQuery,
+} from '@apollo/client';
 
-import { gql } from '@/__generated__';
+const useApolloQuery = <TData, TVariables>(
+	query: DocumentNode | TypedDocumentNode<TData, TVariables>,
+	api: keyof typeof apiName,
+	options?: QueryHookOptions<any, OperationVariables> | undefined,
+): QueryResult<TData, TVariables> => {
+	const mergedOptions = { context: { apiName: api }, ...options };
+	// @ts-expect-error apollo NoInfer type isn't playing nice with the 'mergedOptions'
+	return useQuery(query, mergedOptions);
+};
 
-const CLINICAL_SCHEMA_VERSION_QUERY = gql(`
-	query ClinicalSchemaVersion {
-		clinicalSubmissionSchemaVersion
-	}
-`);
+export const useGatewayQuery = <TData, TVariables>(
+	query: DocumentNode | TypedDocumentNode<TData, TVariables>,
+	options?: QueryHookOptions<any, OperationVariables> | undefined,
+) => {
+	return useApolloQuery(query, apiName.gateway, options);
+};
 
-export default CLINICAL_SCHEMA_VERSION_QUERY;
+export const useClinicalQuery = <TData, TVariables>(
+	query: DocumentNode | TypedDocumentNode<TData, TVariables>,
+	options?: QueryHookOptions<any, OperationVariables> | undefined,
+) => {
+	return useApolloQuery(query, apiName.clinical, options);
+};

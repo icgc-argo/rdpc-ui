@@ -18,37 +18,44 @@
  */
 'use client';
 
-import { ClinicalEntitySearchResultsQuery } from '@/__generated__/graphql';
 import { pageWithPermissions } from '@/app/components/Page';
 import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/app/gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from '@/app/gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import useUrlParamState from '@/app/hooks/useUrlParamState';
 import { notNull } from '@/global/utils';
+import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
-import { Loader } from '@icgc-argo/uikit';
+import { useTheme } from '@emotion/react';
+import { Container, Loader, Typography, VerticalTabs } from '@icgc-argo/uikit';
 import { useEffect, useState } from 'react';
 import { setConfiguration } from 'react-grid-system';
+import ClinicalEntityDataTable from './ClinicalEntityDataTable';
+import ClinicalDownloadButton from './DownloadButtons';
 import SearchBar from './SearchBar';
 import {
 	ClinicalEntitySearchResultResponse,
 	CompletionStates,
 	TsvDownloadIds,
+	aliasedEntityNames,
+	clinicalEntityDisplayNames,
+	clinicalEntityFields,
 	defaultClinicalEntityFilters,
 	emptyClinicalDataResponse,
 	emptySearchResponse,
+	hasClinicalErrors,
 	parseDonorIdString,
 	reverseLookUpEntityAlias,
 } from './common';
 
 setConfiguration({ gutterWidth: 9 });
 
-const defaultClinicalEntityTab = 'donor';
+const defaultClinicalEntityTab = aliasedEntityNames.donor;
 
 // convert codegen automated types to definitions in existing code
 // make data object shape uniform
 const parseSearchResult = (
-	data: ClinicalEntitySearchResultsQuery | undefined,
+	data: ClinicalEntitySearchResultResponse | undefined,
 ): ClinicalEntitySearchResultResponse => {
 	if (!data) return emptySearchResponse;
 	return {
@@ -62,15 +69,12 @@ const parseSearchResult = (
 	};
 };
 
-const ClinicalDataPageComp = ({
-	programShortName,
-	donorId,
-}: {
-	programShortName: string;
-	donorId: string;
-}) => {
+const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }) => {
 	const FEATURE_SUBMITTED_DATA_ENABLED = true;
 	const isLoading = false;
+
+	//
+	const theme = useTheme();
 	const [keyword, setKeyword] = useState('');
 	const [completionState, setCompletionState] = useState(CompletionStates['all']);
 	const [modalVisible, setModalVisible] = useState(false);
@@ -79,7 +83,7 @@ const ClinicalDataPageComp = ({
 		'tab',
 		defaultClinicalEntityTab,
 	);
-	const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', donorId);
+	const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', 'donorId');
 
 	const currentEntity = reverseLookUpEntityAlias(selectedClinicalEntityTab);
 	const urlDonorQueryStrings = selectedDonors ? selectedDonors.split(',') : [];
@@ -184,6 +188,23 @@ const ClinicalDataPageComp = ({
 		submitterDonorIds: useDefaultQuery ? [] : entityTableSubmitterDonorIds.filter(notNull),
 	};
 
+	//
+	const menuItems = clinicalEntityFields.map((entity) => (
+		<VerticalTabs.Item
+			key={entity}
+			active={selectedClinicalEntityTab === aliasedEntityNames[entity]}
+			onClick={() => setSelectedClinicalEntityTab(aliasedEntityNames[entity])}
+			disabled={
+				false //!clinicalData.clinicalEntities.some((e) => e?.entityName === aliasedEntityNames[entity])
+			}
+		>
+			{clinicalEntityDisplayNames[entity]}
+			{hasClinicalErrors(clinicalData, entity) && (
+				<VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
+			)}
+		</VerticalTabs.Item>
+	));
+
 	return (
 		<div>
 			<PageHeader
@@ -210,19 +231,86 @@ const ClinicalDataPageComp = ({
 						donorSearchResults={parsedSearchResultData}
 						setKeyword={setKeyword}
 					/>
-					<div>submitted data placeholder</div>
+					<Container>
+						<div
+							css={css`
+								width: 100%;
+							`}
+						>
+							{/* Sidebar */}
+							<div
+								css={css`
+									width: 20%;
+									max-width: 170px;
+									display: inline-block;
+									border: 1px solid ${theme.colors.grey_2};
+								`}
+							>
+								<VerticalTabs>{menuItems}</VerticalTabs>
+							</div>
+							{/* Content */}
+							<div
+								css={css`
+									display: inline-block;
+									height: 100%;
+									width: calc(97% - 170px);
+									vertical-align: top;
+									padding: 8px 12px;
+								`}
+							>
+								{/* Header */}
+								<div
+									css={css`
+										width: 100%;
+										display: flex;
+										justify-content: space-between;
+									`}
+								>
+									<Typography
+										variant="subtitle2"
+										css={css`
+											margin-top: 4px;
+											margin-left: 4px;
+										`}
+									>
+										{clinicalEntityDisplayNames[currentEntity]} Data
+									</Typography>
+
+									<ClinicalDownloadButton
+										tsvDownloadIds={tsvDownloadIds}
+										text={`${clinicalEntityDisplayNames[currentEntity]} Data`}
+										entityTypes={[currentEntity]}
+										completionState={completionState}
+										disabled={noData}
+									/>
+								</div>
+								{/* DataTable */}
+								<div>
+									<ClinicalEntityDataTable
+										entityType={currentEntity}
+										program={programShortName}
+										completionState={completionState}
+										currentDonors={entityTableDonorIds}
+										donorSearchResults={searchResultData}
+										useDefaultQuery={useDefaultQuery}
+										noData={noData}
+									/>
+								</div>
+							</div>{' '}
+						</div>
+					</Container>
 				</>
 			)}
 		</div>
 	);
 };
 
-const ClinicalDataPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
+const ClinicalDataPage = ({ params: { shortName = '' } }: { params: { shortName: string } }) => {
 	const ClinicalDataWithPermissions = pageWithPermissions(ClinicalDataPageComp, {
 		acceptedRoles: ['isRDPCAdmin', 'isDCCAdmin', 'isProgramAdmin', 'isDataSubmitter'],
 		programShortName: shortName,
 	});
-	return <ClinicalDataWithPermissions programShortName={shortName} donorId="DONOR_ID" />;
+	return <ClinicalDataWithPermissions programShortName={shortName} />;
 };
 
 export default ClinicalDataPage;

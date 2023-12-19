@@ -16,11 +16,62 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import CLINICAL_SUBMISSION_SYSTEM_STATUS from '../gql/CLINICAL_SUBMISSION_SYSTEM_STATUS';
-import { useClinicalQuery } from './useApolloQuery';
 
-export const useSubmissionSystemStatus = () => {
-	const { data } = useClinicalQuery(CLINICAL_SUBMISSION_SYSTEM_STATUS);
+import { gql } from '@/__generated__/gql';
 
-	return { isDisabled: !!data?.clinicalSubmissionSystemDisabled };
-};
+const CLINICAL_ENTITY_DATA_QUERY = gql(`
+	query ClinicalEntityData($programShortName: String!, $filters: ClinicalInput!) {
+		clinicalData(programShortName: $programShortName, filters: $filters) {
+			programShortName
+			clinicalEntities {
+				entityName
+				entityFields
+				totalDocs
+				records {
+					name
+					value
+				}
+				completionStats {
+					coreCompletion {
+						donor
+						specimens
+						primaryDiagnosis
+						followUps
+						treatments
+					}
+					coreCompletionDate
+					coreCompletionPercentage
+					overriddenCoreCompletion
+					donorId
+					entityData {
+						specimens {
+							coreCompletionPercentage
+							normalSpecimensPercentage
+							tumourSpecimensPercentage
+							normalRegistrations
+							normalSubmissions
+							tumourRegistrations
+							tumourSubmissions
+						}
+					}
+				}
+			}
+			clinicalErrors {
+				donorId
+				submitterDonorId
+				errors {
+					errorType
+					fieldName
+					index
+					info {
+						value
+					}
+					message
+					entityName
+				}
+			}
+		}
+	}
+`);
+
+export default CLINICAL_ENTITY_DATA_QUERY;

@@ -136,7 +136,7 @@ export const clinicalEntityDisplayNames = {
 	exposure: 'Exposure',
 	comorbidity: 'Comorbidity',
 	biomarker: 'Biomarker',
-};
+} as const;
 
 export const aliasedEntityNames = {
 	donor: 'donor',
@@ -156,7 +156,8 @@ export const aliasedEntityNames = {
 	biomarker: 'biomarker',
 };
 
-export const clinicalEntityFields = Object.keys(aliasedEntityNames);
+type AliasedEntityNamesKeys = keyof typeof aliasedEntityNames;
+export const clinicalEntityFields = Object.keys(aliasedEntityNames) as AliasedEntityNamesKeys[];
 export const aliasedEntityFields = Object.values(aliasedEntityNames);
 
 // Util for finding camelCase alias for snake_case values

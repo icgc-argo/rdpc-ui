@@ -26,11 +26,12 @@ import NoDataMessage from '@/app/components/NoData';
 import { pageWithPermissions } from '@/app/components/Page';
 import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import CLEAR_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/CLEAR_CLINICAL_REGISTRATION_MUTATION';
-import CLINICAL_SCHEMA_VERSION_QUERY from '@/app/gql/CLINICAL_SCHEMA_VERSION_QUERY';
+import CLINICAL_SCHEMA_VERSION from '@/app/gql/CLINICAL_SCHEMA_VERSION';
 import GET_REGISTRATION_QUERY from '@/app/gql/GET_REGISTRATION_QUERY';
 import UPLOAD_REGISTRATION_MUTATION from '@/app/gql/UPLOAD_REGISTRATION_MUTATION';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useToaster } from '@/app/hooks/ToastProvider';
+import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import useCommonToasters from '@/app/hooks/useCommonToasters';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
 import { notNull } from '@/global/utils';
@@ -62,7 +63,7 @@ const Register = ({ shortName }: { shortName: string }) => {
 	});
 
 	// get dictionary version
-	const latestDictionaryResponse = useQuery(CLINICAL_SCHEMA_VERSION_QUERY);
+	const latestDictionaryResponse = useClinicalQuery(CLINICAL_SCHEMA_VERSION);
 	const { loading: isLoadingDictVersion, data: dictData } = latestDictionaryResponse;
 	const dictionaryVersion =
 		(!isLoadingDictVersion && dictData?.clinicalSubmissionSchemaVersion) || '';

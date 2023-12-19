@@ -16,11 +16,37 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import CLINICAL_SUBMISSION_SYSTEM_STATUS from '../gql/CLINICAL_SUBMISSION_SYSTEM_STATUS';
-import { useClinicalQuery } from './useApolloQuery';
 
-export const useSubmissionSystemStatus = () => {
-	const { data } = useClinicalQuery(CLINICAL_SUBMISSION_SYSTEM_STATUS);
+import {
+	ClinicalEntitySearchResultResponse,
+	CompletionStates,
+	emptySearchResponse,
+} from './common';
 
-	return { isDisabled: !!data?.clinicalSubmissionSystemDisabled };
+export type DonorEntry = {
+	row: string;
+	isNew: boolean;
+	[k: string]: string | number | boolean;
 };
+
+const ClinicalEntityDataTable = ({
+	entityType,
+	program,
+	completionState = CompletionStates['all'],
+	currentDonors,
+	donorSearchResults = emptySearchResponse,
+	useDefaultQuery,
+	noData,
+}: {
+	entityType: string;
+	program: string;
+	completionState: CompletionStates;
+	currentDonors: number[];
+	donorSearchResults: ClinicalEntitySearchResultResponse;
+	useDefaultQuery: boolean;
+	noData: boolean;
+}) => {
+	return <div>Table</div>;
+};
+
+export default ClinicalEntityDataTable;

@@ -29,7 +29,7 @@ import {
 	useClickAway,
 	useTheme,
 } from '@icgc-argo/uikit';
-import { createRef, Dispatch, RefObject, SetStateAction, useEffect, useState } from 'react';
+import { createRef, Dispatch, RefObject, SetStateAction, useState } from 'react';
 import {
 	clinicalEntityFields,
 	ClinicalEntitySearchResultResponse,
@@ -110,7 +110,6 @@ export default function SearchBar({
 	modalVisible: boolean;
 }) {
 	const theme = useTheme();
-	const [displayText, setDisplayText] = useState('- Select an option -');
 	const [searchOpen, setSearchOpen] = useState(false);
 	const setFilterValue = (value: string) => {
 		setKeyword(value);
@@ -147,13 +146,9 @@ export default function SearchBar({
 			.filter((result) => !!result)
 			.slice(0, 20) || [];
 
-	useEffect(() => {
-		const completionDisplayText = COMPLETION_OPTIONS[completionState]
-			? `Show ${COMPLETION_OPTIONS[completionState].display}`
-			: '- Select an option -';
-
-		setDisplayText(completionDisplayText);
-	}, [completionState]);
+	const displayText = COMPLETION_OPTIONS[completionState]
+		? `Show ${COMPLETION_OPTIONS[completionState].display}`
+		: '- Select an option -';
 
 	return (
 		<Container css={searchBackgroundStyle}>
