@@ -21,7 +21,6 @@
 import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { createUploadLink } from 'apollo-upload-client';
-export { gql } from '@/__generated__/gql';
 
 const createInMemoryCache = () =>
 	new InMemoryCache({
