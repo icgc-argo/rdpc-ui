@@ -17,41 +17,42 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { ClinicalSearchResults } from '@/__generated__/clinical/graphql';
+import ErrorNotification from '@/app/components/ErrorNotification';
+import { TableInfoHeaderContainer } from '@/app/components/Table/common';
+import CLINICAL_ENTITY_DATA_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_DATA_QUERY';
+import CLINICAL_SCHEMA_VERSION from '@/app/gql/clinical/CLINICAL_SCHEMA_VERSION';
+import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
+import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from '@/global/constants';
 import {
 	ContentPlaceholder,
-	css,
 	DnaLoader,
 	Icon,
 	Link,
-	noDataSvg,
 	NOTIFICATION_VARIANTS,
 	Table,
 	Tooltip,
 	Typography,
+	css,
+	noDataSvg,
 	useTheme,
 } from '@icgc-argo/uikit';
-import { ClinicalSearchResults } from 'generated/gql_types';
-import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
-import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
-import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
 import memoize from 'lodash/memoize';
 import { createRef, useEffect, useState } from 'react';
-import { TableInfoHeaderContainer } from '../../common';
-import ErrorNotification from '../../ErrorNotification';
+import urljoin from 'url-join';
 import {
-	aliasedEntityFields,
-	aliasedEntityNames,
-	aliasSortNames,
-	clinicalEntityDisplayNames,
-	clinicalEntityFields,
-	ClinicalEntityQueryResponse,
 	ClinicalEntitySearchResultResponse,
 	CompletionStates,
+	aliasSortNames,
+	aliasedEntityFields,
+	aliasedEntityNames,
+	clinicalEntityDisplayNames,
+	clinicalEntityFields,
 	defaultClinicalEntityFilters,
 	emptyClinicalDataResponse,
 	emptySearchResponse,
-} from '../common';
-import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
+} from './common';
 
 export type DonorEntry = {
 	row: string;
@@ -157,7 +158,7 @@ const validateEntityQueryName = (entityQuery) => {
 	return entities.map((entityName) => clinicalEntityFields.find((entity) => entity === entityName));
 };
 
-export const getEntityData = (
+export const useGetEntityData = (
 	program: string,
 	entityType: string | string[],
 	page: number,
@@ -167,7 +168,7 @@ export const getEntityData = (
 	donorIds: number[],
 	submitterDonorIds: string[],
 ) =>
-	useQuery<ClinicalEntityQueryResponse>(CLINICAL_ENTITY_DATA_QUERY, {
+	useClinicalQuery(CLINICAL_ENTITY_DATA_QUERY, {
 		errorPolicy: 'all',
 		fetchPolicy: 'cache-and-network',
 		variables: {
@@ -202,6 +203,9 @@ const ClinicalEntityDataTable = ({
 	useDefaultQuery: boolean;
 	noData: boolean;
 }) => {
+	const { DOCS_URL_ROOT } = useAppConfigContext();
+	const DOCS_DICTIONARY_PAGE = urljoin(DOCS_URL_ROOT, '/dictionary/');
+
 	// Init + Page Settings
 	let totalDocs = 0;
 	let showCompletionStats = false;
@@ -239,7 +243,7 @@ const ClinicalEntityDataTable = ({
 					.filter((id) => !!id)
 					.slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
 
-	const latestDictionaryResponse = useClinicalSubmissionSchemaVersion();
+	const latestDictionaryResponse = useClinicalQuery(CLINICAL_SCHEMA_VERSION);
 	const Subtitle = ({ program = '' }) => (
 		<div
 			css={css`
@@ -275,7 +279,7 @@ const ClinicalEntityDataTable = ({
 		setErrorPageSettings(defaultErrorPageSettings);
 	}, [entityType, useDefaultQuery]);
 
-	const { data: clinicalEntityData, loading } = getEntityData(
+	const { data: clinicalEntityData, loading } = useGetEntityData(
 		program,
 		entityType,
 		page,
