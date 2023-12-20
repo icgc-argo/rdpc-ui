@@ -18,10 +18,10 @@
  */
 'use client';
 
-import { SideMenuProgramStatusQuery, SubmissionState } from '@/__generated__/graphql';
+import { SideMenuProgramStatusQuery, SubmissionState } from '@/__generated__/clinical/graphql';
 import Loader from '@/app/components/Loader';
-import SIDEMENU_PROGRAMS from '@/app/gql/SIDEMENU_PROGRAMS';
-import SIDEMENU_PROGRAM_STATUS from '@/app/gql/SIDEMENU_PROGRAM_STATUS';
+import SIDEMENU_PROGRAM_STATUS from '@/app/gql/clinical/SIDEMENU_PROGRAM_STATUS';
+import SIDEMENU_PROGRAMS from '@/app/gql/gateway/SIDEMENU_PROGRAMS';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useAuthContext } from '@/app/hooks/AuthProvider';
 import { useClinicalQuery, useGatewayQuery } from '@/app/hooks/useApolloQuery';

@@ -24,12 +24,19 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 
 const gqlConfig: CodegenConfig = {
-	schema: `${process.env.NEXT_PUBLIC_GATEWAY_API_ROOT}/graphql`,
-	documents: ['src/**/gql/*.ts'],
 	generates: {
-		'./src/__generated__/': {
+		'./src/__generated__/gateway/': {
+			documents: ['src/**/gql/gateway/*.ts'],
 			preset: 'client',
-			plugins: [],
+			schema: `${process.env.NEXT_PUBLIC_GATEWAY_API_ROOT}/graphql`,
+			presetConfig: {
+				gqlTagName: 'gql',
+			},
+		},
+		'./src/__generated__/clinical/': {
+			documents: ['src/**/gql/clinical/*.ts'],
+			preset: 'client',
+			schema: `${process.env.NEXT_PUBLIC_CLINICAL_API_ROOT}/graphql`,
 			presetConfig: {
 				gqlTagName: 'gql',
 			},

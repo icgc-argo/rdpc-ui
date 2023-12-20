@@ -16,12 +16,13 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 import {
 	ClinicalRecord,
 	ClinicalRegistrationData,
 	GetRegistrationQuery,
 	Maybe,
-} from '@/__generated__/graphql';
+} from '@/__generated__/clinical/graphql';
 import { get, union } from 'lodash';
 import FileTable from './FileTable';
 

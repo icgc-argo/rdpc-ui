@@ -17,59 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@/__generated__/gql';
+import { gql } from '@/__generated__/gateway/gql';
 
-const UPLOAD_REGISTRATION_MUTATION = gql(`
-  mutation UploadRegistration($shortName: String!, $registrationFile: Upload!) {
-    uploadClinicalRegistration(
-      shortName: $shortName
-      registrationFile: $registrationFile
-    ) {
-      id
-    programShortName
-    creator
-    fileName
-    createdAt
-    records {
-      row
-      fields {
-        name
-        value
-      }
-    }
-    errors {
-      type
-      message
-      row
-      field
-      value
-      sampleId
-      donorId
-      specimenId
-    }
-    fileErrors {
-      message
-      fileNames
-      code
-    }
-    newDonors {
-      count
-      rows
-    }
-    newSpecimens {
-      count
-      rows
-    }
-    newSamples {
-      count
-      rows
-    }
-    alreadyRegistered {
-      count
-      rows
-    }
-    }
+const SIDEMENU_PROGRAMS = gql(`
+	query SideMenu ($dataCenter: String) {
+		programs(dataCenter: $dataCenter) {
+			shortName
+		}
   }
 `);
 
-export default UPLOAD_REGISTRATION_MUTATION;
+export default SIDEMENU_PROGRAMS;

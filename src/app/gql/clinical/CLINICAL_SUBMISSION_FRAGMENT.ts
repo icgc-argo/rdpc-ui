@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,12 +17,68 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@/__generated__/gql';
+import { gql } from '@/__generated__/clinical/gql';
 
-const APPROVE_SUBMISSION_MUTATION = gql(`
-  mutation ApproveSubmission($programShortName: String!, $submissionVersion: String!) {
-    approveClinicalSubmission(programShortName: $programShortName, version: $submissionVersion)
-  }
+const CLINICAL_SUBMISSION_FRAGMENT = gql(`
+	fragment ClinicalSubmissionFragment on ClinicalSubmissionData {
+		programShortName # this is the ID
+		state
+		version
+		updatedAt
+		updatedBy
+		clinicalEntities {
+			clinicalType
+			batchName
+			creator
+			createdAt
+			stats {
+				noUpdate
+				new
+				updated
+				errorsFound
+			}
+			records {
+				row
+				fields {
+					name
+					value
+				}
+			}
+			dataUpdates {
+				row
+				field
+				newValue
+				oldValue
+				donorId
+			}
+			dataWarnings {
+				message
+				row
+				field
+				value
+				donorId
+			}
+			dataErrors {
+				message
+				row
+				field
+				value
+				donorId
+			}
+			schemaErrors {
+				message
+				row
+				field
+				value
+				donorId
+			}
+		}
+		fileErrors {
+			message
+			fileNames
+			code
+		}
+	}
 `);
 
-export default APPROVE_SUBMISSION_MUTATION;
+export default CLINICAL_SUBMISSION_FRAGMENT;

@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { Program } from '@/__generated__/graphql';
+import { Program } from '@/__generated__/gateway/graphql';
 import { css } from '@/lib/emotion';
 import { Table, Typography } from '@icgc-argo/uikit';
 import orderBy from 'lodash/orderBy';

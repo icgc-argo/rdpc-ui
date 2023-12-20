@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,12 +17,59 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@/__generated__/gql';
+import { gql } from '@/__generated__/gateway/gql';
 
-const CLINICAL_SCHEMA_VERSION_QUERY = gql(`
-  query ClinicalSchemaVersion {
-    clinicalSubmissionSchemaVersion
+const UPLOAD_REGISTRATION_MUTATION = gql(`
+  mutation UploadRegistration($shortName: String!, $registrationFile: Upload!) {
+    uploadClinicalRegistration(
+      shortName: $shortName
+      registrationFile: $registrationFile
+    ) {
+      id
+    programShortName
+    creator
+    fileName
+    createdAt
+    records {
+      row
+      fields {
+        name
+        value
+      }
+    }
+    errors {
+      type
+      message
+      row
+      field
+      value
+      sampleId
+      donorId
+      specimenId
+    }
+    fileErrors {
+      message
+      fileNames
+      code
+    }
+    newDonors {
+      count
+      rows
+    }
+    newSpecimens {
+      count
+      rows
+    }
+    newSamples {
+      count
+      rows
+    }
+    alreadyRegistered {
+      count
+      rows
+    }
+    }
   }
 `);
 
-export default CLINICAL_SCHEMA_VERSION_QUERY;
+export default UPLOAD_REGISTRATION_MUTATION;

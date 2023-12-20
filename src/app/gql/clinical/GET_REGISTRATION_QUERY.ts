@@ -17,12 +17,56 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@/__generated__/gql';
+import { gql } from '@/__generated__/clinical/gql';
 
-const CLEAR_CLINICAL_REGISTRATION_MUTATION = gql(`
-  mutation ClearClinicalRegistration($shortName: String!, $registrationId: String!) {
-    clearClinicalRegistration(shortName: $shortName, registrationId: $registrationId)
+const GET_REGISTRATION_QUERY = gql(`
+  query GetRegistration($shortName: String!) {
+    clinicalRegistration(shortName: $shortName) {
+      id
+      programShortName
+      creator
+      fileName
+      createdAt
+      records {
+        row
+        fields {
+          name
+          value
+        }
+      }
+      errors {
+        type
+        message
+        row
+        field
+        value
+        sampleId
+        donorId
+        specimenId
+      }
+      fileErrors {
+        message
+        fileNames
+        code
+      }
+      newDonors {
+        count
+        rows
+      }
+      newSpecimens {
+        count
+        rows
+      }
+      newSamples {
+        count
+        rows
+      }
+      alreadyRegistered {
+        count
+        rows
+      }
+    }
   }
 `);
 
-export default CLEAR_CLINICAL_REGISTRATION_MUTATION;
+export default GET_REGISTRATION_QUERY;

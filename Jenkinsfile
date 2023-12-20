@@ -1,3 +1,4 @@
+#!/usr/bin/env groovy
 /*
  * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
  *
@@ -17,54 +18,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@apollo/client';
-
-const REGISTRATION_FRAGMENT = gql`
-	fragment Registration on ClinicalRegistrationData {
-		id
-		programShortName
-		creator
-		fileName
-		createdAt
-		records {
-			row
-			fields {
-				name
-				value
-			}
-		}
-		errors {
-			type
-			message
-			row
-			field
-			value
-			sampleId
-			donorId
-			specimenId
-		}
-		fileErrors {
-			message
-			fileNames
-			code
-		}
-		newDonors {
-			count
-			rows
-		}
-		newSpecimens {
-			count
-			rows
-		}
-		newSamples {
-			count
-			rows
-		}
-		alreadyRegistered {
-			count
-			rows
-		}
-	}
-`;
-
-export default REGISTRATION_FRAGMENT;
+@Library(value='jenkins-pipeline-library@master', changelog=false) _
+pipelineRDPCRdpcUI(
+    buildImage: "node:18.12.0",
+    dockerRegistry: "ghcr.io",
+    dockerRepo: "icgc-argo/rdpc-ui",
+    gitRepo: "icgc-argo/rdpc-ui",
+    testCommand: "npm ci && npm t",
+    helmRelease: "rdpc-ui"
+)

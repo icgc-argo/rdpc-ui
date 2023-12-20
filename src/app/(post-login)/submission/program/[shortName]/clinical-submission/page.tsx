@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { ClinicalSubmissionEntity } from '@/__generated__/graphql';
+import { ClinicalSubmissionEntity } from '@/__generated__/clinical/graphql';
 import ContentMain from '@/app/components/Content/ContentMain';
 import ErrorNotification, { ErrorReportColumns } from '@/app/components/ErrorNotification';
 import {
@@ -28,11 +28,11 @@ import {
 import Loader from '@/app/components/Loader';
 import { ModalPortal } from '@/app/components/Modal';
 import { pageWithPermissions } from '@/app/components/Page';
-import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/CLEAR_CLINICAL_SUBMISSION';
-import CLINICAL_SUBMISSION_QUERY from '@/app/gql/CLINICAL_SUBMISSION_QUERY';
-import SIGN_OFF_SUBMISSION_MUTATION from '@/app/gql/SIGN_OFF_SUBMISSION_MUTATION';
-import UPLOAD_CLINICAL_SUBMISSION_MUTATION from '@/app/gql/UPLOAD_CLINICAL_SUBMISSION_MUTATION';
-import VALIDATE_SUBMISSION_MUTATION from '@/app/gql/VALIDATE_SUBMISSION_MUTATION';
+import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
+import CLINICAL_SUBMISSION_QUERY from '@/app/gql/clinical/CLINICAL_SUBMISSION_QUERY';
+import SIGN_OFF_SUBMISSION_MUTATION from '@/app/gql/clinical/SIGN_OFF_SUBMISSION_MUTATION';
+import VALIDATE_SUBMISSION_MUTATION from '@/app/gql/clinical/VALIDATE_SUBMISSION_MUTATION';
+import UPLOAD_CLINICAL_SUBMISSION_MUTATION from '@/app/gql/gateway/UPLOAD_CLINICAL_SUBMISSION_MUTATION';
 import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
 import { useToaster } from '@/app/hooks/ToastProvider';
 import { useClinicalQuery } from '@/app/hooks/useApolloQuery';

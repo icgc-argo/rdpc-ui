@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@/__generated__/gql';
+import { gql } from '@/__generated__/clinical/gql';
 
 const SIDEMENU_PROGRAM_STATUS = gql(`
 	query SideMenuProgramStatus($activeProgramName: String!, $filters: ClinicalInput!) {

@@ -17,11 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useQuery } from '@apollo/client';
-import CLINICAL_SCHEMA_VERSION_QUERY from '../gql/CLINICAL_SCHEMA_VERSION';
+import { gql } from '@/__generated__/clinical/gql';
 
-export const useClinicalSubmissionSchemaVersion = () => {
-	return useQuery<{
-		clinicalSubmissionSchemaVersion: string;
-	}>(CLINICAL_SCHEMA_VERSION_QUERY);
-};
+const COMMIT_CLINICAL_REGISTRATION_MUTATION = gql(`
+  mutation CommitClinicalRegistration(
+    $shortName: String!
+    $registrationId: String!
+  ) {
+    commitClinicalRegistration(
+      shortName: $shortName
+      registrationId: $registrationId
+    )
+  }
+`);
+
+export default COMMIT_CLINICAL_REGISTRATION_MUTATION;

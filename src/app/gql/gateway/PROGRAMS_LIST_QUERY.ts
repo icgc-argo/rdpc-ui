@@ -17,56 +17,24 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@/__generated__/gql';
+import { gql } from '@/__generated__/gateway/gql';
 
-const GET_REGISTRATION_QUERY = gql(`
-  query GetRegistration($shortName: String!) {
-    clinicalRegistration(shortName: $shortName) {
-      id
-      programShortName
-      creator
-      fileName
-      createdAt
-      records {
-        row
-        fields {
-          name
-          value
-        }
-      }
-      errors {
-        type
-        message
-        row
-        field
-        value
-        sampleId
-        donorId
-        specimenId
-      }
-      fileErrors {
-        message
-        fileNames
-        code
-      }
-      newDonors {
-        count
-        rows
-      }
-      newSpecimens {
-        count
-        rows
-      }
-      newSamples {
-        count
-        rows
-      }
-      alreadyRegistered {
-        count
-        rows
-      }
-    }
-  }
+const PROGRAMS_LIST_QUERY = gql(`
+	query ProgramsList($dataCenter: String) {
+		programs(dataCenter: $dataCenter) {
+			shortName
+			name
+			cancerTypes
+			countries
+			dataCenter {
+				shortName
+			}
+			membershipType
+			genomicDonors
+			submittedDonors
+			commitmentDonors
+		}
+	}
 `);
 
-export default GET_REGISTRATION_QUERY;
+export default PROGRAMS_LIST_QUERY;
