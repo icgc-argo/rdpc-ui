@@ -988,6 +988,91 @@ export type ClearSubmissionMutation = {
 	};
 };
 
+export type ClinicalEntityDataQueryVariables = Exact<{
+	programShortName: Scalars['String']['input'];
+	filters: ClinicalInput;
+}>;
+
+export type ClinicalEntityDataQuery = {
+	__typename?: 'Query';
+	clinicalData: {
+		__typename?: 'ClinicalData';
+		programShortName: string;
+		clinicalEntities: Array<{
+			__typename?: 'ClinicalDataEntities';
+			entityName: string;
+			entityFields?: Array<string | null> | null;
+			totalDocs: number;
+			records: Array<Array<{
+				__typename?: 'ClinicalRecordField';
+				name: string;
+				value?: string | null;
+			} | null> | null>;
+			completionStats?: Array<{
+				__typename?: 'CompletionStats';
+				coreCompletionDate?: string | null;
+				coreCompletionPercentage?: number | null;
+				overriddenCoreCompletion?: Array<string | null> | null;
+				donorId?: number | null;
+				coreCompletion?: {
+					__typename?: 'CoreCompletionFields';
+					donor: number;
+					specimens: number;
+					primaryDiagnosis: number;
+					followUps: number;
+					treatments: number;
+				} | null;
+				entityData?: {
+					__typename?: 'CompletionEntityData';
+					specimens?: {
+						__typename?: 'SpecimenCoreCompletion';
+						coreCompletionPercentage: number;
+						normalSpecimensPercentage: number;
+						tumourSpecimensPercentage: number;
+						normalRegistrations: number;
+						normalSubmissions: number;
+						tumourRegistrations: number;
+						tumourSubmissions: number;
+					} | null;
+				} | null;
+			} | null> | null;
+		} | null>;
+		clinicalErrors: Array<{
+			__typename?: 'ClinicalErrors';
+			donorId?: number | null;
+			submitterDonorId?: string | null;
+			errors?: Array<{
+				__typename?: 'ClinicalErrorRecord';
+				errorType?: string | null;
+				fieldName?: string | null;
+				index?: number | null;
+				message?: string | null;
+				entityName?: string | null;
+				info?: { __typename?: 'ClinicalErrorInfo'; value?: Array<string | null> | null } | null;
+			} | null> | null;
+		} | null>;
+	};
+};
+
+export type ClinicalEntitySearchResultsQueryVariables = Exact<{
+	programShortName: Scalars['String']['input'];
+	filters: ClinicalInput;
+}>;
+
+export type ClinicalEntitySearchResultsQuery = {
+	__typename?: 'Query';
+	clinicalSearchResults: {
+		__typename?: 'ClinicalSearchData';
+		programShortName: string;
+		totalResults: number;
+		searchResults: Array<{
+			__typename?: 'ClinicalSearchResults';
+			donorId: number;
+			submitterDonorId?: string | null;
+		} | null>;
+	};
+};
+
 export type ClinicalSchemaVersionQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ClinicalSchemaVersionQuery = {
@@ -1372,6 +1457,27 @@ export type SignOffSubmissionMutation = {
 			fileNames: Array<string | null>;
 			code: string;
 		} | null> | null;
+	};
+};
+
+export type SubmittedDataSideMenuQueryVariables = Exact<{
+	programShortName: Scalars['String']['input'];
+	filters: ClinicalInput;
+}>;
+
+export type SubmittedDataSideMenuQuery = {
+	__typename?: 'Query';
+	clinicalData: {
+		__typename?: 'ClinicalData';
+		programShortName: string;
+		clinicalEntities: Array<{ __typename?: 'ClinicalDataEntities'; entityName: string } | null>;
+		clinicalErrors: Array<{
+			__typename?: 'ClinicalErrors';
+			errors?: Array<{
+				__typename?: 'ClinicalErrorRecord';
+				entityName?: string | null;
+			} | null> | null;
+		} | null>;
 	};
 };
 
@@ -1937,6 +2043,277 @@ export const ClearSubmissionDocument = {
 		},
 	],
 } as unknown as DocumentNode<ClearSubmissionMutation, ClearSubmissionMutationVariables>;
+export const ClinicalEntityDataDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'ClinicalEntityData' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+					},
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'filters' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'ClinicalInput' } },
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'clinicalData' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'programShortName' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+							},
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'filters' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'filters' } },
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'clinicalEntities' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'entityName' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'entityFields' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'totalDocs' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'records' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+													],
+												},
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'completionStats' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'coreCompletion' },
+															selectionSet: {
+																kind: 'SelectionSet',
+																selections: [
+																	{ kind: 'Field', name: { kind: 'Name', value: 'donor' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'specimens' } },
+																	{
+																		kind: 'Field',
+																		name: { kind: 'Name', value: 'primaryDiagnosis' },
+																	},
+																	{ kind: 'Field', name: { kind: 'Name', value: 'followUps' } },
+																	{ kind: 'Field', name: { kind: 'Name', value: 'treatments' } },
+																],
+															},
+														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'coreCompletionDate' } },
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'coreCompletionPercentage' },
+														},
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'overriddenCoreCompletion' },
+														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'entityData' },
+															selectionSet: {
+																kind: 'SelectionSet',
+																selections: [
+																	{
+																		kind: 'Field',
+																		name: { kind: 'Name', value: 'specimens' },
+																		selectionSet: {
+																			kind: 'SelectionSet',
+																			selections: [
+																				{
+																					kind: 'Field',
+																					name: { kind: 'Name', value: 'coreCompletionPercentage' },
+																				},
+																				{
+																					kind: 'Field',
+																					name: {
+																						kind: 'Name',
+																						value: 'normalSpecimensPercentage',
+																					},
+																				},
+																				{
+																					kind: 'Field',
+																					name: {
+																						kind: 'Name',
+																						value: 'tumourSpecimensPercentage',
+																					},
+																				},
+																				{
+																					kind: 'Field',
+																					name: { kind: 'Name', value: 'normalRegistrations' },
+																				},
+																				{
+																					kind: 'Field',
+																					name: { kind: 'Name', value: 'normalSubmissions' },
+																				},
+																				{
+																					kind: 'Field',
+																					name: { kind: 'Name', value: 'tumourRegistrations' },
+																				},
+																				{
+																					kind: 'Field',
+																					name: { kind: 'Name', value: 'tumourSubmissions' },
+																				},
+																			],
+																		},
+																	},
+																],
+															},
+														},
+													],
+												},
+											},
+										],
+									},
+								},
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'clinicalErrors' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'submitterDonorId' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'errors' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'errorType' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'fieldName' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'index' } },
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'info' },
+															selectionSet: {
+																kind: 'SelectionSet',
+																selections: [
+																	{ kind: 'Field', name: { kind: 'Name', value: 'value' } },
+																],
+															},
+														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'message' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'entityName' } },
+													],
+												},
+											},
+										],
+									},
+								},
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<ClinicalEntityDataQuery, ClinicalEntityDataQueryVariables>;
+export const ClinicalEntitySearchResultsDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'ClinicalEntitySearchResults' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+					},
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'filters' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'ClinicalInput' } },
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'clinicalSearchResults' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'programShortName' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+							},
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'filters' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'filters' } },
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'totalResults' } },
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'searchResults' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'submitterDonorId' } },
+										],
+									},
+								},
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<
+	ClinicalEntitySearchResultsQuery,
+	ClinicalEntitySearchResultsQueryVariables
+>;
 export const ClinicalSchemaVersionDocument = {
 	kind: 'Document',
 	definitions: [
@@ -2654,6 +3031,88 @@ export const SignOffSubmissionDocument = {
 		},
 	],
 } as unknown as DocumentNode<SignOffSubmissionMutation, SignOffSubmissionMutationVariables>;
+export const SubmittedDataSideMenuDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'SubmittedDataSideMenu' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+					},
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'filters' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'ClinicalInput' } },
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'clinicalData' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'programShortName' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+							},
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'filters' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'filters' } },
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'clinicalEntities' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [{ kind: 'Field', name: { kind: 'Name', value: 'entityName' } }],
+									},
+								},
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'clinicalErrors' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'errors' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'entityName' } },
+													],
+												},
+											},
+										],
+									},
+								},
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<SubmittedDataSideMenuQuery, SubmittedDataSideMenuQueryVariables>;
 export const ValidateSubmissionDocument = {
 	kind: 'Document',
 	definitions: [

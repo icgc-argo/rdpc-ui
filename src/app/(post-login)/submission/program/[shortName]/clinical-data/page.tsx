@@ -20,8 +20,9 @@
 
 import { pageWithPermissions } from '@/app/components/Page';
 import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
-import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/app/gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
-import SUBMITTED_DATA_SIDE_MENU_QUERY from '@/app/gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
+import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
+import SUBMITTED_DATA_SIDE_MENU_QUERY from '@/app/gql/clinical/SUBMITTED_DATA_SIDE_MENU_QUERY';
+import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import useUrlParamState from '@/app/hooks/useUrlParamState';
 import { notNull } from '@/global/utils';
 import { css } from '@/lib/emotion';
@@ -109,7 +110,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 
 	// Search Result Query
 	// Populates dropdown menu; Search query populates data table if there are no URL params
-	const { data: searchResultData, loading: searchResultsLoading } = useQuery(
+	const { data: searchResultData, loading: searchResultsLoading } = useClinicalQuery(
 		CLINICAL_ENTITY_SEARCH_RESULTS_QUERY,
 		{
 			errorPolicy: 'all',
