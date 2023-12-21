@@ -62,19 +62,19 @@ export type DonorEntry = {
 
 const errorColumns = [
 	{
-		accessor: 'entries',
+		accessorKey: 'entries',
 		Header: '# Affected Records',
 		id: 'entries',
 		maxWidth: 135,
 	},
 	{
-		accessor: 'fieldName',
+		accessorKey: 'fieldName',
 		Header: `Field with Error`,
 		id: 'fieldName',
 		maxWidth: 215,
 	},
 	{
-		accessor: 'errorMessage',
+		accessorKey: 'errorMessage',
 		Header: `Error Description`,
 		id: 'errorMessage',
 	},
@@ -823,7 +823,7 @@ const ClinicalEntityDataTable = ({
 	columns = columns.map((key) => {
 		return {
 			id: key,
-			accessor: key,
+			accessorKey: key,
 			Header: key,
 			headerStyle: {
 				borderRight: getHeaderBorder(key),
@@ -862,7 +862,8 @@ const ClinicalEntityDataTable = ({
 
 		columns = [
 			{
-				Header: (
+				id: 'clinical_core_completion_header',
+				header: (
 					<div
 						css={css`
 							display: flex;
@@ -913,7 +914,8 @@ const ClinicalEntityDataTable = ({
 				})),
 			},
 			{
-				Header: <div>SUBMITTED DONOR DATA</div>,
+				id: 'submitted_donor_data_header',
+				header: <div>SUBMITTED DONOR DATA</div>,
 				headerStyle: dataHeaderStyle,
 				columns: columns.slice(7).map((column, i) => column),
 			},
@@ -924,6 +926,8 @@ const ClinicalEntityDataTable = ({
 	const tableMax = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
 	const numTablePages = Math.ceil(totalDocs / pageSize);
 	const numErrorPages = Math.ceil(totalErrors / errorPageSize);
+
+	console.log('columns', columns);
 
 	return loading ? (
 		<DnaLoader
@@ -984,7 +988,7 @@ const ClinicalEntityDataTable = ({
 					</Typography>
 				}
 			/>
-			<Table
+			{/* <Table
 				withOutsideBorder
 				manual
 				parentRef={containerRef}
@@ -1005,7 +1009,8 @@ const ClinicalEntityDataTable = ({
 						(column) => column.id === 'donor_id' && setStickyDonorIDColumnsWidth(column.value),
 					);
 				}}
-			/>
+			/> */}
+			<Table data={records} columns={columns} withHeaders withSideBorders />
 		</div>
 	);
 };
