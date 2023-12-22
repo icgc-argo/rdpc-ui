@@ -901,8 +901,16 @@ const ClinicalEntityDataTable = ({
 					...column,
 					maxWidth: noTableData ? 50 : 250,
 					style: noTableData ? noDataCellStyle : {},
-					Cell: ({ value, tdProps }) => {
-						const { isCompletionCell, errorState } = tdProps.rest;
+					cell: (context) => {
+						const value = context.getValue();
+						console.log('CELLL?', context, value);
+
+						const { isCompletionCell, errorState } = getCellStyles(
+							undefined,
+							context.row,
+							context.column,
+						);
+						console.log('is completion cell', isCompletionCell);
 						const showSuccessSvg = isCompletionCell && !errorState;
 
 						return showSuccessSvg ? (
