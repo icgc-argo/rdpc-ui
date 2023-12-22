@@ -279,237 +279,16 @@ const ClinicalEntityDataTable = ({
 		setErrorPageSettings(defaultErrorPageSettings);
 	}, [entityType, useDefaultQuery]);
 
-	// const { data: clinicalEntityData, loading } = useGetEntityData(
-	// 	program,
-	// 	entityType,
-	// 	page,
-	// 	pageSize,
-	// 	sort,
-	// 	completionState,
-	// 	donorIds,
-	// 	submitterDonorIds,
-	// );
-
-	const clinicalEntityData = {
-		clinicalData: {
-			programShortName: 'CIA-IE',
-			clinicalEntities: [
-				{
-					entityName: 'donor',
-					entityFields: [
-						'donor_id',
-						'program_id',
-						'submitter_donor_id',
-						'vital_status',
-						'cause_of_death',
-						'survival_time',
-						'primary_site',
-						'height',
-						'weight',
-						'bmi',
-						'genetic_disorders',
-						'menopause_status',
-						'age_at_menarche',
-						'number_of_pregnancies',
-						'number_of_children',
-						'hrt_type',
-						'hrt_duration',
-						'contraception_type',
-						'contraception_duration',
-						'lost_to_followup_after_clinical_event_id',
-					],
-					totalDocs: 2,
-					records: [
-						[
-							{
-								name: 'donor_id',
-								value: '264723',
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'program_id',
-								value: 'CIA-IE',
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'updatedAt',
-								value: '2023-12-14T18:58:18.113Z',
-								__typename: 'ClinicalRecordField',
-							},
-						],
-						[
-							{
-								name: 'donor_id',
-								value: '264798',
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'program_id',
-								value: 'CIA-IE',
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'updatedAt',
-								value: '2023-12-14T18:58:19.139Z',
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'submitter_donor_id',
-								value: 'DO-1',
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'vital_status',
-								value: 'Deceased',
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'cause_of_death',
-								value: 'Unknown',
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'survival_time',
-								value: '1',
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'primary_site',
-								value: 'Adrenal gland',
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'height',
-								value: null,
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'weight',
-								value: null,
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'bmi',
-								value: null,
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'genetic_disorders',
-								value: null,
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'menopause_status',
-								value: null,
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'age_at_menarche',
-								value: null,
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'number_of_pregnancies',
-								value: null,
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'number_of_children',
-								value: null,
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'hrt_type',
-								value: null,
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'hrt_duration',
-								value: null,
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'contraception_type',
-								value: null,
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'contraception_duration',
-								value: null,
-								__typename: 'ClinicalRecordField',
-							},
-							{
-								name: 'lost_to_followup_after_clinical_event_id',
-								value: null,
-								__typename: 'ClinicalRecordField',
-							},
-						],
-					],
-					completionStats: [
-						{
-							coreCompletion: {
-								donor: 0,
-								specimens: 0,
-								primaryDiagnosis: 0,
-								followUps: 0,
-								treatments: 0,
-								__typename: 'CoreCompletionFields',
-							},
-							coreCompletionDate: null,
-							coreCompletionPercentage: 0,
-							overriddenCoreCompletion: [],
-							donorId: 264723,
-							entityData: {
-								specimens: {
-									coreCompletionPercentage: 0,
-									normalSpecimensPercentage: 0,
-									tumourSpecimensPercentage: 0,
-									normalRegistrations: 1,
-									normalSubmissions: 0,
-									tumourRegistrations: 0,
-									tumourSubmissions: 0,
-									__typename: 'SpecimenCoreCompletion',
-								},
-								__typename: 'CompletionEntityData',
-							},
-							__typename: 'CompletionStats',
-						},
-						{
-							coreCompletion: {
-								donor: 1,
-								specimens: 0,
-								primaryDiagnosis: 0,
-								followUps: 0,
-								treatments: 0,
-								__typename: 'CoreCompletionFields',
-							},
-							coreCompletionDate: null,
-							coreCompletionPercentage: 0.2,
-							overriddenCoreCompletion: null,
-							donorId: 264798,
-							entityData: {
-								specimens: {
-									coreCompletionPercentage: 0,
-									normalSpecimensPercentage: 0,
-									tumourSpecimensPercentage: 0,
-									normalRegistrations: 1,
-									normalSubmissions: 0,
-									tumourRegistrations: 0,
-									tumourSubmissions: 0,
-									__typename: 'SpecimenCoreCompletion',
-								},
-								__typename: 'CompletionEntityData',
-							},
-							__typename: 'CompletionStats',
-						},
-					],
-					__typename: 'ClinicalDataEntities',
-				},
-			],
-			clinicalErrors: [],
-			__typename: 'ClinicalData',
-		},
-	};
+	const { data: clinicalEntityData, loading } = useGetEntityData(
+		program,
+		entityType,
+		page,
+		pageSize,
+		sort,
+		completionState,
+		donorIds,
+		submitterDonorIds,
+	);
 
 	const loading = false;
 
@@ -903,14 +682,13 @@ const ClinicalEntityDataTable = ({
 					style: noTableData ? noDataCellStyle : {},
 					cell: (context) => {
 						const value = context.getValue();
-						console.log('CELLL?', context, value);
 
 						const { isCompletionCell, errorState } = getCellStyles(
 							undefined,
 							context.row,
 							context.column,
 						);
-						console.log('is completion cell', isCompletionCell);
+
 						const showSuccessSvg = isCompletionCell && !errorState;
 
 						return showSuccessSvg ? (
@@ -934,8 +712,6 @@ const ClinicalEntityDataTable = ({
 	const tableMax = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
 	const numTablePages = Math.ceil(totalDocs / pageSize);
 	const numErrorPages = Math.ceil(totalErrors / errorPageSize);
-
-	console.log('columns', columns);
 
 	return loading ? (
 		<DnaLoader
@@ -996,28 +772,6 @@ const ClinicalEntityDataTable = ({
 					</Typography>
 				}
 			/>
-			{/* <Table
-				withOutsideBorder
-				manual
-				parentRef={containerRef}
-				showPagination={true}
-				page={page}
-				pages={numTablePages}
-				pageSize={pageSize}
-				defaultSortMethod={sortEntityData}
-				sorted={sorted}
-				getTdProps={getCellStyles}
-				columns={columns}
-				data={records}
-				onPageChange={(value) => updatePageSettings('page', value)}
-				onPageSizeChange={(value) => updatePageSettings('pageSize', value)}
-				onSortedChange={(value) => updatePageSettings('sorted', value)}
-				onResizedChange={(newResized) => {
-					newResized.forEach(
-						(column) => column.id === 'donor_id' && setStickyDonorIDColumnsWidth(column.value),
-					);
-				}}
-			/> */}
 			<Table data={records} columns={columns} withHeaders withSideBorders />
 		</div>
 	);
