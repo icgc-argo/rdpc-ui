@@ -278,7 +278,7 @@ const ClinicalEntityDataTable = ({
 		setErrorPageSettings(defaultErrorPageSettings);
 	}, [entityType, useDefaultQuery]);
 
-	const { data: clinicalEntityData, loading } = useGetEntityData(
+	const { data: clinicalEntityData } = useGetEntityData(
 		program,
 		entityType,
 		page,
