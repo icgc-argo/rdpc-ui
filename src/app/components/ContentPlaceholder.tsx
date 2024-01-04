@@ -20,7 +20,6 @@ import { css, styled } from '@/lib/emotion';
 import { Typography } from '@icgc-argo/uikit';
 import Image from 'next/image';
 import { FC, ReactNode } from 'react';
-import noDataSvg from '../../../public/assets/no-data.svg';
 
 const Container = styled('div')`
 	display: flex;
@@ -38,7 +37,7 @@ type ContentPlaceholderProps = {
 };
 
 export const ContentPlaceholder: FC<ContentPlaceholderProps> = ({
-	children = <Image alt="no data found" src={noDataSvg} />,
+	children = <Image alt="no data found" src="/assets/no-data.svg" />,
 	title = 'No Data Found.',
 	subtitle,
 	link,

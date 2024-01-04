@@ -35,7 +35,6 @@ import {
 	Tooltip,
 	Typography,
 	css,
-	noDataSvg,
 	useTheme,
 } from '@icgc-argo/uikit';
 import memoize from 'lodash/memoize';
@@ -91,7 +90,7 @@ const NoDataCell = () => (
 		`}
 	>
 		<ContentPlaceholder title="No Data Found.">
-			<img alt="No Data" src={noDataSvg} />
+			<img alt="No Data" src="/assets/no-data.svg" />
 		</ContentPlaceholder>
 	</div>
 );
@@ -279,7 +278,7 @@ const ClinicalEntityDataTable = ({
 		setErrorPageSettings(defaultErrorPageSettings);
 	}, [entityType, useDefaultQuery]);
 
-	const { data: clinicalEntityData, loading } = useGetEntityData(
+	const { data: clinicalEntityData } = useGetEntityData(
 		program,
 		entityType,
 		page,

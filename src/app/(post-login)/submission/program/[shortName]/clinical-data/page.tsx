@@ -18,6 +18,7 @@
  */
 'use client';
 
+import ContentMain from '@/app/components/Content/ContentMain';
 import { pageWithPermissions } from '@/app/components/Page';
 import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
@@ -28,7 +29,7 @@ import { notNull } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
 import { useTheme } from '@emotion/react';
-import { Container, Loader, Typography, VerticalTabs } from '@icgc-argo/uikit';
+import { Loader, Typography, VerticalTabs } from '@icgc-argo/uikit';
 import { useEffect, useState } from 'react';
 import { setConfiguration } from 'react-grid-system';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable';
@@ -232,7 +233,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 						donorSearchResults={parsedSearchResultData}
 						setKeyword={setKeyword}
 					/>
-					<Container>
+					<ContentMain>
 						<div
 							css={css`
 								width: 100%;
@@ -299,7 +300,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 								</div>
 							</div>{' '}
 						</div>
-					</Container>
+					</ContentMain>
 				</>
 			)}
 		</div>
