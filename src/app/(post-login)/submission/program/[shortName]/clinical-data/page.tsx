@@ -85,7 +85,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 		'tab',
 		defaultClinicalEntityTab,
 	);
-	const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', 'donorId');
+	const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', '');
 
 	const currentEntity = reverseLookUpEntityAlias(selectedClinicalEntityTab);
 	const urlDonorQueryStrings = selectedDonors ? selectedDonors.split(',') : [];
