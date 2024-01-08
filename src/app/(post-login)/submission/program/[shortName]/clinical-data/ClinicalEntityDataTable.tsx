@@ -49,7 +49,6 @@ import {
 	clinicalEntityDisplayNames,
 	clinicalEntityFields,
 	defaultClinicalEntityFilters,
-	emptyClinicalDataResponse,
 	emptySearchResponse,
 } from './common';
 
@@ -291,6 +290,11 @@ const ClinicalEntityDataTable = ({
 
 	const { clinicalData } =
 		clinicalEntityData == undefined || loading ? emptyClinicalDataResponse : clinicalEntityData;
+
+	// const { clinicalData } =
+	// 	clinicalEntityData == undefined || loading ? emptyClinicalDataResponse : clinicalEntityData;
+
+	const clinicalData = MOCK_DATA.data.clinicalData;
 
 	const noTableData = noData || clinicalData.clinicalEntities.length === 0;
 
