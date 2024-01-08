@@ -190,7 +190,6 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 		submitterDonorIds: useDefaultQuery ? [] : entityTableSubmitterDonorIds.filter(notNull),
 	};
 
-	//
 	const menuItems = clinicalEntityFields.map((entity) => (
 		<VerticalTabs.Item
 			key={entity}
@@ -217,23 +216,23 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 				<Loader />
 			) : (
 				<>
-					<SearchBar
-						setModalVisible={setModalVisible}
-						modalVisible={modalVisible}
-						completionState={completionState}
-						setCompletionState={setCompletionState}
-						programShortName={programShortName}
-						keyword={keyword}
-						loading={searchResultsLoading}
-						noData={noData}
-						useDefaultQuery={useDefaultQuery}
-						currentDonors={currentDonors}
-						setSelectedDonors={setSelectedDonors}
-						tsvDownloadIds={tsvDownloadIds}
-						donorSearchResults={parsedSearchResultData}
-						setKeyword={setKeyword}
-					/>
 					<ContentMain>
+						<SearchBar
+							setModalVisible={setModalVisible}
+							modalVisible={modalVisible}
+							completionState={completionState}
+							setCompletionState={setCompletionState}
+							programShortName={programShortName}
+							keyword={keyword}
+							loading={searchResultsLoading}
+							noData={noData}
+							useDefaultQuery={useDefaultQuery}
+							currentDonors={currentDonors}
+							setSelectedDonors={setSelectedDonors}
+							tsvDownloadIds={tsvDownloadIds}
+							donorSearchResults={parsedSearchResultData}
+							setKeyword={setKeyword}
+						/>
 						<div
 							css={css`
 								width: 100%;

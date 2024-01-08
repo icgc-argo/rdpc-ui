@@ -49,7 +49,6 @@ import {
 	clinicalEntityDisplayNames,
 	clinicalEntityFields,
 	defaultClinicalEntityFilters,
-	emptyClinicalDataResponse,
 	emptySearchResponse,
 } from './common';
 
@@ -291,8 +290,199 @@ const ClinicalEntityDataTable = ({
 
 	const loading = false;
 
-	const { clinicalData } =
-		clinicalEntityData == undefined || loading ? emptyClinicalDataResponse : clinicalEntityData;
+	const MOCK_DATA = {
+		data: {
+			clinicalData: {
+				programShortName: 'CIA-IE',
+				clinicalEntities: [
+					{
+						entityName: 'donor',
+						entityFields: [
+							'donor_id',
+							'program_id',
+							'submitter_donor_id',
+							'vital_status',
+							'cause_of_death',
+							'survival_time',
+							'primary_site',
+							'height',
+							'weight',
+							'bmi',
+							'genetic_disorders',
+							'menopause_status',
+							'age_at_menarche',
+							'number_of_pregnancies',
+							'number_of_children',
+							'hrt_type',
+							'hrt_duration',
+							'contraception_type',
+							'contraception_duration',
+							'lost_to_followup_after_clinical_event_id',
+						],
+						totalDocs: 2,
+						records: [
+							[
+								{
+									name: 'donor_id',
+									value: '264723',
+								},
+								{
+									name: 'program_id',
+									value: 'CIA-IE',
+								},
+								{
+									name: 'updatedAt',
+									value: '2023-12-14T18:58:18.113Z',
+								},
+							],
+							[
+								{
+									name: 'donor_id',
+									value: '264798',
+								},
+								{
+									name: 'program_id',
+									value: 'CIA-IE',
+								},
+								{
+									name: 'updatedAt',
+									value: '2023-12-14T18:58:19.139Z',
+								},
+								{
+									name: 'submitter_donor_id',
+									value: 'DO-1',
+								},
+								{
+									name: 'vital_status',
+									value: 'Deceased',
+								},
+								{
+									name: 'cause_of_death',
+									value: 'Unknown',
+								},
+								{
+									name: 'survival_time',
+									value: '1',
+								},
+								{
+									name: 'primary_site',
+									value: 'Adrenal gland',
+								},
+								{
+									name: 'height',
+									value: null,
+								},
+								{
+									name: 'weight',
+									value: null,
+								},
+								{
+									name: 'bmi',
+									value: null,
+								},
+								{
+									name: 'genetic_disorders',
+									value: null,
+								},
+								{
+									name: 'menopause_status',
+									value: null,
+								},
+								{
+									name: 'age_at_menarche',
+									value: null,
+								},
+								{
+									name: 'number_of_pregnancies',
+									value: null,
+								},
+								{
+									name: 'number_of_children',
+									value: null,
+								},
+								{
+									name: 'hrt_type',
+									value: null,
+								},
+								{
+									name: 'hrt_duration',
+									value: null,
+								},
+								{
+									name: 'contraception_type',
+									value: null,
+								},
+								{
+									name: 'contraception_duration',
+									value: null,
+								},
+								{
+									name: 'lost_to_followup_after_clinical_event_id',
+									value: null,
+								},
+							],
+						],
+						completionStats: [
+							{
+								coreCompletion: {
+									donor: 0,
+									specimens: 0,
+									primaryDiagnosis: 0,
+									followUps: 0,
+									treatments: 0,
+								},
+								coreCompletionDate: null,
+								coreCompletionPercentage: 0,
+								overriddenCoreCompletion: [],
+								donorId: 264723,
+								entityData: {
+									specimens: {
+										coreCompletionPercentage: 0,
+										normalSpecimensPercentage: 0,
+										tumourSpecimensPercentage: 0,
+										normalRegistrations: 1,
+										normalSubmissions: 0,
+										tumourRegistrations: 0,
+										tumourSubmissions: 0,
+									},
+								},
+							},
+							{
+								coreCompletion: {
+									donor: 1,
+									specimens: 0,
+									primaryDiagnosis: 0,
+									followUps: 0,
+									treatments: 0,
+								},
+								coreCompletionDate: null,
+								coreCompletionPercentage: 0.2,
+								overriddenCoreCompletion: null,
+								donorId: 264798,
+								entityData: {
+									specimens: {
+										coreCompletionPercentage: 0,
+										normalSpecimensPercentage: 0,
+										tumourSpecimensPercentage: 0,
+										normalRegistrations: 1,
+										normalSubmissions: 0,
+										tumourRegistrations: 0,
+										tumourSubmissions: 0,
+									},
+								},
+							},
+						],
+					},
+				],
+				clinicalErrors: [],
+			},
+		},
+	};
+
+	// const { clinicalData } =
+	// 	clinicalEntityData == undefined || loading ? emptyClinicalDataResponse : clinicalEntityData;
+
+	const clinicalData = MOCK_DATA.data.clinicalData;
 
 	const noTableData = noData || clinicalData.clinicalEntities.length === 0;
 
