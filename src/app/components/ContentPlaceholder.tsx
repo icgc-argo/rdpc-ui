@@ -18,7 +18,6 @@
  */
 import { css, styled } from '@/lib/emotion';
 import { Typography } from '@icgc-argo/uikit';
-import Image from 'next/image';
 import { FC, ReactNode } from 'react';
 
 const Container = styled('div')`
@@ -37,7 +36,7 @@ type ContentPlaceholderProps = {
 };
 
 export const ContentPlaceholder: FC<ContentPlaceholderProps> = ({
-	children = <Image alt="no data found" src="/assets/no-data.svg" />,
+	children = <img alt="no data found" src="/assets/no-data.svg" />,
 	title = 'No Data Found.',
 	subtitle,
 	link,
