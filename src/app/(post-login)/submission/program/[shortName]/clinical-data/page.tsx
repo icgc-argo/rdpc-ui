@@ -197,7 +197,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 			active={selectedClinicalEntityTab === aliasedEntityNames[entity]}
 			onClick={() => setSelectedClinicalEntityTab(aliasedEntityNames[entity])}
 			disabled={
-				false //!clinicalData.clinicalEntities.some((e) => e?.entityName === aliasedEntityNames[entity])
+				!clinicalData.clinicalEntities.some((e) => e?.entityName === aliasedEntityNames[entity])
 			}
 		>
 			{clinicalEntityDisplayNames[entity]}
