@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2024 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,37 +17,22 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { TOAST_VARIANTS } from '@icgc-argo/uikit';
-import { useToaster } from './ToastProvider';
+/**
+ * turns "here is some string" -> "Here Is Some String"
+ */
+export const capitalize = (s: string) =>
+	s
+		.split(' ')
+		.map((str) => str.replace(str[0], (str[0] || '').toUpperCase()))
+		.join(' ');
 
-export default function useCommonToasters() {
-	const toaster = useToaster();
-	return {
-		unknownError: () =>
-			toaster.addToast({
-				title: '',
-				variant: TOAST_VARIANTS.ERROR,
-				content: 'Something went wrong, please try again later or contact us for assistance.',
-			}),
-		unknownErrorWithReloadMessage: () =>
-			toaster.addToast({
-				variant: 'ERROR',
-				title: 'Something went wrong',
-				content: 'Uh oh! It looks like something went wrong. This page has been reloaded.',
-			}),
-		onSave: () =>
-			toaster.addToast({
-				title: 'Success!',
-				variant: TOAST_VARIANTS.SUCCESS,
-				content: 'Your changes have been saved.',
-				interactionType: 'CLOSE',
-			}),
-		onDownloadError: (error?: string) => {
-			toaster.addToast({
-				variant: TOAST_VARIANTS.ERROR,
-				title: `Download Error`,
-				content: error || 'An error occurred, the file could not be downloaded.',
-			});
-		},
-	};
-}
+/**
+ * Extracts the filename from the content-disposition header
+ * @param contentDisposition - content-disposition header
+ * @returns {string} filename
+ */
+export const getFilename = (contentDisposition: string): string => {
+	const filenameRegex = /(?<=filename(?:=|\*=(?:[\w\-]+'')))["']?([^"';\n]+)["']?/gi;
+	const matches = contentDisposition.match(filenameRegex);
+	return matches ? matches[0].replace(/["']/g, '') : '';
+};

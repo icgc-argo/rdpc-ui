@@ -21,6 +21,7 @@
 import Header from '@/app/components/Header';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { EGO_JWT_KEY, LOGIN_NONCE } from '@/global/constants';
+import { getFilename } from '@/global/utils/stringUtils';
 import createEgoUtils from '@icgc-argo/ego-token-utils';
 import { DnaLoader } from '@icgc-argo/uikit';
 import Cookies from 'js-cookie';
@@ -36,6 +37,12 @@ import {
 	useState,
 } from 'react';
 
+declare global {
+	interface Navigator {
+		msSaveBlob?: (blob: any, defaultName?: string) => boolean;
+	}
+}
+
 type AuthContextValue = {
 	egoJwt: string | undefined;
 	setEgoJwt: Dispatch<SetStateAction<string | undefined>>;
@@ -45,6 +52,8 @@ type AuthContextValue = {
 	logOut: () => void;
 	permissions: string[];
 	TokenUtils: ReturnType<typeof createEgoUtils>;
+	fetchWithEgoToken: typeof fetch;
+	downloadFileWithEgoToken: (...inputs: Parameters<typeof fetch>) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue>({
@@ -56,6 +65,8 @@ const AuthContext = createContext<AuthContextValue>({
 	logOut: () => undefined,
 	permissions: [],
 	TokenUtils: createEgoUtils(''),
+	fetchWithEgoToken: fetch,
+	downloadFileWithEgoToken: async () => null,
 });
 
 export const getStoredToken = () => Cookies.get(EGO_JWT_KEY);
@@ -74,6 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	const [authLoading, setAuthLoading] = useState(isLoggedIn);
 
 	const tokenIsValid = !!TokenUtils.isValidJwt(storedToken);
+	const isValidJwt = (egoJwt: string) => !!egoJwt && TokenUtils.isValidJwt(egoJwt);
 
 	useEffect(() => {
 		if (storedToken && tokenIsValid) {
@@ -100,6 +112,64 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 	const permissions = egoJwt ? TokenUtils.getPermissionsFromToken(egoJwt) : [];
 
+	const fetchWithEgoToken = async (uri, options) => {
+		const modifiedOption = {
+			...(options || {}),
+			headers: { ...((options && options.headers) || {}), authorization: `Bearer ${egoJwt || ''}` },
+		};
+
+		return fetch(uri, modifiedOption);
+	};
+
+	const downloadFileWithEgoToken = async (uri, options) => {
+		const response = await fetchWithEgoToken(uri, options);
+
+		if (!response.ok) {
+			const data = await response.json().catch((_) => {
+				console.log(`Download request failed and returned non-json response.`);
+			});
+			throw new Error(
+				data?.error || 'Something went wrong with the attempted download. Please try again later.',
+			);
+		}
+		const data = await response.blob();
+
+		const contentDispositionHeader = response.headers.get('content-disposition');
+		const filename = contentDispositionHeader ? getFilename(contentDispositionHeader) : '';
+
+		const blob = new Blob([data], { type: data.type || 'application/octet-stream' });
+		if (typeof window.navigator.msSaveBlob !== 'undefined') {
+			// IE doesn't allow using a blob object directly as link href.
+			// Workaround for "HTML7007: One or more blob URLs were
+			// revoked by closing the blob for which they were created.
+			// These URLs will no longer resolve as the data backing
+			// the URL has been freed."
+			window.navigator.msSaveBlob(blob, filename);
+			return;
+		}
+		// Other browsers
+		// Create a link pointing to the ObjectURL containing the blob
+		const blobURL = window.URL.createObjectURL(blob);
+		const tempLink = document.createElement('a');
+		tempLink.style.display = 'none';
+		tempLink.href = blobURL;
+		tempLink.setAttribute('download', filename);
+		// Safari thinks _blank anchor are pop ups. We only want to set _blank
+		// target if the browser does not support the HTML5 download attribute.
+		// This allows you to download files in desktop safari if pop up blocking
+		// is enabled.
+		if (typeof tempLink.download === 'undefined') {
+			tempLink.setAttribute('target', '_blank');
+		}
+		document.body.appendChild(tempLink);
+		tempLink.click();
+		document.body.removeChild(tempLink);
+		setTimeout(() => {
+			// For Firefox it is necessary to delay revoking the ObjectURL
+			window.URL.revokeObjectURL(blobURL);
+		}, 100);
+	};
+
 	const value: AuthContextValue = {
 		egoJwt,
 		setEgoJwt,
@@ -109,6 +179,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		logOut,
 		permissions,
 		TokenUtils,
+		downloadFileWithEgoToken,
 	};
 
 	return (
