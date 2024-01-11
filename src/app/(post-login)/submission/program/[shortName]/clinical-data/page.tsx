@@ -211,7 +211,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 				leftSlot={<BreadcrumbTitle breadcrumbs={[programShortName, 'Submitted Data']} />}
 				rightSlot={<HelpLink url="" />}
 			/>
-			{isLoading ? (
+			{searchResultsLoading ? (
 				<Loader />
 			) : (
 				<>
