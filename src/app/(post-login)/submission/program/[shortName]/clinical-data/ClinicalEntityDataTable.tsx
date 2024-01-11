@@ -49,6 +49,7 @@ import {
 	clinicalEntityDisplayNames,
 	clinicalEntityFields,
 	defaultClinicalEntityFilters,
+	emptyClinicalDataResponse,
 	emptySearchResponse,
 } from './common';
 
@@ -204,6 +205,8 @@ const ClinicalEntityDataTable = ({
 	const { DOCS_URL_ROOT } = useAppConfigContext();
 	const DOCS_DICTIONARY_PAGE = urljoin(DOCS_URL_ROOT, '/dictionary/');
 
+	console.log('entity type', entityType);
+
 	// Init + Page Settings
 	let totalDocs = 0;
 	let showCompletionStats = false;
@@ -277,7 +280,7 @@ const ClinicalEntityDataTable = ({
 		setErrorPageSettings(defaultErrorPageSettings);
 	}, [entityType, useDefaultQuery]);
 
-	const { data: clinicalEntityData } = useGetEntityData(
+	const { data: clinicalEntityData, loading } = useGetEntityData(
 		program,
 		entityType,
 		page,
@@ -290,11 +293,6 @@ const ClinicalEntityDataTable = ({
 
 	const { clinicalData } =
 		clinicalEntityData == undefined || loading ? emptyClinicalDataResponse : clinicalEntityData;
-
-	// const { clinicalData } =
-	// 	clinicalEntityData == undefined || loading ? emptyClinicalDataResponse : clinicalEntityData;
-
-	const clinicalData = MOCK_DATA.data.clinicalData;
 
 	const noTableData = noData || clinicalData.clinicalEntities.length === 0;
 
@@ -388,6 +386,7 @@ const ClinicalEntityDataTable = ({
 	};
 
 	// Map Completion Stats + Entity Data
+	console.log(clinicalData, aliasedEntityFields);
 	if (noTableData) {
 		showCompletionStats = true;
 		records = noDataCompletionStats;

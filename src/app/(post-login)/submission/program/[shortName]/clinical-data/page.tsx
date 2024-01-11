@@ -127,6 +127,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 	);
 
 	const parsedSearchResultData = parseSearchResult(searchResultData);
+	console.log('parsed data', parsedSearchResultData);
 
 	const searchResults = parsedSearchResultData?.clinicalSearchResults?.searchResults;
 	const searchResultIds = searchResults.map((result) => result?.donorId).filter(notNull);
