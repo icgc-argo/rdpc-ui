@@ -205,8 +205,6 @@ const ClinicalEntityDataTable = ({
 	const { DOCS_URL_ROOT } = useAppConfigContext();
 	const DOCS_DICTIONARY_PAGE = urljoin(DOCS_URL_ROOT, '/dictionary/');
 
-	console.log('entity type', entityType);
-
 	// Init + Page Settings
 	let totalDocs = 0;
 	let showCompletionStats = false;
@@ -386,7 +384,6 @@ const ClinicalEntityDataTable = ({
 	};
 
 	// Map Completion Stats + Entity Data
-	console.log(clinicalData, aliasedEntityFields);
 	if (noTableData) {
 		showCompletionStats = true;
 		records = noDataCompletionStats;
