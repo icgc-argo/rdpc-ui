@@ -73,10 +73,8 @@ const parseSearchResult = (
 
 const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }) => {
 	const FEATURE_SUBMITTED_DATA_ENABLED = true;
-	const isLoading = false;
-
-	//
 	const theme = useTheme();
+
 	const [keyword, setKeyword] = useState('');
 	const [completionState, setCompletionState] = useState(CompletionStates['all']);
 	const [modalVisible, setModalVisible] = useState(false);
@@ -129,6 +127,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 	);
 
 	const parsedSearchResultData = parseSearchResult(searchResultData);
+	console.log('parsed data', parsedSearchResultData);
 
 	const searchResults = parsedSearchResultData?.clinicalSearchResults?.searchResults;
 	const searchResultIds = searchResults.map((result) => result?.donorId).filter(notNull);
@@ -286,7 +285,11 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 									/>
 								</div>
 								{/* DataTable */}
-								<div>
+								<div
+									css={css`
+										margin-top: 16px;
+									`}
+								>
 									<ClinicalEntityDataTable
 										entityType={currentEntity}
 										program={programShortName}
