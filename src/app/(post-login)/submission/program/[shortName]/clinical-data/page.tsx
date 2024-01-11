@@ -30,7 +30,7 @@ import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
 import { useTheme } from '@emotion/react';
 import { Loader, Typography, VerticalTabs } from '@icgc-argo/uikit';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { setConfiguration } from 'react-grid-system';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable';
 import ClinicalDownloadButton from './DownloadButtons';
@@ -127,7 +127,6 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 	);
 
 	const parsedSearchResultData = parseSearchResult(searchResultData);
-	console.log('parsed data', parsedSearchResultData);
 
 	const searchResults = parsedSearchResultData?.clinicalSearchResults?.searchResults;
 	const searchResultIds = searchResults.map((result) => result?.donorId).filter(notNull);
@@ -155,11 +154,6 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 			},
 		},
 	);
-
-	useEffect(() => {
-		//setGlobalLoading(sideMenuLoading);
-		console.log('.....global loading....');
-	}, [sideMenuLoading]);
 
 	const sideMenuData =
 		sideMenuQuery == undefined || sideMenuLoading || !FEATURE_SUBMITTED_DATA_ENABLED
