@@ -18,6 +18,7 @@
  */
 'use client';
 
+import ContentMain from '@/app/components/Content/ContentMain';
 import { pageWithPermissions } from '@/app/components/Page';
 import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
@@ -28,8 +29,8 @@ import { notNull } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
 import { useTheme } from '@emotion/react';
-import { Container, Loader, Typography, VerticalTabs } from '@icgc-argo/uikit';
-import { useEffect, useState } from 'react';
+import { Loader, Typography, VerticalTabs } from '@icgc-argo/uikit';
+import { useState } from 'react';
 import { setConfiguration } from 'react-grid-system';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable';
 import ClinicalDownloadButton from './DownloadButtons';
@@ -72,10 +73,8 @@ const parseSearchResult = (
 
 const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }) => {
 	const FEATURE_SUBMITTED_DATA_ENABLED = true;
-	const isLoading = false;
-
-	//
 	const theme = useTheme();
+
 	const [keyword, setKeyword] = useState('');
 	const [completionState, setCompletionState] = useState(CompletionStates['all']);
 	const [modalVisible, setModalVisible] = useState(false);
@@ -84,7 +83,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 		'tab',
 		defaultClinicalEntityTab,
 	);
-	const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', 'donorId');
+	const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', '');
 
 	const currentEntity = reverseLookUpEntityAlias(selectedClinicalEntityTab);
 	const urlDonorQueryStrings = selectedDonors ? selectedDonors.split(',') : [];
@@ -156,11 +155,6 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 		},
 	);
 
-	useEffect(() => {
-		//setGlobalLoading(sideMenuLoading);
-		console.log('.....global loading....');
-	}, [sideMenuLoading]);
-
 	const sideMenuData =
 		sideMenuQuery == undefined || sideMenuLoading || !FEATURE_SUBMITTED_DATA_ENABLED
 			? emptyClinicalDataResponse
@@ -189,14 +183,13 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 		submitterDonorIds: useDefaultQuery ? [] : entityTableSubmitterDonorIds.filter(notNull),
 	};
 
-	//
 	const menuItems = clinicalEntityFields.map((entity) => (
 		<VerticalTabs.Item
 			key={entity}
 			active={selectedClinicalEntityTab === aliasedEntityNames[entity]}
 			onClick={() => setSelectedClinicalEntityTab(aliasedEntityNames[entity])}
 			disabled={
-				false //!clinicalData.clinicalEntities.some((e) => e?.entityName === aliasedEntityNames[entity])
+				!clinicalData.clinicalEntities.some((e) => e?.entityName === aliasedEntityNames[entity])
 			}
 		>
 			{clinicalEntityDisplayNames[entity]}
@@ -212,27 +205,27 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 				leftSlot={<BreadcrumbTitle breadcrumbs={[programShortName, 'Submitted Data']} />}
 				rightSlot={<HelpLink url="" />}
 			/>
-			{isLoading ? (
+			{searchResultsLoading ? (
 				<Loader />
 			) : (
 				<>
-					<SearchBar
-						setModalVisible={setModalVisible}
-						modalVisible={modalVisible}
-						completionState={completionState}
-						setCompletionState={setCompletionState}
-						programShortName={programShortName}
-						keyword={keyword}
-						loading={searchResultsLoading}
-						noData={noData}
-						useDefaultQuery={useDefaultQuery}
-						currentDonors={currentDonors}
-						setSelectedDonors={setSelectedDonors}
-						tsvDownloadIds={tsvDownloadIds}
-						donorSearchResults={parsedSearchResultData}
-						setKeyword={setKeyword}
-					/>
-					<Container>
+					<ContentMain>
+						<SearchBar
+							setModalVisible={setModalVisible}
+							modalVisible={modalVisible}
+							completionState={completionState}
+							setCompletionState={setCompletionState}
+							programShortName={programShortName}
+							keyword={keyword}
+							loading={searchResultsLoading}
+							noData={noData}
+							useDefaultQuery={useDefaultQuery}
+							currentDonors={currentDonors}
+							setSelectedDonors={setSelectedDonors}
+							tsvDownloadIds={tsvDownloadIds}
+							donorSearchResults={parsedSearchResultData}
+							setKeyword={setKeyword}
+						/>
 						<div
 							css={css`
 								width: 100%;
@@ -286,7 +279,11 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 									/>
 								</div>
 								{/* DataTable */}
-								<div>
+								<div
+									css={css`
+										margin-top: 16px;
+									`}
+								>
 									<ClinicalEntityDataTable
 										entityType={currentEntity}
 										program={programShortName}
@@ -299,7 +296,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 								</div>
 							</div>{' '}
 						</div>
-					</Container>
+					</ContentMain>
 				</>
 			)}
 		</div>

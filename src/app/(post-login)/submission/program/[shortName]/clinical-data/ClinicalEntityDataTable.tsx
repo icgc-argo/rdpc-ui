@@ -35,7 +35,6 @@ import {
 	Tooltip,
 	Typography,
 	css,
-	noDataSvg,
 	useTheme,
 } from '@icgc-argo/uikit';
 import memoize from 'lodash/memoize';
@@ -91,7 +90,7 @@ const NoDataCell = () => (
 		`}
 	>
 		<ContentPlaceholder title="No Data Found.">
-			<img alt="No Data" src={noDataSvg} />
+			<img alt="No Data" src="/assets/no-data.svg" />
 		</ContentPlaceholder>
 	</div>
 );
@@ -289,8 +288,6 @@ const ClinicalEntityDataTable = ({
 		donorIds,
 		submitterDonorIds,
 	);
-
-	const loading = false;
 
 	const { clinicalData } =
 		clinicalEntityData == undefined || loading ? emptyClinicalDataResponse : clinicalEntityData;
@@ -772,7 +769,14 @@ const ClinicalEntityDataTable = ({
 					</Typography>
 				}
 			/>
-			<Table data={records} columns={columns} withHeaders withSideBorders />
+			<Table
+				data={records}
+				columns={columns}
+				withHeaders
+				withSideBorders
+				withPagination
+				showPageSizeOptions
+			/>
 		</div>
 	);
 };

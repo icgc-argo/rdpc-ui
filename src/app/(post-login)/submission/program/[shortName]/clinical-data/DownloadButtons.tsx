@@ -18,6 +18,7 @@
  */
 
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { useAuthContext } from '@/app/hooks/AuthProvider';
 import useCommonToasters from '@/app/hooks/useCommonToasters';
 import usePageContext from '@/app/hooks/usePageContext';
 import { Button, Icon, css } from '@icgc-argo/uikit';
@@ -73,6 +74,7 @@ const ClinicalDownloadButton = ({
 }) => {
 	const toaster = useCommonToasters();
 	const { GATEWAY_API_ROOT } = useAppConfigContext();
+	const { downloadFileWithEgoToken } = useAuthContext();
 	const programShortName = usePageContext().getSingleParam('shortName');
 
 	const [buttonLoadingState, setButtonLoadingState] = React.useState(false);
@@ -94,6 +96,19 @@ const ClinicalDownloadButton = ({
 		);
 
 		setButtonLoadingState(true);
+
+		downloadFileWithEgoToken(url, {
+			method: 'post',
+			body: query,
+			headers: { 'Content-Type': 'application/json' },
+		})
+			.then(() => {
+				setButtonLoadingState(false);
+			})
+			.catch((error) => {
+				toaster.onDownloadError(error);
+				setButtonLoadingState(false);
+			});
 	};
 
 	return (
