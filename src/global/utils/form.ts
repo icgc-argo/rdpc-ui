@@ -28,7 +28,6 @@ export const createFileFormData = (files) => {
 
 export const uploadFileRequest = (url, body) => {
 	const options: RequestInit = {
-		credentials: 'include',
 		headers: { accept: '*/*' },
 		method: 'POST',
 		body,
