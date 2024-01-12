@@ -33,6 +33,7 @@ import CLINICAL_SUBMISSION_QUERY from '@/app/gql/clinical/CLINICAL_SUBMISSION_QU
 import SIGN_OFF_SUBMISSION_MUTATION from '@/app/gql/clinical/SIGN_OFF_SUBMISSION_MUTATION';
 import VALIDATE_SUBMISSION_MUTATION from '@/app/gql/clinical/VALIDATE_SUBMISSION_MUTATION';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { useAuthContext } from '@/app/hooks/AuthProvider';
 import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
 import { useToaster } from '@/app/hooks/ToastProvider';
 import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
@@ -43,7 +44,7 @@ import useUserConfirmationModalState from '@/app/hooks/useUserConfirmationModalS
 import {
 	PROGRAM_DASHBOARD_PATH,
 	PROGRAM_SHORT_NAME_PATH,
-	UPLOAD_REGISTRATION,
+	UPLOAD_CLINICAL_DATA,
 } from '@/global/constants';
 import { displayDateAndTime, getProgramPath, sleep, toDisplayError } from '@/global/utils';
 import { createFileFormData, uploadFileRequest } from '@/global/utils/form';
@@ -84,6 +85,7 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 	const { setGlobalLoading } = useGlobalLoader();
 	const toaster = useToaster();
 	const { CLINICAL_API_ROOT } = useAppConfigContext();
+	const { egoJwt } = useAuthContext();
 
 	useEffect(() => {
 		const defaultQuery = '?tab=donor';
@@ -112,8 +114,8 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 
 	const uploadClinicalSubmission = useMutation(
 		(formData) => {
-			const url = urlJoin(CLINICAL_API_ROOT, getProgramPath(UPLOAD_REGISTRATION, shortName));
-			return uploadFileRequest(url, formData);
+			const url = urlJoin(CLINICAL_API_ROOT, getProgramPath(UPLOAD_CLINICAL_DATA, shortName));
+			return uploadFileRequest(url, formData, egoJwt);
 		},
 		{
 			onError: () => {
@@ -123,7 +125,7 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 	);
 
 	const handleSubmissionFilesUpload = (files: FileList) => {
-		const fileFormData = createFileFormData(files);
+		const fileFormData = createFileFormData(files, 'clinicalFiles');
 		return uploadClinicalSubmission.mutate(fileFormData);
 	};
 

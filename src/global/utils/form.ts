@@ -17,18 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export const createFileFormData = (files) => {
-	const filesToAdd = !Array.isArray(files) ? Array.from(files) : files;
+export const createFileFormData = (upload, uploadName) => {
 	const formData = new FormData();
+
+	const filesToAdd = !Array.isArray(upload) ? [upload] : upload;
 	for (const [i, file] of filesToAdd.entries()) {
-		formData.append(`file_${i}`, file);
+		formData.append(uploadName || `file_${i}`, file);
 	}
 	return formData;
 };
 
-export const uploadFileRequest = (url, body) => {
+export const uploadFileRequest = (url, body, jwt) => {
 	const options: RequestInit = {
-		headers: { accept: '*/*' },
+		headers: { accept: '*/*', authorization: `Bearer ${jwt}` },
 		method: 'POST',
 		body,
 	};

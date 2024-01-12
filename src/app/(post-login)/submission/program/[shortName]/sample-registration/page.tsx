@@ -29,6 +29,7 @@ import CLEAR_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/clinical/CLEAR_CLINI
 import CLINICAL_SCHEMA_VERSION from '@/app/gql/clinical/CLINICAL_SCHEMA_VERSION';
 import GET_REGISTRATION_QUERY from '@/app/gql/clinical/GET_REGISTRATION_QUERY';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { useAuthContext } from '@/app/hooks/AuthProvider';
 import { useToaster } from '@/app/hooks/ToastProvider';
 import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import useCommonToasters from '@/app/hooks/useCommonToasters';
@@ -63,6 +64,8 @@ const Register = ({ shortName }: { shortName: string }) => {
 	} = useQuery(GET_REGISTRATION_QUERY, {
 		variables: { shortName },
 	});
+
+	const { egoJwt } = useAuthContext();
 
 	// get dictionary version
 	const latestDictionaryResponse = useClinicalQuery(CLINICAL_SCHEMA_VERSION);
@@ -101,7 +104,7 @@ const Register = ({ shortName }: { shortName: string }) => {
 	const uploadFile = useMutation(
 		(formData) => {
 			const url = urlJoin(CLINICAL_API_ROOT, getProgramPath(UPLOAD_REGISTRATION, shortName));
-			return uploadFileRequest(url, formData);
+			return uploadFileRequest(url, formData, egoJwt);
 		},
 		{
 			onError: () => {
@@ -111,7 +114,7 @@ const Register = ({ shortName }: { shortName: string }) => {
 	);
 
 	const handleUpload = (file: File) => {
-		const fileFormData = createFileFormData([file]);
+		const fileFormData = createFileFormData(file, 'registrationFile');
 		return uploadFile.mutate(fileFormData);
 	};
 
