@@ -578,7 +578,6 @@ const ClinicalEntityDataTable = ({
 			style: {
 				color: isCompletionCell && !errorState ? theme.colors.accent1_dark : '',
 				background: errorState ? theme.colors.error_4 : '',
-				borderRight: border,
 				...(column.Header === 'donor_id' && {
 					background: 'white',
 					position: 'absolute',
@@ -646,6 +645,7 @@ const ClinicalEntityDataTable = ({
 							align-items: center;
 							justify-content: center;
 							position: relative;
+							width: 100%;
 						`}
 					>
 						CLINICAL CORE COMPLETION
@@ -680,18 +680,46 @@ const ClinicalEntityDataTable = ({
 					cell: (context) => {
 						const value = context.getValue();
 
-						const { isCompletionCell, errorState } = getCellStyles(
+						const { isCompletionCell, errorState, style } = getCellStyles(
 							undefined,
 							context.row,
 							context.column,
 						);
 
 						const showSuccessSvg = isCompletionCell && !errorState;
-
-						return showSuccessSvg ? (
+						const content = showSuccessSvg ? (
 							<Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />
 						) : (
 							value
+						);
+
+						/**
+						 * UIKit enforces styling on the TD element, even with isCustomCell set
+						 * this ensures the cell is full width
+						 * padding is padding: 4px 16px, so overflow with calc
+						 **/
+
+						return (
+							<div
+								css={css`
+									width: calc(100% + 16px);
+									height: calc(100% + 8px);
+									margin: 0 -8px;
+								`}
+							>
+								<div
+									style={{
+										width: '100%',
+										height: '100%',
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'center',
+										...style,
+									}}
+								>
+									{content}
+								</div>
+							</div>
 						);
 					},
 				})),
@@ -776,6 +804,7 @@ const ClinicalEntityDataTable = ({
 				withSideBorders
 				withPagination
 				showPageSizeOptions
+				withStripes
 			/>
 		</div>
 	);
