@@ -18,8 +18,9 @@
  */
 
 export const createFileFormData = (files) => {
+	const filesToAdd = !Array.isArray(files) ? Array.from(files) : files;
 	const formData = new FormData();
-	for (const [i, file] of files.entries()) {
+	for (const [i, file] of filesToAdd.entries()) {
 		formData.append(`file_${i}`, file);
 	}
 	return formData;

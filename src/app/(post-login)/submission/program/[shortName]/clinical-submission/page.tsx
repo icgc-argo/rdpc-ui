@@ -32,7 +32,7 @@ import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/clinical/CLEAR_CLINICAL_SUBMISS
 import CLINICAL_SUBMISSION_QUERY from '@/app/gql/clinical/CLINICAL_SUBMISSION_QUERY';
 import SIGN_OFF_SUBMISSION_MUTATION from '@/app/gql/clinical/SIGN_OFF_SUBMISSION_MUTATION';
 import VALIDATE_SUBMISSION_MUTATION from '@/app/gql/clinical/VALIDATE_SUBMISSION_MUTATION';
-import UPLOAD_CLINICAL_SUBMISSION_MUTATION from '@/app/gql/gateway/UPLOAD_CLINICAL_SUBMISSION_MUTATION';
+import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
 import { useToaster } from '@/app/hooks/ToastProvider';
 import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
@@ -40,10 +40,15 @@ import useCommonToasters from '@/app/hooks/useCommonToasters';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
 import useUrlQueryState from '@/app/hooks/useURLQueryState';
 import useUserConfirmationModalState from '@/app/hooks/useUserConfirmationModalState';
-import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from '@/global/constants';
-import { displayDateAndTime, sleep, toDisplayError } from '@/global/utils';
+import {
+	PROGRAM_DASHBOARD_PATH,
+	PROGRAM_SHORT_NAME_PATH,
+	UPLOAD_REGISTRATION,
+} from '@/global/constants';
+import { displayDateAndTime, getProgramPath, sleep, toDisplayError } from '@/global/utils';
+import { createFileFormData, uploadFileRequest } from '@/global/utils/form';
 import { css } from '@/lib/emotion';
-import { useMutation } from '@apollo/client';
+import { useMutation as useGQLMutation } from '@apollo/client';
 import {
 	ColumnDef,
 	NOTIFICATION_VARIANTS,
@@ -53,6 +58,8 @@ import {
 } from '@icgc-argo/uikit';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+import { useMutation } from 'react-query';
+import urlJoin from 'url-join';
 import FileError from '../../../../../components/FileError';
 import FilesNavigator from './components/FilesNavigator';
 import Header from './components/Header';
@@ -76,6 +83,7 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 	const pathname = usePathname();
 	const { setGlobalLoading } = useGlobalLoader();
 	const toaster = useToaster();
+	const { CLINICAL_API_ROOT } = useAppConfigContext();
 
 	useEffect(() => {
 		const defaultQuery = '?tab=donor';
@@ -100,28 +108,32 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 	});
 
 	// mutations
-	const [clearClinicalSubmission] = useMutation(CLEAR_CLINICAL_SUBMISSION);
-	const [uploadClinicalSubmission] = useMutation(UPLOAD_CLINICAL_SUBMISSION_MUTATION, {
-		onError: () => {
-			commonToaster.unknownError();
+	const [clearClinicalSubmission] = useGQLMutation(CLEAR_CLINICAL_SUBMISSION);
+
+	const uploadClinicalSubmission = useMutation(
+		(formData) => {
+			const url = urlJoin(CLINICAL_API_ROOT, getProgramPath(UPLOAD_REGISTRATION, shortName));
+			return uploadFileRequest(url, formData);
 		},
-	});
-
-	const handleSubmissionFilesUpload = (files: FileList) =>
-		uploadClinicalSubmission({
-			variables: {
-				programShortName: shortName,
-				files,
+		{
+			onError: () => {
+				commonToaster.unknownError();
 			},
-		});
+		},
+	);
 
-	const [validateSubmission] = useMutation(VALIDATE_SUBMISSION_MUTATION, {
+	const handleSubmissionFilesUpload = (files: FileList) => {
+		const fileFormData = createFileFormData(files);
+		return uploadClinicalSubmission.mutate(fileFormData);
+	};
+
+	const [validateSubmission] = useGQLMutation(VALIDATE_SUBMISSION_MUTATION, {
 		onCompleted: () => {
 			//setSelectedClinicalEntityType(defaultClinicalEntityType);
 		},
 	});
 
-	const [signOffSubmission] = useMutation(SIGN_OFF_SUBMISSION_MUTATION);
+	const [signOffSubmission] = useGQLMutation(SIGN_OFF_SUBMISSION_MUTATION);
 
 	const { isDisabled: isSubmissionSystemDisabled } = useSubmissionSystemStatus();
 
