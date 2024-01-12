@@ -24,3 +24,13 @@ export const createFileFormData = (files) => {
 	}
 	return formData;
 };
+
+export const uploadFileRequest = (url, body) => {
+	const options: RequestInit = {
+		credentials: 'include',
+		headers: { accept: '*/*' },
+		method: 'POST',
+		body,
+	};
+	return fetch(url, options);
+};

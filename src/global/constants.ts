@@ -35,4 +35,7 @@ export const PROGRAM_CLINICAL_SUBMISSION_PATH = `${SUBMISSION_PATH}/program/${PR
 export const PROGRAM_CLINICAL_DATA_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/clinical-data`;
 export const CREATE_PROGRAM_PAGE_PATH = `${SUBMISSION_PATH}/program/create`;
 
+// Upload paths
+export const UPLOAD_REGISTRATION = `/clinical/api/submission/program/${PROGRAM_SHORT_NAME_PATH}/clinical/submissionUpload`;
+
 export const CLINICAL_TEMPLATE_PATH = '/clinical/proxy/template';
