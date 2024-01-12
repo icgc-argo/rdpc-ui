@@ -16,57 +16,62 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { css, styled } from '@/lib/emotion';
-import { Typography } from '@icgc-argo/uikit';
-import { FC, ReactNode } from 'react';
 
-const Container = styled('div')`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	padding: 80px 0;
-`;
+import { gql } from '@/__generated__/clinical/gql';
 
-type ContentPlaceholderProps = {
-	title?: string;
-	subtitle?: string;
-	link?: ReactNode;
-	children?: ReactNode;
-};
+const CLINICAL_ENTITY_DATA_QUERY = gql(`
+	query ClinicalEntityData($programShortName: String!, $filters: ClinicalInput!) {
+		clinicalData(programShortName: $programShortName, filters: $filters) {
+			programShortName
+			clinicalEntities {
+				entityName
+				entityFields
+				totalDocs
+				records {
+					name
+					value
+				}
+				completionStats {
+					coreCompletion {
+						donor
+						specimens
+						primaryDiagnosis
+						followUps
+						treatments
+					}
+					coreCompletionDate
+					coreCompletionPercentage
+					overriddenCoreCompletion
+					donorId
+					entityData {
+						specimens {
+							coreCompletionPercentage
+							normalSpecimensPercentage
+							tumourSpecimensPercentage
+							normalRegistrations
+							normalSubmissions
+							tumourRegistrations
+							tumourSubmissions
+						}
+					}
+				}
+			}
+			clinicalErrors {
+				donorId
+				submitterDonorId
+				errors {
+					errorType
+					fieldName
+					index
+					info {
+						value
+					}
+					message
+					entityName
+				}
+			}
+		}
+	}
+`);
 
-export const ContentPlaceholder: FC<ContentPlaceholderProps> = ({
-	children = <img alt="no data found" src="/assets/no-data.svg" />,
-	title = 'No Data Found.',
-	subtitle,
-	link,
-	...rest
-}) => (
-	<Container {...rest}>
-		{children}
-		<Typography
-			css={css`
-				margin-top: 14px;
-				margin-bottom: 0;
-			`}
-			color="grey"
-			variant="navigation"
-			as="p"
-			bold
-		>
-			{title}
-		</Typography>
-		<Typography
-			css={css`
-				margin-top: 10px;
-				margin-bottom: 0;
-			`}
-			color="grey"
-			variant="data"
-			as="p"
-		>
-			{subtitle}
-		</Typography>
-		{link}
-	</Container>
-);
+export default CLINICAL_ENTITY_DATA_QUERY;

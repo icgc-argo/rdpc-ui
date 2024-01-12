@@ -16,57 +16,23 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { css, styled } from '@/lib/emotion';
-import { Typography } from '@icgc-argo/uikit';
-import { FC, ReactNode } from 'react';
 
-const Container = styled('div')`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	padding: 80px 0;
-`;
+'use client';
 
-type ContentPlaceholderProps = {
-	title?: string;
-	subtitle?: string;
-	link?: ReactNode;
-	children?: ReactNode;
+import { useParams } from 'next/navigation';
+
+const usePageContext = () => {
+	const params = useParams();
+
+	// resolves to a string vs string[]
+	// helps typing in consumer
+	const getSingleParam = (key: string) => {
+		const p = params[key];
+		if (typeof p === 'string') return p;
+		return '';
+	};
+
+	return { getSingleParam };
 };
 
-export const ContentPlaceholder: FC<ContentPlaceholderProps> = ({
-	children = <img alt="no data found" src="/assets/no-data.svg" />,
-	title = 'No Data Found.',
-	subtitle,
-	link,
-	...rest
-}) => (
-	<Container {...rest}>
-		{children}
-		<Typography
-			css={css`
-				margin-top: 14px;
-				margin-bottom: 0;
-			`}
-			color="grey"
-			variant="navigation"
-			as="p"
-			bold
-		>
-			{title}
-		</Typography>
-		<Typography
-			css={css`
-				margin-top: 10px;
-				margin-bottom: 0;
-			`}
-			color="grey"
-			variant="data"
-			as="p"
-		>
-			{subtitle}
-		</Typography>
-		{link}
-	</Container>
-);
+export default usePageContext;

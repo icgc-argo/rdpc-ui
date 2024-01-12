@@ -1,0 +1,227 @@
+/*
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ *
+ * This program and the accompanying materials are made available under the terms of
+ * the GNU Affero General Public License v3.0. You should have received a copy of the
+ * GNU Affero General Public License along with this program.
+ *  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+ * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+export enum CoreCompletionEntities {
+	donor = 'donor',
+	primaryDiagnosis = 'primaryDiagnosis',
+	specimens = 'specimens',
+	treatments = 'treatments',
+	followUps = 'followUps',
+}
+
+export type CoreCompletion = {
+	[field in CoreCompletionEntities]: number;
+};
+
+export type CompletionStats = {
+	coreCompletion: CoreCompletion;
+	coreCompletionDate: string;
+	coreCompletionPercentage: number;
+	donorId: number;
+	overriddenCoreCompletion: [CoreCompletionEntities];
+	entityData?: CompletionEntityData;
+};
+
+export type CompletionEntityData = {
+	specimens?: SpecimenCoreCompletion;
+};
+
+export type SpecimenCoreCompletion = {
+	coreCompletionPercentage: number;
+	normalSpecimensPercentage: number;
+	tumourSpecimensPercentage: number;
+	normalRegistrations: number;
+	normalSubmissions: number;
+	tumourRegistrations: number;
+	tumourSubmissions: number;
+};
+
+export enum CompletionStates {
+	all = 'all',
+	invalid = 'invalid',
+	complete = 'complete',
+	incomplete = 'incomplete',
+}
+
+export type ClinicalEntity = {
+	entityName: string;
+	entityFields: string[];
+	totalDocs: number;
+	completionStats?: Array<CompletionStats>;
+	records: Array<{
+		name: string;
+		value: any;
+	}>[];
+};
+
+export type ClinicalSearchResult = {
+	donorId: number;
+	submitterDonorId: string;
+};
+
+export type ClinicalErrorData = {
+	donorId: number;
+	submitterDonorId: string;
+	errors: {
+		entityName: string;
+		errorType: string;
+		fieldName: string;
+		index: number;
+		info: { value: string[] };
+		message: string;
+	}[];
+};
+
+export type ClinicalEntityQueryResponse = {
+	clinicalData: {
+		programShortName?: string;
+		clinicalEntities: Array<ClinicalEntity>;
+		clinicalErrors: Array<ClinicalErrorData>;
+	};
+};
+
+export type ClinicalEntitySearchResultResponse = {
+	clinicalSearchResults: {
+		programShortName?: string;
+		totalResults: number;
+		searchResults: Array<ClinicalSearchResult>;
+	};
+};
+
+export type ClinicalFilter = {
+	entityTypes: string[];
+	page: number;
+	pageSize: number;
+	donorIds?: string[];
+	submitterDonorIds?: string[];
+	completionState?: CompletionStates;
+	sort?: string;
+};
+
+export const clinicalEntityDisplayNames = {
+	donor: 'Donor',
+	sampleRegistration: 'Sample Registration',
+	sample_registration: 'Sample Registration',
+	specimens: 'Specimen',
+	specimen: 'Specimen',
+	primaryDiagnoses: 'Primary Diagnosis',
+	primary_diagnosis: 'Primary Diagnosis',
+	treatment: 'Treatment',
+	chemotherapy: 'Chemotherapy',
+	hormoneTherapy: 'Hormone Therapy',
+	hormone_therapy: 'Hormone Therapy',
+	immunotherapy: 'Immunotherapy',
+	radiation: 'Radiation',
+	surgery: 'Surgery',
+	followUps: 'Follow Up',
+	follow_up: 'Follow Up',
+	familyHistory: 'Family History',
+	family_history: 'Family History',
+	exposure: 'Exposure',
+	comorbidity: 'Comorbidity',
+	biomarker: 'Biomarker',
+} as const;
+
+export const aliasedEntityNames = {
+	donor: 'donor',
+	sampleRegistration: 'sample_registration',
+	specimens: 'specimen',
+	primaryDiagnoses: 'primary_diagnosis',
+	familyHistory: 'family_history',
+	treatment: 'treatment',
+	chemotherapy: 'chemotherapy',
+	immunotherapy: 'immunotherapy',
+	surgery: 'surgery',
+	radiation: 'radiation',
+	followUps: 'follow_up',
+	hormoneTherapy: 'hormone_therapy',
+	exposure: 'exposure',
+	comorbidity: 'comorbidity',
+	biomarker: 'biomarker',
+};
+
+type AliasedEntityNamesKeys = keyof typeof aliasedEntityNames;
+export const clinicalEntityFields = Object.keys(aliasedEntityNames) as AliasedEntityNamesKeys[];
+export const aliasedEntityFields = Object.values(aliasedEntityNames);
+
+// Util for finding camelCase alias for snake_case values
+export const reverseLookUpEntityAlias = (selectedClinicalEntity: string) => {
+	const findAlias = Object.entries(aliasedEntityNames).find(
+		([key, value]) => value === selectedClinicalEntity,
+	);
+
+	return findAlias ? findAlias[0] : 'donor';
+};
+
+export const parseDonorIdString = (donorId: string) =>
+	donorId.match(/do/i) ? parseInt(donorId.split('DO')[1]) : parseInt(donorId);
+
+export const aliasSortNames = {
+	donor_id: 'donorId',
+	program_id: 'programId',
+	submitter_id: 'submitterId',
+	DO: 'donorId',
+	PD: 'primaryDiagnoses',
+	NS: 'specimens',
+	TS: 'familyHistory',
+	TR: 'treatments',
+	FO: 'followUps',
+};
+
+export const defaultClinicalEntityFilters: ClinicalFilter = {
+	entityTypes: clinicalEntityFields,
+	page: 0,
+	pageSize: 20,
+	donorIds: [],
+	submitterDonorIds: [],
+	completionState: CompletionStates['all'],
+	sort: aliasSortNames.donor_id,
+};
+
+export const hasClinicalErrors = (
+	{ clinicalErrors }: ClinicalEntityQueryResponse['clinicalData'],
+	currentEntity: string,
+) =>
+	clinicalErrors &&
+	clinicalErrors.length > 0 &&
+	clinicalErrors.filter(
+		(donor) =>
+			donor.errors &&
+			donor.errors.some(
+				({ entityName }) =>
+					aliasedEntityFields.includes(entityName) &&
+					reverseLookUpEntityAlias(entityName) === currentEntity,
+			),
+	).length > 0;
+
+export const emptyClinicalDataResponse: ClinicalEntityQueryResponse = {
+	clinicalData: {
+		clinicalEntities: [],
+		clinicalErrors: [],
+	},
+};
+
+export const emptySearchResponse: ClinicalEntitySearchResultResponse = {
+	clinicalSearchResults: {
+		searchResults: [],
+		totalResults: 0,
+	},
+};
+
+export type TsvDownloadIds = { donorIds: number[]; submitterDonorIds: string[] };

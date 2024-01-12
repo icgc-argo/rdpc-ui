@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -16,57 +16,26 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { css, styled } from '@/lib/emotion';
-import { Typography } from '@icgc-argo/uikit';
-import { FC, ReactNode } from 'react';
 
-const Container = styled('div')`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	padding: 80px 0;
-`;
+import { css } from '@icgc-argo/uikit';
 
-type ContentPlaceholderProps = {
-	title?: string;
-	subtitle?: string;
-	link?: ReactNode;
-	children?: ReactNode;
-};
-
-export const ContentPlaceholder: FC<ContentPlaceholderProps> = ({
-	children = <img alt="no data found" src="/assets/no-data.svg" />,
-	title = 'No Data Found.',
-	subtitle,
-	link,
-	...rest
-}) => (
-	<Container {...rest}>
-		{children}
-		<Typography
+export default function MatchResults({ numMatched }: { numMatched: number }) {
+	return (
+		<div
 			css={css`
-				margin-top: 14px;
-				margin-bottom: 0;
+				display: flex;
+				align-items: center;
 			`}
-			color="grey"
-			variant="navigation"
-			as="p"
-			bold
 		>
-			{title}
-		</Typography>
-		<Typography
-			css={css`
-				margin-top: 10px;
-				margin-bottom: 0;
-			`}
-			color="grey"
-			variant="data"
-			as="p"
-		>
-			{subtitle}
-		</Typography>
-		{link}
-	</Container>
-);
+			Matched IDs:
+			<b
+				css={css`
+					margin-left: 4px;
+					color: #0774d3;
+				`}
+			>
+				{numMatched}
+			</b>
+		</div>
+	);
+}
