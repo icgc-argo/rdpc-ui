@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -16,57 +16,23 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { css, styled } from '@/lib/emotion';
-import { Typography } from '@icgc-argo/uikit';
-import { FC, ReactNode } from 'react';
 
-const Container = styled('div')`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	padding: 80px 0;
-`;
+import { gql } from '@/__generated__/clinical/gql';
 
-type ContentPlaceholderProps = {
-	title?: string;
-	subtitle?: string;
-	link?: ReactNode;
-	children?: ReactNode;
-};
+const SUBMITTED_DATA_SIDE_MENU_QUERY = gql(`
+  query SubmittedDataSideMenu($programShortName: String!, $filters: ClinicalInput!) {
+    clinicalData(programShortName: $programShortName, filters: $filters) {
+      programShortName
+      clinicalEntities {
+        entityName
+      }
+      clinicalErrors {
+        errors {
+          entityName
+        }
+      }
+    }
+  }
+`);
 
-export const ContentPlaceholder: FC<ContentPlaceholderProps> = ({
-	children = <img alt="no data found" src="/assets/no-data.svg" />,
-	title = 'No Data Found.',
-	subtitle,
-	link,
-	...rest
-}) => (
-	<Container {...rest}>
-		{children}
-		<Typography
-			css={css`
-				margin-top: 14px;
-				margin-bottom: 0;
-			`}
-			color="grey"
-			variant="navigation"
-			as="p"
-			bold
-		>
-			{title}
-		</Typography>
-		<Typography
-			css={css`
-				margin-top: 10px;
-				margin-bottom: 0;
-			`}
-			color="grey"
-			variant="data"
-			as="p"
-		>
-			{subtitle}
-		</Typography>
-		{link}
-	</Container>
-);
+export default SUBMITTED_DATA_SIDE_MENU_QUERY;

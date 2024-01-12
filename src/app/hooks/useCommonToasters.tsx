@@ -42,5 +42,12 @@ export default function useCommonToasters() {
 				content: 'Your changes have been saved.',
 				interactionType: 'CLOSE',
 			}),
+		onDownloadError: (error?: string) => {
+			toaster.addToast({
+				variant: TOAST_VARIANTS.ERROR,
+				title: `Download Error`,
+				content: error || 'An error occurred, the file could not be downloaded.',
+			});
+		},
 	};
 }
