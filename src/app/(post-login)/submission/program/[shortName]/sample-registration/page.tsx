@@ -28,15 +28,16 @@ import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHead
 import CLEAR_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/clinical/CLEAR_CLINICAL_REGISTRATION_MUTATION';
 import CLINICAL_SCHEMA_VERSION from '@/app/gql/clinical/CLINICAL_SCHEMA_VERSION';
 import GET_REGISTRATION_QUERY from '@/app/gql/clinical/GET_REGISTRATION_QUERY';
-import UPLOAD_REGISTRATION_MUTATION from '@/app/gql/gateway/UPLOAD_REGISTRATION_MUTATION';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useToaster } from '@/app/hooks/ToastProvider';
 import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import useCommonToasters from '@/app/hooks/useCommonToasters';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
-import { notNull } from '@/global/utils';
+import { UPLOAD_REGISTRATION } from '@/global/constants';
+import { getProgramPath, notNull } from '@/global/utils';
+import { createFileFormData, uploadFileRequest } from '@/global/utils/form';
 import { css } from '@/lib/emotion';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation as useGQLMutation, useQuery } from '@apollo/client';
 import {
 	BUTTON_SIZES,
 	BUTTON_VARIANTS,
@@ -47,6 +48,7 @@ import {
 } from '@icgc-argo/uikit';
 import { get } from 'lodash';
 import { useState } from 'react';
+import { useMutation } from 'react-query';
 import urlJoin from 'url-join';
 import FileError from '../../../../../components/FileError';
 import FilePreview from './components/FilePreview';
@@ -73,7 +75,7 @@ const Register = ({ shortName }: { shortName: string }) => {
 	const commonToaster = useCommonToasters();
 
 	// docs url
-	const { DOCS_URL_ROOT } = useAppConfigContext();
+	const { DOCS_URL_ROOT, CLINICAL_API_ROOT } = useAppConfigContext();
 	const helpUrl = urlJoin(DOCS_URL_ROOT, '/docs/submission/registering-samples');
 
 	// modal state
@@ -96,33 +98,29 @@ const Register = ({ shortName }: { shortName: string }) => {
 	const registrationId = get(clinicalRegistration, 'id', '') || '';
 
 	// handlers
-	const [uploadFile, { loading: isUploading }] = useMutation(
-		UPLOAD_REGISTRATION_MUTATION,
-
+	const uploadFile = useMutation(
+		(formData) => {
+			const url = urlJoin(CLINICAL_API_ROOT, getProgramPath(UPLOAD_REGISTRATION, shortName));
+			return uploadFileRequest(url, formData);
+		},
 		{
-			onError: (e) => {
+			onError: () => {
 				commonToaster.unknownError();
 			},
 		},
 	);
 
-	const [uploadClinicalSubmission, mutationStatus] = useMutation(UPLOAD_REGISTRATION_MUTATION, {
-		onError: (e) => {
-			commonToaster.unknownError();
-		},
-	});
-
-	const handleUpload = (file: File) =>
-		uploadClinicalSubmission({
-			variables: { shortName, registrationFile: file },
-		});
+	const handleUpload = (file: File) => {
+		const fileFormData = createFileFormData([file]);
+		return uploadFile.mutate(fileFormData);
+	};
 
 	const handleRegister = () => {
 		setShowModal((state) => !state);
 	};
 
 	// file preview clear
-	const [clearRegistration] = useMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
+	const [clearRegistration] = useGQLMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
 	const handleClearClick = async () => {
 		if (clinicalRegistration?.id == null) {
 			refetch();
@@ -192,7 +190,7 @@ const Register = ({ shortName }: { shortName: string }) => {
 					<Instructions
 						dictionaryVersion={dictionaryVersion}
 						handleUpload={handleUpload}
-						isUploading={isUploading}
+						isUploading={uploadFile.isLoading}
 						handleRegister={handleRegister}
 						flags={instructionFlags}
 					/>
