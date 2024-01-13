@@ -33,9 +33,8 @@ import {
 	PROGRAM_DASHBOARD_PATH,
 	PROGRAM_MANAGE_PATH,
 	PROGRAM_SAMPLE_REGISTRATION_PATH,
-	PROGRAM_SHORT_NAME_PATH,
 } from '@/global/constants';
-import { notNull } from '@/global/utils';
+import { getProgramPath, notNull } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import { Icon, MenuItem } from '@icgc-argo/uikit';
 import orderBy from 'lodash/orderBy';
@@ -246,7 +245,6 @@ const MenuContent = ({ programName }: { programName: string }) => {
 	const { egoJwt } = useAuthContext();
 	const pathname = usePathname();
 	const pathnameLastSegment = pathname.split('/').at(-1);
-	const getProgramPath = (path: string) => path.replace(PROGRAM_SHORT_NAME_PATH, programName);
 
 	const { isDisabled: isSubmissionSystemDisabled } = useSubmissionSystemStatus();
 
@@ -279,15 +277,15 @@ const MenuContent = ({ programName }: { programName: string }) => {
 	return (
 		<>
 			{/** Dashboard */}
-			<Link href={getProgramPath(PROGRAM_DASHBOARD_PATH)}>
+			<Link href={getProgramPath(PROGRAM_DASHBOARD_PATH, programName)}>
 				<MenuItem level={3} content="Dashboard" selected={pathnameLastSegment === 'dashboard'} />
 			</Link>
 
 			{/** Register Samples */}
 			{userCanSubmitData &&
 				renderDataSubmissionLinks(
-					getProgramPath(PROGRAM_SAMPLE_REGISTRATION_PATH),
-					getProgramPath(PROGRAM_CLINICAL_SUBMISSION_PATH),
+					getProgramPath(PROGRAM_SAMPLE_REGISTRATION_PATH, programName),
+					getProgramPath(PROGRAM_CLINICAL_SUBMISSION_PATH, programName),
 					registrationStatusIcon,
 					isSubmissionSystemDisabled,
 					pathnameLastSegment,
@@ -296,7 +294,7 @@ const MenuContent = ({ programName }: { programName: string }) => {
 
 			{/** Submitted Data */}
 			{userCanViewData && (
-				<Link href={getProgramPath(PROGRAM_CLINICAL_DATA_PATH)}>
+				<Link href={getProgramPath(PROGRAM_CLINICAL_DATA_PATH, programName)}>
 					<MenuItem
 						level={3}
 						content={
@@ -312,7 +310,7 @@ const MenuContent = ({ programName }: { programName: string }) => {
 
 			{/** Manage Program */}
 			{userCanManageProgram && (
-				<Link href={getProgramPath(PROGRAM_MANAGE_PATH)}>
+				<Link href={getProgramPath(PROGRAM_MANAGE_PATH, programName)}>
 					<MenuItem
 						level={3}
 						content="Manage Program"
