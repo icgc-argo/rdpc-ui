@@ -647,6 +647,14 @@ const ClinicalEntityDataTable = ({
 			text-align: left;
 		`;
 
+		const stickyCSS = css`
+			position: sticky !important;
+			left: 0;
+			top: 0;
+			z-index: 1;
+			background-color: white;
+		`;
+
 		columns = [
 			{
 				id: 'clinical_core_completion_header',
@@ -702,6 +710,7 @@ const ClinicalEntityDataTable = ({
 					header: (props) => {
 						const val = props.header.id;
 						const isThickBorder = val === 'FO';
+						const isSticky = val === 'donor_id';
 						return (
 							<th
 								css={css`
@@ -714,6 +723,7 @@ const ClinicalEntityDataTable = ({
 									border-right: ${isThickBorder
 										? styleThickBorderString
 										: `1px solid ${theme.colors.grey_2}`};
+									${isSticky && stickyCSS}
 								`}
 							>
 								{val}
@@ -725,6 +735,7 @@ const ClinicalEntityDataTable = ({
 					meta: { customCell: true, customHeader: true },
 					cell: (context) => {
 						const value = context.getValue();
+						const isSticky = context.column.id === 'donor_id';
 
 						const { isCompletionCell, errorState, style } = getCellStyles(
 							undefined,
@@ -744,6 +755,7 @@ const ClinicalEntityDataTable = ({
 							<td
 								css={css`
 									border-right: 1px solid ${theme.colors.grey_2};
+									${isSticky && stickyCSS}
 								`}
 								style={{
 									...style,
