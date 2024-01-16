@@ -651,6 +651,7 @@ const ClinicalEntityDataTable = ({
 			{
 				id: 'clinical_core_completion_header',
 				meta: { customHeader: true },
+				sortingFn: sortEntityData,
 				header: (props) => {
 					return (
 						<th
@@ -697,6 +698,7 @@ const ClinicalEntityDataTable = ({
 				headerStyle: completionHeaderStyle,
 				columns: columns.slice(0, 7).map((column) => ({
 					...column,
+					sortingFn: sortEntityData,
 					header: (props) => {
 						const val = props.header.id;
 						const isThickBorder = val === 'FO';
@@ -705,6 +707,9 @@ const ClinicalEntityDataTable = ({
 								css={css`
 									padding: 2px 6px;
 									font-size: 12px;
+									:hover {
+										cursor: pointer;
+									}
 									border-bottom: 1px solid ${theme.colors.grey_2};
 									border-right: ${isThickBorder
 										? styleThickBorderString
@@ -768,7 +773,7 @@ const ClinicalEntityDataTable = ({
 					</th>
 				),
 				headerStyle: dataHeaderStyle,
-				columns: columns.slice(7).map((column, i) => column),
+				columns: columns.slice(7),
 			},
 		];
 	}
@@ -847,6 +852,7 @@ const ClinicalEntityDataTable = ({
 				showPageSizeOptions
 				withStripes
 				enableColumnResizing={false}
+				enableSorting
 			/>
 		</div>
 	);
