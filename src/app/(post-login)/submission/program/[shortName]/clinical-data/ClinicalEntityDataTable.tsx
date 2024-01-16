@@ -698,22 +698,18 @@ const ClinicalEntityDataTable = ({
 				columns: columns.slice(0, 7).map((column) => ({
 					...column,
 					header: (props) => {
-						console.log('props', props);
 						const val = props.header.id;
-						const colIdForBorder = 'FO';
+						const isThickBorder = val === 'FO';
 						return (
 							<th
 								css={css`
 									padding: 2px 6px;
 									font-size: 12px;
+									border-bottom: 1px solid ${theme.colors.grey_2};
+									border-right: ${isThickBorder
+										? styleThickBorderString
+										: `1px solid ${theme.colors.grey_2}`};
 								`}
-								style={{
-									borderRight:
-										val === colIdForBorder
-											? styleThickBorderString
-											: `1px solid ${theme.colors.grey_2}`,
-									borderBottom: `1px solid ${theme.colors.grey_2}`,
-								}}
 							>
 								{val}
 							</th>
