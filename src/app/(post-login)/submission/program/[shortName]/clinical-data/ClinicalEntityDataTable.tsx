@@ -642,17 +642,17 @@ const ClinicalEntityDataTable = ({
 			background-color: ${theme.colors.grey_4};
 			border-bottom: 1px solid ${theme.colors.grey_2};
 			border-right: 1px solid ${theme.colors.grey_2};
-			padding: 5px;
 			font-size: 13px;
+			padding: 5px;
 			text-align: left;
 		`;
 
 		const stickyCSS = css`
-			position: sticky !important;
+			background-color: white;
 			left: 0;
+			position: sticky !important;
 			top: 0;
 			z-index: 1;
-			background-color: white;
 		`;
 
 		columns = [
@@ -704,12 +704,13 @@ const ClinicalEntityDataTable = ({
 					);
 				},
 				headerStyle: completionHeaderStyle,
-				columns: columns.slice(0, 7).map((column) => ({
+				columns: columns.slice(0, 7).map((column, index) => ({
 					...column,
 					sortingFn: sortEntityData,
 					header: (props) => {
 						const value = props.header.id;
-						const isThickBorder = value === 'FO';
+						const coreCompletionColumnsCount = 7;
+						const isLastElement = index === coreCompletionColumnsCount - 1;
 						const isSticky = value === 'donor_id';
 						const isSorted = props.sorted;
 
@@ -723,7 +724,7 @@ const ClinicalEntityDataTable = ({
 										cursor: pointer;
 									}
 									border-bottom: 1px solid ${theme.colors.grey_2};
-									border-right: ${isThickBorder
+									border-right: ${isLastElement
 										? styleThickBorderString
 										: `1px solid ${theme.colors.grey_2}`};
 									${isSticky && stickyCSS}
