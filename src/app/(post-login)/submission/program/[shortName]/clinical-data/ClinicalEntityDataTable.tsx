@@ -711,8 +711,11 @@ const ClinicalEntityDataTable = ({
 						const val = props.header.id;
 						const isThickBorder = val === 'FO';
 						const isSticky = val === 'donor_id';
+						const isSorted = props.sorted;
+
 						return (
 							<th
+								onClick={props.getSortingHandler()}
 								css={css`
 									padding: 2px 6px;
 									font-size: 12px;
@@ -724,6 +727,8 @@ const ClinicalEntityDataTable = ({
 										? styleThickBorderString
 										: `1px solid ${theme.colors.grey_2}`};
 									${isSticky && stickyCSS}
+									${isSorted &&
+									`box-shadow: inset 0 ${isSorted === 'asc' ? '' : '-'}3px 0 0 rgb(7 116 211)`};
 								`}
 							>
 								{val}
