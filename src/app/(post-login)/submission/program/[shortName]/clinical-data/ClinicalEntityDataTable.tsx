@@ -475,10 +475,12 @@ const ClinicalEntityDataTable = ({
 			.sort(sortEntityData);
 	}
 
+	const styleThickBorderString = `3px solid ${theme.colors.grey}`;
 	const getHeaderBorder = (key) =>
 		(showCompletionStats && key === completionColumnHeaders.followUps) ||
-		(!showCompletionStats && key === 'donor_id')
-			? `3px solid ${theme.colors.grey}`
+		(!showCompletionStats && key === 'donor_id') ||
+		key === 'FO'
+			? styleThickBorderString
 			: '';
 
 	const [stickyDonorIDColumnsWidth, setStickyDonorIDColumnsWidth] = useState(74);
@@ -636,51 +638,94 @@ const ClinicalEntityDataTable = ({
 			borderBottom: `1px solid ${theme.colors.grey_2}`,
 		};
 
+		const headerStyle = css`
+			background-color: ${theme.colors.grey_4};
+			border-bottom: 1px solid ${theme.colors.grey_2};
+			border-right: 1px solid ${theme.colors.grey_2};
+			padding: 5px;
+			font-size: 13px;
+			text-align: left;
+		`;
+
 		columns = [
 			{
 				id: 'clinical_core_completion_header',
-				header: (
-					<div
-						css={css`
-							display: flex;
-							align-items: center;
-							justify-content: center;
-							position: relative;
-						`}
-					>
-						CLINICAL CORE COMPLETION
-						<Tooltip
-							style={{ position: 'absolute', left: 'calc(100% - 20px)', top: '-2px' }}
-							html={
-								<p
-									css={css`
-										margin: 0px;
-										margin-right: 6px;
-									`}
-								>
-									For clinical completeness, each donor requires: <br />
-									DO: at least one Donor record <br />
-									PD: at least one Primary Diagnosis record <br />
-									NS: all the registered Normal DNA Specimen record <br />
-									TS: all the registered Tumour DNA Specimen record <br />
-									TR: at least one Treatment record <br />
-									FO: at least one Follow Up record <br />
-								</p>
-							}
+				meta: { customHeader: true },
+				header: (props) => {
+					return (
+						<th
+							colSpan={props.colSpan}
+							css={css`
+								${headerStyle};
+								border-right: 3px solid ${theme.colors.grey};
+							`}
 						>
-							<Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
-						</Tooltip>
-					</div>
-				),
+							<div
+								css={css`
+									display: flex;
+									align-items: center;
+									justify-content: center;
+									position: relative;
+								`}
+							>
+								CLINICAL CORE COMPLETION
+								<Tooltip
+									style={{ position: 'absolute', left: 'calc(100% - 20px)', top: '-2px' }}
+									html={
+										<p
+											css={css`
+												margin: 0px;
+												margin-right: 6px;
+											`}
+										>
+											For clinical completeness, each donor requires: <br />
+											DO: at least one Donor record <br />
+											PD: at least one Primary Diagnosis record <br />
+											NS: all the registered Normal DNA Specimen record <br />
+											TS: all the registered Tumour DNA Specimen record <br />
+											TR: at least one Treatment record <br />
+											FO: at least one Follow Up record <br />
+										</p>
+									}
+								>
+									<Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
+								</Tooltip>
+							</div>
+						</th>
+					);
+				},
 				headerStyle: completionHeaderStyle,
 				columns: columns.slice(0, 7).map((column) => ({
 					...column,
+					header: (props) => {
+						console.log('props', props);
+						const val = props.header.id;
+						const colIdForBorder = 'FO';
+						return (
+							<th
+								css={css`
+									padding: 2px 6px;
+									font-size: 12px;
+								`}
+								style={{
+									borderRight:
+										val === colIdForBorder
+											? styleThickBorderString
+											: `1px solid ${theme.colors.grey_2}`,
+									borderBottom: `1px solid ${theme.colors.grey_2}`,
+								}}
+							>
+								{val}
+							</th>
+						);
+					},
 					maxWidth: noTableData ? 50 : 250,
 					style: noTableData ? noDataCellStyle : {},
+					meta: { customCell: true, customHeader: true },
 					cell: (context) => {
 						const value = context.getValue();
 
-						const { isCompletionCell, errorState } = getCellStyles(
+						const { isCompletionCell, errorState, style } = getCellStyles(
 							undefined,
 							context.row,
 							context.column,
@@ -688,17 +733,44 @@ const ClinicalEntityDataTable = ({
 
 						const showSuccessSvg = isCompletionCell && !errorState;
 
-						return showSuccessSvg ? (
+						const content = showSuccessSvg ? (
 							<Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />
 						) : (
 							value
+						);
+
+						return (
+							<td
+								css={css`
+									border-right: 1px solid ${theme.colors.grey_2};
+								`}
+								style={{
+									...style,
+								}}
+							>
+								<div
+									css={css`
+										font-size: 12px;
+										padding: 2px 8px;
+										min-width: 40px;
+										height: 28px;
+									`}
+								>
+									{content}
+								</div>
+							</td>
 						);
 					},
 				})),
 			},
 			{
 				id: 'submitted_donor_data_header',
-				header: <div>SUBMITTED DONOR DATA</div>,
+				meta: { customHeader: true },
+				header: (props) => (
+					<th colSpan={props.colSpan} css={headerStyle}>
+						<div>SUBMITTED DONOR DATA</div>
+					</th>
+				),
 				headerStyle: dataHeaderStyle,
 				columns: columns.slice(7).map((column, i) => column),
 			},
@@ -757,6 +829,7 @@ const ClinicalEntityDataTable = ({
 					/>
 				</div>
 			)}
+
 			<TableInfoHeaderContainer
 				left={
 					<Typography
@@ -776,6 +849,8 @@ const ClinicalEntityDataTable = ({
 				withSideBorders
 				withPagination
 				showPageSizeOptions
+				withStripes
+				enableColumnResizing={false}
 			/>
 		</div>
 	);
