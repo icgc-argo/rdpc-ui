@@ -11,7 +11,8 @@
     "test": "echo 'Add tests please :)'",
     "gql:compile": "graphql-codegen",
     "gql:watch": "graphql-codegen -w",
-    "type-check": "tsc -p ./tsconfig.json"
+    "type-check": "tsc -p ./tsconfig.json",
+    "clean": "rimraf .next"
   },
   "dependencies": {
     "@apollo/client": "^3.8.1",
@@ -64,6 +65,7 @@
     "lint-staged": "^13.2.2",
     "prettier": "^3.0.3",
     "prettier-plugin-organize-imports": "^3.2.2",
+    "rimraf": "^5.0.5",
     "typescript": "^5.1.6"
   },
   "lint-staged": {
