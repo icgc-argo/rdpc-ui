@@ -228,6 +228,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 						<div
 							css={css`
 								width: 100%;
+								border: none !important;
 							`}
 						>
 							{/* Sidebar */}
