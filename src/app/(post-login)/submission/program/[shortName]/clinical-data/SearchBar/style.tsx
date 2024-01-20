@@ -33,7 +33,7 @@ export const searchTitleParentStyle = css`
 	display: flex;
 	align-items: center;
 	width: fit-content;
-	margin-left: 10px;
+	margin: 21px 0 21px 10px;
 `;
 
 export const searchBoldTextStyle = css`
