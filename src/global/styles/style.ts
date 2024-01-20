@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2024 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -16,35 +16,12 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { containerStyle } from '@/global/styles/style';
-import { css, useTheme } from '@/lib/emotion';
-import { ReactNode } from 'react';
 
-const ContentMain = ({ children }: { children: ReactNode }) => {
-	const theme = useTheme();
-	return (
-		<div
-			id="content"
-			css={css`
-				display: flex;
-				flex: 1 0 auto;
-				flex-direction: column;
-				row-gap: 20px;
-				padding: 25px 30px;
+import { css } from '@/lib/emotion';
 
-				> div {
-					${containerStyle(theme)}
-
-					&.error {
-						border: 1px solid ${theme.colors.error_2};
-						background-color: ${theme.colors.error_4};
-					}
-				}
-			`}
-		>
-			{children}
-		</div>
-	);
-};
-
-export default ContentMain;
+export const containerStyle = (theme) => css`
+	background-color: white;
+	border: 1px solid ${theme.colors.grey_2};
+	border-radius: 8px;
+	box-shadow: none;
+`;

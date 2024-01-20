@@ -236,7 +236,6 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 									width: 20%;
 									max-width: 170px;
 									display: inline-block;
-									border: 1px solid ${theme.colors.grey_2};
 								`}
 							>
 								<VerticalTabs>{menuItems}</VerticalTabs>

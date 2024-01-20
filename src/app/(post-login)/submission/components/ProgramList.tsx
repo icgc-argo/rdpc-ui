@@ -19,7 +19,8 @@
 'use client';
 
 import { Program } from '@/__generated__/gateway/graphql';
-import { css } from '@/lib/emotion';
+import { containerStyle } from '@/global/styles/style';
+import { css, useTheme } from '@/lib/emotion';
 import { Table, Typography } from '@icgc-argo/uikit';
 import orderBy from 'lodash/orderBy';
 import { columns } from '../program-table/config';
@@ -27,13 +28,16 @@ import { columns } from '../program-table/config';
 export type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 
 export default function ProgramList({ programs }: { programs: Program[] }) {
+	const theme = useTheme();
 	const sortedProgramList = orderBy(programs, 'name');
 	const programsArraySize = programs.length;
 
 	return (
 		<div
 			css={css`
+				margin: 25px 25px 18px 25px;
 				padding: 16px 15px 6px;
+				${containerStyle(theme)}
 			`}
 		>
 			<Typography
