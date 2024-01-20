@@ -19,6 +19,7 @@
 'use client';
 
 import { Program } from '@/__generated__/gateway/graphql';
+import { containerStyle } from '@/global/styles/style';
 import { css, useTheme } from '@/lib/emotion';
 import { Table, Typography } from '@icgc-argo/uikit';
 import orderBy from 'lodash/orderBy';
@@ -36,9 +37,7 @@ export default function ProgramList({ programs }: { programs: Program[] }) {
 			css={css`
 				margin: 25px 25px 18px 25px;
 				padding: 16px 15px 6px;
-				border: 1px solid ${theme.colors.grey_2};
-				background-color: white;
-				border-radius: 8px;
+				${containerStyle(theme)}
 			`}
 		>
 			<Typography
