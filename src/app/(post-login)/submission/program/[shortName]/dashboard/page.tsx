@@ -24,48 +24,10 @@ import { pageWithPermissions } from '@/app/components/Page';
 import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { css, styled } from '@/lib/emotion';
-import { Col, Row, ScreenClassRender } from 'react-grid-system';
+import { Col, Row, ScreenClassRender, setConfiguration } from 'react-grid-system';
 import urlJoin from 'url-join';
 
-// <SubmissionLayout
-// subtitle={`${programShortName} Dashboard`}
-// contentHeader={
-//   <div
-//     css={css`
-//       display: flex;
-//       justify-content: space-between;
-//       align-items: center;
-//       width: 100%;
-//     `}
-//   >
-//     <TitleBar>
-//       <>{programShortName}</>
-//       <Row nogutter align="center">
-//         <div
-//           css={css`
-//             margin-right: 20px;
-//           `}
-//         >
-//           Dashboard
-//         </div>
-//       </Row>
-//     </TitleBar>
-//     <Link
-//       target="_blank"
-//       href={DOCS_SUBMITTED_DATA_PAGE}
-//       bold
-//       withChevron
-//       uppercase
-//       underline={false}
-//       css={css`
-//         font-size: 14px;
-//       `}
-//     >
-//       HELP
-//     </Link>
-//   </div>
-// }
-// >
+setConfiguration({ gutterWidth: 9 });
 
 const Dashboard = ({ shortName }: { shortName: string }) => {
 	// docs url
