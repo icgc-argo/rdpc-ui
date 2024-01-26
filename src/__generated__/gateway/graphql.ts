@@ -2439,6 +2439,31 @@ export type ApproveSubmissionMutation = {
 	approveClinicalSubmission: boolean;
 };
 
+export type DashboardSummaryQueryVariables = Exact<{
+	programShortName: Scalars['String']['input'];
+}>;
+
+export type DashboardSummaryQuery = {
+	__typename?: 'Query';
+	programDonorSummary: {
+		__typename?: 'DonorSummary';
+		stats: {
+			__typename?: 'ProgramDonorSummaryStats';
+			registeredDonorsCount: number;
+			percentageCoreClinical: number;
+			percentageTumourAndNormal: number;
+			donorsProcessingMolecularDataCount: number;
+			filesToQcCount: number;
+			donorsWithReleasedFilesCount: number;
+			allFilesCount: number;
+			fullyReleasedDonorsCount: number;
+			partiallyReleasedDonorsCount: number;
+			noReleaseDonorsCount: number;
+		};
+	};
+	program?: { __typename?: 'Program'; commitmentDonors?: number | null; shortName: string } | null;
+};
+
 export type ProgramsListQueryVariables = Exact<{
 	dataCenter?: InputMaybe<Scalars['String']['input']>;
 }>;
@@ -2724,6 +2749,93 @@ export const ApproveSubmissionDocument = {
 		},
 	],
 } as unknown as DocumentNode<ApproveSubmissionMutation, ApproveSubmissionMutationVariables>;
+export const DashboardSummaryDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'DashboardSummary' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'programDonorSummary' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'programShortName' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'stats' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'registeredDonorsCount' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'percentageCoreClinical' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'percentageTumourAndNormal' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'donorsProcessingMolecularDataCount' },
+											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'filesToQcCount' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'donorsWithReleasedFilesCount' },
+											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'allFilesCount' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'fullyReleasedDonorsCount' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'partiallyReleasedDonorsCount' },
+											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'noReleaseDonorsCount' } },
+										],
+									},
+								},
+							],
+						},
+					},
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'program' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'shortName' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'commitmentDonors' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'shortName' } },
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<DashboardSummaryQuery, DashboardSummaryQueryVariables>;
 export const ProgramsListDocument = {
 	kind: 'Document',
 	definitions: [

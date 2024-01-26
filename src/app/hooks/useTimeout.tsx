@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2024 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,31 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { CodegenConfig } from '@graphql-codegen/cli';
-import dotenv from 'dotenv';
+import { useEffect, useState } from 'react';
 
-dotenv.config({ path: '.env' });
-
-const gqlConfig: CodegenConfig = {
-	generates: {
-		'./src/__generated__/gateway/': {
-			documents: ['src/**/gql/gateway/*.ts'],
-			preset: 'client',
-			schema: `${process.env.NEXT_PUBLIC_GATEWAY_API_ROOT}/graphql`,
-			presetConfig: {
-				gqlTagName: 'gql',
-			},
-		},
-		'./src/__generated__/clinical/': {
-			documents: ['src/**/gql/clinical/*.ts'],
-			preset: 'client',
-			schema: `${process.env.NEXT_PUBLIC_CLINICAL_API_ROOT}/graphql`,
-			presetConfig: {
-				gqlTagName: 'gql',
-			},
-		},
-	},
-	ignoreNoDocuments: true,
+export const useTimeout = (msTimeout: number = 30000) => {
+	const [isTimeOut, setIsTimeOut] = useState(false);
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setIsTimeOut(true);
+		}, msTimeout);
+		return () => clearTimeout(timer);
+	}, []);
+	return isTimeOut;
 };
-
-export default gqlConfig;
