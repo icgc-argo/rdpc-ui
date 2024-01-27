@@ -20,8 +20,8 @@
 import { gql } from '@/__generated__/clinical/gql';
 
 const CLINICAL_SUBMISSION_QUERY = gql(`
-  query ClinicalSubmission($shortName: String!) {
-    clinicalSubmissions(programShortName: $shortName) {
+  query ClinicalSubmission($programShortName: String!) {
+    clinicalSubmissions(programShortName: $programShortName) {
       programShortName
       state
       version

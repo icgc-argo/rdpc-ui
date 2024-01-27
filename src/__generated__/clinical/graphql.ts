@@ -1147,7 +1147,7 @@ export type ClinicalSubmissionFragmentFragment = {
 } & { ' $fragmentName'?: 'ClinicalSubmissionFragmentFragment' };
 
 export type ClinicalSubmissionQueryVariables = Exact<{
-	shortName: Scalars['String']['input'];
+	programShortName: Scalars['String']['input'];
 }>;
 
 export type ClinicalSubmissionQuery = {
@@ -2340,7 +2340,7 @@ export const ClinicalSubmissionDocument = {
 			variableDefinitions: [
 				{
 					kind: 'VariableDefinition',
-					variable: { kind: 'Variable', name: { kind: 'Name', value: 'shortName' } },
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
 					type: {
 						kind: 'NonNullType',
 						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
@@ -2357,7 +2357,7 @@ export const ClinicalSubmissionDocument = {
 							{
 								kind: 'Argument',
 								name: { kind: 'Name', value: 'programShortName' },
-								value: { kind: 'Variable', name: { kind: 'Name', value: 'shortName' } },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
 							},
 						],
 						selectionSet: {

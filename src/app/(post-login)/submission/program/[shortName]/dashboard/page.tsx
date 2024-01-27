@@ -27,6 +27,7 @@ import { css, styled } from '@/lib/emotion';
 import { Col, Row, ScreenClassRender, setConfiguration } from 'react-grid-system';
 import urlJoin from 'url-join';
 import DonorReleaseSummary from './components/DonorReleaseSummary';
+import ProgramWorkplaceStatus from './components/ProgramWorkspaceStatus';
 import StatsBar from './components/StatsBar';
 
 setConfiguration({ gutterWidth: 9 });
@@ -73,7 +74,7 @@ const Dashboard = ({ shortName }: { shortName: string }) => {
 							<ScreenClassRender
 								render={(screenClass) => (
 									<Col xs={12} css={applyStackedStyle(screenClass)}>
-										<div>Program workspace status</div>
+										<ProgramWorkplaceStatus programShortName={shortName} />
 									</Col>
 								)}
 							/>
