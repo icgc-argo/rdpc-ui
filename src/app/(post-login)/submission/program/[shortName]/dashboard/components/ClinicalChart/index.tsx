@@ -158,7 +158,6 @@ const ClinicalChart = ({
 			: activeLines.concat(line);
 		setActiveLines(nextLines);
 	};
-	console.log('rr', rangeQueryData[0]);
 	const hasError = rangeQueryError || programQueryError;
 	const isLoading =
 		(rangeQueryData && rangeQueryData.length === 0) || rangeQueryLoading || programQueryLoading;

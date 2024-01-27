@@ -95,7 +95,11 @@ const Dashboard = ({ shortName }: { shortName: string }) => {
 					<ScreenClassRender
 						render={(screenClass: 'xs' | 'sm' | 'md' | 'lg' | 'xl') => (
 							<Col xl={4} lg={12} css={applyStackedStyle(screenClass)}>
-								<div>clinical chart</div>
+								<ClinicalChart
+									chartType="molecular"
+									title="Molecular Data Summary"
+									programShortName={shortName}
+								/>
 							</Col>
 						)}
 					/>
