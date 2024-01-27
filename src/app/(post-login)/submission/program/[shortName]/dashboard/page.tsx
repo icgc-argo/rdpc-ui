@@ -26,6 +26,7 @@ import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { css, styled } from '@/lib/emotion';
 import { Col, Row, ScreenClassRender, setConfiguration } from 'react-grid-system';
 import urlJoin from 'url-join';
+import ClinicalChart from './components/ClinicalChart';
 import DonorReleaseSummary from './components/DonorReleaseSummary';
 import ProgramWorkplaceStatus from './components/ProgramWorkspaceStatus';
 import StatsBar from './components/StatsBar';
@@ -83,7 +84,11 @@ const Dashboard = ({ shortName }: { shortName: string }) => {
 					<ScreenClassRender
 						render={(screenClass: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl') => (
 							<Col xl={4} lg={12} css={applyStackedStyle(screenClass)}>
-								<div>Clinical chart</div>{' '}
+								<ClinicalChart
+									chartType="clinical"
+									title="Completed Core Clinical Data"
+									programShortName={shortName}
+								/>
 							</Col>
 						)}
 					/>

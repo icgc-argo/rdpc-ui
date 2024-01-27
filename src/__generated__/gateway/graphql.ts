@@ -2484,6 +2484,27 @@ export type ProgramsListQuery = {
 	} | null> | null;
 };
 
+export type ProgramDonorPublishedAnalysisByDateRangeQueryVariables = Exact<{
+	programShortName: Scalars['String']['input'];
+	bucketCount: Scalars['Int']['input'];
+	dateRangeFrom: Scalars['DateTime']['input'];
+	dateRangeTo: Scalars['DateTime']['input'];
+	donorFields: Array<InputMaybe<DonorField>> | InputMaybe<DonorField>;
+}>;
+
+export type ProgramDonorPublishedAnalysisByDateRangeQuery = {
+	__typename?: 'Query';
+	programDonorPublishedAnalysisByDateRange: Array<{
+		__typename?: 'AnalysisObject';
+		title?: DonorField | null;
+		buckets?: Array<{
+			__typename?: 'DateRangeBucket';
+			date?: any | null;
+			donors?: number | null;
+		} | null> | null;
+	} | null>;
+};
+
 export type ReopenSubmissionMutationVariables = Exact<{
 	programShortName: Scalars['String']['input'];
 	submissionVersion: Scalars['String']['input'];
@@ -2890,6 +2911,117 @@ export const ProgramsListDocument = {
 		},
 	],
 } as unknown as DocumentNode<ProgramsListQuery, ProgramsListQueryVariables>;
+export const ProgramDonorPublishedAnalysisByDateRangeDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'ProgramDonorPublishedAnalysisByDateRange' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+					},
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'bucketCount' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+					},
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'dateRangeFrom' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'DateTime' } },
+					},
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'dateRangeTo' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'DateTime' } },
+					},
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'donorFields' } },
+					type: {
+						kind: 'NonNullType',
+						type: {
+							kind: 'ListType',
+							type: { kind: 'NamedType', name: { kind: 'Name', value: 'DonorField' } },
+						},
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'programDonorPublishedAnalysisByDateRange' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'programShortName' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+							},
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'bucketCount' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'bucketCount' } },
+							},
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'dateRangeFrom' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'dateRangeFrom' } },
+							},
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'dateRangeTo' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'dateRangeTo' } },
+							},
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'donorFields' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'donorFields' } },
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'title' } },
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'buckets' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'date' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'donors' } },
+										],
+									},
+								},
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<
+	ProgramDonorPublishedAnalysisByDateRangeQuery,
+	ProgramDonorPublishedAnalysisByDateRangeQueryVariables
+>;
 export const ReopenSubmissionDocument = {
 	kind: 'Document',
 	definitions: [
