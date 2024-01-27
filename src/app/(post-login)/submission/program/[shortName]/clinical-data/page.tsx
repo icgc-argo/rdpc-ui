@@ -25,7 +25,7 @@ import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/app/gql/clinical/CLINICAL_EN
 import SUBMITTED_DATA_SIDE_MENU_QUERY from '@/app/gql/clinical/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import useUrlParamState from '@/app/hooks/useUrlParamState';
-import { notNull } from '@/global/utils';
+import { notNull, parseDonorIdString } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
 import { Loader, Typography, VerticalTabs, useTheme } from '@icgc-argo/uikit';
@@ -45,7 +45,6 @@ import {
 	emptyClinicalDataResponse,
 	emptySearchResponse,
 	hasClinicalErrors,
-	parseDonorIdString,
 	reverseLookUpEntityAlias,
 } from './common';
 

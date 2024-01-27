@@ -2505,6 +2505,134 @@ export type ProgramDonorPublishedAnalysisByDateRangeQuery = {
 	} | null>;
 };
 
+export type ProgramDonorSummaryQueryVariables = Exact<{
+	programShortName: Scalars['String']['input'];
+	first: Scalars['Int']['input'];
+	offset: Scalars['Int']['input'];
+	sorts?: InputMaybe<Array<InputMaybe<DonorSummaryEntrySort>> | InputMaybe<DonorSummaryEntrySort>>;
+	filters?: InputMaybe<Array<ProgramDonorSummaryFilter> | ProgramDonorSummaryFilter>;
+}>;
+
+export type ProgramDonorSummaryQuery = {
+	__typename?: 'Query';
+	programDonorSummary: {
+		__typename?: 'DonorSummary';
+		entries?: Array<{
+			__typename?: 'DonorSummaryEntry';
+			id: string;
+			donorId: string;
+			programShortName: string;
+			validWithCurrentDictionary: boolean;
+			releaseStatus: DonorMolecularDataReleaseStatus;
+			submitterDonorId: string;
+			submittedCoreDataPercent: number;
+			registeredNormalSamples: number;
+			registeredTumourSamples: number;
+			publishedNormalAnalysis: number;
+			publishedTumourAnalysis: number;
+			alignmentsCompleted: number;
+			alignmentsRunning: number;
+			alignmentsFailed: number;
+			sangerVcsCompleted: number;
+			sangerVcsRunning: number;
+			sangerVcsFailed: number;
+			mutectFailed: number;
+			mutectRunning: number;
+			mutectCompleted: number;
+			openAccessFailed: number;
+			openAccessRunning: number;
+			openAccessCompleted: number;
+			processingStatus: DonorMolecularDataProcessingStatus;
+			updatedAt: any;
+			rnaRegisteredNormalSamples: number;
+			rnaRegisteredTumourSamples: number;
+			rnaPublishedNormalAnalysis: number;
+			rnaPublishedTumourAnalysis: number;
+			rnaAlignmentsCompleted: number;
+			rnaAlignmentsRunning: number;
+			rnaAlignmentFailed: number;
+			matchedTNPairsDNA: number;
+		}> | null;
+		stats: {
+			__typename?: 'ProgramDonorSummaryStats';
+			registeredDonorsCount: number;
+			fullyReleasedDonorsCount: number;
+			partiallyReleasedDonorsCount: number;
+			noReleaseDonorsCount: number;
+			donorsInvalidWithCurrentDictionaryCount: number;
+			completedWorkflowRuns: number;
+			inProgressWorkflowRuns: number;
+			failedWorkflowRuns: number;
+			coreCompletion: {
+				__typename?: 'CoreCompletionStatusCount';
+				completed: number;
+				incomplete: number;
+				noData: number;
+			};
+			sampleStatus: { __typename?: 'SamplePairsStatusCount'; valid: number; invalid: number };
+			rawReadsStatus: { __typename?: 'SamplePairsStatusCount'; valid: number; invalid: number };
+			alignmentStatusCount: {
+				__typename?: 'WorkflowStatusCount';
+				completed: number;
+				inProgress: number;
+				failed: number;
+				noData: number;
+			};
+			sangerStatusCount: {
+				__typename?: 'WorkflowStatusCount';
+				completed: number;
+				inProgress: number;
+				failed: number;
+				noData: number;
+			};
+			mutectStatusCount: {
+				__typename?: 'WorkflowStatusCount';
+				completed: number;
+				inProgress: number;
+				failed: number;
+				noData: number;
+			};
+			openAccessStatusCount: {
+				__typename?: 'WorkflowStatusCount';
+				completed: number;
+				inProgress: number;
+				failed: number;
+				noData: number;
+			};
+			rnaAlignmentStatusCount: {
+				__typename?: 'WorkflowStatusCount';
+				completed: number;
+				inProgress: number;
+				failed: number;
+				noData: number;
+			};
+			rnaSampleStatus: {
+				__typename?: 'DataSubmissionStatus';
+				dataSubmitted: number;
+				noDataSubmitted: number;
+			};
+			rnaRawReadStatus: {
+				__typename?: 'DataSubmissionStatus';
+				dataSubmitted: number;
+				noDataSubmitted: number;
+			};
+			dnaTNRegisteredStatus: {
+				__typename?: 'TumorNormalStatusCount';
+				tumorAndNormal: number;
+				tumorOrNormal: number;
+				noData: number;
+			};
+			dnaTNMatchedPairStatus: {
+				__typename?: 'TumorNormalMatchedPairStatusCount';
+				tumorNormalMatchedPair: number;
+				tumorNormalNoMatchedPair: number;
+				tumorNormalMatchedPairMissingRawReads: number;
+				noData: number;
+			};
+		};
+	};
+};
+
 export type ReopenSubmissionMutationVariables = Exact<{
 	programShortName: Scalars['String']['input'];
 	submissionVersion: Scalars['String']['input'];
@@ -3022,6 +3150,343 @@ export const ProgramDonorPublishedAnalysisByDateRangeDocument = {
 	ProgramDonorPublishedAnalysisByDateRangeQuery,
 	ProgramDonorPublishedAnalysisByDateRangeQueryVariables
 >;
+export const ProgramDonorSummaryDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'query',
+			name: { kind: 'Name', value: 'ProgramDonorSummary' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+					},
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'first' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+					},
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'offset' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+					},
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'sorts' } },
+					type: {
+						kind: 'ListType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'DonorSummaryEntrySort' } },
+					},
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'filters' } },
+					type: {
+						kind: 'ListType',
+						type: {
+							kind: 'NonNullType',
+							type: {
+								kind: 'NamedType',
+								name: { kind: 'Name', value: 'ProgramDonorSummaryFilter' },
+							},
+						},
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'programDonorSummary' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'programShortName' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'programShortName' } },
+							},
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'first' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'first' } },
+							},
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'offset' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'offset' } },
+							},
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'sorts' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'sorts' } },
+							},
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'filters' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'filters' } },
+							},
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'entries' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'programShortName' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'validWithCurrentDictionary' },
+											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'releaseStatus' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'submitterDonorId' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'submittedCoreDataPercent' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'registeredNormalSamples' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'registeredTumourSamples' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'publishedNormalAnalysis' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'publishedTumourAnalysis' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'alignmentsCompleted' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'alignmentsRunning' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'alignmentsFailed' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'sangerVcsCompleted' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'sangerVcsRunning' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'sangerVcsFailed' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'mutectFailed' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'mutectRunning' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'mutectCompleted' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'openAccessFailed' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'openAccessRunning' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'openAccessCompleted' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'processingStatus' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'rnaRegisteredNormalSamples' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'rnaRegisteredTumourSamples' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'rnaPublishedNormalAnalysis' },
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'rnaPublishedTumourAnalysis' },
+											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'rnaAlignmentsCompleted' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'rnaAlignmentsRunning' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'rnaAlignmentFailed' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'matchedTNPairsDNA' } },
+										],
+									},
+								},
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'stats' },
+									selectionSet: {
+										kind: 'SelectionSet',
+										selections: [
+											{ kind: 'Field', name: { kind: 'Name', value: 'registeredDonorsCount' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'fullyReleasedDonorsCount' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'partiallyReleasedDonorsCount' },
+											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'noReleaseDonorsCount' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'donorsInvalidWithCurrentDictionaryCount' },
+											},
+											{ kind: 'Field', name: { kind: 'Name', value: 'completedWorkflowRuns' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'inProgressWorkflowRuns' } },
+											{ kind: 'Field', name: { kind: 'Name', value: 'failedWorkflowRuns' } },
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'coreCompletion' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'completed' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'incomplete' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'noData' } },
+													],
+												},
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'sampleStatus' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'valid' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'invalid' } },
+													],
+												},
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'rawReadsStatus' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'valid' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'invalid' } },
+													],
+												},
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'alignmentStatusCount' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'completed' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'inProgress' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'failed' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'noData' } },
+													],
+												},
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'sangerStatusCount' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'completed' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'inProgress' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'failed' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'noData' } },
+													],
+												},
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'mutectStatusCount' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'completed' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'inProgress' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'failed' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'noData' } },
+													],
+												},
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'openAccessStatusCount' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'completed' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'inProgress' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'failed' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'noData' } },
+													],
+												},
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'rnaAlignmentStatusCount' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'completed' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'inProgress' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'failed' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'noData' } },
+													],
+												},
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'rnaSampleStatus' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'dataSubmitted' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'noDataSubmitted' } },
+													],
+												},
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'rnaRawReadStatus' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'dataSubmitted' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'noDataSubmitted' } },
+													],
+												},
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'dnaTNRegisteredStatus' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{ kind: 'Field', name: { kind: 'Name', value: 'tumorAndNormal' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'tumorOrNormal' } },
+														{ kind: 'Field', name: { kind: 'Name', value: 'noData' } },
+													],
+												},
+											},
+											{
+												kind: 'Field',
+												name: { kind: 'Name', value: 'dnaTNMatchedPairStatus' },
+												selectionSet: {
+													kind: 'SelectionSet',
+													selections: [
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'tumorNormalMatchedPair' },
+														},
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'tumorNormalNoMatchedPair' },
+														},
+														{
+															kind: 'Field',
+															name: {
+																kind: 'Name',
+																value: 'tumorNormalMatchedPairMissingRawReads',
+															},
+														},
+														{ kind: 'Field', name: { kind: 'Name', value: 'noData' } },
+													],
+												},
+											},
+										],
+									},
+								},
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<ProgramDonorSummaryQuery, ProgramDonorSummaryQueryVariables>;
 export const ReopenSubmissionDocument = {
 	kind: 'Document',
 	definitions: [

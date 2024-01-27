@@ -28,6 +28,12 @@ export const formatFileName = (fileName: string): string => {
 	return fileName.length > 40 ? `${fileName.substr(0, 39)}...` : fileName;
 };
 
+const dateFormat = 'yyyy-MM-dd';
+export const displayDate = (date: string | Date) => {
+	const jsDate = typeof date === 'string' ? new Date(date) : date;
+	return formatDate(jsDate, dateFormat);
+};
+
 const dateTimeFormat = { date: 'MMMM d, yyyy', time: 'h:mm a' };
 export const displayDateAndTime = (date: string | Date) => {
 	if (!date) return '';
@@ -36,3 +42,6 @@ export const displayDateAndTime = (date: string | Date) => {
 	const formattedTime = formatDate(jsDate, dateTimeFormat.time);
 	return `${formattedDate} at ${formattedTime}`;
 };
+
+export const parseDonorIdString = (donorId: string) =>
+	donorId.match(/do/i) ? parseInt(donorId.split('DO')[1]) : parseInt(donorId);

@@ -27,6 +27,7 @@ import { css, styled } from '@/lib/emotion';
 import { Col, Row, ScreenClassRender, setConfiguration } from 'react-grid-system';
 import urlJoin from 'url-join';
 import ClinicalChart from './components/ClinicalChart';
+import DonorDataSummary from './components/DonorDataSummary';
 import DonorReleaseSummary from './components/DonorReleaseSummary';
 import ProgramWorkplaceStatus from './components/ProgramWorkspaceStatus';
 import StatsBar from './components/StatsBar';
@@ -106,7 +107,7 @@ const Dashboard = ({ shortName }: { shortName: string }) => {
 				</PaddedRow>
 				<PaddedRow>
 					<Col xs={12}>
-						<div>Donor Data</div>
+						<DonorDataSummary />
 					</Col>
 				</PaddedRow>
 			</ContentMain>

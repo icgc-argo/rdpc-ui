@@ -21,6 +21,8 @@ const documents = {
 		types.ClinicalEntityDataDocument,
 	'\n  query ClinicalEntitySearchResults($programShortName: String!, $filters: ClinicalInput!) {\n    clinicalSearchResults(programShortName: $programShortName, filters: $filters) {\n      programShortName\n      totalResults\n      searchResults {\n        donorId\n        submitterDonorId\n      }\n    }\n  }\n':
 		types.ClinicalEntitySearchResultsDocument,
+	'\n  query ClinicalErrorData($programShortName: String!, $filters: ClinicalInput!) {\n    clinicalData(programShortName: $programShortName, filters: $filters) {\n      programShortName\n      clinicalErrors {\n        donorId\n        submitterDonorId\n        errors {\n          errorType\n          fieldName\n          index\n          info {\n            value\n          }\n          message\n          entityName\n        }\n      }\n    }\n  }\n':
+		types.ClinicalErrorDataDocument,
 	'\n  query ClinicalSchemaVersion {\n    clinicalSubmissionSchemaVersion\n  }\n':
 		types.ClinicalSchemaVersionDocument,
 	'\n\tfragment ClinicalSubmissionFragment on ClinicalSubmissionData {\n\t\tprogramShortName # this is the ID\n\t\tstate\n\t\tversion\n\t\tupdatedAt\n\t\tupdatedBy\n\t\tclinicalEntities {\n\t\t\tclinicalType\n\t\t\tbatchName\n\t\t\tcreator\n\t\t\tcreatedAt\n\t\t\tstats {\n\t\t\t\tnoUpdate\n\t\t\t\tnew\n\t\t\t\tupdated\n\t\t\t\terrorsFound\n\t\t\t}\n\t\t\trecords {\n\t\t\t\trow\n\t\t\t\tfields {\n\t\t\t\t\tname\n\t\t\t\t\tvalue\n\t\t\t\t}\n\t\t\t}\n\t\t\tdataUpdates {\n\t\t\t\trow\n\t\t\t\tfield\n\t\t\t\tnewValue\n\t\t\t\toldValue\n\t\t\t\tdonorId\n\t\t\t}\n\t\t\tdataWarnings {\n\t\t\t\tmessage\n\t\t\t\trow\n\t\t\t\tfield\n\t\t\t\tvalue\n\t\t\t\tdonorId\n\t\t\t}\n\t\t\tdataErrors {\n\t\t\t\tmessage\n\t\t\t\trow\n\t\t\t\tfield\n\t\t\t\tvalue\n\t\t\t\tdonorId\n\t\t\t}\n\t\t\tschemaErrors {\n\t\t\t\tmessage\n\t\t\t\trow\n\t\t\t\tfield\n\t\t\t\tvalue\n\t\t\t\tdonorId\n\t\t\t}\n\t\t}\n\t\tfileErrors {\n\t\t\tmessage\n\t\t\tfileNames\n\t\t\tcode\n\t\t}\n\t}\n':
@@ -83,6 +85,12 @@ export function gql(
 export function gql(
 	source: '\n  query ClinicalEntitySearchResults($programShortName: String!, $filters: ClinicalInput!) {\n    clinicalSearchResults(programShortName: $programShortName, filters: $filters) {\n      programShortName\n      totalResults\n      searchResults {\n        donorId\n        submitterDonorId\n      }\n    }\n  }\n',
 ): (typeof documents)['\n  query ClinicalEntitySearchResults($programShortName: String!, $filters: ClinicalInput!) {\n    clinicalSearchResults(programShortName: $programShortName, filters: $filters) {\n      programShortName\n      totalResults\n      searchResults {\n        donorId\n        submitterDonorId\n      }\n    }\n  }\n'];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+	source: '\n  query ClinicalErrorData($programShortName: String!, $filters: ClinicalInput!) {\n    clinicalData(programShortName: $programShortName, filters: $filters) {\n      programShortName\n      clinicalErrors {\n        donorId\n        submitterDonorId\n        errors {\n          errorType\n          fieldName\n          index\n          info {\n            value\n          }\n          message\n          entityName\n        }\n      }\n    }\n  }\n',
+): (typeof documents)['\n  query ClinicalErrorData($programShortName: String!, $filters: ClinicalInput!) {\n    clinicalData(programShortName: $programShortName, filters: $filters) {\n      programShortName\n      clinicalErrors {\n        donorId\n        submitterDonorId\n        errors {\n          errorType\n          fieldName\n          index\n          info {\n            value\n          }\n          message\n          entityName\n        }\n      }\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
