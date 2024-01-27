@@ -26,6 +26,7 @@ import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { css, styled } from '@/lib/emotion';
 import { Col, Row, ScreenClassRender, setConfiguration } from 'react-grid-system';
 import urlJoin from 'url-join';
+import DonorReleaseSummary from './components/DonorReleaseSummary';
 import StatsBar from './components/StatsBar';
 
 setConfiguration({ gutterWidth: 9 });
@@ -65,7 +66,7 @@ const Dashboard = ({ shortName }: { shortName: string }) => {
 					<Col xl={4} lg={12}>
 						<PaddedRow>
 							<Col xs={12}>
-								<div>Donor release summary</div>
+								<DonorReleaseSummary programShortName={shortName} />
 							</Col>
 						</PaddedRow>
 						<Row>
