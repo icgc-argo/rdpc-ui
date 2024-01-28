@@ -107,7 +107,7 @@ const Dashboard = ({ shortName }: { shortName: string }) => {
 				</PaddedRow>
 				<PaddedRow>
 					<Col xs={12}>
-						<DonorDataSummary />
+						<DonorDataSummary programShortName={shortName} />
 					</Col>
 				</PaddedRow>
 			</ContentMain>
