@@ -70,7 +70,6 @@ const parseSearchResult = (
 };
 
 const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }) => {
-	const FEATURE_SUBMITTED_DATA_ENABLED = true;
 	const theme = useTheme();
 
 	const [keyword, setKeyword] = useState('');
@@ -154,9 +153,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 	);
 
 	const sideMenuData =
-		sideMenuQuery == undefined || sideMenuLoading || !FEATURE_SUBMITTED_DATA_ENABLED
-			? emptyClinicalDataResponse
-			: sideMenuQuery;
+		sideMenuQuery == undefined || sideMenuLoading ? emptyClinicalDataResponse : sideMenuQuery;
 
 	const { clinicalData } = sideMenuData;
 

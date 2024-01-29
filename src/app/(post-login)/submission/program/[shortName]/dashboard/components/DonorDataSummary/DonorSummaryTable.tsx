@@ -116,15 +116,7 @@ const DonorSummaryTable = ({
 }) => {
 	// config
 	const theme = useTheme();
-	// const { FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED, FEATURE_SUBMITTED_DATA_ENABLED } =
-	// 	useAppConfigContext();
 	const FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED = true;
-	const FEATURE_SUBMITTED_DATA_ENABLED = true;
-	/////
-	////
-	////
-	///
-	/// ===>>>>>???/
 
 	// tabs
 	const { activeTableTab: activePipeline, handleActiveTableTab: handleActivePipeline } =
@@ -231,7 +223,7 @@ const DonorSummaryTable = ({
 	const StatusColumnCell = ({ row: { original } }) => {
 		return (
 			<CellContentCenter>
-				{original.validWithCurrentDictionary || FEATURE_SUBMITTED_DATA_ENABLED ? (
+				{original.validWithCurrentDictionary ? (
 					<StarIcon
 						fill={RELEASED_STATE_FILL_COLOURS[original.releaseStatus]}
 						outline={RELEASED_STATE_STROKE_COLOURS[original.releaseStatus]}
@@ -364,13 +356,10 @@ const DonorSummaryTable = ({
 							programShortName,
 							`/clinical-data/?donorId=${original.donorId}&tab=${errorTab || 'donor'}`,
 						);
-						return FEATURE_SUBMITTED_DATA_ENABLED ? (
-							<NextLink href={linkUrl}>
-								<Link>{`${original.donorId} (${original.submitterDonorId})`}</Link>
-							</NextLink>
-						) : (
-							`${original.donorId} (${original.submitterDonorId})`
-						);
+
+						<NextLink href={linkUrl}>
+							<Link>{`${original.donorId} (${original.submitterDonorId})`}</Link>
+						</NextLink>;
 					},
 					size: 135,
 				},
@@ -847,61 +836,54 @@ const DonorSummaryTable = ({
 				),
 			id: 'updated',
 			columns: [
-				...(FEATURE_SUBMITTED_DATA_ENABLED
-					? [
-							{
-								header: () => (
-									<TableListFilterHeader
-										header={'Alerts'}
-										panelLegend={'Filter Alerts'}
-										onFilter={(options) =>
-											updateFilter({
-												field: 'validWithCurrentDictionary',
-												values: options
-													.filter((option) => option.isChecked)
-													.map((option) => option.key),
-											})
-										}
-										filterOptions={FILTER_OPTIONS.validWithCurrentDictionary}
-										filterCounts={{
-											[FILTER_OPTIONS.validWithCurrentDictionary[0].key]:
-												programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
-											[FILTER_OPTIONS.validWithCurrentDictionary[1].key]:
-												programDonorSummaryStats?.registeredDonorsCount -
-													programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
-										}}
-										activeFilters={getFilterValue('validWithCurrentDictionary')}
-									/>
-								),
-								accessorKey: 'validWithCurrentDictionary',
-								cell: ({ row: { original } }) => {
-									const errorTab =
-										errorLinkData.find(
-											(error) => error.donorId === parseDonorIdString(original.donorId),
-										)?.entity || '';
+				{
+					header: () => (
+						<TableListFilterHeader
+							header={'Alerts'}
+							panelLegend={'Filter Alerts'}
+							onFilter={(options) =>
+								updateFilter({
+									field: 'validWithCurrentDictionary',
+									values: options.filter((option) => option.isChecked).map((option) => option.key),
+								})
+							}
+							filterOptions={FILTER_OPTIONS.validWithCurrentDictionary}
+							filterCounts={{
+								[FILTER_OPTIONS.validWithCurrentDictionary[0].key]:
+									programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
+								[FILTER_OPTIONS.validWithCurrentDictionary[1].key]:
+									programDonorSummaryStats?.registeredDonorsCount -
+										programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
+							}}
+							activeFilters={getFilterValue('validWithCurrentDictionary')}
+						/>
+					),
+					accessorKey: 'validWithCurrentDictionary',
+					cell: ({ row: { original } }) => {
+						const errorTab =
+							errorLinkData.find((error) => error.donorId === parseDonorIdString(original.donorId))
+								?.entity || '';
 
-									const linkUrl = urlJoin(
-										`/submission/program/`,
-										programShortName,
-										`/clinical-data/?donorId=${original.donorId}`,
-										errorTab && `&tab=${errorTab}`,
-									);
+						const linkUrl = urlJoin(
+							`/submission/program/`,
+							programShortName,
+							`/clinical-data/?donorId=${original.donorId}`,
+							errorTab && `&tab=${errorTab}`,
+						);
 
-									return original.validWithCurrentDictionary ? (
-										''
-									) : (
-										<NextLink href={linkUrl}>
-											<Link>
-												<Icon name="warning" fill={theme.colors.error} width="16px" height="15px" />{' '}
-												Update Clinical
-											</Link>
-										</NextLink>
-									);
-								},
-								size: 125,
-							},
-					  ]
-					: []),
+						return original.validWithCurrentDictionary ? (
+							''
+						) : (
+							<NextLink href={linkUrl}>
+								<Link>
+									<Icon name="warning" fill={theme.colors.error} width="16px" height="15px" />{' '}
+									Update Clinical
+								</Link>
+							</NextLink>
+						);
+					},
+					size: 125,
+				},
 				{
 					header: 'Last Updated',
 					accessorKey: 'updatedAt',
