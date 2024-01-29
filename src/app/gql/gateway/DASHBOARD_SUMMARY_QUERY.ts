@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,31 +17,29 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { CodegenConfig } from '@graphql-codegen/cli';
-import dotenv from 'dotenv';
+import { gql } from '@/__generated__/gateway/gql';
 
-dotenv.config({ path: '.env' });
+const DASHBOARD_SUMMARY_QUERY = gql(`
+	query DashboardSummary($programShortName: String!) {
+		programDonorSummary(programShortName: $programShortName) {
+			stats {
+				registeredDonorsCount
+				percentageCoreClinical
+				percentageTumourAndNormal
+				donorsProcessingMolecularDataCount
+				filesToQcCount
+				donorsWithReleasedFilesCount
+				allFilesCount
+				fullyReleasedDonorsCount
+				partiallyReleasedDonorsCount
+				noReleaseDonorsCount
+			}
+		}
+		program(shortName: $programShortName) {
+			commitmentDonors
+			shortName # this is the ID
+		}
+	}
+`);
 
-const gqlConfig: CodegenConfig = {
-	generates: {
-		'./src/__generated__/gateway/': {
-			documents: ['src/**/gql/gateway/*.ts'],
-			preset: 'client',
-			schema: `${process.env.NEXT_PUBLIC_GATEWAY_API_ROOT}/graphql`,
-			presetConfig: {
-				gqlTagName: 'gql',
-			},
-		},
-		'./src/__generated__/clinical/': {
-			documents: ['src/**/gql/clinical/*.ts'],
-			preset: 'client',
-			schema: `${process.env.NEXT_PUBLIC_CLINICAL_API_ROOT}/graphql`,
-			presetConfig: {
-				gqlTagName: 'gql',
-			},
-		},
-	},
-	ignoreNoDocuments: true,
-};
-
-export default gqlConfig;
+export default DASHBOARD_SUMMARY_QUERY;

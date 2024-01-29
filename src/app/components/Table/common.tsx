@@ -92,6 +92,80 @@ export const StatArea: {
 	};
 })();
 
+export const TableLegendContainer = ({ children }) => {
+	const theme = useTheme();
+
+	return (
+		<div
+			css={css`
+				margin-bottom: 8px;
+				padding: 10px;
+				padding-bottom: 0;
+				background-color: ${theme.colors.grey_3};
+
+				b {
+					color: #000;
+				}
+			`}
+		>
+			{children}
+		</div>
+	);
+};
+
+export const TableLegendStatusIcon = ({
+	fill,
+	type,
+}: {
+	fill: keyof ThemeColorNames;
+	type: 'pill' | 'box';
+}) => {
+	const theme = useTheme();
+
+	return (
+		<span
+			css={css`
+				flex-shrink: 0;
+				display: block;
+				width: 18px;
+				height: 12px;
+				border-radius: ${type === 'box' ? '0' : '7px'};
+				margin-right: 5px;
+				background-color: ${theme.colors[fill]};
+				border: ${type === 'box' ? `1px solid ${theme.colors.grey_1}` : 'none'};
+			`}
+		/>
+	);
+};
+
+export const TableLegendSection = styled('div')`
+	display: flex;
+	align-items: center;
+	margin-right: 16px;
+	margin-bottom: 10px;
+`;
+
+export const TableLegendEntry = ({
+	count,
+	icon,
+	text,
+}: PropsWithChildren<{ count?: number; icon: ReactNode; text: string }>) => (
+	<div
+		css={css`
+			margin-right: 5px;
+			display: flex;
+			align-items: flex-start;
+			width: 100%;
+		`}
+	>
+		{icon}
+		<span>
+			{count !== undefined && <b>{count.toLocaleString()}&nbsp;</b>}
+			{text}
+		</span>
+	</div>
+);
+
 export const SubmissionInfoArea = ({
 	fileName,
 	createdAt,

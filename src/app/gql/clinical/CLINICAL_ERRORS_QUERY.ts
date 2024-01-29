@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2024 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -19,68 +19,26 @@
 
 import { gql } from '@/__generated__/clinical/gql';
 
-const CLINICAL_SUBMISSION_QUERY = gql(`
-  query ClinicalSubmission($programShortName: String!) {
-    clinicalSubmissions(programShortName: $programShortName) {
+const CLINICAL_ERRORS_QUERY = gql(`
+  query ClinicalErrorData($programShortName: String!, $filters: ClinicalInput!) {
+    clinicalData(programShortName: $programShortName, filters: $filters) {
       programShortName
-      state
-      version
-      updatedAt
-      updatedBy
-      clinicalEntities {
-        clinicalType
-        batchName
-        creator
-        createdAt
-        stats {
-          noUpdate
-          new
-          updated
-          errorsFound
-        }
-        records {
-          row
-          fields {
-            name
+      clinicalErrors {
+        donorId
+        submitterDonorId
+        errors {
+          errorType
+          fieldName
+          index
+          info {
             value
           }
-        }
-        dataUpdates {
-          row
-          field
-          newValue
-          oldValue
-          donorId
-        }
-        dataWarnings {
           message
-          row
-          field
-          value
-          donorId
+          entityName
         }
-        dataErrors {
-          message
-          row
-          field
-          value
-          donorId
-        }
-        schemaErrors {
-          message
-          row
-          field
-          value
-          donorId
-        }
-      }
-      fileErrors {
-        message
-        fileNames
-        code
       }
     }
   }
 `);
 
-export default CLINICAL_SUBMISSION_QUERY;
+export default CLINICAL_ERRORS_QUERY;
