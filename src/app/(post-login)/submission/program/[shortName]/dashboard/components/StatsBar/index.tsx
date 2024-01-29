@@ -99,7 +99,13 @@ const StatsBar = ({ programShortName }) => {
 	const FEATURE_RNASEQ_ENABLED = false;
 
 	return (
-		<div>
+		<div
+			css={css`
+				h2 {
+					margin: 25px;
+				}
+			`}
+		>
 			<Container>
 				<Row justify="around">
 					<Col>

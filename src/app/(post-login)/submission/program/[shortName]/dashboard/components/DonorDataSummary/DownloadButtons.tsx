@@ -59,6 +59,7 @@ const DownloadButton = ({
 
 const DownloadButtons = ({ programShortName }) => {
 	const toaster = useToaster();
+	const { GATEWAY_API_ROOT } = useAppConfigContext();
 
 	const [buttonLoadingState, setButtonLoadingState] = useState(false);
 
@@ -80,8 +81,6 @@ const DownloadButtons = ({ programShortName }) => {
 	};
 
 	const onClickDownloadAll = () => {
-		const { GATEWAY_API_ROOT } = useAppConfigContext();
-
 		const url = urlJoin(
 			GATEWAY_API_ROOT,
 			`/clinical/program/${programShortName}/all-clinical-data`,

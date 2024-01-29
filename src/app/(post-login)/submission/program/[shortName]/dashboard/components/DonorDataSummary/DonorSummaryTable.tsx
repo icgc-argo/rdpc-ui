@@ -949,6 +949,7 @@ const DonorSummaryTable = ({
 						withPagination
 						withStripes
 						withTabs
+						withSideBorders
 					/>
 				</>
 			)}

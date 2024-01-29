@@ -120,6 +120,7 @@ const SubmissionSummaryTable = ({ clinicalEntities }: { clinicalEntities: Clinic
 				withHeaders
 				enableColumnResizing
 				withRowBorder
+				withSideBorders
 			/>
 		</div>
 	);
