@@ -34,6 +34,8 @@ import StatsBar from './components/StatsBar';
 
 setConfiguration({ gutterWidth: 9 });
 
+type StackedSizes = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl';
+
 const Dashboard = ({ shortName }: { shortName: string }) => {
 	// docs url
 	const { DOCS_URL_ROOT } = useAppConfigContext();
@@ -43,7 +45,7 @@ const Dashboard = ({ shortName }: { shortName: string }) => {
 		padding-bottom: 8px;
 	`;
 
-	const applyStackedStyle = (size: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl') => css`
+	const applyStackedStyle = (size: StackedSizes) => css`
 		padding-bottom: ${['xl'].includes(size) ? '0' : '8'}px;
 	`;
 
