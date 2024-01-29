@@ -105,6 +105,7 @@ const InfoBox = ({
 									x={xText + (isHeader ? 0 : xCircleTextGap)}
 									y={lineY}
 									fontWeight={isHeader ? 'bold' : 'normal'}
+									key={idx}
 								>
 									{!isOneItem && tooltipItem.name}
 									{!isHeader && `: ${tooltipItem.count}`}
