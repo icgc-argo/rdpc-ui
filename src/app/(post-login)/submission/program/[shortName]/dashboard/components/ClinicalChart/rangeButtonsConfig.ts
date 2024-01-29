@@ -38,4 +38,4 @@ export const rangeButtons = [
 		label: 'One week',
 		title: '1W',
 	},
-];
+] satisfies Array<{ days: number | null; label: string; title: string }>;

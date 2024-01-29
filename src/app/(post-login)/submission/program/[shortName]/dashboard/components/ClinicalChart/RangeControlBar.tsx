@@ -19,7 +19,7 @@
 
 import { css, Typography, useTheme } from '@icgc-argo/uikit';
 import { PropsWithChildren } from 'react';
-import { rangeButtons } from './utils';
+import { rangeButtons } from './rangeButtonsConfig';
 
 const RangeButton = ({
 	children,

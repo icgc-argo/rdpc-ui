@@ -37,6 +37,7 @@ import Legend from './Legend';
 import LineChart from './LineChart';
 import { makeChartLineMeta } from './LineChart/utils';
 import RangeControlBar from './RangeControlBar';
+import { rangeButtons } from './rangeButtonsConfig';
 import {
 	ChartType,
 	DonorField,
@@ -44,7 +45,6 @@ import {
 	ProgramDonorPublishedAnalysisByDateRangeQueryVariables,
 	RangeButtons,
 } from './types';
-import { rangeButtons } from './utils';
 
 const CHART_HEIGHT = 220;
 const CHART_PADDING = 12;
