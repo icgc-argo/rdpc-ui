@@ -49,7 +49,7 @@ import { useEffect, useState } from 'react';
 import urlJoin from 'url-join';
 import { defaultClinicalEntityFilters } from '../../../clinical-data/common';
 import { Pipeline } from '../Pipeline';
-import { DesignationCell, DesignationCellLegacy } from './DesignationCell';
+import { DesignationCell } from './DesignationCell';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 import {
 	EMPTY_PROGRAM_SUMMARY_STATS,
@@ -116,15 +116,6 @@ const DonorSummaryTable = ({
 }) => {
 	// config
 	const theme = useTheme();
-	// const { FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED, FEATURE_SUBMITTED_DATA_ENABLED } =
-	// 	useAppConfigContext();
-	const FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED = true;
-	const FEATURE_SUBMITTED_DATA_ENABLED = true;
-	/////
-	////
-	////
-	///
-	/// ===>>>>>???/
 
 	// tabs
 	const { activeTableTab: activePipeline, handleActiveTableTab: handleActivePipeline } =
@@ -231,7 +222,7 @@ const DonorSummaryTable = ({
 	const StatusColumnCell = ({ row: { original } }) => {
 		return (
 			<CellContentCenter>
-				{original.validWithCurrentDictionary || FEATURE_SUBMITTED_DATA_ENABLED ? (
+				{original.validWithCurrentDictionary ? (
 					<StarIcon
 						fill={RELEASED_STATE_FILL_COLOURS[original.releaseStatus]}
 						outline={RELEASED_STATE_STROKE_COLOURS[original.releaseStatus]}
@@ -364,13 +355,10 @@ const DonorSummaryTable = ({
 							programShortName,
 							`/clinical-data/?donorId=${original.donorId}&tab=${errorTab || 'donor'}`,
 						);
-						return FEATURE_SUBMITTED_DATA_ENABLED ? (
-							<NextLink href={linkUrl}>
-								<Link>{`${original.donorId} (${original.submitterDonorId})`}</Link>
-							</NextLink>
-						) : (
-							`${original.donorId} (${original.submitterDonorId})`
-						);
+
+						<NextLink href={linkUrl}>
+							<Link>{`${original.donorId} (${original.submitterDonorId})`}</Link>
+						</NextLink>;
 					},
 					size: 135,
 				},
@@ -416,26 +404,22 @@ const DonorSummaryTable = ({
 			id: 'dnaRnaSeqPipeline',
 			meta: {
 				customHeader: true,
-				...(FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
-					? {
-							columnTabs: {
-								activeTab: activePipeline,
-								handleTabs: handleActivePipeline,
-								tabs: [
-									{
-										label: 'DNA-SEQ',
-										value: PipelineNames.DNA,
-										color: theme.colors[PIPELINE_COLORS[PipelineNames.DNA]],
-									},
-									{
-										label: 'RNA-SEQ',
-										value: PipelineNames.RNA,
-										color: theme.colors[PIPELINE_COLORS[PipelineNames.RNA]],
-									},
-								],
-							},
-					  }
-					: {}),
+				columnTabs: {
+					activeTab: activePipeline,
+					handleTabs: handleActivePipeline,
+					tabs: [
+						{
+							label: 'DNA-SEQ',
+							value: PipelineNames.DNA,
+							color: theme.colors[PIPELINE_COLORS[PipelineNames.DNA]],
+						},
+						{
+							label: 'RNA-SEQ',
+							value: PipelineNames.RNA,
+							color: theme.colors[PIPELINE_COLORS[PipelineNames.RNA]],
+						},
+					],
+				},
 			},
 			columns: [
 				...(activePipeline === PipelineNames.DNA
@@ -444,46 +428,25 @@ const DonorSummaryTable = ({
 								header: () => (
 									<TableListFilterHeader
 										header={'Registered Samples'}
-										panelLegend={`${
-											FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? 'DNA' : 'Sample'
-										} Registration Status`}
+										panelLegend="DNA Registration Status"
 										onFilter={(options) =>
 											updateFilter({
-												field: FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
-													? 'dnaTNRegistered'
-													: 'registeredSamplePairs',
+												field: 'dnaTNRegistered',
 												values: options
 													.filter((option) => option.isChecked)
 													.map((option) => option.key),
 											})
 										}
-										filterOptions={
-											FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
-												? FILTER_OPTIONS.tnRegisteredTnNotRegistered
-												: FILTER_OPTIONS.validInvalid
-										}
-										filterCounts={
-											FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
-												? {
-														[FILTER_OPTIONS.tnRegisteredTnNotRegistered[0].key]:
-															programDonorSummaryStats?.dnaTNRegisteredStatus?.tumorAndNormal,
-														[FILTER_OPTIONS.tnRegisteredTnNotRegistered[1].key]:
-															programDonorSummaryStats?.dnaTNRegisteredStatus?.tumorOrNormal,
-														[FILTER_OPTIONS.tnRegisteredTnNotRegistered[2].key]:
-															programDonorSummaryStats?.dnaTNRegisteredStatus?.noData,
-												  }
-												: {
-														[FILTER_OPTIONS.validInvalid[0].key]:
-															programDonorSummaryStats?.sampleStatus?.valid,
-														[FILTER_OPTIONS.validInvalid[1].key]:
-															programDonorSummaryStats?.sampleStatus?.invalid,
-												  }
-										}
-										activeFilters={getFilterValue(
-											FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
-												? 'dnaTNRegistered'
-												: 'registeredSamplePairs',
-										)}
+										filterOptions={FILTER_OPTIONS.tnRegisteredTnNotRegistered}
+										filterCounts={{
+											[FILTER_OPTIONS.tnRegisteredTnNotRegistered[0].key]:
+												programDonorSummaryStats?.dnaTNRegisteredStatus?.tumorAndNormal,
+											[FILTER_OPTIONS.tnRegisteredTnNotRegistered[1].key]:
+												programDonorSummaryStats?.dnaTNRegisteredStatus?.tumorOrNormal,
+											[FILTER_OPTIONS.tnRegisteredTnNotRegistered[2].key]:
+												programDonorSummaryStats?.dnaTNRegisteredStatus?.noData,
+										}}
+										activeFilters={getFilterValue('dnaTNRegistered')}
 									/>
 								),
 								meta: {
@@ -501,86 +464,53 @@ const DonorSummaryTable = ({
 									);
 								},
 								...setupMultiSort('registeredNormalSamples'),
-								cell: ({ row: { original } }: DonorSummaryCellProps) =>
-									FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? (
-										<DesignationCell
-											normalCount={original.registeredNormalSamples}
-											original={original}
-											tumourCount={original.registeredTumourSamples}
-											type={'dnaTNRegistered'}
-										/>
-									) : (
-										<DesignationCellLegacy
-											left={original.registeredNormalSamples}
-											right={original.registeredTumourSamples}
-										/>
-									),
+								cell: ({ row: { original } }: DonorSummaryCellProps) => (
+									<DesignationCell
+										normalCount={original.registeredNormalSamples}
+										original={original}
+										tumourCount={original.registeredTumourSamples}
+										type={'dnaTNRegistered'}
+									/>
+								),
 							},
 							{
 								header: () => (
 									<TableListFilterHeader
 										header={'Raw Reads'}
-										panelLegend={`${
-											FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? 'DNA ' : ''
-										}Raw Reads Status`}
+										panelLegend="DNA Raw Reads Status"
 										onFilter={(options) =>
 											updateFilter({
-												field: FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
-													? 'dnaTNMatchedPair'
-													: 'rawReads',
+												field: 'dnaTNMatchedPair',
 												values: options
 													.filter((option) => option.isChecked)
 													.map((option) => option.key),
 											})
 										}
-										filterOptions={
-											FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
-												? FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted
-												: FILTER_OPTIONS.validInvalid
-										}
-										filterCounts={
-											FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
-												? {
-														[FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[0].key]:
-															programDonorSummaryStats?.dnaTNMatchedPairStatus
-																?.tumorNormalMatchedPair,
-														[FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[1].key]:
-															programDonorSummaryStats?.dnaTNMatchedPairStatus
-																?.tumorNormalNoMatchedPair,
-														[FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[2].key]:
-															programDonorSummaryStats?.dnaTNMatchedPairStatus
-																?.tumorNormalMatchedPairMissingRawReads,
-														[FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[3].key]:
-															programDonorSummaryStats?.dnaTNMatchedPairStatus?.noData,
-												  }
-												: {
-														[FILTER_OPTIONS.validInvalid[0].key]:
-															programDonorSummaryStats?.rawReadsStatus?.valid,
-														[FILTER_OPTIONS.validInvalid[1].key]:
-															programDonorSummaryStats?.rawReadsStatus?.invalid,
-												  }
-										}
-										activeFilters={getFilterValue(
-											FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? 'dnaTNMatchedPair' : 'rawReads',
-										)}
+										filterOptions={FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted}
+										filterCounts={{
+											[FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[0].key]:
+												programDonorSummaryStats?.dnaTNMatchedPairStatus?.tumorNormalMatchedPair,
+											[FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[1].key]:
+												programDonorSummaryStats?.dnaTNMatchedPairStatus?.tumorNormalNoMatchedPair,
+											[FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[2].key]:
+												programDonorSummaryStats?.dnaTNMatchedPairStatus
+													?.tumorNormalMatchedPairMissingRawReads,
+											[FILTER_OPTIONS.tnMatchedPairSubmittedTnMatchedPairNotSubmitted[3].key]:
+												programDonorSummaryStats?.dnaTNMatchedPairStatus?.noData,
+										}}
+										activeFilters={getFilterValue('dnaTNMatchedPair')}
 									/>
 								),
 								meta: { customCell: true },
 								...setupMultiSort('publishedNormalAnalysis'),
-								cell: ({ row: { original } }) =>
-									FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? (
-										<DesignationCell
-											normalCount={original.publishedNormalAnalysis}
-											original={original}
-											tumourCount={original.publishedTumourAnalysis}
-											type={'dnaTNMatchedPair'}
-										/>
-									) : (
-										<DesignationCellLegacy
-											left={original.publishedNormalAnalysis}
-											right={original.publishedTumourAnalysis}
-										/>
-									),
+								cell: ({ row: { original } }) => (
+									<DesignationCell
+										normalCount={original.publishedNormalAnalysis}
+										original={original}
+										tumourCount={original.publishedTumourAnalysis}
+										type={'dnaTNMatchedPair'}
+									/>
+								),
 							},
 							{
 								header: () => (
@@ -847,61 +777,54 @@ const DonorSummaryTable = ({
 				),
 			id: 'updated',
 			columns: [
-				...(FEATURE_SUBMITTED_DATA_ENABLED
-					? [
-							{
-								header: () => (
-									<TableListFilterHeader
-										header={'Alerts'}
-										panelLegend={'Filter Alerts'}
-										onFilter={(options) =>
-											updateFilter({
-												field: 'validWithCurrentDictionary',
-												values: options
-													.filter((option) => option.isChecked)
-													.map((option) => option.key),
-											})
-										}
-										filterOptions={FILTER_OPTIONS.validWithCurrentDictionary}
-										filterCounts={{
-											[FILTER_OPTIONS.validWithCurrentDictionary[0].key]:
-												programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
-											[FILTER_OPTIONS.validWithCurrentDictionary[1].key]:
-												programDonorSummaryStats?.registeredDonorsCount -
-													programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
-										}}
-										activeFilters={getFilterValue('validWithCurrentDictionary')}
-									/>
-								),
-								accessorKey: 'validWithCurrentDictionary',
-								cell: ({ row: { original } }) => {
-									const errorTab =
-										errorLinkData.find(
-											(error) => error.donorId === parseDonorIdString(original.donorId),
-										)?.entity || '';
+				{
+					header: () => (
+						<TableListFilterHeader
+							header={'Alerts'}
+							panelLegend={'Filter Alerts'}
+							onFilter={(options) =>
+								updateFilter({
+									field: 'validWithCurrentDictionary',
+									values: options.filter((option) => option.isChecked).map((option) => option.key),
+								})
+							}
+							filterOptions={FILTER_OPTIONS.validWithCurrentDictionary}
+							filterCounts={{
+								[FILTER_OPTIONS.validWithCurrentDictionary[0].key]:
+									programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
+								[FILTER_OPTIONS.validWithCurrentDictionary[1].key]:
+									programDonorSummaryStats?.registeredDonorsCount -
+										programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
+							}}
+							activeFilters={getFilterValue('validWithCurrentDictionary')}
+						/>
+					),
+					accessorKey: 'validWithCurrentDictionary',
+					cell: ({ row: { original } }) => {
+						const errorTab =
+							errorLinkData.find((error) => error.donorId === parseDonorIdString(original.donorId))
+								?.entity || '';
 
-									const linkUrl = urlJoin(
-										`/submission/program/`,
-										programShortName,
-										`/clinical-data/?donorId=${original.donorId}`,
-										errorTab && `&tab=${errorTab}`,
-									);
+						const linkUrl = urlJoin(
+							`/submission/program/`,
+							programShortName,
+							`/clinical-data/?donorId=${original.donorId}`,
+							errorTab && `&tab=${errorTab}`,
+						);
 
-									return original.validWithCurrentDictionary ? (
-										''
-									) : (
-										<NextLink href={linkUrl}>
-											<Link>
-												<Icon name="warning" fill={theme.colors.error} width="16px" height="15px" />{' '}
-												Update Clinical
-											</Link>
-										</NextLink>
-									);
-								},
-								size: 125,
-							},
-					  ]
-					: []),
+						return original.validWithCurrentDictionary ? (
+							''
+						) : (
+							<NextLink href={linkUrl}>
+								<Link>
+									<Icon name="warning" fill={theme.colors.error} width="16px" height="15px" />{' '}
+									Update Clinical
+								</Link>
+							</NextLink>
+						);
+					},
+					size: 125,
+				},
 				{
 					header: 'Last Updated',
 					accessorKey: 'updatedAt',

@@ -105,32 +105,3 @@ export const DesignationCell = ({
 		</TableCellWrapper>
 	);
 };
-
-// FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED - remove when flag enabled in production
-// this code isn't required once the RNA feature is in production
-const isValid = (num: number) => num > 0;
-const DesignationEntryLegacy = styled('div')`
-	text-align: center;
-	flex: 1;
-	color: ${({ num, theme }: { num: number; theme }) =>
-		isValid(num) ? theme.colors.primary : theme.colors.error};
-`;
-export const DesignationCellLegacy = ({ left, right }: { left: number; right: number }) => {
-	const theme = useTheme();
-	return (
-		<DesignationContainer>
-			<DesignationEntryLegacy theme={theme} num={left}>
-				{left}N
-			</DesignationEntryLegacy>
-			<DesignationEntryLegacy
-				theme={theme}
-				num={right}
-				css={css`
-					border-left: solid 1px ${theme.colors.grey_2};
-				`}
-			>
-				{right}T
-			</DesignationEntryLegacy>
-		</DesignationContainer>
-	);
-};

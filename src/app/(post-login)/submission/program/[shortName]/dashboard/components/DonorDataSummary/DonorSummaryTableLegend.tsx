@@ -38,11 +38,6 @@ const DonorSummaryTableLegend = ({
 }: {
 	programDonorSummaryStats: ProgramDonorReleaseStats;
 }) => {
-	//
-	//
-	// =======?????/
-	//const { FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED } = useAppConfigContext();
-	const FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED = true;
 	const theme = useTheme();
 
 	const missingMatchedPairsCount =
@@ -120,7 +115,7 @@ const DonorSummaryTableLegend = ({
 							/>
 						</TableLegendSection>
 					</Col>
-					{FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED && !!showMissingDNAErrors && (
+					{!!showMissingDNAErrors && (
 						<Col sm={12} md={4} lg={4} xl={4}>
 							{!!missingSamplesCount && (
 								<TableLegendSection>
