@@ -1,6 +1,7 @@
 version: '3'
 
 services:
+  #
   rdpc-gateway:
     image: '${IMAGE_RDPC_GATEWAY}'
     environment:
@@ -14,3 +15,10 @@ services:
       CLINICAL_API_URL: http://localhost:3002
     ports:
       - 4000:4000
+  #
+  platform-gateway:
+    image: '${IMAGE_PLATFORM_GATEWAY}'
+    environment:
+      PORT: 4001
+    ports:
+      - 4001:4001
