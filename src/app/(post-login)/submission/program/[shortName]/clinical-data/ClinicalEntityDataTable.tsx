@@ -764,8 +764,8 @@ const ClinicalEntityDataTable = ({
 									height: 28px;
 									border-right: 1px solid ${theme.colors.grey_2};
 									${isSticky && stickyCSS}
-									height:100%;
 									${cellExpandToParent}
+									height:100%;
 								`}
 								style={{
 									...style,
