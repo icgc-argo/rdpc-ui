@@ -672,47 +672,47 @@ const ClinicalEntityDataTable = ({
 			);
 		};
 
+		const ClinicalCoreCompletionHeader = () => (
+			<>
+				<TopLevelHeader title="CLINICAL CORE COMPLETION" />
+				<div
+					css={css`
+						position: absolute;
+						right: 8px;
+						top: 50%;
+						transform: translateY(-50%);
+					`}
+				>
+					<Tooltip
+						html={
+							<p
+								css={css`
+									margin: 0px;
+									margin-right: 6px;
+								`}
+							>
+								For clinical completeness, each donor requires: <br />
+								DO: at least one Donor record <br />
+								PD: at least one Primary Diagnosis record <br />
+								NS: all the registered Normal DNA Specimen record <br />
+								TS: all the registered Tumour DNA Specimen record <br />
+								TR: at least one Treatment record <br />
+								FO: at least one Follow Up record <br />
+							</p>
+						}
+					>
+						<Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
+					</Tooltip>
+				</div>
+			</>
+		);
+
 		columns = [
 			{
 				id: 'clinical_core_completion_header',
 				meta: { customHeader: true },
 				sortingFn: sortEntityData,
-				header: () => {
-					return (
-						<>
-							<TopLevelHeader title="CLINICAL CORE COMPLETION" />
-							<div
-								css={css`
-									position: absolute;
-									right: 8px;
-									top: 50%;
-									transform: translateY(-50%);
-								`}
-							>
-								<Tooltip
-									html={
-										<p
-											css={css`
-												margin: 0px;
-												margin-right: 6px;
-											`}
-										>
-											For clinical completeness, each donor requires: <br />
-											DO: at least one Donor record <br />
-											PD: at least one Primary Diagnosis record <br />
-											NS: all the registered Normal DNA Specimen record <br />
-											TS: all the registered Tumour DNA Specimen record <br />
-											TR: at least one Treatment record <br />
-											FO: at least one Follow Up record <br />
-										</p>
-									}
-								>
-									<Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
-								</Tooltip>
-							</div>
-						</>
-					);
-				},
+				header: () => <ClinicalCoreCompletionHeader />,
 				headerStyle: completionHeaderStyle,
 				columns: columns.slice(0, 7).map((column, index) => ({
 					...column,
