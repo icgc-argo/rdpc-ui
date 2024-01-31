@@ -640,8 +640,6 @@ const ClinicalEntityDataTable = ({
 
 		const headerStyle = css`
 			background-color: ${theme.colors.grey_4};
-			border-bottom: 1px solid ${theme.colors.grey_2};
-			border-right: 1px solid ${theme.colors.grey_2};
 			font-size: 13px;
 			padding: 5px;
 			text-align: left;
@@ -655,6 +653,13 @@ const ClinicalEntityDataTable = ({
 			z-index: 1;
 		`;
 
+		const cellExpandToParent = css`
+			height: 28px;
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+		`;
+
 		columns = [
 			{
 				id: 'clinical_core_completion_header',
@@ -662,45 +667,39 @@ const ClinicalEntityDataTable = ({
 				sortingFn: sortEntityData,
 				header: (props) => {
 					return (
-						<th
-							colSpan={props.colSpan}
+						<div
 							css={css`
 								${headerStyle};
-								border-right: 3px solid ${theme.colors.grey};
+								width: 100%;
+								display: flex;
+								align-items: center;
+								justify-content: center;
+								position: relative;
 							`}
 						>
-							<div
-								css={css`
-									display: flex;
-									align-items: center;
-									justify-content: center;
-									position: relative;
-								`}
+							CLINICAL CORE COMPLETION
+							<Tooltip
+								style={{ position: 'absolute', left: 'calc(100% - 20px)', top: '-2px' }}
+								html={
+									<p
+										css={css`
+											margin: 0px;
+											margin-right: 6px;
+										`}
+									>
+										For clinical completeness, each donor requires: <br />
+										DO: at least one Donor record <br />
+										PD: at least one Primary Diagnosis record <br />
+										NS: all the registered Normal DNA Specimen record <br />
+										TS: all the registered Tumour DNA Specimen record <br />
+										TR: at least one Treatment record <br />
+										FO: at least one Follow Up record <br />
+									</p>
+								}
 							>
-								CLINICAL CORE COMPLETION
-								<Tooltip
-									style={{ position: 'absolute', left: 'calc(100% - 20px)', top: '-2px' }}
-									html={
-										<p
-											css={css`
-												margin: 0px;
-												margin-right: 6px;
-											`}
-										>
-											For clinical completeness, each donor requires: <br />
-											DO: at least one Donor record <br />
-											PD: at least one Primary Diagnosis record <br />
-											NS: all the registered Normal DNA Specimen record <br />
-											TS: all the registered Tumour DNA Specimen record <br />
-											TR: at least one Treatment record <br />
-											FO: at least one Follow Up record <br />
-										</p>
-									}
-								>
-									<Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
-								</Tooltip>
-							</div>
-						</th>
+								<Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
+							</Tooltip>
+						</div>
 					);
 				},
 				headerStyle: completionHeaderStyle,
@@ -715,25 +714,24 @@ const ClinicalEntityDataTable = ({
 						const isSorted = props.sorted;
 
 						return (
-							<th
-								onClick={props.getSortingHandler()}
+							<div
 								css={css`
+									width: 100%;
 									padding: 2px 6px;
 									font-size: 12px;
 									:hover {
 										cursor: pointer;
 									}
-									border-bottom: 1px solid ${theme.colors.grey_2};
-									border-right: ${isLastElement
-										? styleThickBorderString
-										: `1px solid ${theme.colors.grey_2}`};
+									border-right: ${isLastElement && styleThickBorderString};
+
 									${isSticky && stickyCSS}
 									${isSorted &&
 									`box-shadow: inset 0 ${isSorted === 'asc' ? '' : '-'}3px 0 0 rgb(7 116 211)`};
+									${cellExpandToParent}
 								`}
 							>
 								{value}
-							</th>
+							</div>
 						);
 					},
 					maxWidth: noTableData ? 50 : 250,
@@ -758,26 +756,23 @@ const ClinicalEntityDataTable = ({
 						);
 
 						return (
-							<td
+							<div
 								css={css`
+									font-size: 12px;
+									padding: 2px 8px;
+									min-width: 40px;
+									height: 28px;
 									border-right: 1px solid ${theme.colors.grey_2};
 									${isSticky && stickyCSS}
+									height:100%;
+									${cellExpandToParent}
 								`}
 								style={{
 									...style,
 								}}
 							>
-								<div
-									css={css`
-										font-size: 12px;
-										padding: 2px 8px;
-										min-width: 40px;
-										height: 28px;
-									`}
-								>
-									{content}
-								</div>
-							</td>
+								{content}
+							</div>
 						);
 					},
 				})),
@@ -786,9 +781,14 @@ const ClinicalEntityDataTable = ({
 				id: 'submitted_donor_data_header',
 				meta: { customHeader: true },
 				header: (props) => (
-					<th colSpan={props.colSpan} css={headerStyle}>
-						<div>SUBMITTED DONOR DATA</div>
-					</th>
+					<div
+						css={css`
+							width: 100%;
+							${headerStyle}
+						`}
+					>
+						SUBMITTED DONOR DATA
+					</div>
 				),
 				headerStyle: dataHeaderStyle,
 				columns: columns.slice(7),
