@@ -65,7 +65,7 @@ const ProgramWorkplaceStatus = ({ programShortName }) => {
 					display: flex;
 					flex-direction: row;
 					align-items: flex-end;
-					padding-top: 10px;
+					margin-top: 10px;
 				`}
 			>
 				<div
@@ -100,7 +100,7 @@ const ProgramWorkplaceStatus = ({ programShortName }) => {
 			<div
 				css={css`
 					height: 40px;
-					padding-top: 20px;
+					margin-top: 20px;
 					display: flex;
 					flex-direction: row;
 					align-items: flex-end;

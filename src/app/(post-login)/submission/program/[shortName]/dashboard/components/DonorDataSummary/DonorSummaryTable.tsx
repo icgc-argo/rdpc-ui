@@ -28,7 +28,6 @@ import {
 	DEFAULT_TABLE_PAGE_SIZE,
 	FilterClearButton,
 	Icon,
-	Link,
 	OnChangeFn,
 	PaginationState,
 	Row,
@@ -44,7 +43,7 @@ import {
 } from '@icgc-argo/uikit';
 
 import { find } from 'lodash';
-import NextLink from 'next/link';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import urlJoin from 'url-join';
 import { defaultClinicalEntityFilters } from '../../../clinical-data/common';
@@ -356,9 +355,7 @@ const DonorSummaryTable = ({
 							`/clinical-data/?donorId=${original.donorId}&tab=${errorTab || 'donor'}`,
 						);
 						return (
-							<NextLink href={linkUrl}>
-								<Link>{`${original.donorId} (${original.submitterDonorId})`}</Link>
-							</NextLink>
+							<Link href={linkUrl}>{`${original.donorId} (${original.submitterDonorId})`}</Link>
 						);
 					},
 					size: 135,
@@ -816,12 +813,10 @@ const DonorSummaryTable = ({
 						return original.validWithCurrentDictionary ? (
 							''
 						) : (
-							<NextLink href={linkUrl}>
-								<Link>
-									<Icon name="warning" fill={theme.colors.error} width="16px" height="15px" />{' '}
-									Update Clinical
-								</Link>
-							</NextLink>
+							<Link href={linkUrl}>
+								<Icon name="warning" fill={theme.colors.error} width="16px" height="15px" /> Update
+								Clinical
+							</Link>
 						);
 					},
 					size: 125,
@@ -837,8 +832,6 @@ const DonorSummaryTable = ({
 			].filter(Boolean),
 		},
 	];
-
-	console.log('data', programDonorSummaryEntries);
 
 	return (
 		<div
