@@ -18,6 +18,6 @@
  */
 'use client';
 
-import Contact from '@/components/views/Contact/Contact';
+import Contact from '@/views/Contact/Contact';
 
 export default Contact;

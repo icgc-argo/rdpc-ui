@@ -18,6 +18,6 @@
  */
 'use client';
 
-import Home from '@/components/views/Home/Home';
+import Home from '@/views/Home/Home';
 
 export default Home;
