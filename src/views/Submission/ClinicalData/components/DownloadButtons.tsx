@@ -25,7 +25,7 @@ import { Button, Icon, css } from '@icgc-argo/uikit';
 import React from 'react';
 import { Col, Row } from 'react-grid-system';
 import urlJoin from 'url-join';
-import { CompletionStates, TsvDownloadIds } from './common';
+import { CompletionStates, TsvDownloadIds } from '../types';
 
 const DownloadButton = ({
 	text,

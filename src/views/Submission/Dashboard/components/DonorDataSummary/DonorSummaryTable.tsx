@@ -42,11 +42,11 @@ import {
 	useTheme,
 } from '@icgc-argo/uikit';
 
+import { defaultClinicalEntityFilters } from '@/views/Submission/data';
 import { find } from 'lodash';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import urlJoin from 'url-join';
-import { defaultClinicalEntityFilters } from '../../../../../app/(post-login)/submission/program/[shortName]/clinical-data/common';
 import { Pipeline } from '../Pipeline';
 import { DesignationCell } from './DesignationCell';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';

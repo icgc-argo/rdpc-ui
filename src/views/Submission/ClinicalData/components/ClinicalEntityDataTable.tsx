@@ -41,8 +41,6 @@ import memoize from 'lodash/memoize';
 import { createRef, useEffect, useState } from 'react';
 import urljoin from 'url-join';
 import {
-	ClinicalEntitySearchResultResponse,
-	CompletionStates,
 	aliasSortNames,
 	aliasedEntityFields,
 	aliasedEntityNames,
@@ -51,7 +49,8 @@ import {
 	defaultClinicalEntityFilters,
 	emptyClinicalDataResponse,
 	emptySearchResponse,
-} from './common';
+} from '../data';
+import { ClinicalEntitySearchResultResponse, CompletionStates } from '../types';
 
 export type DonorEntry = {
 	row: string;

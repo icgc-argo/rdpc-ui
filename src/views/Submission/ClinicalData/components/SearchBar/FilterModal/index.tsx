@@ -23,7 +23,8 @@ import { useQuery } from '@apollo/client';
 import { Button, Modal, css } from '@icgc-argo/uikit/';
 import { Textarea } from '@icgc-argo/uikit/form/Textarea';
 import { useEffect, useState } from 'react';
-import { ClinicalEntitySearchResultResponse, defaultClinicalEntityFilters } from '../../common';
+import { defaultClinicalEntityFilters } from '../../../data';
+import { ClinicalEntitySearchResultResponse } from '../../../types';
 import MatchResults from './MatchResults';
 import UploadButton from './UploadButton';
 

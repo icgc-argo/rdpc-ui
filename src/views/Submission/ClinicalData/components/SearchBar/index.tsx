@@ -30,13 +30,9 @@ import {
 	useTheme,
 } from '@icgc-argo/uikit';
 import { createRef, Dispatch, RefObject, SetStateAction, useState } from 'react';
-import {
-	clinicalEntityFields,
-	ClinicalEntitySearchResultResponse,
-	CompletionStates,
-	emptySearchResponse,
-	TsvDownloadIds,
-} from '../common';
+
+import { clinicalEntityFields, emptySearchResponse } from '../../data';
+import { ClinicalEntitySearchResultResponse, CompletionStates, TsvDownloadIds } from '../../types';
 import ClinicalDownloadButton from '../DownloadButtons';
 import FilterModal from './FilterModal';
 import SearchResultsMenu from './SearchResultsMenu';
