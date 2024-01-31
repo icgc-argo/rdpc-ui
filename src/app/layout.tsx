@@ -22,7 +22,7 @@
 
 import { BUILD_TIME_VARIABLES } from '@/global/constants';
 import { ReactNode } from 'react';
-import App from './App';
+import App from '../App';
 
 async function getAppConfig() {
 	// cache: "no-store" ensures it's run server side
