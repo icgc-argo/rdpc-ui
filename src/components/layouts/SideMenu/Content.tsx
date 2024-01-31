@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -18,9 +18,22 @@
  */
 'use client';
 
-import Layout from '@/components/layouts';
-import { FunctionComponentChildren } from '@/global/types';
+import { Icon, MenuItem, SubMenu } from '@icgc-argo/uikit';
+import { useState } from 'react';
+import ProgramMenu from '../../../app/(post-login)/submission/components/ProgramMenu';
+import Search from '../../../app/(post-login)/submission/components/Search';
 
-const RootLayout = ({ children }: FunctionComponentChildren) => <Layout.App>{children}</Layout.App>;
+const SideMenuContent = () => {
+	const [programNameSearch, setProgramNameSearch] = useState('');
 
-export default RootLayout;
+	return (
+		<SubMenu>
+			<MenuItem icon={<Icon name="programs" />} content={'My Programs'} selected>
+				<Search query={programNameSearch} onChange={setProgramNameSearch} />
+				<ProgramMenu shortNameSearchQuery={programNameSearch} />
+			</MenuItem>
+		</SubMenu>
+	);
+};
+
+export default SideMenuContent;

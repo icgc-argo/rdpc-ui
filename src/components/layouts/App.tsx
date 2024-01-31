@@ -18,22 +18,40 @@
  */
 'use client';
 
-import { Icon, MenuItem, SubMenu } from '@icgc-argo/uikit';
-import { useState } from 'react';
-import ProgramMenu from '../ProgramMenu';
-import Search from '../Search';
+import { HEADER_HEIGHT_PX } from '@/components/Header';
+import { css, useTheme } from '@/lib/emotion';
+import { ReactNode, useState } from 'react';
+import SideMenu from './components/SideMenu/Menu';
 
-const SideMenuContent = () => {
-	const [programNameSearch, setProgramNameSearch] = useState('');
+export default function AppLayout({ children }: { children: ReactNode }) {
+	const theme = useTheme();
+
+	const [isSidebarActive, setSidebarActive] = useState<boolean>(true);
 
 	return (
-		<SubMenu>
-			<MenuItem icon={<Icon name="programs" />} content={'My Programs'} selected>
-				<Search query={programNameSearch} onChange={setProgramNameSearch} />
-				<ProgramMenu shortNameSearchQuery={programNameSearch} />
-			</MenuItem>
-		</SubMenu>
+		<div
+			css={css`
+				display: grid;
+				grid-template-columns: ${isSidebarActive
+					? '248px calc(100vw - 248px)'
+					: '40px calc(100vw - 40px)'};
+				transition: 300ms;
+				background: ${theme.colors.grey_4};
+			`}
+		>
+			<div
+				css={css`
+					height: calc(100vh - ${HEADER_HEIGHT_PX}px);
+					z-index: 1;
+					box-shadow: ${theme.shadows.pageElement};
+				`}
+			>
+				<SideMenu
+					isActive={isSidebarActive}
+					onToggle={() => setSidebarActive((active) => !active)}
+				/>
+			</div>
+			<>{children}</>
+		</div>
 	);
-};
-
-export default SideMenuContent;
+}
