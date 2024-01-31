@@ -26,6 +26,7 @@ import {
 	BUTTON_SIZES,
 	BUTTON_VARIANTS,
 	Button,
+	Container,
 	FileSelectButton,
 	Icon,
 	InstructionBox,
@@ -71,7 +72,7 @@ const Instructions = ({
 		);
 
 	return (
-		<div
+		<Container
 			css={css`
 				padding: 8px;
 			`}
@@ -161,7 +162,7 @@ const Instructions = ({
 					</div>
 				}
 			/>
-		</div>
+		</Container>
 	);
 };
 

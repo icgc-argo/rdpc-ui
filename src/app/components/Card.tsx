@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import { css } from '@/lib/emotion';
-import { Typography } from '@icgc-argo/uikit';
+import { Container, Typography } from '@icgc-argo/uikit';
 import { FC, ReactNode } from 'react';
 
 type CardProps = {
@@ -27,41 +27,43 @@ type CardProps = {
 	children: ReactNode;
 };
 const Card: FC<CardProps> = ({ title, action, fill = false, children }) => (
-	<div
-		css={css`
-			${fill &&
-			css`
-				flex: 1 0 auto;
-			`}
-			padding: 9px;
-		`}
-	>
-		{(title || action) && (
-			<div
-				css={css`
-					display: flex;
-					flex-direction: row;
-					justify-content: space-between;
-					align-items: center;
-					margin-bottom: 2px;
+	<Container>
+		<div
+			css={css`
+				${fill &&
+				css`
+					flex: 1 0 auto;
 				`}
-			>
-				<Typography
+				padding: 9px;
+			`}
+		>
+			{(title || action) && (
+				<div
 					css={css`
-						margin: 0 0 8px 0;
+						display: flex;
+						flex-direction: row;
+						justify-content: space-between;
+						align-items: center;
+						margin-bottom: 2px;
 					`}
-					color="primary"
-					variant="subtitle2"
-					component="h2"
 				>
-					{title}
-				</Typography>
-				{action}
-			</div>
-		)}
+					<Typography
+						css={css`
+							margin: 0 0 8px 0;
+						`}
+						color="primary"
+						variant="subtitle2"
+						component="h2"
+					>
+						{title}
+					</Typography>
+					{action}
+				</div>
+			)}
 
-		{children}
-	</div>
+			{children}
+		</div>
+	</Container>
 );
 
 export default Card;
