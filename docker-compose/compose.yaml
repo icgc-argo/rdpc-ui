@@ -1,9 +1,11 @@
 version: '3'
 
 services:
-  #
+  # RDPC Gateway
   rdpc-gateway:
     image: '${IMAGE_RDPC_GATEWAY}'
+    ports:
+      - 4000:4000
     environment:
       # Gateway Server Configuration
       PORT: 4000
@@ -13,12 +15,42 @@ services:
       # ARGO Clinical Services
       CLINICAL_GQL_URL: http://localhost:3001
       CLINICAL_API_URL: http://localhost:3002
-    ports:
-      - 4000:4000
-  #
+
+  # Platform Gateway
   platform-gateway:
     image: '${IMAGE_PLATFORM_GATEWAY}'
-    environment:
-      PORT: 4001
     ports:
       - 4001:4001
+    depends_on:
+      - elasticsearch
+    environment:
+      PORT: 4001
+      ELASTICSEARCH_HOST:
+      ELASTICSEARCH_PROGRAM_DONOR_DASHBOARD_INDEX: donor_submission_summary
+      ELASTICSEARCH_CLIENT_TRUST_SSL_CERT: false
+      ELASTICSEARCH_VAULT_SECRET_PATH:
+      ELASTICSEARCH_USERNAME:
+      ELASTICSEARCH_PASSWORD:
+
+  # Elasticsearch
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    ports:
+      - 9200:9200
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx2048m'
+
+  # Kibana
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.10.2
+    depends_on:
+      - elasticsearch
+    ports:
+      - 5601:5601
+
+volumes:
+  es_data:
+    driver: local
