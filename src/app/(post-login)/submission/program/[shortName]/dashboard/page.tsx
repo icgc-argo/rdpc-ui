@@ -1,3 +1,5 @@
+'use client';
+
 import { pageWithPermissions } from '@/components/Page';
 import Dashboard from '@/views/Submission/Dashboard/Dashboard';
 
