@@ -28,7 +28,7 @@ import { useGatewayQuery } from '@/hooks/useApolloQuery';
 import { Button, Loader } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import ProgramList from '../components/ProgramList';
+import ProgramList from '../../../../views/Submission/components/ProgramList';
 
 export default function Submission() {
 	const { DATA_CENTER } = useAppConfigContext();

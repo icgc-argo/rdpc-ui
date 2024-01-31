@@ -46,7 +46,7 @@ import { find } from 'lodash';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import urlJoin from 'url-join';
-import { defaultClinicalEntityFilters } from '../../../clinical-data/common';
+import { defaultClinicalEntityFilters } from '../../../../../app/(post-login)/submission/program/[shortName]/clinical-data/common';
 import { Pipeline } from '../Pipeline';
 import { DesignationCell } from './DesignationCell';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';

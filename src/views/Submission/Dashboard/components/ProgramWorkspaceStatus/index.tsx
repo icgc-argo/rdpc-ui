@@ -28,8 +28,8 @@ import {
 } from '@/global/constants';
 import NextLink, { LinkProps } from 'next/link';
 import { ComponentType, ReactNode } from 'react';
-import ClinicalSubmissionProgressBar from '../../../components/ClinicalSubmissionProgressBar';
-import SampleRegistrationProgressBar from '../../../components/SampleRegistrationProgressBar';
+import ClinicalSubmissionProgressBar from '../../../../../app/(post-login)/submission/program/[shortName]/components/ClinicalSubmissionProgressBar';
+import SampleRegistrationProgressBar from '../../../../../app/(post-login)/submission/program/[shortName]/components/SampleRegistrationProgressBar';
 import { DashboardCard } from '../common';
 
 const ConditionalLink: ComponentType<{

@@ -23,7 +23,7 @@ import { containerStyle } from '@/global/styles/style';
 import { css, useTheme } from '@/lib/emotion';
 import { Table, Typography } from '@icgc-argo/uikit';
 import orderBy from 'lodash/orderBy';
-import { columns } from '../program-table/config';
+import { columns } from '../../../app/(post-login)/submission/program-table/config';
 
 export type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 

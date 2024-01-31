@@ -18,10 +18,10 @@
  */
 'use client';
 
+import ProgramMenu from '@/views/Submission/components/ProgramMenu';
+import Search from '@/views/Submission/components/Search';
 import { Icon, MenuItem, SubMenu } from '@icgc-argo/uikit';
 import { useState } from 'react';
-import ProgramMenu from '../../../app/(post-login)/submission/components/ProgramMenu';
-import Search from '../../../app/(post-login)/submission/components/Search';
 
 const SideMenuContent = () => {
 	const [programNameSearch, setProgramNameSearch] = useState('');

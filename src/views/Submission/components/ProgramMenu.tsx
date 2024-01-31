@@ -41,7 +41,7 @@ import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import { notFound, useParams, usePathname } from 'next/navigation';
 import { FC, ReactNode, useState } from 'react';
-import { defaultClinicalEntityFilters } from '../common';
+import { defaultClinicalEntityFilters } from '../data';
 
 const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
 	return (

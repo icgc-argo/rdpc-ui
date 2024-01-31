@@ -18,6 +18,7 @@
  */
 
 import { ClinicalInput } from '@/__generated__/clinical/graphql';
+import { CompletionStates } from './types';
 
 export const aliasSortNames = {
 	donor_id: 'donorId',
@@ -50,23 +51,6 @@ export const aliasedEntityNames = {
 };
 
 export const clinicalEntityFields = Object.keys(aliasedEntityNames);
-
-export type ClinicalFilter = {
-	entityTypes: string[];
-	page: number;
-	pageSize: number;
-	donorIds?: string[];
-	submitterDonorIds?: string[];
-	completionState?: CompletionStates;
-	sort?: string;
-};
-
-export enum CompletionStates {
-	all = 'all',
-	invalid = 'invalid',
-	complete = 'complete',
-	incomplete = 'incomplete',
-}
 
 export const defaultClinicalEntityFilters: ClinicalInput = {
 	entityTypes: clinicalEntityFields,
