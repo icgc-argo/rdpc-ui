@@ -18,40 +18,56 @@
  */
 'use client';
 
-import { HEADER_HEIGHT_PX } from '@/components/Header';
-import { css, useTheme } from '@/lib/emotion';
-import { ReactNode, useState } from 'react';
-import SideMenu from './components/SideMenu/Menu';
+import { useAppConfigContext } from '@/hooks/AppProvider';
+import { css } from '@/lib/emotion';
+import { Button, Icon, useTheme } from '@icgc-argo/uikit';
 
-export default function AppLayout({ children }: { children: ReactNode }) {
+const LoginButton = () => {
+	const { EGO_LOGIN_URL } = useAppConfigContext();
 	const theme = useTheme();
-
-	const [isSidebarActive, setSidebarActive] = useState<boolean>(true);
-
 	return (
 		<div
 			css={css`
-				display: grid;
-				grid-template-columns: ${isSidebarActive
-					? '248px calc(100vw - 248px)'
-					: '40px calc(100vw - 40px)'};
-				transition: 300ms;
-				background: ${theme.colors.grey_4};
+				display: flex;
+				height: 100%;
 			`}
 		>
-			<div
+			<a
+				id="link-login"
+				href={EGO_LOGIN_URL}
 				css={css`
-					height: calc(100vh - ${HEADER_HEIGHT_PX}px);
-					z-index: 1;
-					box-shadow: ${theme.shadows.pageElement};
+					align-self: center;
+					text-decoration: none;
+					padding: 0 16px;
 				`}
 			>
-				<SideMenu
-					isActive={isSidebarActive}
-					onToggle={() => setSidebarActive((active) => !active)}
-				/>
-			</div>
-			<>{children}</>
+				<Button
+					css={css`
+						padding: 8px 18px 8px 12px;
+						border: 1px solid ${theme.colors.grey_1};
+					`}
+				>
+					<span
+						css={css`
+							display: flex;
+							justify-content: center;
+							align-items: center;
+						`}
+					>
+						<Icon
+							name="google"
+							height="17px"
+							width="17px"
+							css={css`
+								margin-right: 5px;
+							`}
+						/>
+						Login
+					</span>
+				</Button>
+			</a>
 		</div>
 	);
-}
+};
+
+export default LoginButton;

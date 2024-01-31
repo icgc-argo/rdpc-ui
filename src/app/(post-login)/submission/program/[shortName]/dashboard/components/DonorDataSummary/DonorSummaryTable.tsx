@@ -18,11 +18,11 @@
  */
 
 import { DonorSummaryEntry } from '@/__generated__/gateway/graphql';
-import { CellContentCenter, DataTableStarIcon as StarIcon } from '@/app/components/Table/common';
-import { ContentError } from '@/app/components/placeholders';
-import CLINICAL_ERRORS_QUERY from '@/app/gql/clinical/CLINICAL_ERRORS_QUERY';
-import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
+import { CellContentCenter, DataTableStarIcon as StarIcon } from '@/components/Table/common';
+import { ContentError } from '@/components/placeholders';
 import { displayDate, parseDonorIdString } from '@/global/utils';
+import CLINICAL_ERRORS_QUERY from '@/gql/clinical/CLINICAL_ERRORS_QUERY';
+import { useClinicalQuery } from '@/hooks/useApolloQuery';
 import {
 	ColumnDef,
 	DEFAULT_TABLE_PAGE_SIZE,

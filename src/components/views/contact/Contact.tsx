@@ -18,56 +18,25 @@
  */
 'use client';
 
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { css } from '@/lib/emotion';
-import { Button, Icon, useTheme } from '@icgc-argo/uikit';
+import { css, useTheme } from '@icgc-argo/uikit';
+import { Row } from 'react-grid-system';
+import Form from './components/form';
+import Info from './components/info';
 
-const LoginButton = () => {
-	const { EGO_LOGIN_URL } = useAppConfigContext();
+const Contact = () => {
 	const theme = useTheme();
 	return (
-		<div
+		<Row
+			nogutter
 			css={css`
-				display: flex;
 				height: 100%;
+				background: ${theme.colors.white};
 			`}
 		>
-			<a
-				id="link-login"
-				href={EGO_LOGIN_URL}
-				css={css`
-					align-self: center;
-					text-decoration: none;
-					padding: 0 16px;
-				`}
-			>
-				<Button
-					css={css`
-						padding: 8px 18px 8px 12px;
-						border: 1px solid ${theme.colors.grey_1};
-					`}
-				>
-					<span
-						css={css`
-							display: flex;
-							justify-content: center;
-							align-items: center;
-						`}
-					>
-						<Icon
-							name="google"
-							height="17px"
-							width="17px"
-							css={css`
-								margin-right: 5px;
-							`}
-						/>
-						Login
-					</span>
-				</Button>
-			</a>
-		</div>
+			<Info />
+			<Form />
+		</Row>
 	);
 };
 
-export default LoginButton;
+export default Contact;

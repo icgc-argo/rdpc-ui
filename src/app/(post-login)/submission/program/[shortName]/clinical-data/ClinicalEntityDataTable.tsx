@@ -18,13 +18,13 @@
  */
 
 import { ClinicalSearchResults } from '@/__generated__/clinical/graphql';
-import ErrorNotification from '@/app/components/ErrorNotification';
-import { TableInfoHeaderContainer } from '@/app/components/Table/common';
-import CLINICAL_ENTITY_DATA_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_DATA_QUERY';
-import CLINICAL_SCHEMA_VERSION from '@/app/gql/clinical/CLINICAL_SCHEMA_VERSION';
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
+import ErrorNotification from '@/components/ErrorNotification';
+import { TableInfoHeaderContainer } from '@/components/Table/common';
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from '@/global/constants';
+import CLINICAL_ENTITY_DATA_QUERY from '@/gql/clinical/CLINICAL_ENTITY_DATA_QUERY';
+import CLINICAL_SCHEMA_VERSION from '@/gql/clinical/CLINICAL_SCHEMA_VERSION';
+import { useAppConfigContext } from '@/hooks/AppProvider';
+import { useClinicalQuery } from '@/hooks/useApolloQuery';
 import {
 	ContentPlaceholder,
 	DnaLoader,

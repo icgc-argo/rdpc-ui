@@ -17,19 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ModalPortal } from '@/app/components/Modal';
-import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
-import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
-import APPROVE_SUBMISSION_MUTATION from '@/app/gql/gateway/APPROVE_SUBMISSION_MUTATION';
-import REOPEN_SUBMISSION_MUTATION from '@/app/gql/gateway/REOPEN_SUBMISSION_MUTATION';
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { useAuthContext } from '@/app/hooks/AuthProvider';
-import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
-import { useToaster } from '@/app/hooks/ToastProvider';
-import useCommonToasters from '@/app/hooks/useCommonToasters';
-import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
-import useUserConfirmationModalState from '@/app/hooks/useUserConfirmationModalState';
+import { ModalPortal } from '@/components/Modal';
+import { BreadcrumbTitle, HelpLink, PageHeader } from '@/components/PageHeader/PageHeader';
 import { sleep } from '@/global/utils';
+import CLEAR_CLINICAL_SUBMISSION from '@/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
+import APPROVE_SUBMISSION_MUTATION from '@/gql/gateway/APPROVE_SUBMISSION_MUTATION';
+import REOPEN_SUBMISSION_MUTATION from '@/gql/gateway/REOPEN_SUBMISSION_MUTATION';
+import { useAppConfigContext } from '@/hooks/AppProvider';
+import { useAuthContext } from '@/hooks/AuthProvider';
+import { useGlobalLoader } from '@/hooks/GlobalLoaderProvider';
+import { useToaster } from '@/hooks/ToastProvider';
+import useCommonToasters from '@/hooks/useCommonToasters';
+import { useSubmissionSystemStatus } from '@/hooks/useSubmissionSystemStatus';
+import useUserConfirmationModalState from '@/hooks/useUserConfirmationModalState';
 import { css, useTheme } from '@/lib/emotion';
 import { useMutation } from '@apollo/client';
 import { Button, Modal } from '@icgc-argo/uikit';

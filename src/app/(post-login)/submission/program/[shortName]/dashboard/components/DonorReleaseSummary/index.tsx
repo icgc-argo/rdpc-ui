@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import DASHBOARD_SUMMARY_QUERY from '@/app/gql/gateway/DASHBOARD_SUMMARY_QUERY';
-import { useGatewayQuery } from '@/app/hooks/useApolloQuery';
+import DASHBOARD_SUMMARY_QUERY from '@/gql/gateway/DASHBOARD_SUMMARY_QUERY';
+import { useGatewayQuery } from '@/hooks/useApolloQuery';
 import { css, Typography } from '@icgc-argo/uikit';
 import { DashboardCard } from '../common';
 

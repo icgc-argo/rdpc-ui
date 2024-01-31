@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { useAuthContext } from '@/app/hooks/AuthProvider';
+import { useAuthContext } from '@/hooks/AuthProvider';
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { DnaLoader, css } from '@icgc-argo/uikit';
 import { redirect } from 'next/navigation';

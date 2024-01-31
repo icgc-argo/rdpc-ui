@@ -17,9 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
-import { useToaster } from '@/app/hooks/ToastProvider';
-import useCommonToasters from '@/app/hooks/useCommonToasters';
+import CLEAR_CLINICAL_SUBMISSION from '@/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
+import { useToaster } from '@/hooks/ToastProvider';
+import useCommonToasters from '@/hooks/useCommonToasters';
 import { css } from '@/lib/emotion';
 import { useMutation } from '@apollo/client';
 import { Col } from 'react-grid-system';

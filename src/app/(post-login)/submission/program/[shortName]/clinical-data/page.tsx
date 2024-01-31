@@ -18,14 +18,14 @@
  */
 'use client';
 
-import ContentMain from '@/app/components/Content/ContentMain';
-import { pageWithPermissions } from '@/app/components/Page';
-import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
-import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
-import SUBMITTED_DATA_SIDE_MENU_QUERY from '@/app/gql/clinical/SUBMITTED_DATA_SIDE_MENU_QUERY';
-import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
-import useUrlParamState from '@/app/hooks/useUrlParamState';
+import ContentMain from '@/components/Content/ContentMain';
+import { pageWithPermissions } from '@/components/Page';
+import { BreadcrumbTitle, HelpLink, PageHeader } from '@/components/PageHeader/PageHeader';
 import { notNull, parseDonorIdString } from '@/global/utils';
+import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/gql/clinical/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
+import SUBMITTED_DATA_SIDE_MENU_QUERY from '@/gql/clinical/SUBMITTED_DATA_SIDE_MENU_QUERY';
+import { useClinicalQuery } from '@/hooks/useApolloQuery';
+import useUrlParamState from '@/hooks/useUrlParamState';
 import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
 import { Loader, Typography, VerticalTabs, useTheme } from '@icgc-argo/uikit';

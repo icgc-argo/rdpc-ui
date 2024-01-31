@@ -23,7 +23,7 @@ import {
 	TableLegendEntry,
 	TableLegendSection,
 	TableLegendStatusIcon,
-} from '@/app/components/Table/common';
+} from '@/components/Table/common';
 import { Icon, Typography, css, useTheme } from '@icgc-argo/uikit';
 import { Col, Row } from 'react-grid-system';
 import {

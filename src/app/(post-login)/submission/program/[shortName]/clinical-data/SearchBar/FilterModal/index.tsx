@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ModalPortal } from '@/app/components/Modal';
-import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
+import { ModalPortal } from '@/components/Modal';
+import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/gql/clinical/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
 import { useQuery } from '@apollo/client';
 import { Button, Modal, css } from '@icgc-argo/uikit/';
 import { Textarea } from '@icgc-argo/uikit/form/Textarea';

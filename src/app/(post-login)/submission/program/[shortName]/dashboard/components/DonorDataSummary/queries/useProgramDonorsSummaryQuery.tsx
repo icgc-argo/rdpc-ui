@@ -17,9 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import PROGRAM_DONOR_SUMMARY_QUERY from '@/app/gql/gateway/PROGRAM_DONOR_SUMMARY_QUERY';
-import { useGatewayQuery } from '@/app/hooks/useApolloQuery';
-import { useTimeout } from '@/app/hooks/useTimeout';
+import PROGRAM_DONOR_SUMMARY_QUERY from '@/gql/gateway/PROGRAM_DONOR_SUMMARY_QUERY';
+import { useGatewayQuery } from '@/hooks/useApolloQuery';
+import { useTimeout } from '@/hooks/useTimeout';
 import { QueryHookOptions } from '@apollo/client';
 import { POLL_INTERVAL_MILLISECONDS } from '../../common';
 import {

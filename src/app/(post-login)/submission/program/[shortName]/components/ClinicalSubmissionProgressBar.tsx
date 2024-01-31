@@ -17,9 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import CLINICAL_SUBMISSION_QUERY from '@/app/gql/clinical/CLINICAL_SUBMISSION_QUERY';
-import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
-import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
+import CLINICAL_SUBMISSION_QUERY from '@/gql/clinical/CLINICAL_SUBMISSION_QUERY';
+import { useClinicalQuery } from '@/hooks/useApolloQuery';
+import { useSubmissionSystemStatus } from '@/hooks/useSubmissionSystemStatus';
 import { css, Progress } from '@icgc-argo/uikit';
 import { ComponentProps, ComponentType, useMemo, useState } from 'react';
 

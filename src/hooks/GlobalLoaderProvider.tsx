@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { FadingDiv } from '@/app/components/FadingDiv';
-import { fillAvailableHeight, fillAvailableWidth } from '@/app/components/Modal';
+import { FadingDiv } from '@/components/FadingDiv';
+import { fillAvailableHeight, fillAvailableWidth } from '@/components/Modal';
 import { DnaLoader, Modal, css } from '@icgc-argo/uikit';
 import { FC, ReactNode, createContext, createRef, useContext, useState } from 'react';
 import ReactDOM from 'react-dom';

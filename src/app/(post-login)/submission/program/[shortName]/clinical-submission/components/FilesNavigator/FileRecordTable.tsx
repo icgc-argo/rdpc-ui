@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { SubmissionInfoArea, TableInfoHeaderContainer } from '@/app/components/Table/common';
+import { SubmissionInfoArea, TableInfoHeaderContainer } from '@/components/Table/common';
 import { css, useTheme } from '@/lib/emotion';
 import { Table } from '@icgc-argo/uikit';
 import { ComponentProps } from 'react';

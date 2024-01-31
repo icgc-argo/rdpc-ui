@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { StatArea } from '@/app/components/Table/common';
+import { StatArea } from '@/components/Table/common';
 import { ColumnDef, Table, TableCellWrapper, css, useTheme } from '@icgc-argo/uikit';
 import { capitalize } from 'lodash';
 import { createRef } from 'react';

@@ -19,14 +19,7 @@
 'use client';
 
 import { SideMenuProgramStatusQuery, SubmissionState } from '@/__generated__/clinical/graphql';
-import Loader from '@/app/components/Loader';
-import SIDEMENU_PROGRAM_STATUS from '@/app/gql/clinical/SIDEMENU_PROGRAM_STATUS';
-import SIDEMENU_PROGRAMS from '@/app/gql/gateway/SIDEMENU_PROGRAMS';
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { useAuthContext } from '@/app/hooks/AuthProvider';
-import { useClinicalQuery, useGatewayQuery } from '@/app/hooks/useApolloQuery';
-import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
-import useUserRole from '@/app/hooks/useUserRole';
+import Loader from '@/components/Loader';
 import {
 	PROGRAM_CLINICAL_DATA_PATH,
 	PROGRAM_CLINICAL_SUBMISSION_PATH,
@@ -35,6 +28,13 @@ import {
 	PROGRAM_SAMPLE_REGISTRATION_PATH,
 } from '@/global/constants';
 import { getProgramPath, notNull } from '@/global/utils';
+import SIDEMENU_PROGRAM_STATUS from '@/gql/clinical/SIDEMENU_PROGRAM_STATUS';
+import SIDEMENU_PROGRAMS from '@/gql/gateway/SIDEMENU_PROGRAMS';
+import { useAppConfigContext } from '@/hooks/AppProvider';
+import { useAuthContext } from '@/hooks/AuthProvider';
+import { useClinicalQuery, useGatewayQuery } from '@/hooks/useApolloQuery';
+import { useSubmissionSystemStatus } from '@/hooks/useSubmissionSystemStatus';
+import useUserRole from '@/hooks/useUserRole';
 import { css } from '@/lib/emotion';
 import { Icon, MenuItem } from '@icgc-argo/uikit';
 import orderBy from 'lodash/orderBy';

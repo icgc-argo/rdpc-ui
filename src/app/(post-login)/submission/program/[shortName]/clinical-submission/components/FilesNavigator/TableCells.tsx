@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { CellContentCenter, DataTableStarIcon } from '@/app/components/Table/common';
+import { CellContentCenter, DataTableStarIcon } from '@/components/Table/common';
 import { css, useTheme } from '@/lib/emotion';
 import { TableCellWrapper } from '@icgc-argo/uikit';
 import { get } from 'lodash';

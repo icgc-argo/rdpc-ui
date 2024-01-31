@@ -18,13 +18,13 @@
  */
 'use client';
 
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { useAppConfigContext } from '@/hooks/AppProvider';
 import { css, useTheme } from '@/lib/emotion';
 import { DataCallout, Link, Typography, overtureLogo } from '@icgc-argo/uikit';
 import Image from 'next/image';
 import { ComponentType } from 'react';
 import urlJoin from 'url-join';
-import Hero from './components/Hero';
+import Hero from '../components/Hero';
 
 const OvertureBanner: ComponentType = () => {
 	const theme = useTheme();

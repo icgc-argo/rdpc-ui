@@ -19,28 +19,15 @@
 'use client';
 
 import { ClinicalSubmissionEntity } from '@/__generated__/clinical/graphql';
-import ContentMain from '@/app/components/Content/ContentMain';
-import ErrorNotification, { ErrorReportColumns } from '@/app/components/ErrorNotification';
+import ContentMain from '@/components/Content/ContentMain';
+import ErrorNotification, { ErrorReportColumns } from '@/components/ErrorNotification';
 import {
 	errorNotificationTableProps,
 	getDefaultErrorTableColumns,
-} from '@/app/components/ErrorNotification/ErrorNotificationDefaultTable';
-import Loader from '@/app/components/Loader';
-import { ModalPortal } from '@/app/components/Modal';
-import { pageWithPermissions } from '@/app/components/Page';
-import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
-import CLINICAL_SUBMISSION_QUERY from '@/app/gql/clinical/CLINICAL_SUBMISSION_QUERY';
-import SIGN_OFF_SUBMISSION_MUTATION from '@/app/gql/clinical/SIGN_OFF_SUBMISSION_MUTATION';
-import VALIDATE_SUBMISSION_MUTATION from '@/app/gql/clinical/VALIDATE_SUBMISSION_MUTATION';
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { useAuthContext } from '@/app/hooks/AuthProvider';
-import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
-import { useToaster } from '@/app/hooks/ToastProvider';
-import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
-import useCommonToasters from '@/app/hooks/useCommonToasters';
-import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
-import useUrlQueryState from '@/app/hooks/useURLQueryState';
-import useUserConfirmationModalState from '@/app/hooks/useUserConfirmationModalState';
+} from '@/components/ErrorNotification/ErrorNotificationDefaultTable';
+import Loader from '@/components/Loader';
+import { ModalPortal } from '@/components/Modal';
+import { pageWithPermissions } from '@/components/Page';
 import {
 	PROGRAM_DASHBOARD_PATH,
 	PROGRAM_SHORT_NAME_PATH,
@@ -48,6 +35,19 @@ import {
 } from '@/global/constants';
 import { displayDateAndTime, getProgramPath, sleep, toDisplayError } from '@/global/utils';
 import { createFileFormData, uploadFileRequest } from '@/global/utils/form';
+import CLEAR_CLINICAL_SUBMISSION from '@/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
+import CLINICAL_SUBMISSION_QUERY from '@/gql/clinical/CLINICAL_SUBMISSION_QUERY';
+import SIGN_OFF_SUBMISSION_MUTATION from '@/gql/clinical/SIGN_OFF_SUBMISSION_MUTATION';
+import VALIDATE_SUBMISSION_MUTATION from '@/gql/clinical/VALIDATE_SUBMISSION_MUTATION';
+import { useAppConfigContext } from '@/hooks/AppProvider';
+import { useAuthContext } from '@/hooks/AuthProvider';
+import { useGlobalLoader } from '@/hooks/GlobalLoaderProvider';
+import { useToaster } from '@/hooks/ToastProvider';
+import { useClinicalQuery } from '@/hooks/useApolloQuery';
+import useCommonToasters from '@/hooks/useCommonToasters';
+import { useSubmissionSystemStatus } from '@/hooks/useSubmissionSystemStatus';
+import useUrlQueryState from '@/hooks/useURLQueryState';
+import useUserConfirmationModalState from '@/hooks/useUserConfirmationModalState';
 import { css } from '@/lib/emotion';
 import { useMutation as useGQLMutation } from '@apollo/client';
 import {
@@ -61,7 +61,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useMutation } from 'react-query';
 import urlJoin from 'url-join';
-import FileError from '../../../../../components/FileError';
+import FileError from '../../../../../../components/FileError';
 import FilesNavigator from './components/FilesNavigator';
 import Header from './components/Header';
 import Instructions from './components/Instructions';

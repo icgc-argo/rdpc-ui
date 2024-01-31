@@ -17,11 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ContentError, ContentLoader } from '@/app/components/placeholders';
-import DASHBOARD_SUMMARY_QUERY from '@/app/gql/gateway/DASHBOARD_SUMMARY_QUERY';
-import PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY from '@/app/gql/gateway/PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY';
-import { useGatewayQuery } from '@/app/hooks/useApolloQuery';
-import { useTimeout } from '@/app/hooks/useTimeout';
+import { ContentError, ContentLoader } from '@/components/placeholders';
+import DASHBOARD_SUMMARY_QUERY from '@/gql/gateway/DASHBOARD_SUMMARY_QUERY';
+import PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY from '@/gql/gateway/PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY';
+import { useGatewayQuery } from '@/hooks/useApolloQuery';
+import { useTimeout } from '@/hooks/useTimeout';
 import { QueryHookOptions, useQuery } from '@apollo/client';
 import { Typography, css, useElementDimension, useTheme } from '@icgc-argo/uikit';
 import { format as formatDate, subDays } from 'date-fns';

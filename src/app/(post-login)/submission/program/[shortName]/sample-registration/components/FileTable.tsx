@@ -23,7 +23,7 @@ import {
 	StatArea as StatAreaDisplay,
 	SubmissionInfoArea,
 	TableInfoHeaderContainer,
-} from '@/app/components/Table/common';
+} from '@/components/Table/common';
 import { toDisplayRowIndex } from '@/global/utils/clinical';
 import { ColumnDef, Icon, Table, css } from '@icgc-argo/uikit';
 import memoize from 'lodash/memoize';

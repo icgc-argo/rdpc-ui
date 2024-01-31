@@ -18,10 +18,10 @@
  */
 'use client';
 
-import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
-import { useToaster } from '@/app/hooks/ToastProvider';
-import useCommonToasters from '@/app/hooks/useCommonToasters';
 import { sleep } from '@/global/utils';
+import { useGlobalLoader } from '@/hooks/GlobalLoaderProvider';
+import { useToaster } from '@/hooks/ToastProvider';
+import useCommonToasters from '@/hooks/useCommonToasters';
 import { css } from '@/lib/emotion';
 import { Button } from '@icgc-argo/uikit';
 import { FC } from 'react';
