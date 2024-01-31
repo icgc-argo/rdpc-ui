@@ -466,9 +466,10 @@ const LineChart = ({
 	// invisible box (keep track of mouse hovering)
 	const HoverDetector = () => {
 		return (
-			<g fill-opacity="0" stroke="none">
+			<g fillOpacity="0" stroke="none">
 				{xCoordinates.map((xCoordinate, idx) => (
 					<rect
+						key={idx}
 						onMouseEnter={() => {
 							setTooltipIndex(idx);
 						}}
