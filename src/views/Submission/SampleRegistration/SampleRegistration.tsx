@@ -18,10 +18,9 @@
  */
 'use client';
 
-import Instructions from '@/app/(post-login)/submission/program/[shortName]/sample-registration/components/Instructions';
-import ProgressBar from '@/app/(post-login)/submission/program/[shortName]/sample-registration/components/ProgressBar';
 import Card from '@/components/Card';
 import ContentMain from '@/components/Content/ContentMain';
+import FileError from '@/components/FileError';
 import NoDataMessage from '@/components/NoData';
 import { BreadcrumbTitle, HelpLink, PageHeader } from '@/components/PageHeader/PageHeader';
 import { UPLOAD_REGISTRATION } from '@/global/constants';
@@ -37,6 +36,8 @@ import { useClinicalQuery } from '@/hooks/useApolloQuery';
 import useCommonToasters from '@/hooks/useCommonToasters';
 import { useSubmissionSystemStatus } from '@/hooks/useSubmissionSystemStatus';
 import { css } from '@/lib/emotion';
+import Instructions from '@/views/Submission/SampleRegistration/components/Instructions';
+import ProgressBar from '@/views/Submission/SampleRegistration/components/ProgressBar';
 import { useMutation as useGQLMutation, useQuery } from '@apollo/client';
 import {
 	BUTTON_SIZES,
@@ -50,7 +51,6 @@ import { get } from 'lodash';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
 import urlJoin from 'url-join';
-import FileError from '../../../../../../components/FileError';
 import FilePreview from './components/FilePreview';
 import RegisterSamplesModal from './components/RegisterSampleModal';
 import UploadError from './components/UploadError';
