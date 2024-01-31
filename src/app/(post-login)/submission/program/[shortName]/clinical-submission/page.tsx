@@ -105,7 +105,7 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 		updateQuery: updateClinicalSubmissionQuery,
 	} = useClinicalQuery(CLINICAL_SUBMISSION_QUERY, {
 		variables: {
-			shortName,
+			programShortName: shortName,
 		},
 	});
 

@@ -16,7 +16,6 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { containerStyle } from '@/global/styles/style';
 import { css, useTheme } from '@/lib/emotion';
 import { ReactNode } from 'react';
 
@@ -29,12 +28,9 @@ const ContentMain = ({ children }: { children: ReactNode }) => {
 				display: flex;
 				flex: 1 0 auto;
 				flex-direction: column;
-				row-gap: 20px;
 				padding: 25px 30px;
 
 				> div {
-					${containerStyle(theme)}
-
 					&.error {
 						border: 1px solid ${theme.colors.error_2};
 						background-color: ${theme.colors.error_4};

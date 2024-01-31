@@ -355,10 +355,11 @@ const DonorSummaryTable = ({
 							programShortName,
 							`/clinical-data/?donorId=${original.donorId}&tab=${errorTab || 'donor'}`,
 						);
-
-						<NextLink href={linkUrl}>
-							<Link>{`${original.donorId} (${original.submitterDonorId})`}</Link>
-						</NextLink>;
+						return (
+							<NextLink href={linkUrl}>
+								<Link>{`${original.donorId} (${original.submitterDonorId})`}</Link>
+							</NextLink>
+						);
 					},
 					size: 135,
 				},
@@ -836,6 +837,8 @@ const DonorSummaryTable = ({
 			].filter(Boolean),
 		},
 	];
+
+	console.log('data', programDonorSummaryEntries);
 
 	return (
 		<div
