@@ -20,14 +20,19 @@
 'use client';
 
 import { ThemeProvider, css } from '@/lib/emotion';
-import { ApolloProvider } from '@apollo/client';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 import { ReactNode, forwardRef } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import { modalPortalRef } from './components/Modal';
-import { AppProvider, AuthProvider, GlobalLoaderProvider, loaderPortalRef } from './hooks';
+import {
+	ApolloProvider,
+	AppProvider,
+	AuthProvider,
+	GlobalLoaderProvider,
+	loaderPortalRef,
+} from './hooks';
 import ToastProvider from './hooks/ToastProvider';
 
 // Apollo on app error messaging instead of error messages in webpages
