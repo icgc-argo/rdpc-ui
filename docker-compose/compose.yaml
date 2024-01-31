@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  rdpc-gateway:
+    image: '${IMAGE_RDPC_GATEWAY}'
+    environment:
+      # Gateway Server Configuration
+      PORT: 4000
+      # RDPC-Gateway Services
+      WORKFLOW_API_URL: http://localhost:8088
+      SONG_SEARCH_URL: http://localhost:8081
+      # ARGO Clinical Services
+      CLINICAL_GQL_URL: http://localhost:3001
+      CLINICAL_API_URL: http://localhost:3002
+    ports:
+      - 4000:4000
