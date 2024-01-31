@@ -1,0 +1,781 @@
+{
+	"settings": {
+		"index.max_result_window": 300000,
+		"analysis": {
+			"analyzer": {
+				"autocomplete_analyzer": {
+					"filter": ["lowercase", "edge_ngram"],
+					"tokenizer": "standard"
+				},
+				"autocomplete_prefix": {
+					"filter": ["lowercase", "edge_ngram"],
+					"tokenizer": "keyword"
+				},
+				"lowercase_keyword": {
+					"filter": ["lowercase"],
+					"tokenizer": "keyword"
+				}
+			},
+			"filter": {
+				"edge_ngram": {
+					"max_gram": 20,
+					"min_gram": 2,
+					"side": "front",
+					"type": "edge_ngram"
+				}
+			}
+		}
+	},
+	"mappings": {
+		"dynamic": "false",
+		"date_detection": false,
+		"properties": {
+			"meta": {
+				"properties": {
+					"study_id": {
+						"type": "keyword"
+					},
+					"release_state": {
+						"type": "keyword"
+					},
+					"embargo_stage": {
+						"type": "keyword"
+					}
+				}
+			},
+			"analysis": {
+				"properties": {
+					"analysis_id": {
+						"type": "keyword",
+						"copy_to": ["file_autocomplete"]
+					},
+					"analysis_type": {
+						"type": "keyword"
+					},
+					"analysis_state": {
+						"type": "keyword"
+					},
+					"analysis_version": {
+						"type": "integer"
+					},
+					"updated_at": {
+						"type": "date"
+					},
+					"first_published_at": {
+						"type": "date"
+					},
+					"published_at": {
+						"type": "date"
+					},
+					"experiment": {
+						"properties": {
+							"experimental_strategy": {
+								"type": "keyword"
+							},
+							"platform": {
+								"type": "keyword"
+							}
+						}
+					},
+					"variant_class": {
+						"type": "keyword"
+					},
+					"workflow": {
+						"properties": {
+							"workflow_name": {
+								"type": "keyword"
+							},
+							"workflow_version": {
+								"type": "keyword"
+							}
+						}
+					}
+				}
+			},
+			"analysis_tools": {
+				"type": "keyword",
+				"copy_to": ["file_autocomplete"]
+			},
+			"clinical": {
+				"properties": {
+					"donor": {
+						"properties": {
+							"age_at_menarche": {
+								"type": "integer"
+							},
+							"bmi": {
+								"type": "integer"
+							},
+							"cause_of_death": {
+								"type": "keyword"
+							},
+							"donor_id": {
+								"type": "keyword",
+								"fields": {
+									"lowercase": {
+										"type": "text",
+										"analyzer": "lowercase_keyword"
+									}
+								}
+							},
+							"height": {
+								"type": "integer"
+							},
+							"menopause_status": {
+								"type": "keyword"
+							},
+							"number_of_children": {
+								"type": "integer"
+							},
+							"number_of_pregnancies": {
+								"type": "integer"
+							},
+							"primary_site": {
+								"type": "keyword"
+							},
+							"submitter_donor_id": {
+								"type": "keyword",
+								"fields": {
+									"lowercase": {
+										"type": "text",
+										"analyzer": "lowercase_keyword"
+									}
+								}
+							},
+							"survival_time": {
+								"type": "integer"
+							},
+							"vital_status": {
+								"type": "keyword"
+							},
+							"weight": {
+								"type": "integer"
+							}
+						}
+					},
+					"follow_ups": {
+						"type": "nested",
+						"properties": {
+							"anatomic_site_progression_or_recurrences": {
+								"type": "keyword"
+							},
+							"disease_status_at_followup": {
+								"type": "keyword"
+							},
+							"follow_up_id": {
+								"type": "keyword",
+								"fields": {
+									"lowercase": {
+										"type": "text",
+										"analyzer": "lowercase_keyword"
+									}
+								}
+							},
+							"interval_of_followup": {
+								"type": "integer"
+							},
+							"is_primary_treatment": {
+								"type": "keyword"
+							},
+							"method_of_progression_status": {
+								"type": "keyword"
+							},
+							"posttherapy_m_category": {
+								"type": "keyword"
+							},
+							"posttherapy_n_category": {
+								"type": "keyword"
+							},
+							"posttherapy_stage_group": {
+								"type": "keyword"
+							},
+							"posttherapy_t_category": {
+								"type": "keyword"
+							},
+							"posttherapy_tumour_staging_system": {
+								"type": "keyword"
+							},
+							"primary_diagnosis_id": {
+								"type": "keyword",
+								"fields": {
+									"lowercase": {
+										"type": "text",
+										"analyzer": "lowercase_keyword"
+									}
+								}
+							},
+							"recurrence_m_category": {
+								"type": "keyword"
+							},
+							"recurrence_n_category": {
+								"type": "keyword"
+							},
+							"recurrence_stage_group": {
+								"type": "keyword"
+							},
+							"recurrence_t_category": {
+								"type": "keyword"
+							},
+							"recurrence_tumour_staging_system": {
+								"type": "keyword"
+							},
+							"relapse_interval": {
+								"type": "integer"
+							},
+							"relapse_type": {
+								"type": "keyword"
+							},
+							"submitter_follow_up_id": {
+								"type": "keyword",
+								"fields": {
+									"lowercase": {
+										"type": "text",
+										"analyzer": "lowercase_keyword"
+									}
+								}
+							},
+							"submitter_primary_diagnosis_id": {
+								"type": "keyword",
+								"fields": {
+									"lowercase": {
+										"type": "text",
+										"analyzer": "lowercase_keyword"
+									}
+								}
+							},
+							"submitter_treatment_id": {
+								"type": "keyword",
+								"fields": {
+									"lowercase": {
+										"type": "text",
+										"analyzer": "lowercase_keyword"
+									}
+								}
+							},
+							"treatment_id": {
+								"type": "keyword"
+							},
+							"treatment_type": {
+								"type": "keyword"
+							},
+							"weight_at_followup": {
+								"type": "integer"
+							}
+						}
+					},
+					"primary_diagnosis": {
+						"type": "nested",
+						"properties": {
+							"age_at_diagnosis": {
+								"type": "integer"
+							},
+							"basis_of_diagnosis": {
+								"type": "keyword"
+							},
+							"cancer_type_additional_information": {
+								"type": "keyword"
+							},
+							"cancer_type_code": {
+								"type": "keyword"
+							},
+							"clinical_m_category": {
+								"type": "keyword"
+							},
+							"clinical_n_category": {
+								"type": "keyword"
+							},
+							"clinical_stage_group": {
+								"type": "keyword"
+							},
+							"clinical_t_category": {
+								"type": "keyword"
+							},
+							"clinical_tumour_staging_system": {
+								"type": "keyword"
+							},
+							"number_lymph_nodes_examined": {
+								"type": "integer"
+							},
+							"number_lymph_nodes_positive": {
+								"type": "integer"
+							},
+							"performance_status": {
+								"type": "keyword"
+							},
+							"presenting_symptoms": {
+								"type": "keyword"
+							},
+							"primary_diagnosis_id": {
+								"type": "keyword"
+							},
+							"submitter_primary_diagnosis_id": {
+								"type": "keyword",
+								"fields": {
+									"lowercase": {
+										"type": "text",
+										"analyzer": "lowercase_keyword"
+									}
+								}
+							}
+						}
+					},
+					"specimens": {
+						"type": "nested",
+						"properties": {
+							"pathological_m_category": {
+								"type": "keyword"
+							},
+							"pathological_n_category": {
+								"type": "keyword"
+							},
+							"pathological_stage_group": {
+								"type": "keyword"
+							},
+							"pathological_t_category": {
+								"type": "keyword"
+							},
+							"pathological_tumour_staging_system": {
+								"type": "keyword"
+							},
+							"percent_inflammatory_tissue": {
+								"type": "float"
+							},
+							"percent_necrosis": {
+								"type": "float"
+							},
+							"percent_proliferating_cells": {
+								"type": "float"
+							},
+							"percent_stromal_cells": {
+								"type": "float"
+							},
+							"percent_tumour_cells": {
+								"type": "float"
+							},
+							"primary_diagnosis_id": {
+								"type": "keyword"
+							},
+							"reference_pathology_confirmed": {
+								"type": "keyword"
+							},
+							"specimen_acquisition_interval": {
+								"type": "integer"
+							},
+							"specimen_anatomic_location": {
+								"type": "keyword"
+							},
+							"specimen_id": {
+								"type": "keyword"
+							},
+							"specimen_processing": {
+								"type": "keyword"
+							},
+							"specimen_storage": {
+								"type": "keyword"
+							},
+							"submitter_primary_diagnosis_id": {
+								"type": "keyword",
+								"fields": {
+									"lowercase": {
+										"type": "text",
+										"analyzer": "lowercase_keyword"
+									}
+								}
+							},
+							"submitter_specimen_id": {
+								"type": "keyword",
+								"fields": {
+									"lowercase": {
+										"type": "text",
+										"analyzer": "lowercase_keyword"
+									}
+								}
+							},
+							"tumour_grade": {
+								"type": "keyword"
+							},
+							"tumour_grading_system": {
+								"type": "keyword"
+							},
+							"tumour_histological_type": {
+								"type": "keyword"
+							}
+						}
+					},
+					"treatments": {
+						"type": "nested",
+						"properties": {
+							"adverse_events": {
+								"type": "keyword"
+							},
+							"anatomical_site_irradiated": {
+								"type": "keyword"
+							},
+							"chemotherapy_dosage_units": {
+								"type": "keyword"
+							},
+							"clinical_trial_number": {
+								"type": "keyword"
+							},
+							"clinical_trials_database": {
+								"type": "keyword"
+							},
+							"cumulative_drug_dosage": {
+								"type": "float"
+							},
+							"days_per_cycle": {
+								"type": "integer"
+							},
+							"drug_name": {
+								"type": "keyword"
+							},
+							"drug_rxnormcui": {
+								"type": "keyword"
+							},
+							"hemotological_toxicity": {
+								"type": "keyword"
+							},
+							"hormone_drug_dosage_units": {
+								"type": "keyword"
+							},
+							"is_primary_treatment": {
+								"type": "keyword"
+							},
+							"line_of_treatment": {
+								"type": "integer"
+							},
+							"number_of_cycles": {
+								"type": "integer"
+							},
+							"outcome_of_treatment": {
+								"type": "keyword"
+							},
+							"primary_diagnosis_id": {
+								"type": "keyword"
+							},
+							"radiation_therapy_dosage": {
+								"type": "integer"
+							},
+							"radiation_therapy_fractions": {
+								"type": "integer"
+							},
+							"radiation_therapy_modality": {
+								"type": "keyword"
+							},
+							"radiation_therapy_type": {
+								"type": "keyword"
+							},
+							"response_to_treatment": {
+								"type": "keyword"
+							},
+							"submitter_primary_diagnosis_id": {
+								"type": "keyword",
+								"fields": {
+									"lowercase": {
+										"type": "text",
+										"analyzer": "lowercase_keyword"
+									}
+								}
+							},
+							"submitter_treatment_id": {
+								"type": "keyword",
+								"fields": {
+									"lowercase": {
+										"type": "text",
+										"analyzer": "lowercase_keyword"
+									}
+								}
+							},
+							"toxicity_type": {
+								"type": "keyword"
+							},
+							"treatment_duration": {
+								"type": "integer"
+							},
+							"treatment_id": {
+								"type": "keyword"
+							},
+							"treatment_intent": {
+								"type": "keyword"
+							},
+							"treatment_setting": {
+								"type": "keyword"
+							},
+							"treatment_start_interval": {
+								"type": "integer"
+							},
+							"treatment_type": {
+								"type": "keyword"
+							}
+						}
+					}
+				}
+			},
+			"data_category": {
+				"type": "keyword",
+				"copy_to": ["file_autocomplete"]
+			},
+			"data_type": {
+				"type": "keyword",
+				"copy_to": ["file_autocomplete"]
+			},
+			"donors": {
+				"type": "nested",
+				"properties": {
+					"donor_id": {
+						"type": "keyword",
+						"copy_to": ["file_autocomplete"],
+						"fields": {
+							"lowercase": {
+								"type": "text",
+								"analyzer": "lowercase_keyword"
+							}
+						}
+					},
+					"gender": {
+						"type": "keyword"
+					},
+					"specimens": {
+						"type": "nested",
+						"properties": {
+							"samples": {
+								"type": "nested",
+								"properties": {
+									"matched_normal_submitter_sample_id": {
+										"type": "keyword",
+										"copy_to": ["file_autocomplete"],
+										"fields": {
+											"lowercase": {
+												"type": "text",
+												"analyzer": "lowercase_keyword"
+											}
+										}
+									},
+									"sample_id": {
+										"type": "keyword",
+										"copy_to": ["file_autocomplete"],
+										"fields": {
+											"lowercase": {
+												"type": "text",
+												"analyzer": "lowercase_keyword"
+											}
+										}
+									},
+									"sample_type": {
+										"type": "keyword"
+									},
+									"submitter_sample_id": {
+										"type": "keyword",
+										"copy_to": ["file_autocomplete"],
+										"fields": {
+											"lowercase": {
+												"type": "text",
+												"analyzer": "lowercase_keyword"
+											}
+										}
+									}
+								}
+							},
+							"specimen_id": {
+								"type": "keyword",
+								"copy_to": ["file_autocomplete"],
+								"fields": {
+									"lowercase": {
+										"type": "text",
+										"analyzer": "lowercase_keyword"
+									}
+								}
+							},
+							"specimen_tissue_source": {
+								"type": "keyword"
+							},
+							"specimen_type": {
+								"type": "keyword"
+							},
+							"submitter_specimen_id": {
+								"type": "keyword",
+								"copy_to": ["file_autocomplete"],
+								"fields": {
+									"lowercase": {
+										"type": "text",
+										"analyzer": "lowercase_keyword"
+									}
+								}
+							},
+							"tumour_normal_designation": {
+								"type": "keyword"
+							}
+						}
+					},
+					"submitter_donor_id": {
+						"type": "keyword",
+						"copy_to": ["file_autocomplete"],
+						"fields": {
+							"lowercase": {
+								"type": "text",
+								"analyzer": "lowercase_keyword"
+							}
+						}
+					}
+				}
+			},
+			"file": {
+				"properties": {
+					"index_file": {
+						"properties": {
+							"file_type": {
+								"type": "keyword"
+							},
+							"md5sum": {
+								"type": "keyword"
+							},
+							"name": {
+								"type": "keyword"
+							},
+							"object_id": {
+								"type": "keyword"
+							},
+							"size": {
+								"type": "long"
+							}
+						}
+					},
+					"md5sum": {
+						"type": "keyword"
+					},
+					"name": {
+						"type": "keyword",
+						"copy_to": ["file_autocomplete"]
+					},
+					"size": {
+						"type": "long"
+					}
+				}
+			},
+			"file_access": {
+				"type": "keyword"
+			},
+			"file_autocomplete": {
+				"type": "keyword",
+				"fields": {
+					"analyzed": {
+						"type": "text",
+						"analyzer": "autocomplete_analyzer",
+						"search_analyzer": "lowercase_keyword"
+					},
+					"lowercase": {
+						"type": "text",
+						"analyzer": "lowercase_keyword"
+					},
+					"prefix": {
+						"type": "text",
+						"analyzer": "autocomplete_prefix",
+						"search_analyzer": "lowercase_keyword"
+					}
+				}
+			},
+			"file_id": {
+				"type": "keyword",
+				"copy_to": ["file_autocomplete"],
+				"fields": {
+					"lowercase": {
+						"type": "text",
+						"analyzer": "lowercase_keyword"
+					}
+				}
+			},
+			"file_number": {
+				"type": "integer"
+			},
+			"file_type": {
+				"type": "keyword"
+			},
+			"object_id": {
+				"type": "keyword",
+				"copy_to": ["file_autocomplete"]
+			},
+			"program_access_date": {
+				"type": "date"
+			},
+			"release_state": {
+				"type": "keyword"
+			},
+			"embargo_stage": {
+				"type": "keyword"
+			},
+			"has_clinical_data": {
+				"type": "boolean"
+			},
+			"repositories": {
+				"type": "nested",
+				"properties": {
+					"code": {
+						"type": "keyword"
+					},
+					"country": {
+						"type": "keyword"
+					},
+					"name": {
+						"type": "keyword"
+					},
+					"organization": {
+						"type": "keyword"
+					},
+					"url": {
+						"type": "keyword"
+					}
+				}
+			},
+			"study_id": {
+				"type": "keyword",
+				"copy_to": ["file_autocomplete"],
+				"fields": {
+					"lowercase": {
+						"type": "text",
+						"analyzer": "lowercase_keyword"
+					}
+				}
+			},
+			"metrics": {
+				"properties": {
+					"average_insert_size": {
+						"type": "float"
+					},
+					"average_length": {
+						"type": "integer"
+					},
+					"duplicated_bases": {
+						"type": "long"
+					},
+					"error_rate": {
+						"type": "float"
+					},
+					"mapped_bases_cigar": {
+						"type": "long"
+					},
+					"mapped_reads": {
+						"type": "long"
+					},
+					"mismatch_bases": {
+						"type": "long"
+					},
+					"paired_reads": {
+						"type": "long"
+					},
+					"pairs_on_different_chromosomes": {
+						"type": "long"
+					},
+					"properly_paired_reads": {
+						"type": "long"
+					},
+					"total_bases": {
+						"type": "long"
+					},
+					"total_reads": {
+						"type": "long"
+					}
+				}
+			}
+		}
+	}
+}

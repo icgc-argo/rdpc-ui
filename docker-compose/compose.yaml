@@ -25,12 +25,9 @@ services:
       - elasticsearch
     environment:
       PORT: 4001
-      ELASTICSEARCH_HOST:
+      ELASTICSEARCH_HOST: 'http://elasticsearch:9200'
       ELASTICSEARCH_PROGRAM_DONOR_DASHBOARD_INDEX: donor_submission_summary
-      ELASTICSEARCH_CLIENT_TRUST_SSL_CERT: false
-      ELASTICSEARCH_VAULT_SECRET_PATH:
-      ELASTICSEARCH_USERNAME:
-      ELASTICSEARCH_PASSWORD:
+      DEV_RECAPTCHA_DISABLED: true
 
   # Elasticsearch
   elasticsearch:
