@@ -20,7 +20,6 @@
 import { useAppConfigContext } from '@/hooks/AppProvider';
 import { BUTTON_SIZES, Button, Icon, Typography, css, useTheme } from '@icgc-argo/uikit';
 import Link from 'next/link';
-import galaxyImage from '../../../public/assets/galaxy.png';
 import RegionBanner from './RegionBanner';
 
 const Hero = () => {
@@ -29,7 +28,7 @@ const Hero = () => {
 	return (
 		<div
 			css={css({
-				backgroundImage: `linear-gradient(180deg, rgba(0, 0, 0, 0) 41.37%, #000000 100%), url(${galaxyImage.src})`,
+				//backgroundImage: `linear-gradient(180deg, rgba(0, 0, 0, 0) 41.37%, #000000 100%), url(${galaxyImage.src})`,
 				backgroundSize: 'cover',
 				backgroundColor: `${theme.colors.primary}`,
 				width: '100%',

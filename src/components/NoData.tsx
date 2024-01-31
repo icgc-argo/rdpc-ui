@@ -19,7 +19,6 @@
 
 import { ContentPlaceholder, css, DnaLoader } from '@icgc-argo/uikit';
 import Image from 'next/image';
-import beakersImage from '../../../public/assets/beakers.svg';
 
 export default function NoDataMessage(props: { loading: boolean }) {
 	return (
@@ -40,7 +39,7 @@ export default function NoDataMessage(props: { loading: boolean }) {
 				>
 					<Image
 						alt="Chemistry beakers"
-						src={beakersImage}
+						//	src={beakersImage}
 						layout="fixed"
 						width={167}
 						height={151}
