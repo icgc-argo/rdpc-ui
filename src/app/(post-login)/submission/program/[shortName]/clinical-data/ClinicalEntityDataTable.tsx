@@ -638,13 +638,6 @@ const ClinicalEntityDataTable = ({
 			borderBottom: `1px solid ${theme.colors.grey_2}`,
 		};
 
-		const headerStyle = css`
-			background-color: ${theme.colors.grey_4};
-			font-size: 13px;
-			padding: 5px;
-			text-align: left;
-		`;
-
 		const stickyCSS = css`
 			background-color: white;
 			left: 0;
@@ -660,46 +653,64 @@ const ClinicalEntityDataTable = ({
 			justify-content: flex-start;
 		`;
 
+		const TopLevelHeader = ({ title }) => {
+			return (
+				<div
+					css={css`
+						background-color: ${theme.colors.grey_4};
+						font-size: 13px;
+						padding: 5px;
+						text-align: left;
+						width: 100%;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+					`}
+				>
+					{title}
+				</div>
+			);
+		};
+
 		columns = [
 			{
 				id: 'clinical_core_completion_header',
 				meta: { customHeader: true },
 				sortingFn: sortEntityData,
-				header: (props) => {
+				header: () => {
 					return (
-						<div
-							css={css`
-								${headerStyle};
-								width: 100%;
-								display: flex;
-								align-items: center;
-								justify-content: center;
-								position: relative;
-							`}
-						>
-							CLINICAL CORE COMPLETION
-							<Tooltip
-								style={{ position: 'absolute', left: 'calc(100% - 20px)', top: '-2px' }}
-								html={
-									<p
-										css={css`
-											margin: 0px;
-											margin-right: 6px;
-										`}
-									>
-										For clinical completeness, each donor requires: <br />
-										DO: at least one Donor record <br />
-										PD: at least one Primary Diagnosis record <br />
-										NS: all the registered Normal DNA Specimen record <br />
-										TS: all the registered Tumour DNA Specimen record <br />
-										TR: at least one Treatment record <br />
-										FO: at least one Follow Up record <br />
-									</p>
-								}
+						<>
+							<TopLevelHeader title="CLINICAL CORE COMPLETION" />
+							<div
+								css={css`
+									position: absolute;
+									right: 8px;
+									top: 50%;
+									transform: translateY(-50%);
+								`}
 							>
-								<Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
-							</Tooltip>
-						</div>
+								<Tooltip
+									html={
+										<p
+											css={css`
+												margin: 0px;
+												margin-right: 6px;
+											`}
+										>
+											For clinical completeness, each donor requires: <br />
+											DO: at least one Donor record <br />
+											PD: at least one Primary Diagnosis record <br />
+											NS: all the registered Normal DNA Specimen record <br />
+											TS: all the registered Tumour DNA Specimen record <br />
+											TR: at least one Treatment record <br />
+											FO: at least one Follow Up record <br />
+										</p>
+									}
+								>
+									<Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
+								</Tooltip>
+							</div>
+						</>
 					);
 				},
 				headerStyle: completionHeaderStyle,
@@ -780,16 +791,7 @@ const ClinicalEntityDataTable = ({
 			{
 				id: 'submitted_donor_data_header',
 				meta: { customHeader: true },
-				header: (props) => (
-					<div
-						css={css`
-							width: 100%;
-							${headerStyle}
-						`}
-					>
-						SUBMITTED DONOR DATA
-					</div>
-				),
+				header: () => <TopLevelHeader title="SUBMITTED DONOR DATA" />,
 				headerStyle: dataHeaderStyle,
 				columns: columns.slice(7),
 			},
