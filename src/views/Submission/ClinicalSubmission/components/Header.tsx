@@ -23,12 +23,14 @@ import { sleep } from '@/global/utils';
 import CLEAR_CLINICAL_SUBMISSION from '@/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
 import APPROVE_SUBMISSION_MUTATION from '@/gql/gateway/APPROVE_SUBMISSION_MUTATION';
 import REOPEN_SUBMISSION_MUTATION from '@/gql/gateway/REOPEN_SUBMISSION_MUTATION';
-import { useAppConfigContext } from '@/hooks/AppProvider';
-import { useAuthContext } from '@/hooks/AuthProvider';
-import { useGlobalLoader } from '@/hooks/GlobalLoaderProvider';
-import { useToaster } from '@/hooks/ToastProvider';
+import {
+	useAppConfigContext,
+	useAuthContext,
+	useGlobalLoader,
+	useSubmissionSystemStatus,
+	useToaster,
+} from '@/hooks';
 import useCommonToasters from '@/hooks/useCommonToasters';
-import { useSubmissionSystemStatus } from '@/hooks/useSubmissionSystemStatus';
 import useUserConfirmationModalState from '@/hooks/useUserConfirmationModalState';
 import { css, useTheme } from '@/lib/emotion';
 import { useMutation } from '@apollo/client';

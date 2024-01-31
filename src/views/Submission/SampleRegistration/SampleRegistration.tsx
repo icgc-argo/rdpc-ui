@@ -29,12 +29,14 @@ import { createFileFormData, uploadFileRequest } from '@/global/utils/form';
 import CLEAR_CLINICAL_REGISTRATION_MUTATION from '@/gql/clinical/CLEAR_CLINICAL_REGISTRATION_MUTATION';
 import CLINICAL_SCHEMA_VERSION from '@/gql/clinical/CLINICAL_SCHEMA_VERSION';
 import GET_REGISTRATION_QUERY from '@/gql/clinical/GET_REGISTRATION_QUERY';
-import { useAppConfigContext } from '@/hooks/AppProvider';
-import { useAuthContext } from '@/hooks/AuthProvider';
-import { useToaster } from '@/hooks/ToastProvider';
-import { useClinicalQuery } from '@/hooks/useApolloQuery';
+import {
+	useAppConfigContext,
+	useAuthContext,
+	useClinicalQuery,
+	useSubmissionSystemStatus,
+	useToaster,
+} from '@/hooks';
 import useCommonToasters from '@/hooks/useCommonToasters';
-import { useSubmissionSystemStatus } from '@/hooks/useSubmissionSystemStatus';
 import { css } from '@/lib/emotion';
 import Instructions from '@/views/Submission/SampleRegistration/components/Instructions';
 import ProgressBar from '@/views/Submission/SampleRegistration/components/ProgressBar';

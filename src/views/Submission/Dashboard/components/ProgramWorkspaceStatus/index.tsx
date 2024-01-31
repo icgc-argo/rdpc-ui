@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useAuthContext } from '@/hooks/AuthProvider';
+import { useAuthContext } from '@/hooks';
 import useUserRole from '@/hooks/useUserRole';
 import { css, HyperLinkProps, Link, Typography } from '@icgc-argo/uikit';
 

@@ -20,8 +20,7 @@
 
 import { CLINICAL_TEMPLATE_PATH } from '@/global/constants';
 import CLINICAL_SCHEMA_VERSION from '@/gql/clinical/CLINICAL_SCHEMA_VERSION';
-import { useAppConfigContext } from '@/hooks/AppProvider';
-import { useClinicalQuery } from '@/hooks/useApolloQuery';
+import { useAppConfigContext, useClinicalQuery } from '@/hooks';
 import { css, useTheme } from '@/lib/emotion';
 import {
 	BUTTON_SIZES,

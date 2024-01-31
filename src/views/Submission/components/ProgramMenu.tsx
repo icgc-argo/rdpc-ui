@@ -30,10 +30,13 @@ import {
 import { getProgramPath, notNull } from '@/global/utils';
 import SIDEMENU_PROGRAM_STATUS from '@/gql/clinical/SIDEMENU_PROGRAM_STATUS';
 import SIDEMENU_PROGRAMS from '@/gql/gateway/SIDEMENU_PROGRAMS';
-import { useAppConfigContext } from '@/hooks/AppProvider';
-import { useAuthContext } from '@/hooks/AuthProvider';
-import { useClinicalQuery, useGatewayQuery } from '@/hooks/useApolloQuery';
-import { useSubmissionSystemStatus } from '@/hooks/useSubmissionSystemStatus';
+import {
+	useAppConfigContext,
+	useAuthContext,
+	useClinicalQuery,
+	useGatewayQuery,
+	useSubmissionSystemStatus,
+} from '@/hooks';
 import useUserRole from '@/hooks/useUserRole';
 import { css } from '@/lib/emotion';
 import { Icon, MenuItem } from '@icgc-argo/uikit';

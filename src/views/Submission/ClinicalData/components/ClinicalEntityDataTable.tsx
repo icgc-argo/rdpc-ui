@@ -23,8 +23,8 @@ import { TableInfoHeaderContainer } from '@/components/Table/common';
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from '@/global/constants';
 import CLINICAL_ENTITY_DATA_QUERY from '@/gql/clinical/CLINICAL_ENTITY_DATA_QUERY';
 import CLINICAL_SCHEMA_VERSION from '@/gql/clinical/CLINICAL_SCHEMA_VERSION';
-import { useAppConfigContext } from '@/hooks/AppProvider';
-import { useClinicalQuery } from '@/hooks/useApolloQuery';
+
+import { useAppConfigContext, useClinicalQuery } from '@/hooks';
 import {
 	ContentPlaceholder,
 	DnaLoader,

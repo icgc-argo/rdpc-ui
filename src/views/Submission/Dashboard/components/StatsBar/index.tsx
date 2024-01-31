@@ -18,9 +18,8 @@
  */
 
 import DASHBOARD_SUMMARY_QUERY from '@/gql/gateway/DASHBOARD_SUMMARY_QUERY';
-import { useGatewayQuery } from '@/hooks/useApolloQuery';
-import { useTimeout } from '@/hooks/useTimeout';
-import { Container, css, PercentBar, styled, Typography } from '@icgc-argo/uikit';
+import { useGatewayQuery, useTimeout } from '@/hooks';
+import { Container, PercentBar, Typography, css, styled } from '@icgc-argo/uikit';
 import { ComponentType, ReactNode } from 'react';
 import { Col, Row } from 'react-grid-system';
 import { POLL_INTERVAL_MILLISECONDS } from '../common';

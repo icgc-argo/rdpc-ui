@@ -18,7 +18,7 @@
  */
 
 import DASHBOARD_SUMMARY_QUERY from '@/gql/gateway/DASHBOARD_SUMMARY_QUERY';
-import { useGatewayQuery } from '@/hooks/useApolloQuery';
+import { useGatewayQuery } from '@/hooks';
 import { css, Typography } from '@icgc-argo/uikit';
 import { DashboardCard } from '../common';
 

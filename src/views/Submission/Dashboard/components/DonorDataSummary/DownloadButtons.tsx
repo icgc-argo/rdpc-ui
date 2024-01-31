@@ -18,9 +18,8 @@
  */
 
 import { EGO_JWT_KEY } from '@/global/constants';
-import { useAppConfigContext } from '@/hooks/AppProvider';
-import { useToaster } from '@/hooks/ToastProvider';
-import { Button, css, Icon, TOAST_VARIANTS } from '@icgc-argo/uikit';
+import { useAppConfigContext, useToaster } from '@/hooks';
+import { Button, Icon, TOAST_VARIANTS, css } from '@icgc-argo/uikit';
 import { format as formatDate } from 'date-fns';
 import { saveAs } from 'file-saver';
 import Cookies from 'js-cookie';

@@ -18,8 +18,7 @@
  */
 'use client';
 
-import { useAppConfigContext } from '@/hooks/AppProvider';
-import { useAuthContext } from '@/hooks/AuthProvider';
+import { useAppConfigContext, useAuthContext } from '@/hooks';
 import { DnaLoader, css, useTheme } from '@icgc-argo/uikit';
 import { useRouter } from 'next/navigation';
 import { useQuery } from 'react-query';

@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useAppConfigContext } from '@/hooks/AppProvider';
-import { useAuthContext } from '@/hooks/AuthProvider';
+import { useAppConfigContext, useAuthContext } from '@/hooks';
+
 import useCommonToasters from '@/hooks/useCommonToasters';
 import usePageContext from '@/hooks/usePageContext';
 import { Button, Icon, css } from '@icgc-argo/uikit';

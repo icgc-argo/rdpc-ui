@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useAppConfigContext } from '@/hooks/AppProvider';
+import { useAppConfigContext } from '@/hooks';
 import { Button, Link, Typography, css, useTheme } from '@icgc-argo/uikit';
 import { Col } from 'react-grid-system';
 import urljoin from 'url-join';

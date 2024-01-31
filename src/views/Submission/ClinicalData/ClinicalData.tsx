@@ -23,7 +23,7 @@ import { BreadcrumbTitle, HelpLink, PageHeader } from '@/components/PageHeader/P
 import { notNull, parseDonorIdString } from '@/global/utils';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/gql/clinical/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from '@/gql/clinical/SUBMITTED_DATA_SIDE_MENU_QUERY';
-import { useClinicalQuery } from '@/hooks/useApolloQuery';
+import { useClinicalQuery } from '@/hooks';
 import useUrlParamState from '@/hooks/useUrlParamState';
 import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';

@@ -39,13 +39,15 @@ import CLEAR_CLINICAL_SUBMISSION from '@/gql/clinical/CLEAR_CLINICAL_SUBMISSION'
 import CLINICAL_SUBMISSION_QUERY from '@/gql/clinical/CLINICAL_SUBMISSION_QUERY';
 import SIGN_OFF_SUBMISSION_MUTATION from '@/gql/clinical/SIGN_OFF_SUBMISSION_MUTATION';
 import VALIDATE_SUBMISSION_MUTATION from '@/gql/clinical/VALIDATE_SUBMISSION_MUTATION';
-import { useAppConfigContext } from '@/hooks/AppProvider';
-import { useAuthContext } from '@/hooks/AuthProvider';
-import { useGlobalLoader } from '@/hooks/GlobalLoaderProvider';
-import { useToaster } from '@/hooks/ToastProvider';
-import { useClinicalQuery } from '@/hooks/useApolloQuery';
+import {
+	useAppConfigContext,
+	useAuthContext,
+	useClinicalQuery,
+	useGlobalLoader,
+	useSubmissionSystemStatus,
+	useToaster,
+} from '@/hooks';
 import useCommonToasters from '@/hooks/useCommonToasters';
-import { useSubmissionSystemStatus } from '@/hooks/useSubmissionSystemStatus';
 import useUrlQueryState from '@/hooks/useURLQueryState';
 import useUserConfirmationModalState from '@/hooks/useUserConfirmationModalState';
 import { css } from '@/lib/emotion';

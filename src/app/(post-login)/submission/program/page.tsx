@@ -23,8 +23,7 @@ import { BreadcrumbTitle, PageHeader } from '@/components/PageHeader/PageHeader'
 import { CREATE_PROGRAM_PAGE_PATH } from '@/global/constants';
 import { notNull } from '@/global/utils';
 import PROGRAMS_LIST_QUERY from '@/gql/gateway/PROGRAMS_LIST_QUERY';
-import { useAppConfigContext } from '@/hooks/AppProvider';
-import { useGatewayQuery } from '@/hooks/useApolloQuery';
+import { useAppConfigContext, useGatewayQuery } from '@/hooks';
 import { Button, Loader } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';

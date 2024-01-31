@@ -19,19 +19,16 @@
 // all our context providers won't work server side, beacuse React.Context is client side
 'use client';
 
-import { ApolloProvider } from '@/hooks/ApolloProvider';
-import { AppProvider } from '@/hooks/AppProvider';
-import { AuthProvider } from '@/hooks/AuthProvider';
-import GlobalLoaderProvider, { loaderPortalRef } from '@/hooks/GlobalLoaderProvider';
-import ThemeProvider from '@/hooks/ThemeProvider';
-import ToastProvider from '@/hooks/ToastProvider';
-import { css } from '@/lib/emotion';
+import { ThemeProvider, css } from '@/lib/emotion';
+import { ApolloProvider } from '@apollo/client';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 import { ReactNode, forwardRef } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import { modalPortalRef } from './components/Modal';
+import { AppProvider, AuthProvider, GlobalLoaderProvider, loaderPortalRef } from './hooks';
+import ToastProvider from './hooks/ToastProvider';
 
 // Apollo on app error messaging instead of error messages in webpages
 if (process.env.NODE_ENV === 'development') {

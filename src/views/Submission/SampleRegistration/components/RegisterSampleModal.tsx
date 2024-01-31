@@ -26,8 +26,7 @@ import {
 import { sleep } from '@/global/utils';
 import COMMIT_CLINICAL_REGISTRATION_MUTATION from '@/gql/clinical/COMMIT_CLINICAL_REGISTRATION_MUTATION';
 import GET_REGISTRATION_QUERY from '@/gql/clinical/GET_REGISTRATION_QUERY';
-import { useGlobalLoader } from '@/hooks/GlobalLoaderProvider';
-import { useToaster } from '@/hooks/ToastProvider';
+import { useGlobalLoader, useToaster } from '@/hooks';
 import { useMutation } from '@apollo/client';
 import { Modal, TOAST_VARIANTS, Typography, Link as UIKitLink } from '@icgc-argo/uikit';
 import { get } from 'lodash';

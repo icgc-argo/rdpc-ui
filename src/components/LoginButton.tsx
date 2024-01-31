@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { useAppConfigContext } from '@/hooks/AppProvider';
+import { useAppConfigContext } from '@/hooks';
 import { css } from '@/lib/emotion';
 import { Button, Icon, useTheme } from '@icgc-argo/uikit';
 

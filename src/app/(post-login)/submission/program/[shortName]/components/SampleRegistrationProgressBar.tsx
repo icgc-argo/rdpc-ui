@@ -18,8 +18,7 @@
  */
 
 import GET_REGISTRATION_QUERY from '@/gql/clinical/GET_REGISTRATION_QUERY';
-import { useGatewayQuery } from '@/hooks/useApolloQuery';
-import { useSubmissionSystemStatus } from '@/hooks/useSubmissionSystemStatus';
+import { useGatewayQuery, useSubmissionSystemStatus } from '@/hooks';
 import { Progress } from '@icgc-argo/uikit';
 import get from 'lodash/get';
 import { ComponentProps, ComponentType } from 'react';

@@ -21,7 +21,7 @@
 import Header from '@/components/Header';
 import { EGO_JWT_KEY, LOGIN_NONCE } from '@/global/constants';
 import { getFilename } from '@/global/utils/stringUtils';
-import { useAppConfigContext } from '@/hooks/AppProvider';
+import { useAppConfigContext } from '@/hooks';
 import createEgoUtils from '@icgc-argo/ego-token-utils';
 import { DnaLoader } from '@icgc-argo/uikit';
 import Cookies from 'js-cookie';

@@ -22,7 +22,7 @@ import { CellContentCenter, DataTableStarIcon as StarIcon } from '@/components/T
 import { ContentError } from '@/components/placeholders';
 import { displayDate, parseDonorIdString } from '@/global/utils';
 import CLINICAL_ERRORS_QUERY from '@/gql/clinical/CLINICAL_ERRORS_QUERY';
-import { useClinicalQuery } from '@/hooks/useApolloQuery';
+import { useClinicalQuery } from '@/hooks';
 import {
 	ColumnDef,
 	DEFAULT_TABLE_PAGE_SIZE,
