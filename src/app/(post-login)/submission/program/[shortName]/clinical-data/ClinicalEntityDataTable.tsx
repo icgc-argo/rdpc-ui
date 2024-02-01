@@ -607,22 +607,6 @@ const ClinicalEntityDataTable = ({
 			id: key,
 			accessorKey: key,
 			Header: key,
-			headerStyle: {
-				borderRight: getHeaderBorder(key),
-				...(key === 'donor_id' && {
-					position: 'absolute',
-					//z-index used here because header element is beneath its neighbouring element.
-					zIndex: 1,
-					background: 'white',
-				}),
-				...(key === 'DO' && {
-					marginLeft: stickyDonorIDColumnsWidth,
-				}),
-				...(key === 'program_id' &&
-					!showCompletionStats && {
-						marginLeft: stickyDonorIDColumnsWidth,
-					}),
-			},
 			minWidth: getColumnWidth(key, showCompletionStats, noTableData),
 		};
 	});
