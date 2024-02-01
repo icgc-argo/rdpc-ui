@@ -37,7 +37,9 @@ const cellExpandToParent = css`
 	justify-content: flex-start;
 `;
 
-export const styleThickBorderString = `3px solid ${ARGOTheme.colors.grey}`;
+export const styleThickBorder = css`
+	border-right: 3px solid ${ARGOTheme.colors.grey};
+`;
 
 /**
  *
@@ -61,11 +63,13 @@ export const Cell = ({
 		:hover {
 			cursor: pointer;
 		}
-		border-right: ${isLastElement && styleThickBorderString};
+		${isLastElement && styleThickBorder};
 
 		${isSticky && stickyCSS}
 		${isSorted && `box-shadow: inset 0 ${isSorted === 'asc' ? '' : '-'}3px 0 0 rgb(7 116 211)`};
 		${cellExpandToParent}
+		height: 100%;
+		min-height: 28px;
 	`;
 
 	return <div css={[base, ...styles]}>{children}</div>;
@@ -88,7 +92,7 @@ export const TopLevelHeader = ({ title, styles = [] }) => {
 
 export const ClinicalCoreCompletionHeader = () => (
 	<>
-		<TopLevelHeader title="CLINICAL CORE COMPLETION" />
+		<TopLevelHeader title="CLINICAL CORE COMPLETION" styles={[styleThickBorder]} />
 		<div
 			css={css`
 				position: absolute;

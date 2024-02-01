@@ -43,7 +43,7 @@ import {
 	Cell,
 	ClinicalCoreCompletionHeader,
 	TopLevelHeader,
-	styleThickBorderString,
+	styleThickBorder,
 } from './ClinicalDataTableComp';
 import {
 	ClinicalEntitySearchResultResponse,
@@ -484,7 +484,7 @@ const ClinicalEntityDataTable = ({
 		(showCompletionStats && key === completionColumnHeaders.followUps) ||
 		(!showCompletionStats && key === 'donor_id') ||
 		key === 'FO'
-			? styleThickBorderString
+			? styleThickBorder
 			: '';
 
 	const [stickyDonorIDColumnsWidth, setStickyDonorIDColumnsWidth] = useState(74);
@@ -578,8 +578,6 @@ const ClinicalEntityDataTable = ({
 			specificErrorValue?.length > 0 ||
 			fieldError?.length > 0;
 
-		const border = getHeaderBorder(id);
-
 		// use Emotion styling
 		const headerDonorIdStyle = css`
 			background: white,
@@ -591,7 +589,7 @@ const ClinicalEntityDataTable = ({
 		const style = css`
 			color: ${isCompletionCell && !errorState && theme.colors.accent1_dark};
 			background: ${errorState && theme.colors.error_4};
-			borderright: ${border};
+			${getHeaderBorder(id)}
 			${column.Header === 'donor_id' && headerDonorIdStyle};
 			${column.Header === 'DO' && stickyMarginStyle};
 			${column.Header === 'program_id' && !showCompletionStats && stickyMarginStyle};
