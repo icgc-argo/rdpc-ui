@@ -32,14 +32,19 @@ import {
 	Link,
 	NOTIFICATION_VARIANTS,
 	Table,
-	Tooltip,
 	Typography,
 	css,
 	useTheme,
 } from '@icgc-argo/uikit';
 import memoize from 'lodash/memoize';
-import { ReactNode, createRef, useEffect, useState } from 'react';
+import { createRef, useEffect, useState } from 'react';
 import urljoin from 'url-join';
+import {
+	Cell,
+	ClinicalCoreCompletionHeader,
+	TopLevelHeader,
+	styleThickBorderString,
+} from './ClinicalDataTableComp';
 import {
 	ClinicalEntitySearchResultResponse,
 	CompletionStates,
@@ -475,8 +480,6 @@ const ClinicalEntityDataTable = ({
 			.sort(sortEntityData);
 	}
 
-	const styleThickBorderString = `3px solid ${theme.colors.grey}`;
-
 	const getHeaderBorder = (key) =>
 		(showCompletionStats && key === completionColumnHeaders.followUps) ||
 		(!showCompletionStats && key === 'donor_id') ||
@@ -627,103 +630,6 @@ const ClinicalEntityDataTable = ({
 	});
 
 	if (showCompletionStats) {
-		const stickyCSS = css`
-			background-color: white;
-			left: 0;
-			position: sticky !important;
-			top: 0;
-			z-index: 1;
-		`;
-
-		const cellExpandToParent = css`
-			height: 28px;
-			display: flex;
-			align-items: center;
-			justify-content: flex-start;
-		`;
-
-		const TopLevelHeader = ({ title, styles = [] }) => {
-			const base = css`
-				background-color: ${theme.colors.grey_4};
-				font-size: 13px;
-				padding: 5px;
-				text-align: left;
-				width: 100%;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			`;
-
-			return <div css={[base, ...styles]}>{title}</div>;
-		};
-
-		const ClinicalCoreCompletionHeader = () => (
-			<>
-				<TopLevelHeader title="CLINICAL CORE COMPLETION" />
-				<div
-					css={css`
-						position: absolute;
-						right: 8px;
-						top: 50%;
-						transform: translateY(-50%);
-					`}
-				>
-					<Tooltip
-						html={
-							<p
-								css={css`
-									margin: 0px;
-									margin-right: 6px;
-								`}
-							>
-								For clinical completeness, each donor requires: <br />
-								DO: at least one Donor record <br />
-								PD: at least one Primary Diagnosis record <br />
-								NS: all the registered Normal DNA Specimen record <br />
-								TS: all the registered Tumour DNA Specimen record <br />
-								TR: at least one Treatment record <br />
-								FO: at least one Follow Up record <br />
-							</p>
-						}
-					>
-						<Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
-					</Tooltip>
-				</div>
-			</>
-		);
-
-		/**
-		 *
-		 * @param param0
-		 * @returns
-		 */
-		const Cell = ({
-			children,
-			config,
-			styles = [],
-		}: {
-			children: ReactNode;
-			config: any;
-			styles?: any;
-		}) => {
-			const { isLastElement, isSorted, isSticky } = config;
-			const base = css`
-				width: 100%;
-				padding: 2px 6px;
-				font-size: 12px;
-				:hover {
-					cursor: pointer;
-				}
-				border-right: ${isLastElement && styleThickBorderString};
-
-				${isSticky && stickyCSS}
-				${isSorted && `box-shadow: inset 0 ${isSorted === 'asc' ? '' : '-'}3px 0 0 rgb(7 116 211)`};
-				${cellExpandToParent}
-			`;
-
-			return <div css={[base, ...styles]}>{children}</div>;
-		};
-
 		columns = [
 			{
 				id: 'clinical_core_completion_header',

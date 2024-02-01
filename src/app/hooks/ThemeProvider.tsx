@@ -33,6 +33,8 @@ const typography = mapValues(defaultTheme.typography, (typography) => ({
 }));
 const theme = { ...defaultTheme, typography };
 
+export const ARGOTheme = defaultTheme;
+
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
 	return (
 		<>
