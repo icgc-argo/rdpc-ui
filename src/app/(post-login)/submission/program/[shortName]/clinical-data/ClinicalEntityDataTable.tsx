@@ -476,6 +476,7 @@ const ClinicalEntityDataTable = ({
 	}
 
 	const styleThickBorderString = `3px solid ${theme.colors.grey}`;
+
 	const getHeaderBorder = (key) =>
 		(showCompletionStats && key === completionColumnHeaders.followUps) ||
 		(!showCompletionStats && key === 'donor_id') ||
@@ -707,13 +708,37 @@ const ClinicalEntityDataTable = ({
 			</>
 		);
 
+		const SubLevelHeader = ({ value, config }) => {
+			const { isLastElement, isSorted, isSticky } = config;
+			return (
+				<div
+					css={css`
+						width: 100%;
+						padding: 2px 6px;
+						font-size: 12px;
+						:hover {
+							cursor: pointer;
+						}
+						border-right: ${isLastElement && styleThickBorderString};
+
+						${isSticky && stickyCSS}
+						${isSorted &&
+						`box-shadow: inset 0 ${isSorted === 'asc' ? '' : '-'}3px 0 0 rgb(7 116 211)`};
+						${cellExpandToParent}
+					`}
+				>
+					{value}
+				</div>
+			);
+		};
+
 		columns = [
 			{
 				id: 'clinical_core_completion_header',
 				meta: { customHeader: true },
 				sortingFn: sortEntityData,
 				header: () => <ClinicalCoreCompletionHeader />,
-				headerStyle: completionHeaderStyle,
+
 				columns: columns.slice(0, 7).map((column, index) => ({
 					...column,
 					sortingFn: sortEntityData,
@@ -724,26 +749,7 @@ const ClinicalEntityDataTable = ({
 						const isSticky = value === 'donor_id';
 						const isSorted = props.sorted;
 
-						return (
-							<div
-								css={css`
-									width: 100%;
-									padding: 2px 6px;
-									font-size: 12px;
-									:hover {
-										cursor: pointer;
-									}
-									border-right: ${isLastElement && styleThickBorderString};
-
-									${isSticky && stickyCSS}
-									${isSorted &&
-									`box-shadow: inset 0 ${isSorted === 'asc' ? '' : '-'}3px 0 0 rgb(7 116 211)`};
-									${cellExpandToParent}
-								`}
-							>
-								{value}
-							</div>
-						);
+						return <SubLevelHeader value={value} config={{ isLastElement, isSorted, isSticky }} />;
 					},
 					maxWidth: noTableData ? 50 : 250,
 					style: noTableData ? noDataCellStyle : {},
