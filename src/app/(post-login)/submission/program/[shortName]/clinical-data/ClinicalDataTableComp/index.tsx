@@ -41,11 +41,6 @@ export const styleThickBorder = css`
 	border-right: 3px solid ${ARGOTheme.colors.grey};
 `;
 
-/**
- *
- * @param param0
- * @returns
- */
 export const Cell = ({
 	children,
 	config,
