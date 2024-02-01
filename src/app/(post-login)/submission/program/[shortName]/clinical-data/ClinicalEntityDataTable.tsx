@@ -38,7 +38,7 @@ import {
 	useTheme,
 } from '@icgc-argo/uikit';
 import memoize from 'lodash/memoize';
-import { createRef, useEffect, useState } from 'react';
+import { ReactNode, createRef, useEffect, useState } from 'react';
 import urljoin from 'url-join';
 import {
 	ClinicalEntitySearchResultResponse,
@@ -577,23 +577,28 @@ const ClinicalEntityDataTable = ({
 
 		const border = getHeaderBorder(id);
 
+		// use Emotion styling
+		const headerDonorIdStyle = css`
+			background: white,
+			position: absolute,
+		`;
+		const headerDOStyle = css`
+			margin-left: ${stickyDonorIDColumnsWidth};
+		`;
+		const headerProgramIdStyle = css`
+			margin-left: ${stickyDonorIDColumnsWidth};
+		`;
+		const style = css`
+			color: ${isCompletionCell && !errorState && theme.colors.accent1_dark};
+			background: ${errorState && theme.colors.error_4};
+			borderright: ${border};
+			${column.Header === 'donor_id' && headerDonorIdStyle};
+			${column.Header === 'DO' && headerDOStyle};
+			${column.Header === 'program_id' && !showCompletionStats && headerProgramIdStyle};
+		`;
+
 		return {
-			style: {
-				color: isCompletionCell && !errorState ? theme.colors.accent1_dark : '',
-				background: errorState ? theme.colors.error_4 : '',
-				borderRight: border,
-				...(column.Header === 'donor_id' && {
-					background: 'white',
-					position: 'absolute',
-				}),
-				...(column.Header === 'DO' && {
-					marginLeft: stickyDonorIDColumnsWidth,
-				}),
-				...(column.Header === 'program_id' &&
-					!showCompletionStats && {
-						marginLeft: stickyDonorIDColumnsWidth,
-					}),
-			},
+			style,
 			isCompletionCell,
 			errorState,
 		};
@@ -625,10 +630,6 @@ const ClinicalEntityDataTable = ({
 	});
 
 	if (showCompletionStats) {
-		const completionHeaderStyle = {
-			borderRight: getHeaderBorder(completionColumnHeaders.followUps),
-		};
-
 		const dataHeaderStyle = {
 			textAlign: 'left',
 			paddingLeft: '6px',
@@ -708,28 +709,36 @@ const ClinicalEntityDataTable = ({
 			</>
 		);
 
-		const SubLevelHeader = ({ value, config }) => {
+		/**
+		 *
+		 * @param param0
+		 * @returns
+		 */
+		const Cell = ({
+			children,
+			config,
+			styles = [],
+		}: {
+			children: ReactNode;
+			config: any;
+			styles?: any;
+		}) => {
 			const { isLastElement, isSorted, isSticky } = config;
-			return (
-				<div
-					css={css`
-						width: 100%;
-						padding: 2px 6px;
-						font-size: 12px;
-						:hover {
-							cursor: pointer;
-						}
-						border-right: ${isLastElement && styleThickBorderString};
+			const base = css`
+				width: 100%;
+				padding: 2px 6px;
+				font-size: 12px;
+				:hover {
+					cursor: pointer;
+				}
+				border-right: ${isLastElement && styleThickBorderString};
 
-						${isSticky && stickyCSS}
-						${isSorted &&
-						`box-shadow: inset 0 ${isSorted === 'asc' ? '' : '-'}3px 0 0 rgb(7 116 211)`};
-						${cellExpandToParent}
-					`}
-				>
-					{value}
-				</div>
-			);
+				${isSticky && stickyCSS}
+				${isSorted && `box-shadow: inset 0 ${isSorted === 'asc' ? '' : '-'}3px 0 0 rgb(7 116 211)`};
+				${cellExpandToParent}
+			`;
+			console.log('s', styles);
+			return <div css={[base, ...styles]}>{children}</div>;
 		};
 
 		columns = [
@@ -749,7 +758,7 @@ const ClinicalEntityDataTable = ({
 						const isSticky = value === 'donor_id';
 						const isSorted = props.sorted;
 
-						return <SubLevelHeader value={value} config={{ isLastElement, isSorted, isSticky }} />;
+						return <Cell config={{ isLastElement, isSorted, isSticky }}>{value}</Cell>;
 					},
 					maxWidth: noTableData ? 50 : 250,
 					style: noTableData ? noDataCellStyle : {},
@@ -770,6 +779,12 @@ const ClinicalEntityDataTable = ({
 							<Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />
 						) : (
 							value
+						);
+						console.log('ss', style);
+						return (
+							<Cell config={{ isSticky }} styles={[style]}>
+								{content}
+							</Cell>
 						);
 
 						return (
