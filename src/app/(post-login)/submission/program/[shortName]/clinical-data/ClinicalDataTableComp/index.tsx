@@ -50,7 +50,7 @@ export const Cell = ({
 	styles = [],
 }: {
 	children: ReactNode;
-	config: any;
+	config: { isLastElement?: boolean; isSorted?: string; isSticky?: boolean };
 	styles?: any;
 }) => {
 	const { isLastElement, isSorted, isSticky } = config;
