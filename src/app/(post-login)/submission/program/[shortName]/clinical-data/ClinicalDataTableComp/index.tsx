@@ -77,9 +77,6 @@ export const TopLevelHeader = ({ title, styles = [] }) => {
 		padding: 5px;
 		text-align: left;
 		width: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
 	`;
 
 	return <div css={[base, ...styles]}>{title}</div>;
@@ -87,7 +84,15 @@ export const TopLevelHeader = ({ title, styles = [] }) => {
 
 export const ClinicalCoreCompletionHeader = () => (
 	<>
-		<TopLevelHeader title="CLINICAL CORE COMPLETION" styles={[styleThickBorder]} />
+		<TopLevelHeader
+			title="CLINICAL CORE COMPLETION"
+			styles={[
+				styleThickBorder,
+				css`
+					text-align: center;
+				`,
+			]}
+		/>
 		<div
 			css={css`
 				position: absolute;
