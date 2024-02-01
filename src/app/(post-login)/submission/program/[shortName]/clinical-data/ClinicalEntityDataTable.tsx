@@ -635,11 +635,6 @@ const ClinicalEntityDataTable = ({
 			paddingLeft: '6px',
 		};
 
-		const noDataCellStyle = {
-			height: 50,
-			borderBottom: `1px solid ${theme.colors.grey_2}`,
-		};
-
 		const stickyCSS = css`
 			background-color: white;
 			left: 0;
@@ -760,8 +755,6 @@ const ClinicalEntityDataTable = ({
 
 						return <Cell config={{ isLastElement, isSorted, isSticky }}>{value}</Cell>;
 					},
-					maxWidth: noTableData ? 50 : 250,
-					style: noTableData ? noDataCellStyle : {},
 					meta: { customCell: true, customHeader: true },
 					cell: (context) => {
 						const value = context.getValue();
@@ -781,7 +774,6 @@ const ClinicalEntityDataTable = ({
 							value
 						);
 
-						console.log('ss', style);
 						return (
 							<Cell config={{ isSticky }} styles={[style]}>
 								{content}
