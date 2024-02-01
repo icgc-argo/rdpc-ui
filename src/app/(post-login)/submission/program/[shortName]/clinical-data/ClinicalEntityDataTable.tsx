@@ -780,31 +780,12 @@ const ClinicalEntityDataTable = ({
 						) : (
 							value
 						);
+
 						console.log('ss', style);
 						return (
 							<Cell config={{ isSticky }} styles={[style]}>
 								{content}
 							</Cell>
-						);
-
-						return (
-							<div
-								css={css`
-									font-size: 12px;
-									padding: 2px 8px;
-									min-width: 40px;
-									height: 28px;
-									border-right: 1px solid ${theme.colors.grey_2};
-									${isSticky && stickyCSS}
-									${cellExpandToParent}
-									height:100%;
-								`}
-								style={{
-									...style,
-								}}
-							>
-								{content}
-							</div>
 						);
 					},
 				})),
