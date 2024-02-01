@@ -32,7 +32,6 @@ import {
 	Link,
 	NOTIFICATION_VARIANTS,
 	Table,
-	Tooltip,
 	Typography,
 	css,
 	useTheme,
@@ -40,6 +39,12 @@ import {
 import memoize from 'lodash/memoize';
 import { createRef, useEffect, useState } from 'react';
 import urljoin from 'url-join';
+import {
+	Cell,
+	ClinicalCoreCompletionHeader,
+	TopLevelHeader,
+	styleThickBorder,
+} from './ClinicalDataTableComp';
 import {
 	ClinicalEntitySearchResultResponse,
 	CompletionStates,
@@ -475,12 +480,11 @@ const ClinicalEntityDataTable = ({
 			.sort(sortEntityData);
 	}
 
-	const styleThickBorderString = `3px solid ${theme.colors.grey}`;
 	const getHeaderBorder = (key) =>
 		(showCompletionStats && key === completionColumnHeaders.followUps) ||
 		(!showCompletionStats && key === 'donor_id') ||
 		key === 'FO'
-			? styleThickBorderString
+			? styleThickBorder
 			: '';
 
 	const [stickyDonorIDColumnsWidth, setStickyDonorIDColumnsWidth] = useState(74);
@@ -574,25 +578,25 @@ const ClinicalEntityDataTable = ({
 			specificErrorValue?.length > 0 ||
 			fieldError?.length > 0;
 
-		const border = getHeaderBorder(id);
+		// use Emotion styling
+		const headerDonorIdStyle = css`
+			background: white,
+			position: absolute,
+		`;
+		const stickyMarginStyle = css`
+			margin-left: ${stickyDonorIDColumnsWidth};
+		`;
+		const style = css`
+			color: ${isCompletionCell && !errorState && theme.colors.accent1_dark};
+			background: ${errorState && theme.colors.error_4};
+			${getHeaderBorder(id)}
+			${column.Header === 'donor_id' && headerDonorIdStyle};
+			${column.Header === 'DO' && stickyMarginStyle};
+			${column.Header === 'program_id' && !showCompletionStats && stickyMarginStyle};
+		`;
 
 		return {
-			style: {
-				color: isCompletionCell && !errorState ? theme.colors.accent1_dark : '',
-				background: errorState ? theme.colors.error_4 : '',
-				borderRight: border,
-				...(column.Header === 'donor_id' && {
-					background: 'white',
-					position: 'absolute',
-				}),
-				...(column.Header === 'DO' && {
-					marginLeft: stickyDonorIDColumnsWidth,
-				}),
-				...(column.Header === 'program_id' &&
-					!showCompletionStats && {
-						marginLeft: stickyDonorIDColumnsWidth,
-					}),
-			},
+			style,
 			isCompletionCell,
 			errorState,
 		};
@@ -603,107 +607,18 @@ const ClinicalEntityDataTable = ({
 			id: key,
 			accessorKey: key,
 			Header: key,
-			headerStyle: {
-				borderRight: getHeaderBorder(key),
-				...(key === 'donor_id' && {
-					position: 'absolute',
-					//z-index used here because header element is beneath its neighbouring element.
-					zIndex: 1,
-					background: 'white',
-				}),
-				...(key === 'DO' && {
-					marginLeft: stickyDonorIDColumnsWidth,
-				}),
-				...(key === 'program_id' &&
-					!showCompletionStats && {
-						marginLeft: stickyDonorIDColumnsWidth,
-					}),
-			},
 			minWidth: getColumnWidth(key, showCompletionStats, noTableData),
 		};
 	});
 
 	if (showCompletionStats) {
-		const completionHeaderStyle = {
-			borderRight: getHeaderBorder(completionColumnHeaders.followUps),
-		};
-
-		const dataHeaderStyle = {
-			textAlign: 'left',
-			paddingLeft: '6px',
-		};
-
-		const noDataCellStyle = {
-			height: 50,
-			borderBottom: `1px solid ${theme.colors.grey_2}`,
-		};
-
-		const headerStyle = css`
-			background-color: ${theme.colors.grey_4};
-			border-bottom: 1px solid ${theme.colors.grey_2};
-			border-right: 1px solid ${theme.colors.grey_2};
-			font-size: 13px;
-			padding: 5px;
-			text-align: left;
-		`;
-
-		const stickyCSS = css`
-			background-color: white;
-			left: 0;
-			position: sticky !important;
-			top: 0;
-			z-index: 1;
-		`;
-
 		columns = [
 			{
 				id: 'clinical_core_completion_header',
 				meta: { customHeader: true },
 				sortingFn: sortEntityData,
-				header: (props) => {
-					return (
-						<th
-							colSpan={props.colSpan}
-							css={css`
-								${headerStyle};
-								border-right: 3px solid ${theme.colors.grey};
-							`}
-						>
-							<div
-								css={css`
-									display: flex;
-									align-items: center;
-									justify-content: center;
-									position: relative;
-								`}
-							>
-								CLINICAL CORE COMPLETION
-								<Tooltip
-									style={{ position: 'absolute', left: 'calc(100% - 20px)', top: '-2px' }}
-									html={
-										<p
-											css={css`
-												margin: 0px;
-												margin-right: 6px;
-											`}
-										>
-											For clinical completeness, each donor requires: <br />
-											DO: at least one Donor record <br />
-											PD: at least one Primary Diagnosis record <br />
-											NS: all the registered Normal DNA Specimen record <br />
-											TS: all the registered Tumour DNA Specimen record <br />
-											TR: at least one Treatment record <br />
-											FO: at least one Follow Up record <br />
-										</p>
-									}
-								>
-									<Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
-								</Tooltip>
-							</div>
-						</th>
-					);
-				},
-				headerStyle: completionHeaderStyle,
+				header: () => <ClinicalCoreCompletionHeader />,
+
 				columns: columns.slice(0, 7).map((column, index) => ({
 					...column,
 					sortingFn: sortEntityData,
@@ -714,30 +629,8 @@ const ClinicalEntityDataTable = ({
 						const isSticky = value === 'donor_id';
 						const isSorted = props.sorted;
 
-						return (
-							<th
-								onClick={props.getSortingHandler()}
-								css={css`
-									padding: 2px 6px;
-									font-size: 12px;
-									:hover {
-										cursor: pointer;
-									}
-									border-bottom: 1px solid ${theme.colors.grey_2};
-									border-right: ${isLastElement
-										? styleThickBorderString
-										: `1px solid ${theme.colors.grey_2}`};
-									${isSticky && stickyCSS}
-									${isSorted &&
-									`box-shadow: inset 0 ${isSorted === 'asc' ? '' : '-'}3px 0 0 rgb(7 116 211)`};
-								`}
-							>
-								{value}
-							</th>
-						);
+						return <Cell config={{ isLastElement, isSorted, isSticky }}>{value}</Cell>;
 					},
-					maxWidth: noTableData ? 50 : 250,
-					style: noTableData ? noDataCellStyle : {},
 					meta: { customCell: true, customHeader: true },
 					cell: (context) => {
 						const value = context.getValue();
@@ -758,26 +651,9 @@ const ClinicalEntityDataTable = ({
 						);
 
 						return (
-							<td
-								css={css`
-									border-right: 1px solid ${theme.colors.grey_2};
-									${isSticky && stickyCSS}
-								`}
-								style={{
-									...style,
-								}}
-							>
-								<div
-									css={css`
-										font-size: 12px;
-										padding: 2px 8px;
-										min-width: 40px;
-										height: 28px;
-									`}
-								>
-									{content}
-								</div>
-							</td>
+							<Cell config={{ isSticky }} styles={[style]}>
+								{content}
+							</Cell>
 						);
 					},
 				})),
@@ -785,12 +661,16 @@ const ClinicalEntityDataTable = ({
 			{
 				id: 'submitted_donor_data_header',
 				meta: { customHeader: true },
-				header: (props) => (
-					<th colSpan={props.colSpan} css={headerStyle}>
-						<div>SUBMITTED DONOR DATA</div>
-					</th>
+				header: () => (
+					<TopLevelHeader
+						title="SUBMITTED DONOR DATA"
+						styles={[
+							css`
+								text-align: left;
+							`,
+						]}
+					/>
 				),
-				headerStyle: dataHeaderStyle,
 				columns: columns.slice(7),
 			},
 		];
