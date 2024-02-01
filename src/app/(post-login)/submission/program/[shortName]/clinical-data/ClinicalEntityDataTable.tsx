@@ -582,10 +582,7 @@ const ClinicalEntityDataTable = ({
 			background: white,
 			position: absolute,
 		`;
-		const headerDOStyle = css`
-			margin-left: ${stickyDonorIDColumnsWidth};
-		`;
-		const headerProgramIdStyle = css`
+		const stickyMarginStyle = css`
 			margin-left: ${stickyDonorIDColumnsWidth};
 		`;
 		const style = css`
@@ -593,8 +590,8 @@ const ClinicalEntityDataTable = ({
 			background: ${errorState && theme.colors.error_4};
 			borderright: ${border};
 			${column.Header === 'donor_id' && headerDonorIdStyle};
-			${column.Header === 'DO' && headerDOStyle};
-			${column.Header === 'program_id' && !showCompletionStats && headerProgramIdStyle};
+			${column.Header === 'DO' && stickyMarginStyle};
+			${column.Header === 'program_id' && !showCompletionStats && stickyMarginStyle};
 		`;
 
 		return {
@@ -630,11 +627,6 @@ const ClinicalEntityDataTable = ({
 	});
 
 	if (showCompletionStats) {
-		const dataHeaderStyle = {
-			textAlign: 'left',
-			paddingLeft: '6px',
-		};
-
 		const stickyCSS = css`
 			background-color: white;
 			left: 0;
@@ -650,23 +642,19 @@ const ClinicalEntityDataTable = ({
 			justify-content: flex-start;
 		`;
 
-		const TopLevelHeader = ({ title }) => {
-			return (
-				<div
-					css={css`
-						background-color: ${theme.colors.grey_4};
-						font-size: 13px;
-						padding: 5px;
-						text-align: left;
-						width: 100%;
-						display: flex;
-						align-items: center;
-						justify-content: center;
-					`}
-				>
-					{title}
-				</div>
-			);
+		const TopLevelHeader = ({ title, styles = [] }) => {
+			const base = css`
+				background-color: ${theme.colors.grey_4};
+				font-size: 13px;
+				padding: 5px;
+				text-align: left;
+				width: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			`;
+
+			return <div css={[base, ...styles]}>{title}</div>;
 		};
 
 		const ClinicalCoreCompletionHeader = () => (
@@ -732,7 +720,7 @@ const ClinicalEntityDataTable = ({
 				${isSorted && `box-shadow: inset 0 ${isSorted === 'asc' ? '' : '-'}3px 0 0 rgb(7 116 211)`};
 				${cellExpandToParent}
 			`;
-			console.log('s', styles);
+
 			return <div css={[base, ...styles]}>{children}</div>;
 		};
 
@@ -785,8 +773,16 @@ const ClinicalEntityDataTable = ({
 			{
 				id: 'submitted_donor_data_header',
 				meta: { customHeader: true },
-				header: () => <TopLevelHeader title="SUBMITTED DONOR DATA" />,
-				headerStyle: dataHeaderStyle,
+				header: () => (
+					<TopLevelHeader
+						title="SUBMITTED DONOR DATA"
+						styles={[
+							css`
+								text-align: left;
+							`,
+						]}
+					/>
+				),
 				columns: columns.slice(7),
 			},
 		];
