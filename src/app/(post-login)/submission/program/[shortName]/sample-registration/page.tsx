@@ -43,6 +43,7 @@ import {
 	BUTTON_SIZES,
 	BUTTON_VARIANTS,
 	Button,
+	Container,
 	NOTIFICATION_VARIANTS,
 	NotificationInteraction,
 	Typography,
@@ -190,57 +191,65 @@ const Register = ({ shortName }: { shortName: string }) => {
 					rightSlot={<HelpLink url={helpUrl} />}
 				/>
 				<ContentMain>
-					<Instructions
-						dictionaryVersion={dictionaryVersion}
-						handleUpload={handleUpload}
-						isUploading={uploadFile.isLoading}
-						handleRegister={handleRegister}
-						flags={instructionFlags}
-					/>
-					{fileErrors.filter(notNull).map((fileError, index) => (
-						<FileError
-							fileError={{
-								message: fileError.message,
-								title: `File failed to upload: ${fileError?.fileNames.join(', ')}`,
-							}}
-							index={index}
-							onClose={onFileErrorClose}
-							key={index}
+					<Container
+						css={css`
+							padding-bottom: 0px;
+						`}
+					>
+						<Instructions
+							dictionaryVersion={dictionaryVersion}
+							handleUpload={handleUpload}
+							isUploading={uploadFile.isLoading}
+							handleRegister={handleRegister}
+							flags={instructionFlags}
 						/>
-					))}
-					{clinicalRegistration?.records.length ? (
-						<Card
-							fill
-							title="File Preview"
-							action={
-								<Button
-									id="button-register-clear-file"
-									variant={BUTTON_VARIANTS.TEXT}
-									size={BUTTON_SIZES.SM}
-									onClick={handleClearClick}
-									disabled={false}
-								>
-									<Typography variant="data">Clear</Typography>
-								</Button>
-							}
-						>
-							<FilePreview registration={clinicalRegistration} />
-						</Card>
-					) : schemaOrValidationErrors.length ? (
-						<UploadError
-							level={NOTIFICATION_VARIANTS.ERROR}
-							onClearClick={handleClearClick}
-							title={`${schemaOrValidationErrors.length.toLocaleString()} error(s) found in uploaded file`}
-							errors={schemaOrValidationErrors}
-							subtitle={
-								'Your file cannot be processed. Please correct the following errors and reupload your file.'
-							}
-						/>
-					) : (
-						<Card fill>
-							<NoDataMessage loading={false} />
-						</Card>
-					)}
+					</Container>
+					<Container>
+						{fileErrors.filter(notNull).map((fileError, index) => (
+							<FileError
+								fileError={{
+									message: fileError.message,
+									title: `File failed to upload: ${fileError?.fileNames.join(', ')}`,
+								}}
+								index={index}
+								onClose={onFileErrorClose}
+								key={index}
+							/>
+						))}
+						{clinicalRegistration?.records.length ? (
+							<Card
+								fill
+								title="File Preview"
+								action={
+									<Button
+										id="button-register-clear-file"
+										variant={BUTTON_VARIANTS.TEXT}
+										size={BUTTON_SIZES.SM}
+										onClick={handleClearClick}
+										disabled={false}
+									>
+										<Typography variant="data">Clear</Typography>
+									</Button>
+								}
+							>
+								<FilePreview registration={clinicalRegistration} />
+							</Card>
+						) : schemaOrValidationErrors.length ? (
+							<UploadError
+								level={NOTIFICATION_VARIANTS.ERROR}
+								onClearClick={handleClearClick}
+								title={`${schemaOrValidationErrors.length.toLocaleString()} error(s) found in uploaded file`}
+								errors={schemaOrValidationErrors}
+								subtitle={
+									'Your file cannot be processed. Please correct the following errors and reupload your file.'
+								}
+							/>
+						) : (
+							<Card fill>
+								<NoDataMessage loading={false} />
+							</Card>
+						)}
+					</Container>
 				</ContentMain>
 			</div>
 

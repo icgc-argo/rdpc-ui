@@ -28,7 +28,7 @@ import useUrlParamState from '@/app/hooks/useUrlParamState';
 import { notNull, parseDonorIdString } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import { useQuery } from '@apollo/client';
-import { Loader, Typography, VerticalTabs, useTheme } from '@icgc-argo/uikit';
+import { Container, Loader, Typography, VerticalTabs, useTheme } from '@icgc-argo/uikit';
 import { useState } from 'react';
 import { setConfiguration } from 'react-grid-system';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable';
@@ -221,75 +221,77 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 							donorSearchResults={parsedSearchResultData}
 							setKeyword={setKeyword}
 						/>
-						<div
-							css={css`
-								width: 100%;
-							`}
-						>
-							{/* Sidebar */}
+						<Container>
 							<div
 								css={css`
-									width: 20%;
-									max-width: 170px;
-									display: inline-block;
+									width: 100%;
 								`}
 							>
-								<VerticalTabs>{menuItems}</VerticalTabs>
-							</div>
-							{/* Content */}
-							<div
-								css={css`
-									display: inline-block;
-									height: 100%;
-									width: calc(97% - 170px);
-									vertical-align: top;
-									padding: 8px 12px;
-								`}
-							>
-								{/* Header */}
+								{/* Sidebar */}
 								<div
 									css={css`
-										width: 100%;
-										display: flex;
-										justify-content: space-between;
+										width: 20%;
+										max-width: 170px;
+										display: inline-block;
 									`}
 								>
-									<Typography
-										variant="subtitle2"
+									<VerticalTabs>{menuItems}</VerticalTabs>
+								</div>
+								{/* Content */}
+								<div
+									css={css`
+										display: inline-block;
+										height: 100%;
+										width: calc(97% - 170px);
+										vertical-align: top;
+										padding: 8px 12px;
+									`}
+								>
+									{/* Header */}
+									<div
 										css={css`
-											margin-top: 4px;
-											margin-left: 4px;
+											width: 100%;
+											display: flex;
+											justify-content: space-between;
 										`}
 									>
-										{clinicalEntityDisplayNames[currentEntity]} Data
-									</Typography>
+										<Typography
+											variant="subtitle2"
+											css={css`
+												margin-top: 4px;
+												margin-left: 4px;
+											`}
+										>
+											{clinicalEntityDisplayNames[currentEntity]} Data
+										</Typography>
 
-									<ClinicalDownloadButton
-										tsvDownloadIds={tsvDownloadIds}
-										text={`${clinicalEntityDisplayNames[currentEntity]} Data`}
-										entityTypes={[currentEntity]}
-										completionState={completionState}
-										disabled={noData}
-									/>
-								</div>
-								{/* DataTable */}
-								<div
-									css={css`
-										margin-top: 16px;
-									`}
-								>
-									<ClinicalEntityDataTable
-										entityType={currentEntity}
-										program={programShortName}
-										completionState={completionState}
-										currentDonors={entityTableDonorIds}
-										donorSearchResults={searchResultData}
-										useDefaultQuery={useDefaultQuery}
-										noData={noData}
-									/>
-								</div>
-							</div>{' '}
-						</div>
+										<ClinicalDownloadButton
+											tsvDownloadIds={tsvDownloadIds}
+											text={`${clinicalEntityDisplayNames[currentEntity]} Data`}
+											entityTypes={[currentEntity]}
+											completionState={completionState}
+											disabled={noData}
+										/>
+									</div>
+									{/* DataTable */}
+									<div
+										css={css`
+											margin-top: 16px;
+										`}
+									>
+										<ClinicalEntityDataTable
+											entityType={currentEntity}
+											program={programShortName}
+											completionState={completionState}
+											currentDonors={entityTableDonorIds}
+											donorSearchResults={searchResultData}
+											useDefaultQuery={useDefaultQuery}
+											noData={noData}
+										/>
+									</div>
+								</div>{' '}
+							</div>
+						</Container>
 					</ContentMain>
 				</>
 			)}

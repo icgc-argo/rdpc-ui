@@ -52,6 +52,7 @@ import { css } from '@/lib/emotion';
 import { useMutation as useGQLMutation } from '@apollo/client';
 import {
 	ColumnDef,
+	Container,
 	NOTIFICATION_VARIANTS,
 	NotificationVariant,
 	Table,
@@ -105,7 +106,7 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 		updateQuery: updateClinicalSubmissionQuery,
 	} = useClinicalQuery(CLINICAL_SUBMISSION_QUERY, {
 		variables: {
-			shortName,
+			programShortName: shortName,
 		},
 	});
 
@@ -382,19 +383,24 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 						programShortName={shortName}
 					/>
 					<ContentMain>
-						<Instructions
-							uploadEnabled={!isSubmissionSystemDisabled}
-							signOffEnabled={!isSubmissionSystemDisabled && isReadyForSignoff}
-							validationEnabled={
-								!isSubmissionSystemDisabled && isReadyForValidation && !hasDataError && !isValidated
-							}
-							onUploadFileSelect={handleSubmissionFilesUpload}
-							onValidateClick={handleSubmissionValidation}
-							onSignOffClick={handleSignOff}
-							clinicalTypes={clinicalEntities.map(({ clinicalType }) => clinicalType)}
-						/>
+						<Container>
+							<Instructions
+								uploadEnabled={!isSubmissionSystemDisabled}
+								signOffEnabled={!isSubmissionSystemDisabled && isReadyForSignoff}
+								validationEnabled={
+									!isSubmissionSystemDisabled &&
+									isReadyForValidation &&
+									!hasDataError &&
+									!isValidated
+								}
+								onUploadFileSelect={handleSubmissionFilesUpload}
+								onValidateClick={handleSubmissionValidation}
+								onSignOffClick={handleSignOff}
+								clinicalTypes={clinicalEntities.map(({ clinicalType }) => clinicalType)}
+							/>
+						</Container>
 						{isPendingApproval && (
-							<div
+							<Container
 								css={css`
 									padding: 24px;
 								`}
@@ -422,7 +428,7 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 									</Typography>
 								</div>
 								<SubmissionSummaryTable clinicalEntities={clinicalEntities} />
-							</div>
+							</Container>
 						)}
 
 						{/* File errors */}
@@ -478,16 +484,27 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 							</div>
 						)}
 						{/* Main clinical entity section */}
-						<FilesNavigator
-							submissionState={clinicalState}
-							clearDataError={handleClearSchemaError}
-							fileStates={clinicalEntities}
-							selectedClinicalEntityType={selectedClinicalEntityType}
-							onFileSelect={setSelectedClinicalEntityType}
-							submissionVersion={clinicalVersion}
-							programShortName={shortName}
-							refetchClinicalSubmission={refetch}
-						/>
+						<Container
+							css={css`
+								min-height: 100px;
+								position: relative;
+								padding: 0px;
+								min-height: 350px;
+								display: flex;
+								flex: 1;
+							`}
+						>
+							<FilesNavigator
+								submissionState={clinicalState}
+								clearDataError={handleClearSchemaError}
+								fileStates={clinicalEntities}
+								selectedClinicalEntityType={selectedClinicalEntityType}
+								onFileSelect={setSelectedClinicalEntityType}
+								submissionVersion={clinicalVersion}
+								programShortName={shortName}
+								refetchClinicalSubmission={refetch}
+							/>
+						</Container>
 					</ContentMain>
 				</div>
 			</>
