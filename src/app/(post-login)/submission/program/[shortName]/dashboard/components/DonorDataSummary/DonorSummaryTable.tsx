@@ -356,9 +356,11 @@ const DonorSummaryTable = ({
 							`/clinical-data/?donorId=${original.donorId}&tab=${errorTab || 'donor'}`,
 						);
 
-						<NextLink href={linkUrl}>
-							<Link>{`${original.donorId} (${original.submitterDonorId})`}</Link>
-						</NextLink>;
+						return (
+							<NextLink href={linkUrl}>
+								<Link>{`${original.donorId} (${original.submitterDonorId})`}</Link>
+							</NextLink>
+						);
 					},
 					size: 135,
 				},
@@ -856,7 +858,6 @@ const DonorSummaryTable = ({
 					<Table
 						columns={tableColumns}
 						data={programDonorSummaryEntries}
-						enableColumnResizing
 						enableSorting
 						loading={isCardLoading || isTableLoading}
 						manualPagination
