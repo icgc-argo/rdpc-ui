@@ -23,10 +23,8 @@ import { BreadcrumbTitle, PageHeader } from '@/app/components/PageHeader/PageHea
 import PROGRAMS_LIST_QUERY from '@/app/gql/gateway/PROGRAMS_LIST_QUERY';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useGatewayQuery } from '@/app/hooks/useApolloQuery';
-import { CREATE_PROGRAM_PAGE_PATH } from '@/global/constants';
 import { notNull } from '@/global/utils';
-import { Button, Loader } from '@icgc-argo/uikit';
-import Link from 'next/link';
+import { Loader } from '@icgc-argo/uikit';
 import { notFound } from 'next/navigation';
 import ProgramList from '../components/ProgramList';
 
@@ -44,16 +42,7 @@ export default function Submission() {
 	const canCreate = true;
 	return (
 		<div>
-			<PageHeader
-				leftSlot={<BreadcrumbTitle breadcrumbs={['All Programs']} />}
-				rightSlot={
-					canCreate && (
-						<Link href={CREATE_PROGRAM_PAGE_PATH} legacyBehavior>
-							<Button>Create a program</Button>
-						</Link>
-					)
-				}
-			/>
+			<PageHeader leftSlot={<BreadcrumbTitle breadcrumbs={['All Programs']} />} />
 			<ProgramList programs={programs} />
 		</div>
 	);
