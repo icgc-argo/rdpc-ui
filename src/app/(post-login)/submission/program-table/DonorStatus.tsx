@@ -29,7 +29,9 @@ const DonorStatus = ({ submittedDonors, commitmentDonors }: DonorStatusProps) =>
 	const numerator = submittedDonors ? submittedDonors : 0;
 	const denominator = commitmentDonors ? commitmentDonors : 0;
 	const percentComplete =
-		numerator === 0 ? '0%' : `${((numerator / denominator) * 100).toFixed(2)}%`;
+		numerator === 0 || denominator === 0
+			? '0%'
+			: `${((numerator / denominator) * 100).toFixed(2)}%`;
 
 	return (
 		<div
