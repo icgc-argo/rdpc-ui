@@ -28,6 +28,8 @@ const DonorStatus = ({ submittedDonors, commitmentDonors }: DonorStatusProps) =>
 	const theme = useTheme();
 	const numerator = submittedDonors ? submittedDonors : 0;
 	const denominator = commitmentDonors ? commitmentDonors : 0;
+	const percentComplete =
+		numerator === 0 ? '0%' : `${((numerator / denominator) * 100).toFixed(2)}%`;
 
 	return (
 		<div
@@ -54,7 +56,7 @@ const DonorStatus = ({ submittedDonors, commitmentDonors }: DonorStatusProps) =>
 				{denominator.toLocaleString()}
 			</Typography>
 			<Typography variant="data" component="div">
-				({((numerator / denominator) * 100).toFixed(2)}%)
+				{percentComplete}
 			</Typography>
 		</div>
 	);
