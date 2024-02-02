@@ -856,7 +856,6 @@ const DonorSummaryTable = ({
 					<Table
 						columns={tableColumns}
 						data={programDonorSummaryEntries}
-						enableColumnResizing
 						enableSorting
 						loading={isCardLoading || isTableLoading}
 						manualPagination
