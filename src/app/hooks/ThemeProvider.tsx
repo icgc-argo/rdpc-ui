@@ -50,10 +50,6 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
 						margin: 0;
 					}
 
-					:root {
-						font-size: 62.5%;
-					}
-
 					body {
 						line-height: 1.5;
 						font-family: ${workSans.style.fontFamily};
