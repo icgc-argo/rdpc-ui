@@ -39,7 +39,6 @@ export default function Submission() {
 	if (loading) return <Loader />;
 	if (error) notFound();
 
-	const canCreate = true;
 	return (
 		<div>
 			<PageHeader leftSlot={<BreadcrumbTitle breadcrumbs={['All Programs']} />} />
