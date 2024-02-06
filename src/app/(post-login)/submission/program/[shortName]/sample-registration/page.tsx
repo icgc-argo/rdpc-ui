@@ -142,7 +142,6 @@ const Register = ({ shortName }: { shortName: string }) => {
 			await refetch();
 		} catch (err) {
 			await refetch();
-			console.log(err);
 			toaster.addToast({
 				variant: 'ERROR',
 				title: 'Something went wrong',
