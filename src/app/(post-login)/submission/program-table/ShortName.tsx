@@ -22,7 +22,7 @@ import { Link as UIKitLink } from '@icgc-argo/uikit';
 import Link from 'next/link';
 
 const ShortName = ({ shortName }: { shortName: string }) => (
-	<Link href={`submission/${shortName}`} passHref legacyBehavior>
+	<Link href={`program/${shortName}/dashboard`} passHref legacyBehavior>
 		<UIKitLink>{shortName}</UIKitLink>
 	</Link>
 );
