@@ -102,12 +102,14 @@ const Register = ({ shortName }: { shortName: string }) => {
 	const registrationId = get(clinicalRegistration, 'id', '') || '';
 
 	// handlers
+	const uploadURL = urlJoin(CLINICAL_API_ROOT, getProgramPath(UPLOAD_REGISTRATION, shortName));
 	const uploadFile = useMutation(
 		(formData) => {
-			const url = urlJoin(CLINICAL_API_ROOT, getProgramPath(UPLOAD_REGISTRATION, shortName));
-			return uploadFileRequest(url, formData, egoJwt);
+			return uploadFileRequest(uploadURL, formData, egoJwt);
 		},
 		{
+			onSuccess: (data, variables, context) => console.log(data),
+
 			onError: () => {
 				commonToaster.unknownError();
 			},
@@ -204,7 +206,11 @@ const Register = ({ shortName }: { shortName: string }) => {
 							flags={instructionFlags}
 						/>
 					</Container>
-					<Container>
+					<Container
+						css={css`
+							flex: 1;
+						`}
+					>
 						{fileErrors.filter(notNull).map((fileError, index) => (
 							<FileError
 								fileError={{
