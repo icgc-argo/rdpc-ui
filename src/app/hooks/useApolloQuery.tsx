@@ -30,6 +30,7 @@ import {
 type APIType = keyof typeof apiName;
 type QueryType<TData, TVariables> = DocumentNode | TypedDocumentNode<TData, TVariables>;
 type OptionsType = QueryHookOptions<any, OperationVariables> | undefined;
+type MutationOptions = OptionsType & { refetchQueries?: any };
 
 const useApolloQuery = <TData, TVariables>(
 	query: QueryType<TData, TVariables>,
@@ -59,7 +60,7 @@ export const useClinicalQuery = <TData, TVariables>(
 const useApolloMutation = <TData, TVariables>(
 	mutation: QueryType<TData, TVariables>,
 	api: APIType,
-	options?: OptionsType,
+	options?: MutationOptions,
 ) => {
 	const mergedOptions = { context: { apiName: api }, ...options };
 	// @ts-expect-error apollo NoInfer type isn't playing nice with the 'mergedOptions'
@@ -68,14 +69,14 @@ const useApolloMutation = <TData, TVariables>(
 
 export const useGatewayMutation = <TData, TVariables>(
 	mutation: QueryType<TData, TVariables>,
-	options?: OptionsType,
+	options?: MutationOptions,
 ) => {
 	return useApolloMutation(mutation, apiName.gateway, options);
 };
 
 export const useClinicalMutation = <TData, TVariables>(
 	mutation: QueryType<TData, TVariables>,
-	options?: OptionsType,
+	options?: MutationOptions,
 ) => {
 	return useApolloMutation(mutation, apiName.clinical, options);
 };
