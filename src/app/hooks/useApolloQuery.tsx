@@ -23,13 +23,18 @@ import {
 	QueryHookOptions,
 	QueryResult,
 	TypedDocumentNode,
+	useMutation,
 	useQuery,
 } from '@apollo/client';
 
+type APIType = keyof typeof apiName;
+type QueryType<TData, TVariables> = DocumentNode | TypedDocumentNode<TData, TVariables>;
+type OptionsType = QueryHookOptions<any, OperationVariables> | undefined;
+
 const useApolloQuery = <TData, TVariables>(
-	query: DocumentNode | TypedDocumentNode<TData, TVariables>,
-	api: keyof typeof apiName,
-	options?: QueryHookOptions<any, OperationVariables> | undefined,
+	query: QueryType<TData, TVariables>,
+	api: APIType,
+	options?: OptionsType,
 ): QueryResult<TData, TVariables> => {
 	const mergedOptions = { context: { apiName: api }, ...options };
 	// @ts-expect-error apollo NoInfer type isn't playing nice with the 'mergedOptions'
@@ -37,15 +42,40 @@ const useApolloQuery = <TData, TVariables>(
 };
 
 export const useGatewayQuery = <TData, TVariables>(
-	query: DocumentNode | TypedDocumentNode<TData, TVariables>,
-	options?: QueryHookOptions<any, OperationVariables> | undefined,
+	query: QueryType<TData, TVariables>,
+	options?: OptionsType,
 ) => {
 	return useApolloQuery(query, apiName.gateway, options);
 };
 
 export const useClinicalQuery = <TData, TVariables>(
-	query: DocumentNode | TypedDocumentNode<TData, TVariables>,
-	options?: QueryHookOptions<any, OperationVariables> | undefined,
+	query: QueryType<TData, TVariables>,
+	options?: OptionsType,
 ) => {
 	return useApolloQuery(query, apiName.clinical, options);
+};
+
+// Mutation
+const useApolloMutation = <TData, TVariables>(
+	mutation: QueryType<TData, TVariables>,
+	api: APIType,
+	options?: OptionsType,
+) => {
+	const mergedOptions = { context: { apiName: api }, ...options };
+	// @ts-expect-error apollo NoInfer type isn't playing nice with the 'mergedOptions'
+	return useMutation(mutation, mergedOptions);
+};
+
+export const useGatewayMutation = <TData, TVariables>(
+	mutation: QueryType<TData, TVariables>,
+	options?: OptionsType,
+) => {
+	return useApolloMutation(mutation, apiName.gateway, options);
+};
+
+export const useClinicalMutation = <TData, TVariables>(
+	mutation: QueryType<TData, TVariables>,
+	options?: OptionsType,
+) => {
+	return useApolloMutation(mutation, apiName.clinical, options);
 };
