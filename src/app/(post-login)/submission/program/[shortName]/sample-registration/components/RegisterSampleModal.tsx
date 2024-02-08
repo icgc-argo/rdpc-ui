@@ -22,13 +22,13 @@ import COMMIT_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/clinical/COMMIT_CLI
 import GET_REGISTRATION_QUERY from '@/app/gql/clinical/GET_REGISTRATION_QUERY';
 import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
 import { useToaster } from '@/app/hooks/ToastProvider';
+import { useClinicalMutation } from '@/app/hooks/useApolloQuery';
 import {
 	CONTACT_PAGE_PATH,
 	PROGRAM_DASHBOARD_PATH,
 	PROGRAM_SHORT_NAME_PATH,
 } from '@/global/constants';
 import { sleep } from '@/global/utils';
-import { useMutation } from '@apollo/client';
 import { Modal, TOAST_VARIANTS, Typography, Link as UIKitLink } from '@icgc-argo/uikit';
 import { get } from 'lodash';
 import Link from 'next/link';
@@ -44,7 +44,7 @@ export default function RegisterSamplesModal({
 	shortName: string;
 	registrationId: string;
 }) {
-	const [commitRegistration] = useMutation(COMMIT_CLINICAL_REGISTRATION_MUTATION, {
+	const [commitRegistration] = useClinicalMutation(COMMIT_CLINICAL_REGISTRATION_MUTATION, {
 		variables: {
 			shortName,
 			registrationId,

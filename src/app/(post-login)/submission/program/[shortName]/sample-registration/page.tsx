@@ -31,14 +31,13 @@ import GET_REGISTRATION_QUERY from '@/app/gql/clinical/GET_REGISTRATION_QUERY';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useAuthContext } from '@/app/hooks/AuthProvider';
 import { useToaster } from '@/app/hooks/ToastProvider';
-import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
+import { useClinicalMutation, useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import useCommonToasters from '@/app/hooks/useCommonToasters';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
 import { UPLOAD_REGISTRATION } from '@/global/constants';
 import { getProgramPath, notNull } from '@/global/utils';
 import { createFileFormData, uploadFileRequest } from '@/global/utils/form';
 import { css } from '@/lib/emotion';
-import { useMutation as useGQLMutation, useQuery } from '@apollo/client';
 import {
 	BUTTON_SIZES,
 	BUTTON_VARIANTS,
@@ -62,7 +61,7 @@ const Register = ({ shortName }: { shortName: string }) => {
 		data,
 		refetch,
 		updateQuery: updateClinicalRegistrationQuery,
-	} = useQuery(GET_REGISTRATION_QUERY, {
+	} = useClinicalQuery(GET_REGISTRATION_QUERY, {
 		variables: { shortName },
 	});
 
@@ -102,12 +101,14 @@ const Register = ({ shortName }: { shortName: string }) => {
 	const registrationId = get(clinicalRegistration, 'id', '') || '';
 
 	// handlers
+	const uploadURL = urlJoin(CLINICAL_API_ROOT, getProgramPath(UPLOAD_REGISTRATION, shortName));
 	const uploadFile = useMutation(
 		(formData) => {
-			const url = urlJoin(CLINICAL_API_ROOT, getProgramPath(UPLOAD_REGISTRATION, shortName));
-			return uploadFileRequest(url, formData, egoJwt);
+			return uploadFileRequest(uploadURL, formData, egoJwt);
 		},
 		{
+			onSuccess: (data, variables, context) => refetch(),
+
 			onError: () => {
 				commonToaster.unknownError();
 			},
@@ -124,7 +125,7 @@ const Register = ({ shortName }: { shortName: string }) => {
 	};
 
 	// file preview clear
-	const [clearRegistration] = useGQLMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
+	const [clearRegistration] = useClinicalMutation(CLEAR_CLINICAL_REGISTRATION_MUTATION);
 	const handleClearClick = async () => {
 		if (clinicalRegistration?.id == null) {
 			refetch();
@@ -204,7 +205,11 @@ const Register = ({ shortName }: { shortName: string }) => {
 							flags={instructionFlags}
 						/>
 					</Container>
-					<Container>
+					<Container
+						css={css`
+							flex: 1;
+						`}
+					>
 						{fileErrors.filter(notNull).map((fileError, index) => (
 							<FileError
 								fileError={{
