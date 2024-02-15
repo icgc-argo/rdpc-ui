@@ -58,7 +58,6 @@ const FilesNavigator = ({
 	const selectedFile = fileStates.find(
 		(file) => file && file.clinicalType === selectedClinicalEntityType,
 	);
-
 	const schemaErrors = selectedFile?.schemaErrors;
 
 	const clearSubmission = async (fileType: string) => {

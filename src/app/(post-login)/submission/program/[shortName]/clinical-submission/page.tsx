@@ -28,7 +28,6 @@ import {
 import Loader from '@/app/components/Loader';
 import { ModalPortal } from '@/app/components/Modal';
 import { pageWithPermissions } from '@/app/components/Page';
-import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
 import CLINICAL_SUBMISSION_QUERY from '@/app/gql/clinical/CLINICAL_SUBMISSION_QUERY';
 import SIGN_OFF_SUBMISSION_MUTATION from '@/app/gql/clinical/SIGN_OFF_SUBMISSION_MUTATION';
 import VALIDATE_SUBMISSION_MUTATION from '@/app/gql/clinical/VALIDATE_SUBMISSION_MUTATION';
@@ -110,17 +109,39 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 		},
 	});
 
-	// mutations
-	const [clearClinicalSubmission] = useGQLMutation(CLEAR_CLINICAL_SUBMISSION);
-
 	const uploadClinicalSubmission = useMutation(
 		(formData) => {
 			const url = urlJoin(CLINICAL_API_ROOT, getProgramPath(UPLOAD_CLINICAL_DATA, shortName));
 			return uploadFileRequest(url, formData, egoJwt);
 		},
 		{
-			onSuccess: () => {
-				refetch();
+			onSuccess: async (data) => {
+				/**
+				 * these properties are not returned from the HTTP response
+				 * they are needed for GQL type completeness
+				 */
+				const propertiesNotReturnedFromSever = {
+					batchName: null,
+					creator: null,
+					createdAt: null,
+					stats: null,
+				};
+				const result = await data.json();
+
+				const { programShortName, fileErrors, clinicalEntities } = result;
+				const clinicalEntitiesWithMissingProperties = clinicalEntities.map((entity) => ({
+					...entity,
+					...propertiesNotReturnedFromSever,
+				}));
+				updateClinicalSubmissionQuery((previous) => ({
+					...previous,
+					clinicalSubmissions: {
+						...previous.clinicalSubmissions,
+						programShortName,
+						fileErrors,
+						clinicalEntities: clinicalEntitiesWithMissingProperties,
+					},
+				}));
 			},
 			onError: () => {
 				commonToaster.unknownError();
