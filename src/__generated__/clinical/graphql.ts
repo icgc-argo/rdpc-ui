@@ -344,7 +344,7 @@ export type CompletionStats = {
 	coreCompletionPercentage?: Maybe<Scalars['Float']['output']>;
 	donorId?: Maybe<Scalars['Int']['output']>;
 	entityData?: Maybe<CompletionEntityData>;
-	overriddenCoreCompletion?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+	hasMissingEntityException?: Maybe<Scalars['Boolean']['output']>;
 };
 
 /** Specific Entity Completion Values */
@@ -1012,7 +1012,6 @@ export type ClinicalEntityDataQuery = {
 				__typename?: 'CompletionStats';
 				coreCompletionDate?: string | null;
 				coreCompletionPercentage?: number | null;
-				overriddenCoreCompletion?: Array<string | null> | null;
 				donorId?: number | null;
 				coreCompletion?: {
 					__typename?: 'CoreCompletionFields';
@@ -2164,10 +2163,6 @@ export const ClinicalEntityDataDocument = {
 														{
 															kind: 'Field',
 															name: { kind: 'Name', value: 'coreCompletionPercentage' },
-														},
-														{
-															kind: 'Field',
-															name: { kind: 'Name', value: 'overriddenCoreCompletion' },
 														},
 														{ kind: 'Field', name: { kind: 'Name', value: 'donorId' } },
 														{

@@ -34,7 +34,6 @@ export type CompletionStats = {
 	coreCompletionDate: string;
 	coreCompletionPercentage: number;
 	donorId: number;
-	overriddenCoreCompletion: [CoreCompletionEntities];
 	entityData?: CompletionEntityData;
 };
 

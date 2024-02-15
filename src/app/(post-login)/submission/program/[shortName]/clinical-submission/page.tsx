@@ -119,6 +119,9 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 			return uploadFileRequest(url, formData, egoJwt);
 		},
 		{
+			onSuccess: () => {
+				refetch();
+			},
 			onError: () => {
 				commonToaster.unknownError();
 			},
