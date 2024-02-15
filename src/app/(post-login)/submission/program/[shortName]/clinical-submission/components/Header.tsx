@@ -26,12 +26,12 @@ import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useAuthContext } from '@/app/hooks/AuthProvider';
 import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
 import { useToaster } from '@/app/hooks/ToastProvider';
+import { useClinicalMutation } from '@/app/hooks/useApolloQuery';
 import useCommonToasters from '@/app/hooks/useCommonToasters';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
 import useUserConfirmationModalState from '@/app/hooks/useUserConfirmationModalState';
 import { sleep } from '@/global/utils';
 import { css, useTheme } from '@/lib/emotion';
-import { useMutation } from '@apollo/client';
 import { Button, Modal } from '@icgc-argo/uikit';
 import { useRouter } from 'next/navigation';
 import { FC, useMemo } from 'react';
@@ -94,21 +94,21 @@ const Header: FC<HeaderProps> = ({
 
 	const { isDisabled: isSubmissionSystemDisabled } = useSubmissionSystemStatus();
 
-	const [approveClinicalSubmission] = useMutation(APPROVE_SUBMISSION_MUTATION, {
+	const [approveClinicalSubmission] = useClinicalMutation(APPROVE_SUBMISSION_MUTATION, {
 		variables: {
 			programShortName,
 			submissionVersion: clinicalVersion,
 		},
 	});
 
-	const [reopenSubmission] = useMutation(REOPEN_SUBMISSION_MUTATION, {
+	const [reopenSubmission] = useClinicalMutation(REOPEN_SUBMISSION_MUTATION, {
 		variables: {
 			programShortName,
 			submissionVersion: clinicalVersion,
 		},
 	});
 
-	const [clearClinicalSubmission] = useMutation(CLEAR_CLINICAL_SUBMISSION, {
+	const [clearClinicalSubmission] = useClinicalMutation(CLEAR_CLINICAL_SUBMISSION, {
 		variables: {
 			programShortName,
 			submissionVersion: clinicalVersion,
