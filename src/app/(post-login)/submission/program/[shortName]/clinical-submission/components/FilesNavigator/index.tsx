@@ -19,9 +19,9 @@
 
 import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
 import { useToaster } from '@/app/hooks/ToastProvider';
+import { useClinicalMutation } from '@/app/hooks/useApolloQuery';
 import useCommonToasters from '@/app/hooks/useCommonToasters';
 import { css } from '@/lib/emotion';
-import { useMutation } from '@apollo/client';
 import { Col } from 'react-grid-system';
 import { ClinicalEntity, ClinicalSubmission } from '../../types';
 import FilePreview from './FilePreview';
@@ -52,13 +52,12 @@ const FilesNavigator = ({
 	const toaster = useToaster();
 
 	// queries
-	const [clearClinicalEntitySubmission] = useMutation(CLEAR_CLINICAL_SUBMISSION);
+	const [clearClinicalEntitySubmission] = useClinicalMutation(CLEAR_CLINICAL_SUBMISSION);
 
 	// state
 	const selectedFile = fileStates.find(
 		(file) => file && file.clinicalType === selectedClinicalEntityType,
 	);
-
 	const schemaErrors = selectedFile?.schemaErrors;
 
 	const clearSubmission = async (fileType: string) => {
