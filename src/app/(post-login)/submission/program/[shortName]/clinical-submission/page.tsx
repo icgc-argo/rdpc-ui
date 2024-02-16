@@ -456,19 +456,20 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 						)}
 
 						{/* File errors */}
-						{clinicalFileErrors.map(({ fileNames, message }, i) => (
-							<FileError
-								key={i}
-								fileError={{
-									message,
-									title: `${fileNames.length} of ${(
-										'!!' || []
-									).length.toLocaleString()} files failed to upload: ${fileNames.join(', ')}`,
-								}}
-								onClose={onErrorClose}
-								index={i}
-							/>
-						))}
+						{clinicalFileErrors.map(({ fileNames, message }, i) => {
+							const title = `Files failed to upload: ${fileNames.join(', ')}`;
+							return (
+								<FileError
+									key={i}
+									fileError={{
+										message,
+										title,
+									}}
+									onClose={onErrorClose}
+									index={i}
+								/>
+							);
+						})}
 
 						{/* Submimssion data errors */}
 						{hasDataError && (
