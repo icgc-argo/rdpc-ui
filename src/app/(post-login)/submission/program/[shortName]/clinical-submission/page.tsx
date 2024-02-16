@@ -18,7 +18,6 @@
  */
 'use client';
 
-import { ClinicalSubmissionEntity } from '@/__generated__/clinical/graphql';
 import ContentMain from '@/app/components/Content/ContentMain';
 import ErrorNotification, { ErrorReportColumns } from '@/app/components/ErrorNotification';
 import {
@@ -35,7 +34,7 @@ import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useAuthContext } from '@/app/hooks/AuthProvider';
 import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
 import { useToaster } from '@/app/hooks/ToastProvider';
-import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
+import { useClinicalMutation, useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import useCommonToasters from '@/app/hooks/useCommonToasters';
 import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
 import useUrlQueryState from '@/app/hooks/useURLQueryState';
@@ -48,7 +47,6 @@ import {
 import { displayDateAndTime, getProgramPath, sleep, toDisplayError } from '@/global/utils';
 import { createFileFormData, uploadFileRequest } from '@/global/utils/form';
 import { css } from '@/lib/emotion';
-import { useMutation as useGQLMutation } from '@apollo/client';
 import {
 	ColumnDef,
 	Container,
@@ -117,26 +115,29 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 		{
 			onSuccess: async (data) => {
 				/**
-				 * these properties are not returned from the HTTP response
+				 * these properties are not returned from the HTTP response for certain clinical entities
+				 * example if there is a file error
 				 * they are needed for GQL type completeness
 				 */
 				const propertiesNotReturnedFromSever = {
-					batchName: null,
-					creator: null,
-					createdAt: null,
+					batchName: '',
+					creator: '',
+					createdAt: '',
 					stats: null,
+					fileName: '',
 				};
 				const result = await data.json();
 
-				const { programShortName, fileErrors, clinicalEntities } = result;
+				const { programShortName, fileErrors, clinicalEntities, version } = result;
 				const clinicalEntitiesWithMissingProperties = clinicalEntities.map((entity) => ({
-					...entity,
 					...propertiesNotReturnedFromSever,
+					...entity,
 				}));
 				updateClinicalSubmissionQuery((previous) => ({
 					...previous,
 					clinicalSubmissions: {
 						...previous.clinicalSubmissions,
+						version,
 						programShortName,
 						fileErrors,
 						clinicalEntities: clinicalEntitiesWithMissingProperties,
@@ -154,13 +155,13 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 		return uploadClinicalSubmission.mutate(fileFormData);
 	};
 
-	const [validateSubmission] = useGQLMutation(VALIDATE_SUBMISSION_MUTATION, {
+	const [validateSubmission] = useClinicalMutation(VALIDATE_SUBMISSION_MUTATION, {
 		onCompleted: () => {
 			//setSelectedClinicalEntityType(defaultClinicalEntityType);
 		},
 	});
 
-	const [signOffSubmission] = useGQLMutation(SIGN_OFF_SUBMISSION_MUTATION);
+	const [signOffSubmission] = useClinicalMutation(SIGN_OFF_SUBMISSION_MUTATION);
 
 	const { isDisabled: isSubmissionSystemDisabled } = useSubmissionSystemStatus();
 
@@ -300,6 +301,7 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 		const isReadyForValidation = hasSomeEntity && !hasSchemaError && !hasSchemaErrorsAfterMigration;
 		const isReadyForSignoff = isReadyForValidation && clinicalState === 'VALID';
 		const isValidated = clinicalState !== 'OPEN';
+
 		// Instruction box handlers
 		const handleSubmissionValidation = async () => {
 			try {
@@ -370,12 +372,13 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 								...entity,
 								schemaErrors:
 									clearedSchemaType === currentEntityType ? [] : currentEntitySchemaError,
-							} as ClinicalSubmissionEntity;
+							};
 						}),
 					},
 				};
 			});
 		};
+
 		const setSelectedClinicalEntityType = () => null;
 
 		return (
@@ -412,10 +415,7 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 								uploadEnabled={!isSubmissionSystemDisabled}
 								signOffEnabled={!isSubmissionSystemDisabled && isReadyForSignoff}
 								validationEnabled={
-									!isSubmissionSystemDisabled &&
-									isReadyForValidation &&
-									!hasDataError &&
-									!isValidated
+									!isSubmissionSystemDisabled && isReadyForValidation && !hasDataError
 								}
 								onUploadFileSelect={handleSubmissionFilesUpload}
 								onValidateClick={handleSubmissionValidation}
