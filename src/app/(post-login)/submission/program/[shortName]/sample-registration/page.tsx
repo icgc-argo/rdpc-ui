@@ -47,7 +47,7 @@ import {
 	NotificationInteraction,
 	Typography,
 } from '@icgc-argo/uikit';
-import { get } from 'lodash';
+import { get, isFunction, isString } from 'lodash';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
 import urlJoin from 'url-join';
@@ -100,6 +100,65 @@ const Register = ({ shortName }: { shortName: string }) => {
 	const hasErrors = !!schemaOrValidationErrors.length;
 	const registrationId = get(clinicalRegistration, 'id', '') || '';
 
+	/**
+	 * new HTTP endpoints don't return the same data as strictly typed gql endpoints
+	 * data shape needs to match so state can stay in sync on the frontend
+	 */
+	type RequiredProperty = { key: string; accessor: string | (() => void); defaultValue: any };
+	const requiredProperties: RequiredProperty[] = [
+		{ key: 'creator', accessor: 'registration.creator', defaultValue: '' },
+		{ key: 'fileName', accessor: 'fileName', defaultValue: '' },
+		{ key: 'createdAt', accessor: 'registration.createdAt', defaultValue: '' },
+		{ key: 'newDonors', accessor: 'newDonors', defaultValue: [] },
+		{ key: 'newSamples', accessor: 'newSamples', defaultValue: [] },
+		{ key: 'newSpecimens', accessor: 'newSpecimens', defaultValue: [] },
+		{ key: 'alreadyRegistered', accessor: 'alreadyRegistered', defaultValue: [] },
+		{
+			key: 'records',
+			accessor: (resp) =>
+				resp.registration?.records.map((record, index) => ({
+					row: index,
+					fields: Object.keys(record).map((key) => ({ name: key, value: record[key] })),
+				})),
+			defaultValue: [],
+		},
+		{
+			key: 'errors',
+			accessor: (resp) =>
+				resp.errors.map((error) => ({
+					type: error.type,
+					message: error.message,
+					row: error.index,
+					field: error.fieldName,
+					value: error.info.value,
+					sampleId: error.info.sampleSubmitterId,
+					donorId: error.info.donorSubmitterId,
+					specimenId: error.info.specimenSubmitterId,
+				})),
+			defaultValue: [],
+		},
+	];
+
+	const getValueFromAccessor = (data, accessor, defaultValue) => {
+		if (isFunction(accessor)) {
+			return accessor(data) || defaultValue;
+		} else if (isString(accessor)) {
+			return get(data, accessor, defaultValue);
+		}
+	};
+	const satisfyGQL = ({
+		apiResp,
+		requiredProperties,
+	}: {
+		apiResp: any;
+		requiredProperties: RequiredProperty[];
+	}) =>
+		requiredProperties.reduce((acc, curr) => {
+			const value = getValueFromAccessor(apiResp, curr.accessor, curr.defaultValue);
+			console.log('v', value);
+			return { ...acc, ...{ [curr.key]: value } };
+		}, {});
+
 	// handlers
 	const uploadURL = urlJoin(CLINICAL_API_ROOT, getProgramPath(UPLOAD_REGISTRATION, shortName));
 	const uploadFile = useMutation(
@@ -107,9 +166,22 @@ const Register = ({ shortName }: { shortName: string }) => {
 			return uploadFileRequest(uploadURL, formData, egoJwt);
 		},
 		{
-			onSuccess: (data, variables, context) => refetch(),
+			// success of query - not HTTP status
+			onSuccess: async (data, variables, context) => {
+				const registration = await data.json();
+				const registrationUpdate = satisfyGQL({ apiResp: registration, requiredProperties });
+				console.log('reg update', registrationUpdate);
+				// updateClinicalRegistrationQuery((previous) => {
+				// 	const update = { ...previous.clinicalRegistration, ...registrationUpdate, id: '' };
+				// 	console.log('update', update);
+				// 	return { clinicalRegistration: update };
+				// });
+				refetch();
+			},
 
-			onError: () => {
+			onError: (error) => {
+				console.log('err', error);
+
 				commonToaster.unknownError();
 			},
 		},
