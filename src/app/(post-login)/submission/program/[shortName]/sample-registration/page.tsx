@@ -115,7 +115,7 @@ const Register = ({ shortName }: { shortName: string }) => {
 		},
 	);
 
-	const handleUpload = (file: File) => {
+	const handleUpload = (file: FileList) => {
 		const fileFormData = createFileFormData(file, 'registrationFile');
 		return uploadFile.mutate(fileFormData);
 	};

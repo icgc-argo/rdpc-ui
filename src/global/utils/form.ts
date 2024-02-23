@@ -20,7 +20,7 @@
 export const createFileFormData = (upload: FileList, uploadName) => {
 	const formData = new FormData();
 
-	[...upload].forEach((file) => {
+	[...upload].forEach((file, i) => {
 		formData.append(uploadName || `file_${i}`, file);
 	});
 
