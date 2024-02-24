@@ -101,27 +101,11 @@ const Register = ({ shortName }: { shortName: string }) => {
 	const registrationId = get(clinicalRegistration, 'id', '') || '';
 
 	/**
-	 * new HTTP endpoints don't return the same data as strictly typed gql endpoints
+	 * new HTTP endpoints don't return the same objects as strictly typed gql endpoints
 	 * data shape needs to match so state can stay in sync on the frontend
 	 */
 	type RequiredProperty = { key: string; accessor: string | (() => void); defaultValue: any };
 	const requiredProperties: RequiredProperty[] = [
-		{ key: 'creator', accessor: 'registration.creator', defaultValue: '' },
-		{ key: 'fileName', accessor: 'fileName', defaultValue: '' },
-		{ key: 'createdAt', accessor: 'registration.createdAt', defaultValue: '' },
-		{ key: 'newDonors', accessor: 'newDonors', defaultValue: [] },
-		{ key: 'newSamples', accessor: 'newSamples', defaultValue: [] },
-		{ key: 'newSpecimens', accessor: 'newSpecimens', defaultValue: [] },
-		{ key: 'alreadyRegistered', accessor: 'alreadyRegistered', defaultValue: [] },
-		{
-			key: 'records',
-			accessor: (resp) =>
-				resp.registration?.records.map((record, index) => ({
-					row: index,
-					fields: Object.keys(record).map((key) => ({ name: key, value: record[key] })),
-				})),
-			defaultValue: [],
-		},
 		{
 			key: 'errors',
 			accessor: (resp) =>
@@ -146,6 +130,8 @@ const Register = ({ shortName }: { shortName: string }) => {
 			return get(data, accessor, defaultValue);
 		}
 	};
+
+	// match a certain shape from gql
 	const satisfyGQL = ({
 		apiResp,
 		requiredProperties,
@@ -155,7 +141,6 @@ const Register = ({ shortName }: { shortName: string }) => {
 	}) =>
 		requiredProperties.reduce((acc, curr) => {
 			const value = getValueFromAccessor(apiResp, curr.accessor, curr.defaultValue);
-			console.log('v', value);
 			return { ...acc, ...{ [curr.key]: value } };
 		}, {});
 
@@ -168,20 +153,23 @@ const Register = ({ shortName }: { shortName: string }) => {
 		{
 			// success of query - not HTTP status
 			onSuccess: async (data, variables, context) => {
-				const registration = await data.json();
-				const registrationUpdate = satisfyGQL({ apiResp: registration, requiredProperties });
-				console.log('reg update', registrationUpdate);
-				// updateClinicalRegistrationQuery((previous) => {
-				// 	const update = { ...previous.clinicalRegistration, ...registrationUpdate, id: '' };
-				// 	console.log('update', update);
-				// 	return { clinicalRegistration: update };
-				// });
-				refetch();
+				// succesful uploads will have state on the server
+				if ([200, 201].includes(data.status)) {
+					refetch();
+				} else {
+					// errors are not persisted server side - manually update cache (state store)
+					const registration = await data.json();
+					const registrationUpdate = satisfyGQL({ apiResp: registration, requiredProperties });
+
+					updateClinicalRegistrationQuery((previous) => {
+						// update Apollo cache
+						const update = { ...previous.clinicalRegistration, ...registrationUpdate };
+						return { clinicalRegistration: update };
+					});
+				}
 			},
 
 			onError: (error) => {
-				console.log('err', error);
-
 				commonToaster.unknownError();
 			},
 		},
