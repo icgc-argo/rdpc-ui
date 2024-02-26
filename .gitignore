@@ -38,3 +38,7 @@ next-env.d.ts
 
 # generic name for files that shouldn't be checked in (handy for mock data)
 *.temp*
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
