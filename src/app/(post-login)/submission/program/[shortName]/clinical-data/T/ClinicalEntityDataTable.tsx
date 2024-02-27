@@ -55,16 +55,16 @@ const completionColumnHeaders = {
 
 const coreCompletionFields = Object.keys(completionColumnHeaders);
 
-const getColumnWidth = memoize<
-	(keyString: string, showCompletionStats: boolean, noData: boolean) => number
->((keyString, showCompletionStats, noData) => {
-	const minWidth = keyString === 'donor_id' ? 70 : showCompletionStats ? 40 : 95;
-	const maxWidth = noData && showCompletionStats ? 45 : 200;
-	const spacePerChar = 8;
-	const margin = 10;
-	const targetWidth = keyString.length * spacePerChar + margin;
-	return Math.max(Math.min(maxWidth, targetWidth), minWidth);
-});
+const getColumnWidth = memoize<(keyString: string, showCompletionStats: boolean) => number>(
+	(keyString, showCompletionStats) => {
+		const minWidth = keyString === 'donor_id' ? 70 : showCompletionStats ? 40 : 95;
+		const maxWidth = showCompletionStats ? 45 : 200;
+		const spacePerChar = 8;
+		const margin = 10;
+		const targetWidth = keyString.length * spacePerChar + margin;
+		return Math.max(Math.min(maxWidth, targetWidth), minWidth);
+	},
+);
 
 const parseRecords = (records, showCompletionStats, completionStats) =>
 	records.map((record) => {
@@ -303,7 +303,8 @@ const ClinicalEntityDataTable = ({
 		};
 	};
 
-	columns = columns.map((key) => {
+	let columns = [];
+	columns = columnNames.map((key) => {
 		return {
 			id: key,
 			accessorKey: key,
