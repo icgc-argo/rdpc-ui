@@ -66,6 +66,64 @@ const getColumnWidth = memoize<
 	return Math.max(Math.min(maxWidth, targetWidth), minWidth);
 });
 
+const parseRecords = (records, showCompletionStats, completionStats) =>
+	records.map((record) => {
+		let clinicalRecord = {};
+		record.forEach((r) => {
+			const displayKey = r.name;
+			clinicalRecord[displayKey] = displayKey === 'donor_id' ? `DO${r.value}` : r.value || '';
+			if (showCompletionStats && displayKey === 'donor_id') {
+				const completionRecord = completionStats.find((stat) => stat.donorId === parseInt(r.value));
+
+				if (!completionRecord) {
+					clinicalRecord = { ...clinicalRecord, ...emptyCompletion };
+				} else {
+					const { coreCompletion, entityData: completionEntityData } = completionRecord;
+
+					coreCompletionFields.forEach((field) => {
+						const completionField = completionColumnHeaders[field];
+						const isSpecimenField =
+							completionField === completionColumnHeaders['normalSpecimens'] ||
+							completionField === completionColumnHeaders['tumourSpecimens'];
+
+						if (!isSpecimenField) {
+							const completionValue = coreCompletion[field];
+							clinicalRecord[completionField] = completionValue || 0;
+						} else {
+							const {
+								specimens: {
+									coreCompletionPercentage,
+									normalSpecimensPercentage,
+									tumourSpecimensPercentage,
+									normalSubmissions,
+									tumourSubmissions,
+								},
+							} = completionEntityData;
+
+							if (coreCompletionPercentage === 1) {
+								clinicalRecord[completionField] = 1;
+							} else {
+								const currentPercentage =
+									completionField === completionColumnHeaders['normalSpecimens']
+										? normalSpecimensPercentage
+										: tumourSpecimensPercentage;
+								const currentSubmissions =
+									completionField === completionColumnHeaders['normalSpecimens']
+										? normalSubmissions
+										: tumourSubmissions;
+								const hasErrors = currentPercentage !== 1;
+								const value = hasErrors ? currentSubmissions : currentPercentage;
+								clinicalRecord[completionField] = value;
+							}
+						}
+					});
+				}
+			}
+		});
+
+		return clinicalRecord;
+	});
+
 type ClinicalEntityDataTableProps = {
 	entityType: string;
 	currentDonors: number[];
@@ -121,67 +179,7 @@ const ClinicalEntityDataTable = ({
 		...(showCompletionStats && Object.values(completionColumnHeaders)),
 	];
 
-	//
-	records = entityData.records
-		.map((record) => {
-			let clinicalRecord = {};
-			record.forEach((r) => {
-				const displayKey = r.name;
-				clinicalRecord[displayKey] = displayKey === 'donor_id' ? `DO${r.value}` : r.value || '';
-				if (showCompletionStats && displayKey === 'donor_id') {
-					const completionRecord = completionStats.find(
-						(stat) => stat.donorId === parseInt(r.value),
-					);
-
-					if (!completionRecord) {
-						clinicalRecord = { ...clinicalRecord, ...emptyCompletion };
-					} else {
-						const { coreCompletion, entityData: completionEntityData } = completionRecord;
-
-						coreCompletionFields.forEach((field) => {
-							const completionField = completionColumnHeaders[field];
-							const isSpecimenField =
-								completionField === completionColumnHeaders['normalSpecimens'] ||
-								completionField === completionColumnHeaders['tumourSpecimens'];
-
-							if (!isSpecimenField) {
-								const completionValue = coreCompletion[field];
-								clinicalRecord[completionField] = completionValue || 0;
-							} else {
-								const {
-									specimens: {
-										coreCompletionPercentage,
-										normalSpecimensPercentage,
-										tumourSpecimensPercentage,
-										normalSubmissions,
-										tumourSubmissions,
-									},
-								} = completionEntityData;
-
-								if (coreCompletionPercentage === 1) {
-									clinicalRecord[completionField] = 1;
-								} else {
-									const currentPercentage =
-										completionField === completionColumnHeaders['normalSpecimens']
-											? normalSpecimensPercentage
-											: tumourSpecimensPercentage;
-									const currentSubmissions =
-										completionField === completionColumnHeaders['normalSpecimens']
-											? normalSubmissions
-											: tumourSubmissions;
-									const hasErrors = currentPercentage !== 1;
-									const value = hasErrors ? currentSubmissions : currentPercentage;
-									clinicalRecord[completionField] = value;
-								}
-							}
-						});
-					}
-				}
-			});
-
-			return clinicalRecord;
-		})
-		.sort(sortingFn);
+	records = parseRecords(entityData.records, showCompletionStats, completionStats).sort(sortingFn);
 
 	const getHeaderBorder = (key) =>
 		(showCompletionStats && key === completionColumnHeaders.followUps) ||
