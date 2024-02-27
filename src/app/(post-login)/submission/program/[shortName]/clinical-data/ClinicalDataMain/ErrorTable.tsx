@@ -51,7 +51,16 @@ const Subtitle = ({ program = '' }) => {
 		</div>
 	);
 };
-
+type ErrorTableProps = {
+	totalErrors;
+	entityType;
+	program: string;
+	tableErrors;
+	page;
+	pageSize;
+	sorted;
+	updatePageSettings;
+};
 export const ErrorTable = ({
 	totalErrors,
 	entityType,
@@ -61,7 +70,7 @@ export const ErrorTable = ({
 	pageSize,
 	sorted,
 	updatePageSettings,
-}) => {
+}: ErrorTableProps) => {
 	const numErrorPages = Math.ceil(totalErrors / pageSize);
 	return (
 		<ErrorNotification

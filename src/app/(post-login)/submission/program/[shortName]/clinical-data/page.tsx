@@ -31,9 +31,9 @@ import { useQuery } from '@apollo/client';
 import { Container, Loader, Typography, VerticalTabs, useTheme } from '@icgc-argo/uikit';
 import { useState } from 'react';
 import { setConfiguration } from 'react-grid-system';
+import ClinicalEntityData from './ClinicalDataMain/ClinicalEntityData';
 import ClinicalDownloadButton from './DownloadButtons';
 import SearchBar from './SearchBar';
-import ClinicalEntityData from './T/ClinicalEntityData';
 import {
 	ClinicalEntitySearchResultResponse,
 	CompletionStates,

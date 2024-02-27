@@ -21,7 +21,7 @@ import { ClinicalInput, ClinicalSearchResults } from '@/__generated__/clinical/g
 import CLINICAL_ENTITY_DATA_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_DATA_QUERY';
 import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import { ContentPlaceholder, DnaLoader, css } from '@icgc-argo/uikit';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
 	ClinicalEntitySearchResultResponse,
 	CompletionStates,
@@ -32,9 +32,13 @@ import {
 	emptyClinicalDataResponse,
 	emptySearchResponse,
 } from '../common';
-import { usePageSettings } from '../tableDataRefactor';
-import ClinicalEntityDataTable from './ClinicalEntityDataTable';
+import { formatTableErrors } from '../tableDataRefactor';
 import { ErrorTable } from './ErrorTable';
+import {
+	defaultDonorSettings,
+	defaultEntityPageSettings,
+	usePageSettings,
+} from './usePageSettings';
 
 export type DonorEntry = {
 	row: string;
@@ -164,15 +168,20 @@ const ClinicalEntityData = ({
 	useDefaultQuery,
 	noData,
 }: ClinicalEntityDataTableProps) => {
-	const { pageSettings, defaultPageSettings, setPageSettings } = usePageSettings({
-		useDefaultQuery,
-		entityType,
-	});
+	// Clinical Data table page
+	const defaultPageSettings =
+		useDefaultQuery && entityType === 'donor' ? defaultDonorSettings : defaultEntityPageSettings;
+	const [pageSettings, setPageSettings] = usePageSettings(defaultPageSettings);
 	const { page, pageSize, sorted } = pageSettings;
 
-	const [errorPageSettings, setErrorPageSettings] = useState(defaultErrorPageSettings);
-	// reuse hook?
-	const { page: errorPage, pageSize: errorPageSize, sorted: errorSorted } = errorPageSettings;
+	// Error table page
+	const [errorPageSettings, setErrorPageSettings] = usePageSettings(defaultErrorPageSettings);
+
+	// reset paging
+	useEffect(() => {
+		setPageSettings(defaultPageSettings);
+		setErrorPageSettings(defaultErrorPageSettings);
+	}, [entityType, useDefaultQuery]);
 
 	const { desc, id } = sorted[0];
 	const sortKey = aliasSortNames[id] || id;
@@ -181,14 +190,14 @@ const ClinicalEntityData = ({
 	const {
 		clinicalSearchResults: { searchResults, totalResults },
 	} = donorSearchResults || emptySearchResponse;
-	const { donorIdsToFilter, submittedDonorIdsToFilter } = getDonorIdFilters({
+	const { donorIds, submitterDonorIds: submittedDonorIdsToFilter } = getDonorIdFilters({
 		currentDonors,
 		searchResults,
 		useDefaultQuery,
 	});
 	const nextSearchPage = (page + 1) * pageSize;
 	const clinicalDataPropertyFilters = {
-		donorIds: donorIdsToFilter,
+		donorIds,
 		submitterDonorIds: submittedDonorIdsToFilter.slice(
 			page * pageSize,
 			nextSearchPage < totalResults ? nextSearchPage : totalResults,
@@ -205,12 +214,6 @@ const ClinicalEntityData = ({
 		setPageSettings(newPageSettings);
 		return newPageSettings;
 	};
-
-	// reset paging
-	useEffect(() => {
-		setPageSettings(defaultPageSettings);
-		setErrorPageSettings(defaultErrorPageSettings);
-	}, [entityType, useDefaultQuery]);
 
 	// API query
 	const { data: clinicalEntityData, loading } = useGetEntityData({
@@ -234,6 +237,12 @@ const ClinicalEntityData = ({
 
 	const aliasedEntityName = aliasedEntityNames[entityType];
 
+	const { clinicalErrors = [] } = clinicalData;
+	const { tableErrors, totalErrorsAmount } = formatTableErrors({
+		clinicalErrors,
+		aliasedEntityName,
+	});
+
 	return loading ? (
 		<DnaLoader
 			css={css`
@@ -246,22 +255,23 @@ const ClinicalEntityData = ({
 		<NoDataCell />
 	) : (
 		<>
-			{hasErrors && (
+			{totalErrorsAmount > 0 && (
 				<div
 					id="error-submission-workspace"
 					css={css`
 						margin: 12px 0px;
 					`}
 				>
-					<ErrorTable page={} pageSize={} />
+					<ErrorTable {...errorPageSettings} />
 				</div>
 			)}
-			<ClinicalEntityDataTable
+			{/* <ClinicalEntityDataTable
 				aliasedEntityName={aliasedEntityName}
 				totalResults={totalResults}
 				page={page}
 				pageSize={pageSize}
-			/>
+			/> */}
+			<div>data table</div>
 		</>
 	);
 };
