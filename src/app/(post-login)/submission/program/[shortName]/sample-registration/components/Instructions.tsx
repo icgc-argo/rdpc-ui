@@ -55,7 +55,7 @@ const Instructions = ({
 	flags,
 }: {
 	dictionaryVersion: string;
-	handleUpload: (f: File) => void;
+	handleUpload: (f: FileList) => void;
 	isUploading: boolean;
 	handleRegister: () => void;
 	flags: { uploadEnabled: boolean; registrationEnabled: boolean };
@@ -113,7 +113,7 @@ const Instructions = ({
 							size={BUTTON_SIZES.SM}
 							isLoading={isUploading}
 							onFilesSelect={async (files) => {
-								if (files[0]) await handleUpload(files[0]);
+								if (files[0]) await handleUpload(files);
 							}}
 							disabled={!flags.uploadEnabled}
 						>
