@@ -162,17 +162,30 @@ const validateEntityQueryName = (entityQuery) => {
 	return entities.map((entityName) => clinicalEntityFields.find((entity) => entity === entityName));
 };
 
-export const useGetEntityData = (
-	program: string,
-	entityType: string | string[],
-	page: number,
-	pageSize: number,
-	sort: string,
-	completionState: CompletionStates,
-	donorIds: number[],
-	submitterDonorIds: string[],
-) =>
-	useClinicalQuery(CLINICAL_ENTITY_DATA_QUERY, {
+// Function: GQL Query
+type GetEntityDataProps = {
+	program: string;
+	entityType: string | string[];
+	page: number;
+	pageSize: number;
+	sort: string;
+	completionState: CompletionStates;
+	donorIds: number[];
+	submitterDonorIds: string[];
+};
+export const useGetEntityData = ({
+	program,
+	entityType,
+	page,
+	pageSize,
+	sort,
+	completionState,
+	donorIds,
+	submitterDonorIds,
+}: GetEntityDataProps) => {
+	const entityTypes = validateEntityQueryName(entityType);
+
+	return useClinicalQuery(CLINICAL_ENTITY_DATA_QUERY, {
 		errorPolicy: 'all',
 		fetchPolicy: 'cache-and-network',
 		variables: {
@@ -185,11 +198,47 @@ export const useGetEntityData = (
 				completionState,
 				donorIds,
 				submitterDonorIds,
-				entityTypes: validateEntityQueryName(entityType),
+				entityTypes,
 			},
 		},
 	});
+};
 
+// Component: Subtitle
+const Subtitle = ({ program = '' }) => {
+	const { DOCS_URL_ROOT } = useAppConfigContext();
+	const DOCS_DICTIONARY_PAGE = urljoin(DOCS_URL_ROOT, '/dictionary/');
+	const latestDictionaryResponse = useClinicalQuery(CLINICAL_SCHEMA_VERSION);
+
+	return (
+		<div
+			css={css`
+				margin-bottom: 12px;
+			`}
+		>
+			<Link target="_blank" href={DOCS_DICTIONARY_PAGE}>
+				{!latestDictionaryResponse.loading &&
+					`Version ${latestDictionaryResponse.data.clinicalSubmissionSchemaVersion}`}
+			</Link>{' '}
+			of the data dictionary was released and has made some donors invalid. Please download the
+			error report to view the affected donors, then submit a corrected TSV file in the{' '}
+			<Link href={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(PROGRAM_SHORT_NAME_PATH, program)}>
+				Submit Clinical Data{' '}
+			</Link>
+			workspace.
+		</div>
+	);
+};
+
+type ClinicalEntityDataTableProps = {
+	entityType: string;
+	program: string;
+	completionState: CompletionStates;
+	currentDonors: number[];
+	donorSearchResults: ClinicalEntitySearchResultResponse;
+	useDefaultQuery: boolean;
+	noData: boolean;
+};
 const ClinicalEntityDataTable = ({
 	entityType,
 	program,
@@ -198,18 +247,7 @@ const ClinicalEntityDataTable = ({
 	donorSearchResults = emptySearchResponse,
 	useDefaultQuery,
 	noData,
-}: {
-	entityType: string;
-	program: string;
-	completionState: CompletionStates;
-	currentDonors: number[];
-	donorSearchResults: ClinicalEntitySearchResultResponse;
-	useDefaultQuery: boolean;
-	noData: boolean;
-}) => {
-	const { DOCS_URL_ROOT } = useAppConfigContext();
-	const DOCS_DICTIONARY_PAGE = urljoin(DOCS_URL_ROOT, '/dictionary/');
-
+}: ClinicalEntityDataTableProps) => {
 	// Init + Page Settings
 	let totalDocs = 0;
 	let showCompletionStats = false;
@@ -217,6 +255,7 @@ const ClinicalEntityDataTable = ({
 	let columns = [];
 	const theme = useTheme();
 	const containerRef = createRef<HTMLDivElement>();
+
 	const defaultPageSettings =
 		useDefaultQuery && entityType === 'donor' ? defaultDonorSettings : defaultEntityPageSettings;
 	const [pageSettings, setPageSettings] = useState(defaultPageSettings);
@@ -247,26 +286,6 @@ const ClinicalEntityDataTable = ({
 					.filter((id) => !!id)
 					.slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
 
-	const latestDictionaryResponse = useClinicalQuery(CLINICAL_SCHEMA_VERSION);
-	const Subtitle = ({ program = '' }) => (
-		<div
-			css={css`
-				margin-bottom: 12px;
-			`}
-		>
-			<Link target="_blank" href={DOCS_DICTIONARY_PAGE}>
-				{!latestDictionaryResponse.loading &&
-					`Version ${latestDictionaryResponse.data.clinicalSubmissionSchemaVersion}`}
-			</Link>{' '}
-			of the data dictionary was released and has made some donors invalid. Please download the
-			error report to view the affected donors, then submit a corrected TSV file in the{' '}
-			<Link href={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(PROGRAM_SHORT_NAME_PATH, program)}>
-				Submit Clinical Data{' '}
-			</Link>
-			workspace.
-		</div>
-	);
-
 	const updatePageSettings = (key, value) => {
 		const newPageSettings = { ...pageSettings, [key]: value };
 
@@ -283,7 +302,9 @@ const ClinicalEntityDataTable = ({
 		setErrorPageSettings(defaultErrorPageSettings);
 	}, [entityType, useDefaultQuery]);
 
-	const { data: clinicalEntityData, loading } = useGetEntityData(
+	//
+
+	const { data: clinicalEntityData, loading } = useGetEntityData({
 		program,
 		entityType,
 		page,
@@ -292,7 +313,11 @@ const ClinicalEntityDataTable = ({
 		completionState,
 		donorIds,
 		submitterDonorIds,
-	);
+	});
+
+	// This is the core of the logic here
+	// this data response => UI
+	console.log('data', clinicalEntityData);
 
 	const { clinicalData } =
 		clinicalEntityData == undefined || loading ? emptyClinicalDataResponse : clinicalEntityData;
