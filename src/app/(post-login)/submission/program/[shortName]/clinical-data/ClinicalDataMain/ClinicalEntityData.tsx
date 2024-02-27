@@ -17,24 +17,24 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ClinicalSearchResults } from '@/__generated__/clinical/graphql';
+import { ClinicalInput, ClinicalSearchResults } from '@/__generated__/clinical/graphql';
 import CLINICAL_ENTITY_DATA_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_DATA_QUERY';
 import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import { ContentPlaceholder, DnaLoader, css } from '@icgc-argo/uikit';
 import { useEffect, useState } from 'react';
-import { aliasedEntityNames } from '../common';
-import ClinicalEntityDataTable from './ClinicalEntityDataTable';
-import { ErrorTable } from './ErrorTable';
 import {
 	ClinicalEntitySearchResultResponse,
 	CompletionStates,
 	aliasSortNames,
+	aliasedEntityNames,
 	clinicalEntityFields,
 	defaultClinicalEntityFilters,
 	emptyClinicalDataResponse,
 	emptySearchResponse,
-} from './common';
-import { usePageSettings } from './tableDataRefactor';
+} from '../common';
+import { usePageSettings } from '../tableDataRefactor';
+import ClinicalEntityDataTable from './ClinicalEntityDataTable';
+import { ErrorTable } from './ErrorTable';
 
 export type DonorEntry = {
 	row: string;
@@ -120,6 +120,31 @@ export const useGetEntityData = ({
 	});
 };
 
+/**
+ *
+ * returns a donorId array and a submitterDonorId array to filter
+ */
+type CI = Required<Pick<ClinicalInput, 'donorIds' | 'submitterDonorIds'>>;
+const getDonorIdFilters = ({ searchResults, currentDonors, useDefaultQuery }): CI => {
+	const donorIds = useDefaultQuery
+		? []
+		: currentDonors.length
+		? currentDonors
+		: searchResults.map(({ donorId }: ClinicalSearchResults) => donorId);
+
+	const submitterDonorIds =
+		useDefaultQuery || currentDonors.length
+			? []
+			: searchResults
+					.map(({ submitterDonorId }: ClinicalSearchResults) => submitterDonorId)
+					.filter((id) => !!id);
+
+	return {
+		donorIds,
+		submitterDonorIds,
+	};
+};
+
 // query, sort, format data for table, search etc
 type ClinicalEntityDataTableProps = {
 	entityType: string;
@@ -156,22 +181,19 @@ const ClinicalEntityData = ({
 	const {
 		clinicalSearchResults: { searchResults, totalResults },
 	} = donorSearchResults || emptySearchResponse;
-
+	const { donorIdsToFilter, submittedDonorIdsToFilter } = getDonorIdFilters({
+		currentDonors,
+		searchResults,
+		useDefaultQuery,
+	});
 	const nextSearchPage = (page + 1) * pageSize;
-
-	const donorIds = useDefaultQuery
-		? []
-		: currentDonors.length
-		? currentDonors
-		: searchResults.map(({ donorId }: ClinicalSearchResults) => donorId);
-
-	const submitterDonorIds =
-		useDefaultQuery || currentDonors.length
-			? []
-			: searchResults
-					.map(({ submitterDonorId }: ClinicalSearchResults) => submitterDonorId)
-					.filter((id) => !!id)
-					.slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
+	const clinicalDataPropertyFilters = {
+		donorIds: donorIdsToFilter,
+		submitterDonorIds: submittedDonorIdsToFilter.slice(
+			page * pageSize,
+			nextSearchPage < totalResults ? nextSearchPage : totalResults,
+		),
+	};
 
 	const updatePageSettings = (key, value) => {
 		const newPageSettings = { ...pageSettings, [key]: value };
@@ -184,22 +206,21 @@ const ClinicalEntityData = ({
 		return newPageSettings;
 	};
 
+	// reset paging
 	useEffect(() => {
 		setPageSettings(defaultPageSettings);
 		setErrorPageSettings(defaultErrorPageSettings);
 	}, [entityType, useDefaultQuery]);
 
-	//
-
+	// API query
 	const { data: clinicalEntityData, loading } = useGetEntityData({
 		program,
 		entityType,
+		completionState,
 		page,
 		pageSize,
 		sort,
-		completionState,
-		donorIds,
-		submitterDonorIds,
+		...clinicalDataPropertyFilters,
 	});
 
 	// This is the core of the logic here
@@ -245,4 +266,4 @@ const ClinicalEntityData = ({
 	);
 };
 
-export default ClinicalEntityDataTable;
+export default ClinicalEntityData;
