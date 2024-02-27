@@ -33,7 +33,7 @@ import { useState } from 'react';
 import { setConfiguration } from 'react-grid-system';
 import ClinicalDownloadButton from './DownloadButtons';
 import SearchBar from './SearchBar';
-import ClinicalEntityDataTable from './T/ClinicalEntityDataTable';
+import ClinicalEntityData from './T/ClinicalEntityData';
 import {
 	ClinicalEntitySearchResultResponse,
 	CompletionStates,
@@ -279,7 +279,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 											margin-top: 16px;
 										`}
 									>
-										<ClinicalEntityDataTable
+										<ClinicalEntityData
 											entityType={currentEntity}
 											program={programShortName}
 											completionState={completionState}

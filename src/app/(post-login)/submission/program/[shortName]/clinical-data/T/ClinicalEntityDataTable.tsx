@@ -70,16 +70,20 @@ type ClinicalEntityDataTableProps = {
 	entityType: string;
 	currentDonors: number[];
 	useDefaultQuery: boolean;
+	aliasedEntityName: string;
 	page;
 	pageSize;
 	clinicalData: any;
 	clinicalErrors: any;
 	sortingFn: any;
+	totalResults: any;
 };
 const ClinicalEntityDataTable = ({
 	entityType,
+	aliasedEntityName,
 	currentDonors,
 	useDefaultQuery,
+	totalResults,
 	page,
 	pageSize,
 	clinicalData,
@@ -90,37 +94,34 @@ const ClinicalEntityDataTable = ({
 	const containerRef = createRef<HTMLDivElement>();
 
 	// Init + Page Settings
-	let totalDocs = 0;
-	let showCompletionStats = false;
 	let records = [];
-	let columns = [];
 
 	const entityData = clinicalData.clinicalEntities.find(
-		(entity) => entity.entityName === aliasedEntityNames[entityType],
+		(entity) => entity.entityName === aliasedEntityName,
 	);
-	columns = [...entityData.entityFields];
-	const { completionStats, entityName } = entityData;
-	showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
+
+	const { completionStats, entityName, entityFields } = entityData;
+	const showCompletionStats = completionStats && entityName === aliasedEntityNames.donor;
 
 	// totalDocs affects pagination and display text
 	// If using default query, or using search but not filtering by donor in URL, then we display total number of search results
 	// Else we use the total number of results that match our query
-	totalDocs =
+	const totalDocs =
 		(useDefaultQuery && entityType === 'donor') ||
 		(!currentDonors.length && totalResults > entityData.totalDocs)
 			? totalResults
 			: entityData.totalDocs;
 
-	entityData.records.forEach((record) => {
-		record.forEach((r) => {
-			if (!columns.includes(r.name)) columns.push(r.name);
-		});
-	});
+	// iterate for field names not in entity fields
+	// add completion column headers if showing completion stats
+	const columnNames = [
+		...entityData.records[0]
+			.filter((record) => !entityFields.includes(record.name))
+			.map((record) => record.name),
+		...(showCompletionStats && Object.values(completionColumnHeaders)),
+	];
 
-	if (showCompletionStats) {
-		columns.splice(1, 0, ...Object.values(completionColumnHeaders));
-	}
-
+	//
 	records = entityData.records
 		.map((record) => {
 			let clinicalRecord = {};

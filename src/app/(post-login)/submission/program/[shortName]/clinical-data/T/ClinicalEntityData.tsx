@@ -22,6 +22,8 @@ import CLINICAL_ENTITY_DATA_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_DATA_
 import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import { ContentPlaceholder, DnaLoader, css } from '@icgc-argo/uikit';
 import { useEffect, useState } from 'react';
+import { aliasedEntityNames } from '../common';
+import ClinicalEntityDataTable from './ClinicalEntityDataTable';
 import { ErrorTable } from './ErrorTable';
 import {
 	ClinicalEntitySearchResultResponse,
@@ -128,7 +130,7 @@ type ClinicalEntityDataTableProps = {
 	useDefaultQuery: boolean;
 	noData: boolean;
 };
-const ClinicalEntityDataTable = ({
+const ClinicalEntityData = ({
 	entityType,
 	program,
 	completionState = CompletionStates['all'],
@@ -209,6 +211,8 @@ const ClinicalEntityDataTable = ({
 
 	const noTableData = noData || clinicalData.clinicalEntities.length === 0;
 
+	const aliasedEntityName = aliasedEntityNames[entityType];
+
 	return loading ? (
 		<DnaLoader
 			css={css`
@@ -231,7 +235,12 @@ const ClinicalEntityDataTable = ({
 					<ErrorTable page={} pageSize={} />
 				</div>
 			)}
-			<ClinicalEntityDataTable page={} pageSize={} />
+			<ClinicalEntityDataTable
+				aliasedEntityName={aliasedEntityName}
+				totalResults={totalResults}
+				page={page}
+				pageSize={pageSize}
+			/>
 		</>
 	);
 };
