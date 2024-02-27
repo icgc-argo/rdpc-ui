@@ -57,6 +57,7 @@ import {
 	emptyClinicalDataResponse,
 	emptySearchResponse,
 } from './common';
+import { formatTableErrors } from './tableDataRefactor';
 
 export type DonorEntry = {
 	row: string;
@@ -324,57 +325,1077 @@ const ClinicalEntityDataTable = ({
 
 	const noTableData = noData || clinicalData.clinicalEntities.length === 0;
 
+	//const aliasedEntityName = aliasedEntityNames[entityType];
+	const aliasedEntityName = aliasedEntityNames.primaryDiagnoses;
+	const x_clinicalErrors = [
+		{
+			donorId: 262500,
+			submitterDonorId: 'Pat-1',
+			errors: [
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'lymph_nodes_examined_method',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'lymph_nodes_examined_method' field must be submitted if the 'lymph_nodes_examined_status' field is 'Yes'",
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'lymph_nodes_examined_method',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'lymph_nodes_examined_method' field must be submitted if the 'lymph_nodes_examined_status' field is 'Yes'",
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'lymph_nodes_examined_method',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'lymph_nodes_examined_method' field must be submitted if the 'lymph_nodes_examined_status' field is 'Yes'",
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'lymph_nodes_examined_method',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'lymph_nodes_examined_method' field must be submitted if the 'lymph_nodes_examined_status' field is 'Yes'",
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'lymph_nodes_examined_method',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'lymph_nodes_examined_method' field must be submitted if the 'lymph_nodes_examined_status' field is 'Yes'",
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'lymph_nodes_examined_method',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'lymph_nodes_examined_method' field must be submitted if the 'lymph_nodes_examined_status' field is 'Yes'",
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'lymph_nodes_examined_method',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'lymph_nodes_examined_method' field must be submitted if the 'lymph_nodes_examined_status' field is 'Yes'",
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'lymph_nodes_examined_method',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'lymph_nodes_examined_method' field must be submitted if the 'lymph_nodes_examined_status' field is 'Yes'",
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+			],
+			__typename: 'ClinicalErrors',
+		},
+		{
+			donorId: 262500,
+			submitterDonorId: 'Pat-1',
+			errors: [
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 1,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_ENUM_VALUE',
+					fieldName: 'response_to_treatment',
+					index: 5,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'The value is not permissible for this field.',
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 5,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'radiation therapy'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 1,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_ENUM_VALUE',
+					fieldName: 'response_to_treatment',
+					index: 5,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'The value is not permissible for this field.',
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 5,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'radiation therapy'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 1,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_ENUM_VALUE',
+					fieldName: 'response_to_treatment',
+					index: 5,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'The value is not permissible for this field.',
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 5,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'radiation therapy'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 1,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_ENUM_VALUE',
+					fieldName: 'response_to_treatment',
+					index: 5,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'The value is not permissible for this field.',
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 5,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'radiation therapy'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 1,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_ENUM_VALUE',
+					fieldName: 'response_to_treatment',
+					index: 5,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'The value is not permissible for this field.',
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 5,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'radiation therapy'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 1,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'surgery'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_ENUM_VALUE',
+					fieldName: 'response_to_treatment',
+					index: 5,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'The value is not permissible for this field.',
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment_criteria_method',
+					index: 5,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						"The 'response_to_treatment_criteria_method' field must be submitted when the 'treatment_type' field is 'radiation therapy'",
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+			],
+			__typename: 'ClinicalErrors',
+		},
+		{
+			donorId: 262500,
+			submitterDonorId: 'Pat-1',
+			errors: [
+				{
+					errorType: 'INVALID_BY_REGEX',
+					fieldName: 'anatomic_site_progression_or_recurrence',
+					index: 0,
+					info: {
+						value: ['Unknown'],
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						'The value is not a permissible for this field, it must meet the regular expression: "^[C][0-9]{2}(.[0-9]{1})?$". Examples: C50.1|C18',
+					entityName: 'follow_up',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'recurrence_stage_group',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						'The recurrence_stage_group must be submitted if the field recurrence_tumour_staging_system is submitted.',
+					entityName: 'follow_up',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_REGEX',
+					fieldName: 'anatomic_site_progression_or_recurrence',
+					index: 1,
+					info: {
+						value: ['Unknown'],
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						'The value is not a permissible for this field, it must meet the regular expression: "^[C][0-9]{2}(.[0-9]{1})?$". Examples: C50.1|C18',
+					entityName: 'follow_up',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'recurrence_stage_group',
+					index: 1,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						'The recurrence_stage_group must be submitted if the field recurrence_tumour_staging_system is submitted.',
+					entityName: 'follow_up',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_REGEX',
+					fieldName: 'anatomic_site_progression_or_recurrence',
+					index: 0,
+					info: {
+						value: ['Unknown'],
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						'The value is not a permissible for this field, it must meet the regular expression: "^[C][0-9]{2}(.[0-9]{1})?$". Examples: C50.1|C18',
+					entityName: 'follow_up',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'recurrence_stage_group',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						'The recurrence_stage_group must be submitted if the field recurrence_tumour_staging_system is submitted.',
+					entityName: 'follow_up',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_REGEX',
+					fieldName: 'anatomic_site_progression_or_recurrence',
+					index: 1,
+					info: {
+						value: ['Unknown'],
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						'The value is not a permissible for this field, it must meet the regular expression: "^[C][0-9]{2}(.[0-9]{1})?$". Examples: C50.1|C18',
+					entityName: 'follow_up',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'recurrence_stage_group',
+					index: 1,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						'The recurrence_stage_group must be submitted if the field recurrence_tumour_staging_system is submitted.',
+					entityName: 'follow_up',
+					__typename: 'ClinicalErrorRecord',
+				},
+			],
+			__typename: 'ClinicalErrors',
+		},
+		{
+			donorId: 262500,
+			submitterDonorId: 'Pat-1',
+			errors: [
+				{
+					errorType: 'UNRECOGNIZED_FIELD',
+					fieldName: 'radiation_boost',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'UNRECOGNIZED_FIELD',
+					entityName: 'radiation',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'UNRECOGNIZED_FIELD',
+					fieldName: 'reference_radiation_treatment_id',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'UNRECOGNIZED_FIELD',
+					entityName: 'radiation',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'UNRECOGNIZED_FIELD',
+					fieldName: 'radiation_boost',
+					index: 1,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'UNRECOGNIZED_FIELD',
+					entityName: 'radiation',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'UNRECOGNIZED_FIELD',
+					fieldName: 'reference_radiation_treatment_id',
+					index: 1,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'UNRECOGNIZED_FIELD',
+					entityName: 'radiation',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'UNRECOGNIZED_FIELD',
+					fieldName: 'radiation_boost',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'UNRECOGNIZED_FIELD',
+					entityName: 'radiation',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'UNRECOGNIZED_FIELD',
+					fieldName: 'reference_radiation_treatment_id',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'UNRECOGNIZED_FIELD',
+					entityName: 'radiation',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'UNRECOGNIZED_FIELD',
+					fieldName: 'radiation_boost',
+					index: 1,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'UNRECOGNIZED_FIELD',
+					entityName: 'radiation',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'UNRECOGNIZED_FIELD',
+					fieldName: 'reference_radiation_treatment_id',
+					index: 1,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'UNRECOGNIZED_FIELD',
+					entityName: 'radiation',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'UNRECOGNIZED_FIELD',
+					fieldName: 'radiation_boost',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'UNRECOGNIZED_FIELD',
+					entityName: 'radiation',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'UNRECOGNIZED_FIELD',
+					fieldName: 'reference_radiation_treatment_id',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'UNRECOGNIZED_FIELD',
+					entityName: 'radiation',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'UNRECOGNIZED_FIELD',
+					fieldName: 'radiation_boost',
+					index: 1,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'UNRECOGNIZED_FIELD',
+					entityName: 'radiation',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'UNRECOGNIZED_FIELD',
+					fieldName: 'reference_radiation_treatment_id',
+					index: 1,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'UNRECOGNIZED_FIELD',
+					entityName: 'radiation',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'UNRECOGNIZED_FIELD',
+					fieldName: 'radiation_boost',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'UNRECOGNIZED_FIELD',
+					entityName: 'radiation',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'UNRECOGNIZED_FIELD',
+					fieldName: 'reference_radiation_treatment_id',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'UNRECOGNIZED_FIELD',
+					entityName: 'radiation',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'UNRECOGNIZED_FIELD',
+					fieldName: 'radiation_boost',
+					index: 1,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'UNRECOGNIZED_FIELD',
+					entityName: 'radiation',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'UNRECOGNIZED_FIELD',
+					fieldName: 'reference_radiation_treatment_id',
+					index: 1,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'UNRECOGNIZED_FIELD',
+					entityName: 'radiation',
+					__typename: 'ClinicalErrorRecord',
+				},
+			],
+			__typename: 'ClinicalErrors',
+		},
+		{
+			donorId: 262508,
+			submitterDonorId: 'Pat-2',
+			errors: [
+				{
+					errorType: 'MISSING_REQUIRED_FIELD',
+					fieldName: 'specimen_acquisition_interval',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'specimen_acquisition_interval is a required field.',
+					entityName: 'specimen',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'MISSING_REQUIRED_FIELD',
+					fieldName: 'specimen_anatomic_location',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'specimen_anatomic_location is a required field.',
+					entityName: 'specimen',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'MISSING_REQUIRED_FIELD',
+					fieldName: 'specimen_acquisition_interval',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'specimen_acquisition_interval is a required field.',
+					entityName: 'specimen',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'MISSING_REQUIRED_FIELD',
+					fieldName: 'specimen_anatomic_location',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'specimen_anatomic_location is a required field.',
+					entityName: 'specimen',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'MISSING_REQUIRED_FIELD',
+					fieldName: 'specimen_acquisition_interval',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'specimen_acquisition_interval is a required field.',
+					entityName: 'specimen',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'MISSING_REQUIRED_FIELD',
+					fieldName: 'specimen_anatomic_location',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'specimen_anatomic_location is a required field.',
+					entityName: 'specimen',
+					__typename: 'ClinicalErrorRecord',
+				},
+			],
+			__typename: 'ClinicalErrors',
+		},
+		{
+			donorId: 262508,
+			submitterDonorId: 'Pat-2',
+			errors: [
+				{
+					errorType: 'MISSING_REQUIRED_FIELD',
+					fieldName: 'cancer_type_code',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'cancer_type_code is a required field.',
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'MISSING_REQUIRED_FIELD',
+					fieldName: 'lymph_nodes_examined_status',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'lymph_nodes_examined_status is a required field.',
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'lymph_nodes_examined_method',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: "The 'lymph_nodes_examined_status' field must be submitted.",
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'MISSING_REQUIRED_FIELD',
+					fieldName: 'cancer_type_code',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'cancer_type_code is a required field.',
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'MISSING_REQUIRED_FIELD',
+					fieldName: 'lymph_nodes_examined_status',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'lymph_nodes_examined_status is a required field.',
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'lymph_nodes_examined_method',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: "The 'lymph_nodes_examined_status' field must be submitted.",
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'MISSING_REQUIRED_FIELD',
+					fieldName: 'cancer_type_code',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'cancer_type_code is a required field.',
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'MISSING_REQUIRED_FIELD',
+					fieldName: 'lymph_nodes_examined_status',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: 'lymph_nodes_examined_status is a required field.',
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'lymph_nodes_examined_method',
+					index: 2,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message: "The 'lymph_nodes_examined_status' field must be submitted.",
+					entityName: 'primary_diagnosis',
+					__typename: 'ClinicalErrorRecord',
+				},
+			],
+			__typename: 'ClinicalErrors',
+		},
+		{
+			donorId: 262508,
+			submitterDonorId: 'Pat-2',
+			errors: [
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'response_to_treatment',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						'\'Partial response\' is not a permissible value. When \'response_to_treatment_criteria_method\' is set to \'iRECIST\', the \'response_to_treatment\' field must be one of the following: \n- "immune complete response (icr)"\n- "immune confirmed progressive disease (icpd)"\n- "immune partial response (ipr)"\n- "immune stable disease (isd)"\n- "immune unconfirmed progressive disease (iupd)"',
+					entityName: 'treatment',
+					__typename: 'ClinicalErrorRecord',
+				},
+			],
+			__typename: 'ClinicalErrors',
+		},
+		{
+			donorId: 262508,
+			submitterDonorId: 'Pat-2',
+			errors: [
+				{
+					errorType: 'INVALID_BY_REGEX',
+					fieldName: 'anatomic_site_progression_or_recurrence',
+					index: 0,
+					info: {
+						value: ['Unknown'],
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						'The value is not a permissible for this field, it must meet the regular expression: "^[C][0-9]{2}(.[0-9]{1})?$". Examples: C50.1|C18',
+					entityName: 'follow_up',
+					__typename: 'ClinicalErrorRecord',
+				},
+				{
+					errorType: 'INVALID_BY_SCRIPT',
+					fieldName: 'recurrence_stage_group',
+					index: 0,
+					info: {
+						value: null,
+						__typename: 'ClinicalErrorInfo',
+					},
+					message:
+						'The recurrence_stage_group must be submitted if the field recurrence_tumour_staging_system is submitted.',
+					entityName: 'follow_up',
+					__typename: 'ClinicalErrorRecord',
+				},
+			],
+			__typename: 'ClinicalErrors',
+		},
+	];
+
 	// Collect Error Data
 	const { clinicalErrors = [] } = clinicalData;
-	const tableErrorGroups = [];
-
-	clinicalErrors.forEach((donor) => {
-		const relatedErrors = donor.errors.filter(
-			(error) => error.entityName === aliasedEntityNames[entityType],
-		);
-
-		relatedErrors.forEach((error) => {
-			const { donorId } = donor;
-			const { errorType, message, fieldName } = error;
-			const relatedErrorGroup = tableErrorGroups.find(
-				(tableErrorGroup) =>
-					tableErrorGroup[0].errorType === errorType &&
-					tableErrorGroup[0].message === message &&
-					tableErrorGroup[0].fieldName === fieldName,
-			);
-			const tableError = { ...error, donorId };
-
-			if (!relatedErrorGroup) {
-				tableErrorGroups.push([tableError]);
-			} else {
-				relatedErrorGroup.push(tableError);
-			}
-		});
+	const { tableErrors, totalErrorsAmount: totalErrors } = formatTableErrors({
+		clinicalErrors,
+		aliasedEntityName,
 	});
 
-	const tableErrors = tableErrorGroups.map((errorGroup) => {
-		// Counts Number of Records affected for each Error Object
-		const { fieldName, entityName, message, errorType } = errorGroup[0];
-
-		const errorMessage =
-			errorType === 'UNRECOGNIZED_FIELD'
-				? `${fieldName} is not a field within the latest dictionary. Please remove this from the ${entityName}.tsv file before submitting.`
-				: message;
-
-		const entries = errorGroup.length;
-
-		return {
-			entries,
-			fieldName,
-			entityName,
-			errorMessage,
-		};
-	});
-
-	const totalErrors = tableErrors.reduce(
-		(errorCount, errorGroup) => errorCount + errorGroup.entries,
-		0,
-	);
 	const hasErrors = totalErrors > 0;
 
 	const sortEntityData = (prev, next) => {
