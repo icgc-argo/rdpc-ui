@@ -120,7 +120,7 @@ export const useGetEntityData = ({
 	});
 };
 
-// query, sort, format data for table
+// query, sort, format data for table, search etc
 type ClinicalEntityDataTableProps = {
 	entityType: string;
 	program: string;

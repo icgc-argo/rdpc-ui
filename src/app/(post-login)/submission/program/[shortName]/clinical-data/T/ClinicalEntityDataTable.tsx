@@ -124,6 +124,137 @@ const parseRecords = (records, showCompletionStats, completionStats) =>
 		return clinicalRecord;
 	});
 
+// very hardcoded styling logic
+const getHeaderBorder = (key, showCompletionStats) =>
+	(showCompletionStats && key === completionColumnHeaders.followUps) ||
+	(!showCompletionStats && key === 'donor_id') ||
+	key === 'FO'
+		? styleThickBorder
+		: '';
+
+const getCellStyles = (
+	state,
+	row,
+	column,
+	showCompletionStats,
+	clinicalErrors,
+	entityType,
+	clinicalData,
+	theme,
+	stickyDonorIDColumnsWidth,
+) => {
+	const { original } = row;
+	const { id } = column;
+	const isCompletionCell =
+		showCompletionStats && Object.values(completionColumnHeaders).includes(id);
+
+	const isSpecimenCell =
+		isCompletionCell &&
+		(id === completionColumnHeaders.normalSpecimens ||
+			id === completionColumnHeaders.tumourSpecimens);
+
+	const originalDonorId = original['donor_id'];
+	const cellDonorId = parseInt(
+		originalDonorId && originalDonorId.includes('DO')
+			? originalDonorId.substring(2)
+			: originalDonorId,
+	);
+
+	const donorErrorData = clinicalErrors
+		.filter((donor) => donor.donorId === cellDonorId)
+		.map((donor) => donor.errors)
+		.flat();
+
+	const columnErrorData =
+		donorErrorData.length &&
+		donorErrorData.filter(
+			(error) =>
+				error &&
+				(error.entityName === entityType ||
+					(aliasedEntityFields.includes(error.entityName) &&
+						aliasedEntityNames[entityType] === error.entityName)) &&
+				error.fieldName === id,
+		);
+
+	const hasClinicalErrors = columnErrorData && columnErrorData.length >= 1;
+
+	let hasCompletionErrors = isCompletionCell && original[id] !== 1;
+
+	if (isSpecimenCell) {
+		const completionData = clinicalData.clinicalEntities.find(
+			(entity) => entity.entityName === aliasedEntityNames['donor'],
+		).completionStats;
+
+		const completionRecord =
+			isCompletionCell &&
+			completionData.find((stat) => stat.donorId === parseInt(originalDonorId.substr(2)));
+
+		if (completionRecord) {
+			const { entityData: completionEntityData } = completionRecord;
+
+			const {
+				specimens: { normalSpecimensPercentage, tumourSpecimensPercentage },
+			} = completionEntityData;
+
+			const currentPercentage =
+				id === completionColumnHeaders['normalSpecimens']
+					? normalSpecimensPercentage
+					: tumourSpecimensPercentage;
+
+			hasCompletionErrors = currentPercentage !== 1;
+		}
+	}
+
+	const specificErrorValue =
+		hasClinicalErrors &&
+		columnErrorData.filter(
+			(error) =>
+				(error.errorType === 'INVALID_BY_SCRIPT' || error.errorType === 'INVALID_ENUM_VALUE') &&
+				(error.info?.value === original[id] ||
+					(error.info?.value && error.info.value[0] === original[id]) ||
+					(error.info.value === null && !Boolean(original[id]))),
+		);
+
+	const fieldError =
+		hasClinicalErrors &&
+		columnErrorData.filter(
+			(error) =>
+				(error.errorType === 'UNRECOGNIZED_FIELD' ||
+					error.errorType === 'MISSING_REQUIRED_FIELD') &&
+				error.fieldName === id,
+		);
+
+	const errorState =
+		// Completion Stats === 1 indicates Complete
+		// 0 is Incomplete, <1 Incorrect Sample / Specimen Ratio
+		(isCompletionCell && hasCompletionErrors) ||
+		specificErrorValue?.length > 0 ||
+		fieldError?.length > 0;
+
+	// use Emotion styling
+	const headerDonorIdStyle = css`
+				background: white,
+				position: absolute,
+			`;
+	const stickyMarginStyle = css`
+		margin-left: ${stickyDonorIDColumnsWidth};
+	`;
+	const style = css`
+		color: ${isCompletionCell && !errorState && theme.colors.accent1_dark};
+		background: ${errorState && theme.colors.error_4};
+		${getHeaderBorder(id, showCompletionStats)}
+		${column.Header === 'donor_id' && headerDonorIdStyle};
+		${column.Header === 'DO' && stickyMarginStyle};
+		${column.Header === 'program_id' && !showCompletionStats && stickyMarginStyle};
+	`;
+
+	return {
+		style,
+		isCompletionCell,
+		errorState,
+	};
+};
+
 type ClinicalEntityDataTableProps = {
 	entityType: string;
 	currentDonors: number[];
@@ -151,9 +282,6 @@ const ClinicalEntityDataTable = ({
 	const theme = useTheme();
 	const containerRef = createRef<HTMLDivElement>();
 
-	// Init + Page Settings
-	let records = [];
-
 	const entityData = clinicalData.clinicalEntities.find(
 		(entity) => entity.entityName === aliasedEntityName,
 	);
@@ -179,129 +307,11 @@ const ClinicalEntityDataTable = ({
 		...(showCompletionStats && Object.values(completionColumnHeaders)),
 	];
 
-	records = parseRecords(entityData.records, showCompletionStats, completionStats).sort(sortingFn);
-
-	const getHeaderBorder = (key) =>
-		(showCompletionStats && key === completionColumnHeaders.followUps) ||
-		(!showCompletionStats && key === 'donor_id') ||
-		key === 'FO'
-			? styleThickBorder
-			: '';
+	const records = parseRecords(entityData.records, showCompletionStats, completionStats).sort(
+		sortingFn,
+	);
 
 	const [stickyDonorIDColumnsWidth, setStickyDonorIDColumnsWidth] = useState(74);
-
-	const getCellStyles = (state, row, column) => {
-		const { original } = row;
-		const { id } = column;
-		const isCompletionCell =
-			showCompletionStats && Object.values(completionColumnHeaders).includes(id);
-
-		const isSpecimenCell =
-			isCompletionCell &&
-			(id === completionColumnHeaders.normalSpecimens ||
-				id === completionColumnHeaders.tumourSpecimens);
-
-		const originalDonorId = original['donor_id'];
-		const cellDonorId = parseInt(
-			originalDonorId && originalDonorId.includes('DO')
-				? originalDonorId.substring(2)
-				: originalDonorId,
-		);
-
-		const donorErrorData = clinicalErrors
-			.filter((donor) => donor.donorId === cellDonorId)
-			.map((donor) => donor.errors)
-			.flat();
-
-		const columnErrorData =
-			donorErrorData.length &&
-			donorErrorData.filter(
-				(error) =>
-					error &&
-					(error.entityName === entityType ||
-						(aliasedEntityFields.includes(error.entityName) &&
-							aliasedEntityNames[entityType] === error.entityName)) &&
-					error.fieldName === id,
-			);
-
-		const hasClinicalErrors = columnErrorData && columnErrorData.length >= 1;
-
-		let hasCompletionErrors = isCompletionCell && original[id] !== 1;
-
-		if (isSpecimenCell) {
-			const completionData = clinicalData.clinicalEntities.find(
-				(entity) => entity.entityName === aliasedEntityNames['donor'],
-			).completionStats;
-
-			const completionRecord =
-				isCompletionCell &&
-				completionData.find((stat) => stat.donorId === parseInt(originalDonorId.substr(2)));
-
-			if (completionRecord) {
-				const { entityData: completionEntityData } = completionRecord;
-
-				const {
-					specimens: { normalSpecimensPercentage, tumourSpecimensPercentage },
-				} = completionEntityData;
-
-				const currentPercentage =
-					id === completionColumnHeaders['normalSpecimens']
-						? normalSpecimensPercentage
-						: tumourSpecimensPercentage;
-
-				hasCompletionErrors = currentPercentage !== 1;
-			}
-		}
-
-		const specificErrorValue =
-			hasClinicalErrors &&
-			columnErrorData.filter(
-				(error) =>
-					(error.errorType === 'INVALID_BY_SCRIPT' || error.errorType === 'INVALID_ENUM_VALUE') &&
-					(error.info?.value === original[id] ||
-						(error.info?.value && error.info.value[0] === original[id]) ||
-						(error.info.value === null && !Boolean(original[id]))),
-			);
-
-		const fieldError =
-			hasClinicalErrors &&
-			columnErrorData.filter(
-				(error) =>
-					(error.errorType === 'UNRECOGNIZED_FIELD' ||
-						error.errorType === 'MISSING_REQUIRED_FIELD') &&
-					error.fieldName === id,
-			);
-
-		const errorState =
-			// Completion Stats === 1 indicates Complete
-			// 0 is Incomplete, <1 Incorrect Sample / Specimen Ratio
-			(isCompletionCell && hasCompletionErrors) ||
-			specificErrorValue?.length > 0 ||
-			fieldError?.length > 0;
-
-		// use Emotion styling
-		const headerDonorIdStyle = css`
-			background: white,
-			position: absolute,
-		`;
-		const stickyMarginStyle = css`
-			margin-left: ${stickyDonorIDColumnsWidth};
-		`;
-		const style = css`
-			color: ${isCompletionCell && !errorState && theme.colors.accent1_dark};
-			background: ${errorState && theme.colors.error_4};
-			${getHeaderBorder(id)}
-			${column.Header === 'donor_id' && headerDonorIdStyle};
-			${column.Header === 'DO' && stickyMarginStyle};
-			${column.Header === 'program_id' && !showCompletionStats && stickyMarginStyle};
-		`;
-
-		return {
-			style,
-			isCompletionCell,
-			errorState,
-		};
-	};
 
 	let columns = [];
 	columns = columnNames.map((key) => {
@@ -309,7 +319,7 @@ const ClinicalEntityDataTable = ({
 			id: key,
 			accessorKey: key,
 			Header: key,
-			minWidth: getColumnWidth(key, showCompletionStats, noTableData),
+			minWidth: getColumnWidth(key, showCompletionStats),
 		};
 	});
 
@@ -342,6 +352,12 @@ const ClinicalEntityDataTable = ({
 							undefined,
 							context.row,
 							context.column,
+							showCompletionStats,
+							clinicalErrors,
+							entityType,
+							clinicalData,
+							theme,
+							stickyDonorIDColumnsWidth,
 						);
 
 						const showSuccessSvg = isCompletionCell && !errorState;
