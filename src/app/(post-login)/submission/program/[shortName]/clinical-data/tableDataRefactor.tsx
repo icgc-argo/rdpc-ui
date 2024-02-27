@@ -5,6 +5,9 @@
  * return: something like {affectedfields: 7, error_field: cancer_type_code, error_message: "cancer_type_code is a required field"}
  **/
 
+import { useState } from 'react';
+import { defaultClinicalEntityFilters } from './common';
+
 export const formatTableErrors = ({ clinicalErrors, aliasedEntityName }) => {
 	const tableErrorGroups = [];
 	// {
@@ -74,4 +77,24 @@ export const formatTableErrors = ({ clinicalErrors, aliasedEntityName }) => {
 	);
 
 	return { tableErrors, totalErrorsAmount };
+};
+
+//
+
+const defaultEntityPageSettings = {
+	page: defaultClinicalEntityFilters.page,
+	pageSize: defaultClinicalEntityFilters.pageSize,
+	sorted: [{ id: 'donorId', desc: true }],
+};
+
+const defaultDonorSettings = {
+	...defaultEntityPageSettings,
+	sorted: [{ id: 'completionStats.coreCompletionPercentage', desc: false }],
+};
+export const usePageSettings = ({ useDefaultQuery, entityType }) => {
+	const defaultPageSettings =
+		useDefaultQuery && entityType === 'donor' ? defaultDonorSettings : defaultEntityPageSettings;
+	const [pageSettings, setPageSettings] = useState(defaultPageSettings);
+	const { page, pageSize, sorted } = pageSettings;
+	return { pageSettings, defaultPageSettings, setPageSettings };
 };

@@ -57,7 +57,7 @@ import {
 	emptyClinicalDataResponse,
 	emptySearchResponse,
 } from './common';
-import { formatTableErrors } from './tableDataRefactor';
+import { formatTableErrors, usePageSettings } from './tableDataRefactor';
 
 export type DonorEntry = {
 	row: string;
@@ -141,17 +141,6 @@ const getColumnWidth = memoize<
 	return Math.max(Math.min(maxWidth, targetWidth), minWidth);
 });
 
-const defaultEntityPageSettings = {
-	page: defaultClinicalEntityFilters.page,
-	pageSize: defaultClinicalEntityFilters.pageSize,
-	sorted: [{ id: 'donorId', desc: true }],
-};
-
-const defaultDonorSettings = {
-	...defaultEntityPageSettings,
-	sorted: [{ id: 'completionStats.coreCompletionPercentage', desc: false }],
-};
-
 const defaultErrorPageSettings = {
 	page: 0,
 	pageSize: 5,
@@ -184,6 +173,16 @@ export const useGetEntityData = ({
 	donorIds,
 	submitterDonorIds,
 }: GetEntityDataProps) => {
+	console.log('get data', {
+		program,
+		entityType,
+		page,
+		pageSize,
+		sort,
+		completionState,
+		donorIds,
+		submitterDonorIds,
+	});
 	const entityTypes = validateEntityQueryName(entityType);
 
 	return useClinicalQuery(CLINICAL_ENTITY_DATA_QUERY, {
@@ -249,20 +248,24 @@ const ClinicalEntityDataTable = ({
 	useDefaultQuery,
 	noData,
 }: ClinicalEntityDataTableProps) => {
+	const theme = useTheme();
+	const containerRef = createRef<HTMLDivElement>();
+
 	// Init + Page Settings
 	let totalDocs = 0;
 	let showCompletionStats = false;
 	let records = [];
 	let columns = [];
-	const theme = useTheme();
-	const containerRef = createRef<HTMLDivElement>();
 
-	const defaultPageSettings =
-		useDefaultQuery && entityType === 'donor' ? defaultDonorSettings : defaultEntityPageSettings;
-	const [pageSettings, setPageSettings] = useState(defaultPageSettings);
+	const { pageSettings, defaultPageSettings, setPageSettings } = usePageSettings({
+		useDefaultQuery,
+		entityType,
+	});
 	const { page, pageSize, sorted } = pageSettings;
+
 	const [errorPageSettings, setErrorPageSettings] = useState(defaultErrorPageSettings);
 	const { page: errorPage, pageSize: errorPageSize, sorted: errorSorted } = errorPageSettings;
+
 	const { desc, id } = sorted[0];
 	const sortKey = aliasSortNames[id] || id;
 	const sort = `${desc ? '-' : ''}${sortKey}`;
