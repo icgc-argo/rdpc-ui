@@ -47,7 +47,7 @@ import {
 	NotificationInteraction,
 	Typography,
 } from '@icgc-argo/uikit';
-import { get } from 'lodash';
+import { get, isFunction, isString } from 'lodash';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
 import urlJoin from 'url-join';
@@ -100,6 +100,50 @@ const Register = ({ shortName }: { shortName: string }) => {
 	const hasErrors = !!schemaOrValidationErrors.length;
 	const registrationId = get(clinicalRegistration, 'id', '') || '';
 
+	/**
+	 * new HTTP endpoints don't return the same objects as strictly typed gql endpoints
+	 * data shape needs to match so state can stay in sync on the frontend
+	 */
+	type RequiredProperty = { key: string; accessor: string | (() => void); defaultValue: any };
+	const requiredProperties: RequiredProperty[] = [
+		{
+			key: 'errors',
+			accessor: (resp) =>
+				resp.errors.map((error) => ({
+					type: error.type,
+					message: error.message,
+					row: error.index,
+					field: error.fieldName,
+					value: error.info.value,
+					sampleId: error.info.sampleSubmitterId,
+					donorId: error.info.donorSubmitterId,
+					specimenId: error.info.specimenSubmitterId,
+				})),
+			defaultValue: [],
+		},
+	];
+
+	const getValueFromAccessor = (data, accessor, defaultValue) => {
+		if (isFunction(accessor)) {
+			return accessor(data) || defaultValue;
+		} else if (isString(accessor)) {
+			return get(data, accessor, defaultValue);
+		}
+	};
+
+	// match a certain shape from gql
+	const satisfyGQL = ({
+		apiResp,
+		requiredProperties,
+	}: {
+		apiResp: any;
+		requiredProperties: RequiredProperty[];
+	}) =>
+		requiredProperties.reduce((acc, curr) => {
+			const value = getValueFromAccessor(apiResp, curr.accessor, curr.defaultValue);
+			return { ...acc, ...{ [curr.key]: value } };
+		}, {});
+
 	// handlers
 	const uploadURL = urlJoin(CLINICAL_API_ROOT, getProgramPath(UPLOAD_REGISTRATION, shortName));
 	const uploadFile = useMutation(
@@ -107,15 +151,31 @@ const Register = ({ shortName }: { shortName: string }) => {
 			return uploadFileRequest(uploadURL, formData, egoJwt);
 		},
 		{
-			onSuccess: (data, variables, context) => refetch(),
+			// success of query - not HTTP status
+			onSuccess: async (data, variables, context) => {
+				// succesful uploads will have state on the server
+				if ([200, 201].includes(data.status)) {
+					refetch();
+				} else {
+					// errors are not persisted server side - manually update cache (state store)
+					const registration = await data.json();
+					const registrationUpdate = satisfyGQL({ apiResp: registration, requiredProperties });
 
-			onError: () => {
+					updateClinicalRegistrationQuery((previous) => {
+						// update Apollo cache
+						const update = { ...previous.clinicalRegistration, ...registrationUpdate };
+						return { clinicalRegistration: update };
+					});
+				}
+			},
+
+			onError: (error) => {
 				commonToaster.unknownError();
 			},
 		},
 	);
 
-	const handleUpload = (file: File) => {
+	const handleUpload = (file: FileList) => {
 		const fileFormData = createFileFormData(file, 'registrationFile');
 		return uploadFile.mutate(fileFormData);
 	};
