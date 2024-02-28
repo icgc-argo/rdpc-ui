@@ -249,6 +249,18 @@ const ClinicalEntityData = ({
 		program,
 	};
 
+	const clinicalDataTableProps = {
+		aliasedEntityName,
+		totalResults,
+		page,
+		pageSize,
+		entityType,
+		currentDonors,
+		useDefaultQuery,
+		clinicalData,
+		sortingFn: () => null,
+	};
+
 	return loading ? (
 		<DnaLoader
 			css={css`
@@ -271,17 +283,7 @@ const ClinicalEntityData = ({
 					<ErrorTable {...errorTableProps} />
 				</div>
 			)}
-			<ClinicalEntityDataTable
-				aliasedEntityName={aliasedEntityName}
-				totalResults={totalResults}
-				page={page}
-				pageSize={pageSize}
-				entityType={''}
-				currentDonors={[]}
-				useDefaultQuery={false}
-				clinicalData={clinicalData}
-				sortingFn={undefined}
-			/>
+			<ClinicalEntityDataTable {...clinicalDataTableProps} />
 		</>
 	);
 };

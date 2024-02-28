@@ -17,7 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ClinicalEntityDataQuery } from '@/__generated__/clinical/graphql';
 import { TableInfoHeaderContainer } from '@/app/components/Table/common';
 import { Icon, Table, Typography, css, useTheme } from '@icgc-argo/uikit';
 import memoize from 'lodash/memoize';
@@ -263,7 +262,7 @@ type ClinicalEntityDataTableProps = {
 	aliasedEntityName: string;
 	page: number;
 	pageSize: number;
-	clinicalData: ClinicalEntityDataQuery['clinicalData'];
+	clinicalData: any;
 	sortingFn: any;
 	totalResults: number;
 };
