@@ -17,6 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { ClinicalEntityDataQuery } from '@/__generated__/clinical/graphql';
 import { TableInfoHeaderContainer } from '@/app/components/Table/common';
 import { Icon, Table, Typography, css, useTheme } from '@icgc-argo/uikit';
 import memoize from 'lodash/memoize';
@@ -260,12 +261,11 @@ type ClinicalEntityDataTableProps = {
 	currentDonors: number[];
 	useDefaultQuery: boolean;
 	aliasedEntityName: string;
-	page;
-	pageSize;
-	clinicalData: any;
-	clinicalErrors: any;
+	page: number;
+	pageSize: number;
+	clinicalData: ClinicalEntityDataQuery['clinicalData'];
 	sortingFn: any;
-	totalResults: any;
+	totalResults: number;
 };
 const ClinicalEntityDataTable = ({
 	entityType,
@@ -276,15 +276,17 @@ const ClinicalEntityDataTable = ({
 	page,
 	pageSize,
 	clinicalData,
-	clinicalErrors,
 	sortingFn,
 }: ClinicalEntityDataTableProps) => {
+	console.log('cc', clinicalData);
 	const theme = useTheme();
 	const containerRef = createRef<HTMLDivElement>();
 
 	const entityData = clinicalData.clinicalEntities.find(
 		(entity) => entity.entityName === aliasedEntityName,
 	);
+
+	const clinicalErrors = clinicalData.clinicalErrors;
 
 	const { completionStats, entityName, entityFields } = entityData;
 	const showCompletionStats = completionStats && entityName === aliasedEntityNames.donor;

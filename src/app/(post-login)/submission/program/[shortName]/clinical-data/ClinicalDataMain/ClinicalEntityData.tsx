@@ -33,6 +33,7 @@ import {
 	emptySearchResponse,
 } from '../common';
 import { formatTableErrors } from '../tableDataRefactor';
+import ClinicalEntityDataTable from './ClinicalEntityDataTable';
 import { ErrorTable, ErrorTableProps } from './ErrorTable';
 import { mock } from './mock';
 import {
@@ -270,13 +271,17 @@ const ClinicalEntityData = ({
 					<ErrorTable {...errorTableProps} />
 				</div>
 			)}
-			{/* <ClinicalEntityDataTable
+			<ClinicalEntityDataTable
 				aliasedEntityName={aliasedEntityName}
 				totalResults={totalResults}
 				page={page}
 				pageSize={pageSize}
-			/> */}
-			<div>data table</div>
+				entityType={''}
+				currentDonors={[]}
+				useDefaultQuery={false}
+				clinicalData={clinicalData}
+				sortingFn={undefined}
+			/>
 		</>
 	);
 };
