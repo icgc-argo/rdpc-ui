@@ -33,7 +33,8 @@ import {
 	emptySearchResponse,
 } from '../common';
 import { formatTableErrors } from '../tableDataRefactor';
-import { ErrorTable } from './ErrorTable';
+import { ErrorTable, ErrorTableProps } from './ErrorTable';
+import { mock } from './mock';
 import {
 	defaultDonorSettings,
 	defaultEntityPageSettings,
@@ -174,13 +175,9 @@ const ClinicalEntityData = ({
 	const [pageSettings, setPageSettings] = usePageSettings(defaultPageSettings);
 	const { page, pageSize, sorted } = pageSettings;
 
-	// Error table page
-	const [errorPageSettings, setErrorPageSettings] = usePageSettings(defaultErrorPageSettings);
-
 	// reset paging
 	useEffect(() => {
 		setPageSettings(defaultPageSettings);
-		setErrorPageSettings(defaultErrorPageSettings);
 	}, [entityType, useDefaultQuery]);
 
 	const { desc, id } = sorted[0];
@@ -239,9 +236,17 @@ const ClinicalEntityData = ({
 
 	const { clinicalErrors = [] } = clinicalData;
 	const { tableErrors, totalErrorsAmount } = formatTableErrors({
-		clinicalErrors,
-		aliasedEntityName,
+		clinicalErrors: mock.clinicalErrors,
+		aliasedEntityName: mock.aliasedEntityName,
 	});
+	console.log('te', tableErrors, 'total', totalErrorsAmount);
+
+	const errorTableProps: ErrorTableProps = {
+		tableErrors,
+		totalErrorsAmount,
+		entityType,
+		program,
+	};
 
 	return loading ? (
 		<DnaLoader
@@ -262,7 +267,7 @@ const ClinicalEntityData = ({
 						margin: 12px 0px;
 					`}
 				>
-					<ErrorTable {...errorPageSettings} />
+					<ErrorTable {...errorTableProps} />
 				</div>
 			)}
 			{/* <ClinicalEntityDataTable

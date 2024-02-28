@@ -1,9 +1,10 @@
-import ErrorNotification from '@/app/components/ErrorNotification';
+import ErrorNotification, { ErrorReportColumns } from '@/app/components/ErrorNotification';
+import { errorNotificationTableProps } from '@/app/components/ErrorNotification/ErrorNotificationDefaultTable';
 import CLINICAL_SCHEMA_VERSION from '@/app/gql/clinical/CLINICAL_SCHEMA_VERSION';
 import { useAppConfigContext } from '@/app/hooks/AppProvider';
 import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from '@/global/constants';
-import { Link, NOTIFICATION_VARIANTS, css } from '@icgc-argo/uikit';
+import { ColumnDef, Link, NOTIFICATION_VARIANTS, Table, css } from '@icgc-argo/uikit';
 import urljoin from 'url-join';
 import { clinicalEntityDisplayNames } from '../common';
 
@@ -51,48 +52,67 @@ const Subtitle = ({ program = '' }) => {
 		</div>
 	);
 };
-type ErrorTableProps = {
-	totalErrors;
-	entityType;
+
+type ErrorTableColumns = {
+	entries: number;
+	errorMessage: string;
+	fieldName: string;
+};
+
+type ErrorTableColumnProperties = {
+	accessorKey: keyof ErrorTableColumns;
+	header: string;
+	maxSize?: number;
+};
+
+type DefaultErrorColumns = {
+	errorReportColumns: ErrorReportColumns[];
+	errorTableColumns: ColumnDef<ErrorTableColumns>[];
+};
+
+const getErrorColumns = (): DefaultErrorColumns => {
+	const errorTableColumns: ErrorTableColumnProperties[] = [
+		{ accessorKey: 'entries', header: '# Affected Records', maxSize: 135 },
+		{ accessorKey: 'fieldName', header: `Field with Error`, maxSize: 215 },
+		{ accessorKey: 'errorMessage', header: `Error Description` },
+	];
+
+	const errorReportColumns: ErrorReportColumns[] = errorTableColumns.map(
+		({ accessorKey, header }) => ({
+			header,
+			id: accessorKey,
+		}),
+	);
+
+	return { errorReportColumns, errorTableColumns };
+};
+
+export type ErrorTableProps = {
+	totalErrorsAmount: number;
+	entityType: string;
 	program: string;
-	tableErrors;
-	page;
-	pageSize;
-	sorted;
-	updatePageSettings;
+	tableErrors: any;
 };
 export const ErrorTable = ({
-	totalErrors,
+	totalErrorsAmount,
 	entityType,
 	program,
 	tableErrors,
-	page,
-	pageSize,
-	sorted,
-	updatePageSettings,
 }: ErrorTableProps) => {
-	const numErrorPages = Math.ceil(totalErrors / pageSize);
+	const { errorReportColumns, errorTableColumns } = getErrorColumns();
+
 	return (
 		<ErrorNotification
 			level={NOTIFICATION_VARIANTS.ERROR}
-			title={`${totalErrors.toLocaleString()} error(s) found on the current page of ${clinicalEntityDisplayNames[
+			title={`${totalErrorsAmount.toLocaleString()} error(s) found on the current page of ${clinicalEntityDisplayNames[
 				entityType
 			].toLowerCase()} table`}
 			subtitle={<Subtitle program={program} />}
-			errors={tableErrors}
-			columnConfig={errorColumns}
-			tableProps={{
-				page,
-				pages: numErrorPages,
-				pageSize,
-				sorted,
-				onPageChange: (value) => updatePageSettings('page', value),
-				onPageSizeChange: (value) => updatePageSettings('pageSize', value),
-				onSortedChange: (value) => updatePageSettings('sorted', value),
-				// TODO: Test + Update Pagination in #2267
-				// https://github.com/icgc-argo/platform-ui/issues/2267
-				showPagination: false,
-			}}
+			reportData={tableErrors}
+			reportColumns={errorReportColumns}
+			tableComponent={
+				<Table {...errorNotificationTableProps} columns={errorTableColumns} data={tableErrors} />
+			}
 		/>
 	);
 };
