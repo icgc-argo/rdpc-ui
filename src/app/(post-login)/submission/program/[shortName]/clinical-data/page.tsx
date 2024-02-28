@@ -27,11 +27,9 @@ import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import useUrlParamState from '@/app/hooks/useUrlParamState';
 import { notNull, parseDonorIdString } from '@/global/utils';
 import { css } from '@/lib/emotion';
-import { useQuery } from '@apollo/client';
 import { Container, Loader, Typography, VerticalTabs, useTheme } from '@icgc-argo/uikit';
 import { useState } from 'react';
 import { setConfiguration } from 'react-grid-system';
-import ClinicalEntityData from './ClinicalDataMain/ClinicalEntityData';
 import ClinicalDownloadButton from './DownloadButtons';
 import SearchBar from './SearchBar';
 import {
@@ -137,7 +135,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 
 	// Side Menu Query
 	// Populates Clinical Entity Table, Side Menu, Title Bar
-	const { data: sideMenuQuery, loading: sideMenuLoading } = useQuery(
+	const { data: sideMenuQuery, loading: sideMenuLoading } = useClinicalQuery(
 		SUBMITTED_DATA_SIDE_MENU_QUERY,
 		{
 			errorPolicy: 'all',
@@ -178,21 +176,23 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 		submitterDonorIds: useDefaultQuery ? [] : entityTableSubmitterDonorIds.filter(notNull),
 	};
 
-	const menuItems = clinicalEntityFields.map((entity) => (
-		<VerticalTabs.Item
-			key={entity}
-			active={selectedClinicalEntityTab === aliasedEntityNames[entity]}
-			onClick={() => setSelectedClinicalEntityTab(aliasedEntityNames[entity])}
-			disabled={
-				!clinicalData.clinicalEntities.some((e) => e?.entityName === aliasedEntityNames[entity])
-			}
-		>
-			{clinicalEntityDisplayNames[entity]}
-			{hasClinicalErrors(clinicalData, entity) && (
-				<VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
-			)}
-		</VerticalTabs.Item>
-	));
+	const menuItems = clinicalEntityFields.map((entity) => {
+		const aliasedEntityName = aliasedEntityNames[entity];
+
+		return (
+			<VerticalTabs.Item
+				key={entity}
+				active={selectedClinicalEntityTab === aliasedEntityName}
+				onClick={() => setSelectedClinicalEntityTab(aliasedEntityName)}
+				disabled={!clinicalData.clinicalEntities.some((e) => e.entityName === aliasedEntityName)}
+			>
+				{clinicalEntityDisplayNames[entity]}
+				{hasClinicalErrors(clinicalData, entity) && (
+					<VerticalTabs.Tag variant="ERROR">!</VerticalTabs.Tag>
+				)}
+			</VerticalTabs.Item>
+		);
+	});
 
 	return (
 		<div>
@@ -279,7 +279,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 											margin-top: 16px;
 										`}
 									>
-										<ClinicalEntityData
+										{/* <ClinicalEntityData
 											entityType={currentEntity}
 											program={programShortName}
 											completionState={completionState}
@@ -287,7 +287,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 											donorSearchResults={searchResultData}
 											useDefaultQuery={useDefaultQuery}
 											noData={noData}
-										/>
+										/> */}
 									</div>
 								</div>{' '}
 							</div>
