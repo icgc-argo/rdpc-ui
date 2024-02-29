@@ -36,6 +36,7 @@ import {
 	css,
 	useTheme,
 } from '@icgc-argo/uikit';
+import { mean } from 'lodash';
 import memoize from 'lodash/memoize';
 import { createRef, useEffect, useState } from 'react';
 import urljoin from 'url-join';
@@ -189,6 +190,21 @@ export const useGetEntityData = (
 			},
 		},
 	});
+
+const DashIcon = (
+	<svg width="10" height="2" viewBox="0 0 10 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<path d="M1 1H9" stroke="#BABCC2" stroke-width="2" stroke-linecap="round" />
+	</svg>
+);
+
+/**
+ * check for completion against core clinical fields - not missing entity exception fields (Treatment & Follow Up)
+ */
+const checkForMissingEntityException = ({ coreCompletionPercentage, coreCompletion }): boolean => {
+	const { donor, specimens, primaryDiagnosis } = coreCompletion;
+	// mean of the required core fields - DO, SP and PD matches overall core completion percentage
+	return mean([donor, specimens, primaryDiagnosis]) === coreCompletionPercentage;
+};
 
 const ClinicalEntityDataTable = ({
 	entityType,
@@ -432,7 +448,17 @@ const ClinicalEntityDataTable = ({
 						if (!completionRecord) {
 							clinicalRecord = { ...clinicalRecord, ...emptyCompletion };
 						} else {
-							const { coreCompletion, entityData: completionEntityData } = completionRecord;
+							const {
+								coreCompletion,
+								entityData: completionEntityData,
+								coreCompletionPercentage,
+							} = completionRecord;
+
+							const hasMissingEntityException = checkForMissingEntityException({
+								coreCompletionPercentage,
+								coreCompletion,
+							});
+							clinicalRecord['hasMissingEntityException'] = hasMissingEntityException;
 
 							coreCompletionFields.forEach((field) => {
 								const completionField = completionColumnHeaders[field];
@@ -588,7 +614,7 @@ const ClinicalEntityDataTable = ({
 		`;
 		const style = css`
 			color: ${isCompletionCell && !errorState && theme.colors.accent1_dark};
-			background: ${errorState && theme.colors.error_4};
+			background: ${errorState && !original.hasMissingEntityException && theme.colors.error_4};
 			${getHeaderBorder(id)}
 			${column.Header === 'donor_id' && headerDonorIdStyle};
 			${column.Header === 'DO' && stickyMarginStyle};
@@ -643,8 +669,17 @@ const ClinicalEntityDataTable = ({
 						);
 
 						const showSuccessSvg = isCompletionCell && !errorState;
+						const { hasMissingEntityException } = context.row.original;
+						const colId = context.column.id;
+						const showMissingEntitySymbol =
+							hasMissingEntityException &&
+							[completionColumnHeaders.treatments, completionColumnHeaders.followUps].includes(
+								colId,
+							);
 
-						const content = showSuccessSvg ? (
+						const content = showMissingEntitySymbol ? (
+							<div>{DashIcon}</div>
+						) : showSuccessSvg ? (
 							<Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />
 						) : (
 							value
