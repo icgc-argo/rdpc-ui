@@ -19,11 +19,11 @@
 
 import { ModalPortal } from '@/app/components/Modal';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
-import { useQuery } from '@apollo/client';
+import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import { Button, Modal, css } from '@icgc-argo/uikit/';
 import { Textarea } from '@icgc-argo/uikit/form/Textarea';
 import { useEffect, useState } from 'react';
-import { ClinicalEntitySearchResultResponse, defaultClinicalEntityFilters } from '../../common';
+import { defaultClinicalEntityFilters } from '../../common';
 import MatchResults from './MatchResults';
 import UploadButton from './UploadButton';
 
@@ -65,22 +65,19 @@ export default function FilterModal({
 		.filter(Boolean);
 
 	// enter the formatted array of string to query and return the matched strings
-	const { data: searchResultData } = useQuery<ClinicalEntitySearchResultResponse>(
-		CLINICAL_ENTITY_SEARCH_RESULTS_QUERY,
-		{
-			errorPolicy: 'all',
-			variables: {
-				programShortName,
-				filters: {
-					...defaultClinicalEntityFilters,
-					completionState: 'all',
-					donorIds: filterDonorIds,
-					submitterDonorIds: filterSubmitterIds,
-					entityTypes: ['donor'],
-				},
+	const { data: searchResultData } = useClinicalQuery(CLINICAL_ENTITY_SEARCH_RESULTS_QUERY, {
+		errorPolicy: 'all',
+		variables: {
+			programShortName,
+			filters: {
+				...defaultClinicalEntityFilters,
+				completionState: 'all',
+				donorIds: filterDonorIds,
+				submitterDonorIds: filterSubmitterIds,
+				entityTypes: ['donor'],
 			},
 		},
-	);
+	});
 
 	useEffect(() => {
 		// This set contain unique ids inputs (no duplicates)

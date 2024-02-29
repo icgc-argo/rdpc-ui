@@ -27,7 +27,6 @@ import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import useUrlParamState from '@/app/hooks/useUrlParamState';
 import { notNull, parseDonorIdString } from '@/global/utils';
 import { css } from '@/lib/emotion';
-import { useQuery } from '@apollo/client';
 import { Container, Loader, Typography, VerticalTabs, useTheme } from '@icgc-argo/uikit';
 import { useState } from 'react';
 import { setConfiguration } from 'react-grid-system';
@@ -137,7 +136,7 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 
 	// Side Menu Query
 	// Populates Clinical Entity Table, Side Menu, Title Bar
-	const { data: sideMenuQuery, loading: sideMenuLoading } = useQuery(
+	const { data: sideMenuQuery, loading: sideMenuLoading } = useClinicalQuery(
 		SUBMITTED_DATA_SIDE_MENU_QUERY,
 		{
 			errorPolicy: 'all',
