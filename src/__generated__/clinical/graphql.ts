@@ -1010,6 +1010,7 @@ export type ClinicalEntityDataQuery = {
 			} | null> | null>;
 			completionStats?: Array<{
 				__typename?: 'CompletionStats';
+				hasMissingEntityException?: boolean | null;
 				coreCompletionDate?: string | null;
 				coreCompletionPercentage?: number | null;
 				donorId?: number | null;
@@ -2158,6 +2159,10 @@ export const ClinicalEntityDataDocument = {
 																	{ kind: 'Field', name: { kind: 'Name', value: 'treatments' } },
 																],
 															},
+														},
+														{
+															kind: 'Field',
+															name: { kind: 'Name', value: 'hasMissingEntityException' },
 														},
 														{ kind: 'Field', name: { kind: 'Name', value: 'coreCompletionDate' } },
 														{
