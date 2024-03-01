@@ -36,7 +36,6 @@ import {
 	css,
 	useTheme,
 } from '@icgc-argo/uikit';
-import { mean } from 'lodash';
 import memoize from 'lodash/memoize';
 import { createRef, useEffect, useState } from 'react';
 import urljoin from 'url-join';
@@ -196,15 +195,6 @@ const DashIcon = (
 		<path d="M1 1H9" stroke="#BABCC2" stroke-width="2" stroke-linecap="round" />
 	</svg>
 );
-
-/**
- * check for completion against core clinical fields - not missing entity exception fields (Treatment & Follow Up)
- */
-const checkForMissingEntityException = ({ coreCompletionPercentage, coreCompletion }): boolean => {
-	const { donor, specimens, primaryDiagnosis } = coreCompletion;
-	// mean of the required core fields - DO, SP and PD matches overall core completion percentage
-	return mean([donor, specimens, primaryDiagnosis]) === coreCompletionPercentage;
-};
 
 const ClinicalEntityDataTable = ({
 	entityType,
@@ -451,13 +441,9 @@ const ClinicalEntityDataTable = ({
 							const {
 								coreCompletion,
 								entityData: completionEntityData,
-								coreCompletionPercentage,
+								hasMissingEntityException,
 							} = completionRecord;
 
-							const hasMissingEntityException = checkForMissingEntityException({
-								coreCompletionPercentage,
-								coreCompletion,
-							});
 							clinicalRecord['hasMissingEntityException'] = hasMissingEntityException;
 
 							coreCompletionFields.forEach((field) => {
