@@ -39,6 +39,7 @@ const CLINICAL_ENTITY_DATA_QUERY = gql(`
 						followUps
 						treatments
 					}
+					hasMissingEntityException
 					coreCompletionDate
 					coreCompletionPercentage
 					donorId
