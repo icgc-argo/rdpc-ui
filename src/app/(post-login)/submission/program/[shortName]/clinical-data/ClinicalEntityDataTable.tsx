@@ -190,6 +190,12 @@ export const useGetEntityData = (
 		},
 	});
 
+const DashIcon = (
+	<svg width="10" height="2" viewBox="0 0 10 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<path d="M1 1H9" stroke="#BABCC2" strokeWidth="2" strokeLinecap="round" />
+	</svg>
+);
+
 const ClinicalEntityDataTable = ({
 	entityType,
 	program,
@@ -432,7 +438,13 @@ const ClinicalEntityDataTable = ({
 						if (!completionRecord) {
 							clinicalRecord = { ...clinicalRecord, ...emptyCompletion };
 						} else {
-							const { coreCompletion, entityData: completionEntityData } = completionRecord;
+							const {
+								coreCompletion,
+								entityData: completionEntityData,
+								hasMissingEntityException,
+							} = completionRecord;
+
+							clinicalRecord['hasMissingEntityException'] = hasMissingEntityException;
 
 							coreCompletionFields.forEach((field) => {
 								const completionField = completionColumnHeaders[field];
@@ -588,7 +600,7 @@ const ClinicalEntityDataTable = ({
 		`;
 		const style = css`
 			color: ${isCompletionCell && !errorState && theme.colors.accent1_dark};
-			background: ${errorState && theme.colors.error_4};
+			background: ${errorState && !original.hasMissingEntityException && theme.colors.error_4};
 			${getHeaderBorder(id)}
 			${column.Header === 'donor_id' && headerDonorIdStyle};
 			${column.Header === 'DO' && stickyMarginStyle};
@@ -643,8 +655,17 @@ const ClinicalEntityDataTable = ({
 						);
 
 						const showSuccessSvg = isCompletionCell && !errorState;
+						const { hasMissingEntityException } = context.row.original;
+						const colId = context.column.id;
+						const showMissingEntitySymbol =
+							hasMissingEntityException &&
+							[completionColumnHeaders.treatments, completionColumnHeaders.followUps].includes(
+								colId,
+							);
 
-						const content = showSuccessSvg ? (
+						const content = showMissingEntitySymbol ? (
+							<div>{DashIcon}</div>
+						) : showSuccessSvg ? (
 							<Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />
 						) : (
 							value
