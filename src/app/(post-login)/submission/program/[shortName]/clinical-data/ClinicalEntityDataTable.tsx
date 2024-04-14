@@ -301,7 +301,7 @@ const ClinicalEntityDataTable = ({
 	);
 
 	const { clinicalData } =
-		clinicalEntityData == undefined || loading ? emptyClinicalDataResponse : clinicalEntityData;
+		clinicalEntityData === undefined || loading ? emptyClinicalDataResponse : clinicalEntityData;
 
 	const noTableData = noData || clinicalData.clinicalEntities.length === 0;
 
