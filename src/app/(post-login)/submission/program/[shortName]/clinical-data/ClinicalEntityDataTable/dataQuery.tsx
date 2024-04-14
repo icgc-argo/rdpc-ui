@@ -19,12 +19,8 @@
 
 import CLINICAL_ENTITY_DATA_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_DATA_QUERY';
 import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
-import { CompletionStates, clinicalEntityFields, defaultClinicalEntityFilters } from './common';
-
-const validateEntityQueryName = (entityQuery) => {
-	const entities = typeof entityQuery === 'string' ? [entityQuery] : entityQuery;
-	return entities.map((entityName) => clinicalEntityFields.find((entity) => entity === entityName));
-};
+import { CompletionStates, defaultClinicalEntityFilters } from '../common';
+import { validateEntityQueryName } from './util';
 
 export const useGetEntityData = (
 	program: string,

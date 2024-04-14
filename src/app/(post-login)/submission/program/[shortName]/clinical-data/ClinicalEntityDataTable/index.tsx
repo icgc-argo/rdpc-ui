@@ -20,7 +20,7 @@
 import { ClinicalSearchResults } from '@/__generated__/clinical/graphql';
 import ErrorNotification from '@/app/components/ErrorNotification';
 import { TableInfoHeaderContainer } from '@/app/components/Table/common';
-import { css, useTheme } from '@emotion/react';
+import { css, useTheme } from '@/lib/emotion';
 import { DnaLoader, Icon, NOTIFICATION_VARIANTS, Table, Typography } from '@icgc-argo/uikit';
 import { createRef, useEffect, useState } from 'react';
 import {
@@ -42,6 +42,7 @@ import {
 import { DashIcon, NoDataCell, Subtitle } from './components';
 import { useGetEntityData } from './dataQuery';
 import {
+	completionColumnHeaders,
 	completionColumnNames,
 	completionKeys,
 	coreCompletionFields,
@@ -107,42 +108,6 @@ const getTableErrors = (clinicalErrors, entityType) => {
 	return [tableErrors, totalErrorCount];
 };
 
-const createSortEntityDataFunction = (clinicalErrors, hasErrors, sortKey, desc) => (prev, next) => {
-	let sortVal = 0;
-
-	if (hasErrors) {
-		// If Current Entity has Errors, Prioritize Data w/ Errors
-		const { errorsA, errorsB } = clinicalErrors.reduce(
-			(acc, current) => {
-				if (current.donorId == prev['donor_id']) {
-					acc.errorsA = -1;
-				}
-				if (current.donorId == next['donor_id']) {
-					acc.errorsB = 1;
-				}
-				return acc;
-			},
-			{ errorsA: 0, errorsB: 0 },
-		);
-
-		sortVal += errorsA + errorsB;
-	}
-
-	// Handles Manual User Sorting by Core Completion columns
-	const completionSortIndex = completionKeys.indexOf(sortKey);
-
-	if (completionSortIndex) {
-		const completionSortKey = completionColumnNames[completionSortIndex];
-		const completionA = prev[completionSortKey];
-		const completionB = next[completionSortKey];
-
-		sortVal = completionA === completionB ? 0 : completionA > completionB ? -1 : 1;
-		sortVal *= desc ? -1 : 1;
-	}
-
-	return sortVal;
-};
-
 const ClinicalEntityDataTable = ({
 	entityType,
 	program,
@@ -168,7 +133,7 @@ const ClinicalEntityDataTable = ({
 	const [pageSettings, setPageSettings] = useState(defaultPageSettings);
 	const { page, pageSize, sorted } = pageSettings;
 
-	// !! this state never changes
+	// TODO: This state never changes
 	const [errorPageSettings, setErrorPageSettings] = useState(defaultErrorPageSettings);
 	const { page: errorPage, pageSize: errorPageSize, sorted: errorSorted } = errorPageSettings;
 	const { desc, id } = sorted[0];
@@ -234,7 +199,43 @@ const ClinicalEntityDataTable = ({
 
 	const hasErrors = totalErrorCount > 0;
 
-	const sortEntityData = createSortEntityDataFunction(clinicalErrors, hasErrors, sortKey, desc);
+	const sortEntityData = (prev, next) => {
+		let sortVal = 0;
+
+		if (hasErrors) {
+			// If Current Entity has Errors, Prioritize Data w/ Errors
+			const { errorsA, errorsB } = clinicalErrors.reduce(
+				(acc, current) => {
+					if (current.donorId == prev['donor_id']) {
+						acc.errorsA = -1;
+					}
+					if (current.donorId == next['donor_id']) {
+						acc.errorsB = 1;
+					}
+					return acc;
+				},
+				{ errorsA: 0, errorsB: 0 },
+			);
+
+			sortVal += errorsA + errorsB;
+		}
+
+		// Handles Manual User Sorting by Core Completion columns
+		const completionSortIndex = completionKeys.indexOf(sortKey);
+
+		if (completionSortIndex) {
+			const completionSortKey = completionColumnNames[completionSortIndex];
+			const completionA = prev[completionSortKey];
+			const completionB = next[completionSortKey];
+
+			sortVal = completionA === completionB ? 0 : completionA > completionB ? -1 : 1;
+			sortVal *= desc ? -1 : 1;
+		}
+
+		return sortVal;
+	};
+
+	const [stickyDonorIDColumnsWidth, setStickyDonorIDColumnsWidth] = useState(74);
 
 	if (loading) {
 		return (
@@ -254,12 +255,16 @@ const ClinicalEntityDataTable = ({
 		let showCompletionStats = false;
 		let records = [];
 		let columns = [];
+
 		// Map Completion Stats + Entity Data
 		const entityData = clinicalData.clinicalEntities.find(
 			(entity) => entity.entityName === aliasedEntityNames[entityType],
 		);
+
 		columns = [...entityData.entityFields];
+
 		const { completionStats, entityName } = entityData;
+
 		showCompletionStats = !!(completionStats && entityName === aliasedEntityNames.donor);
 
 		// totalDocs affects pagination and display text
@@ -347,281 +352,281 @@ const ClinicalEntityDataTable = ({
 				return clinicalRecord;
 			})
 			.sort(sortEntityData);
-	}
 
-	const getHeaderBorder = (key) =>
-		(showCompletionStats && key === completionColumnHeaders.followUps) ||
-		(!showCompletionStats && key === 'donor_id') ||
-		key === 'FO'
-			? styleThickBorder
-			: '';
+		const getHeaderBorder = (key) => {
+			return (showCompletionStats && key === completionColumnHeaders.followUps) ||
+				(!showCompletionStats && key === 'donor_id') ||
+				key === 'FO'
+				? styleThickBorder
+				: '';
+		};
 
-	const [stickyDonorIDColumnsWidth, setStickyDonorIDColumnsWidth] = useState(74);
+		const getCellStyles = (state, row, column) => {
+			const { original } = row;
+			const { id } = column;
+			const isCompletionCell =
+				showCompletionStats && Object.values(completionColumnHeaders).includes(id);
 
-	const getCellStyles = (state, row, column) => {
-		const { original } = row;
-		const { id } = column;
-		const isCompletionCell =
-			showCompletionStats && Object.values(completionColumnHeaders).includes(id);
-
-		const isSpecimenCell =
-			isCompletionCell &&
-			(id === completionColumnHeaders.normalSpecimens ||
-				id === completionColumnHeaders.tumourSpecimens);
-
-		const originalDonorId = original['donor_id'];
-		const cellDonorId = parseInt(
-			originalDonorId && originalDonorId.includes('DO')
-				? originalDonorId.substring(2)
-				: originalDonorId,
-		);
-
-		const donorErrorData = clinicalErrors
-			.filter((donor) => donor.donorId === cellDonorId)
-			.map((donor) => donor.errors)
-			.flat();
-
-		const columnErrorData =
-			donorErrorData.length &&
-			donorErrorData.filter(
-				(error) =>
-					error &&
-					(error.entityName === entityType ||
-						(aliasedEntityFields.includes(error.entityName) &&
-							aliasedEntityNames[entityType] === error.entityName)) &&
-					error.fieldName === id,
-			);
-
-		const hasClinicalErrors = columnErrorData && columnErrorData.length >= 1;
-
-		let hasCompletionErrors = isCompletionCell && original[id] !== 1;
-
-		if (isSpecimenCell) {
-			const completionData = clinicalData.clinicalEntities.find(
-				(entity) => entity.entityName === aliasedEntityNames['donor'],
-			).completionStats;
-
-			const completionRecord =
+			const isSpecimenCell =
 				isCompletionCell &&
-				completionData.find((stat) => stat.donorId === parseInt(originalDonorId.substr(2)));
+				(id === completionColumnHeaders.normalSpecimens ||
+					id === completionColumnHeaders.tumourSpecimens);
 
-			if (completionRecord) {
-				const { entityData: completionEntityData } = completionRecord;
+			const originalDonorId = original['donor_id'];
+			const cellDonorId = parseInt(
+				originalDonorId && originalDonorId.includes('DO')
+					? originalDonorId.substring(2)
+					: originalDonorId,
+			);
 
-				const {
-					specimens: { normalSpecimensPercentage, tumourSpecimensPercentage },
-				} = completionEntityData;
+			const donorErrorData = clinicalErrors
+				.filter((donor) => donor.donorId === cellDonorId)
+				.map((donor) => donor.errors)
+				.flat();
 
-				const currentPercentage =
-					id === completionColumnHeaders['normalSpecimens']
-						? normalSpecimensPercentage
-						: tumourSpecimensPercentage;
+			const columnErrorData =
+				donorErrorData.length &&
+				donorErrorData.filter(
+					(error) =>
+						error &&
+						(error.entityName === entityType ||
+							(aliasedEntityFields.includes(error.entityName) &&
+								aliasedEntityNames[entityType] === error.entityName)) &&
+						error.fieldName === id,
+				);
 
-				hasCompletionErrors = currentPercentage !== 1;
+			const hasClinicalErrors = columnErrorData && columnErrorData.length >= 1;
+
+			let hasCompletionErrors = isCompletionCell && original[id] !== 1;
+
+			if (isSpecimenCell) {
+				const completionData = clinicalData.clinicalEntities.find(
+					(entity) => entity.entityName === aliasedEntityNames['donor'],
+				).completionStats;
+
+				const completionRecord =
+					isCompletionCell &&
+					completionData.find((stat) => stat.donorId === parseInt(originalDonorId.substr(2)));
+
+				if (completionRecord) {
+					const { entityData: completionEntityData } = completionRecord;
+
+					const {
+						specimens: { normalSpecimensPercentage, tumourSpecimensPercentage },
+					} = completionEntityData;
+
+					const currentPercentage =
+						id === completionColumnHeaders['normalSpecimens']
+							? normalSpecimensPercentage
+							: tumourSpecimensPercentage;
+
+					hasCompletionErrors = currentPercentage !== 1;
+				}
 			}
-		}
 
-		const specificErrorValue =
-			hasClinicalErrors &&
-			columnErrorData.filter(
-				(error) =>
-					(error.errorType === 'INVALID_BY_SCRIPT' || error.errorType === 'INVALID_ENUM_VALUE') &&
-					(error.info?.value === original[id] ||
-						(error.info?.value && error.info.value[0] === original[id]) ||
-						(error.info.value === null && !Boolean(original[id]))),
-			);
+			const specificErrorValue =
+				hasClinicalErrors &&
+				columnErrorData.filter(
+					(error) =>
+						(error.errorType === 'INVALID_BY_SCRIPT' || error.errorType === 'INVALID_ENUM_VALUE') &&
+						(error.info?.value === original[id] ||
+							(error.info?.value && error.info.value[0] === original[id]) ||
+							(error.info.value === null && !Boolean(original[id]))),
+				);
 
-		const fieldError =
-			hasClinicalErrors &&
-			columnErrorData.filter(
-				(error) =>
-					(error.errorType === 'UNRECOGNIZED_FIELD' ||
-						error.errorType === 'MISSING_REQUIRED_FIELD') &&
-					error.fieldName === id,
-			);
+			const fieldError =
+				hasClinicalErrors &&
+				columnErrorData.filter(
+					(error) =>
+						(error.errorType === 'UNRECOGNIZED_FIELD' ||
+							error.errorType === 'MISSING_REQUIRED_FIELD') &&
+						error.fieldName === id,
+				);
 
-		const errorState =
-			// Completion Stats === 1 indicates Complete
-			// 0 is Incomplete, <1 Incorrect Sample / Specimen Ratio
-			(isCompletionCell && hasCompletionErrors) ||
-			specificErrorValue?.length > 0 ||
-			fieldError?.length > 0;
+			const errorState =
+				// Completion Stats === 1 indicates Complete
+				// 0 is Incomplete, <1 Incorrect Sample / Specimen Ratio
+				(isCompletionCell && hasCompletionErrors) ||
+				specificErrorValue?.length > 0 ||
+				fieldError?.length > 0;
 
-		// use Emotion styling
-		const headerDonorIdStyle = css`
+			// use Emotion styling
+			const headerDonorIdStyle = css`
     background: white,
     position: absolute,
   `;
-		const stickyMarginStyle = css`
-			margin-left: ${stickyDonorIDColumnsWidth};
-		`;
-		const style = css`
-			color: ${isCompletionCell && !errorState && theme.colors.accent1_dark};
-			background: ${errorState && !original.hasMissingEntityException && theme.colors.error_4};
-			${getHeaderBorder(id)}
-			${column.Header === 'donor_id' && headerDonorIdStyle};
-			${column.Header === 'DO' && stickyMarginStyle};
-			${column.Header === 'program_id' && !showCompletionStats && stickyMarginStyle};
-		`;
+			const stickyMarginStyle = css`
+				margin-left: ${stickyDonorIDColumnsWidth};
+			`;
 
-		return {
-			style,
-			isCompletionCell,
-			errorState,
+			const style = css`
+				color: ${isCompletionCell && !errorState && theme.colors.accent1_dark};
+				background: ${errorState && !original.hasMissingEntityException && theme.colors.error_4};
+				${getHeaderBorder(id)}
+				${column.Header === 'donor_id' && headerDonorIdStyle};
+				${column.Header === 'DO' && stickyMarginStyle};
+				${column.Header === 'program_id' && !showCompletionStats && stickyMarginStyle};
+			`;
+
+			return {
+				style,
+				isCompletionCell,
+				errorState,
+			};
 		};
-	};
 
-	columns = columns.map((key) => {
-		return {
-			id: key,
-			accessorKey: key,
-			Header: key,
-			minWidth: getColumnWidth(key, showCompletionStats, noTableData),
-		};
-	});
+		columns = columns.map((key) => {
+			return {
+				id: key,
+				accessorKey: key,
+				Header: key,
+				minWidth: getColumnWidth(key, showCompletionStats, noTableData),
+			};
+		});
 
-	if (showCompletionStats) {
-		columns = [
-			{
-				id: 'clinical_core_completion_header',
-				meta: { customHeader: true },
-				sortingFn: sortEntityData,
-				header: () => <ClinicalCoreCompletionHeader />,
-
-				columns: columns.slice(0, 7).map((column, index) => ({
-					...column,
+		if (showCompletionStats) {
+			columns = [
+				{
+					id: 'clinical_core_completion_header',
+					meta: { customHeader: true },
 					sortingFn: sortEntityData,
-					header: (props) => {
-						const value = props.header.id;
-						const coreCompletionColumnsCount = 7;
-						const isLastElement = index === coreCompletionColumnsCount - 1;
-						const isSticky = value === 'donor_id';
-						const isSorted = props.sorted;
+					header: () => <ClinicalCoreCompletionHeader />,
 
-						return <Cell config={{ isLastElement, isSorted, isSticky }}>{value}</Cell>;
-					},
-					meta: { customCell: true, customHeader: true },
-					cell: (context) => {
-						const value = context.getValue();
-						const isSticky = context.column.id === 'donor_id';
+					columns: columns.slice(0, 7).map((column, index) => ({
+						...column,
+						sortingFn: sortEntityData,
+						header: (props) => {
+							const value = props.header.id;
+							const coreCompletionColumnsCount = 7;
+							const isLastElement = index === coreCompletionColumnsCount - 1;
+							const isSticky = value === 'donor_id';
+							const isSorted = props.sorted;
 
-						const { isCompletionCell, errorState, style } = getCellStyles(
-							undefined,
-							context.row,
-							context.column,
-						);
+							return <Cell config={{ isLastElement, isSorted, isSticky }}>{value}</Cell>;
+						},
+						meta: { customCell: true, customHeader: true },
+						cell: (context) => {
+							const value = context.getValue();
+							const isSticky = context.column.id === 'donor_id';
 
-						const showSuccessSvg = isCompletionCell && !errorState;
-						const { hasMissingEntityException } = context.row.original;
-						const colId = context.column.id;
-						const showMissingEntitySymbol =
-							hasMissingEntityException &&
-							[completionColumnHeaders.treatments, completionColumnHeaders.followUps].includes(
-								colId,
+							const { isCompletionCell, errorState, style } = getCellStyles(
+								undefined,
+								context.row,
+								context.column,
 							);
 
-						const content = showMissingEntitySymbol ? (
-							<div>{DashIcon}</div>
-						) : showSuccessSvg ? (
-							<Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />
-						) : (
-							value
-						);
+							const showSuccessSvg = isCompletionCell && !errorState;
+							const { hasMissingEntityException } = context.row.original;
+							const colId = context.column.id;
+							const showMissingEntitySymbol =
+								hasMissingEntityException &&
+								[completionColumnHeaders.treatments, completionColumnHeaders.followUps].includes(
+									colId,
+								);
 
-						return (
-							<Cell config={{ isSticky }} styles={[style]}>
-								{content}
-							</Cell>
-						);
-					},
-				})),
-			},
-			{
-				id: 'submitted_donor_data_header',
-				meta: { customHeader: true },
-				header: () => (
-					<TopLevelHeader
-						title="SUBMITTED DONOR DATA"
-						styles={[
-							css`
-								text-align: left;
-							`,
-						]}
-					/>
-				),
-				columns: columns.slice(7),
-			},
-		];
-	}
+							const content = showMissingEntitySymbol ? (
+								<div>{DashIcon}</div>
+							) : showSuccessSvg ? (
+								<Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />
+							) : (
+								value
+							);
 
-	const tableMin = totalDocs > 0 ? page * pageSize + 1 : totalDocs;
-	const tableMax = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
-	const numTablePages = Math.ceil(totalDocs / pageSize);
-	const numErrorPages = Math.ceil(totalErrorCount / errorPageSize);
+							return (
+								<Cell config={{ isSticky }} styles={[style]}>
+									{content}
+								</Cell>
+							);
+						},
+					})),
+				},
+				{
+					id: 'submitted_donor_data_header',
+					meta: { customHeader: true },
+					header: () => (
+						<TopLevelHeader
+							title="SUBMITTED DONOR DATA"
+							styles={[
+								css`
+									text-align: left;
+								`,
+							]}
+						/>
+					),
+					columns: columns.slice(7),
+				},
+			];
+		}
 
-	return (
-		<div
-			ref={containerRef}
-			css={css`
-				position: relative;
-			`}
-		>
-			{hasErrors && (
-				<div
-					id="error-submission-workspace"
-					css={css`
-						margin: 12px 0px;
-					`}
-				>
-					<ErrorNotification
-						level={NOTIFICATION_VARIANTS.ERROR}
-						title={`${totalErrorCount.toLocaleString()} error(s) found on the current page of ${clinicalEntityDisplayNames[
-							entityType
-						].toLowerCase()} table`}
-						subtitle={<Subtitle program={program} />}
-						errors={tableErrors}
-						columnConfig={errorColumns}
-						tableProps={{
-							page: errorPage,
-							pages: numErrorPages,
-							pageSize: errorPageSize,
-							sorted: errorSorted,
-							onPageChange: (value) => updatePageSettings('page', value),
-							onPageSizeChange: (value) => updatePageSettings('pageSize', value),
-							onSortedChange: (value) => updatePageSettings('sorted', value),
-							// TODO: Test + Update Pagination in #2267
-							// https://github.com/icgc-argo/platform-ui/issues/2267
-							showPagination: false,
-						}}
-					/>
-				</div>
-			)}
+		const tableMin = totalDocs > 0 ? page * pageSize + 1 : totalDocs;
+		const tableMax = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
+		const numTablePages = Math.ceil(totalDocs / pageSize);
+		const numErrorPages = Math.ceil(totalErrorCount / errorPageSize);
 
-			<TableInfoHeaderContainer
-				left={
-					<Typography
+		return (
+			<div
+				ref={containerRef}
+				css={css`
+					position: relative;
+				`}
+			>
+				{hasErrors && (
+					<div
+						id="error-submission-workspace"
 						css={css`
-							margin: 0px;
+							margin: 12px 0px;
 						`}
-						variant="data"
 					>
-						Showing {tableMin} - {tableMax} of {totalDocs} records
-					</Typography>
-				}
-			/>
-			<Table
-				data={records}
-				columns={columns}
-				withHeaders
-				withSideBorders
-				withPagination
-				showPageSizeOptions
-				withStripes
-				enableColumnResizing={false}
-				enableSorting
-			/>
-		</div>
-	);
+						<ErrorNotification
+							level={NOTIFICATION_VARIANTS.ERROR}
+							title={`${totalErrorCount.toLocaleString()} error(s) found on the current page of ${clinicalEntityDisplayNames[
+								entityType
+							].toLowerCase()} table`}
+							subtitle={<Subtitle program={program} />}
+							errors={tableErrors}
+							columnConfig={errorColumns}
+							tableProps={{
+								page: errorPage,
+								pages: numErrorPages,
+								pageSize: errorPageSize,
+								sorted: errorSorted,
+								onPageChange: (value) => updatePageSettings('page', value),
+								onPageSizeChange: (value) => updatePageSettings('pageSize', value),
+								onSortedChange: (value) => updatePageSettings('sorted', value),
+								// TODO: Test + Update Pagination in #2267
+								// https://github.com/icgc-argo/platform-ui/issues/2267
+								showPagination: false,
+							}}
+						/>
+					</div>
+				)}
+
+				<TableInfoHeaderContainer
+					left={
+						<Typography
+							css={css`
+								margin: 0px;
+							`}
+							variant="data"
+						>
+							Showing {tableMin} - {tableMax} of {totalDocs} records
+						</Typography>
+					}
+				/>
+				<Table
+					data={records}
+					columns={columns}
+					withHeaders
+					withSideBorders
+					withPagination
+					showPageSizeOptions
+					withStripes
+					enableColumnResizing={false}
+					enableSorting
+				/>
+			</div>
+		);
+	}
 };
 
 export default ClinicalEntityDataTable;
