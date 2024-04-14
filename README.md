@@ -18,6 +18,12 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+```bash
+npm run type-check
+```
+
+to see all type errors
+
 ## Env vars
 
 Hosting environments that use runtime variables need to be able to send public client env vars to the client.
@@ -62,6 +68,7 @@ In an attempt to try and keep things clean and bug free, Emotion functions are u
 react + react dom + emotion all versions needs to be in sync with @icgc-argo/uikit
 
 ## API Requests
+
 We use both regular style HTTP endpoints and GQL endpoints.
 We use Apollo GQL store on the frontend for most state.
 
