@@ -36,7 +36,6 @@ import {
 	aliasedEntityFields,
 	aliasedEntityNames,
 	clinicalEntityDisplayNames,
-	emptyClinicalDataResponse,
 	emptySearchResponse,
 } from '../common';
 import { DashIcon, NoDataCell, Subtitle } from './components';
@@ -187,53 +186,10 @@ const ClinicalEntityDataTable = ({
 		submitterDonorIds,
 	);
 
-	const { clinicalData } =
-		clinicalEntityData === undefined || loading ? emptyClinicalDataResponse : clinicalEntityData;
+	const { clinicalData } = clinicalEntityData;
 
+	// TODO: can you have ClinicalEntityErrors without ClinicalEntityData?
 	const noTableData = noData || clinicalData.clinicalEntities.length === 0;
-
-	// Collect Error Data
-	const { clinicalErrors = [] } = clinicalData;
-
-	const [tableErrors, totalErrorCount] = getTableErrors(clinicalErrors, entityType);
-
-	const hasErrors = totalErrorCount > 0;
-
-	const sortEntityData = (prev, next) => {
-		let sortVal = 0;
-
-		if (hasErrors) {
-			// If Current Entity has Errors, Prioritize Data w/ Errors
-			const { errorsA, errorsB } = clinicalErrors.reduce(
-				(acc, current) => {
-					if (current.donorId == prev['donor_id']) {
-						acc.errorsA = -1;
-					}
-					if (current.donorId == next['donor_id']) {
-						acc.errorsB = 1;
-					}
-					return acc;
-				},
-				{ errorsA: 0, errorsB: 0 },
-			);
-
-			sortVal += errorsA + errorsB;
-		}
-
-		// Handles Manual User Sorting by Core Completion columns
-		const completionSortIndex = completionKeys.indexOf(sortKey);
-
-		if (completionSortIndex) {
-			const completionSortKey = completionColumnNames[completionSortIndex];
-			const completionA = prev[completionSortKey];
-			const completionB = next[completionSortKey];
-
-			sortVal = completionA === completionB ? 0 : completionA > completionB ? -1 : 1;
-			sortVal *= desc ? -1 : 1;
-		}
-
-		return sortVal;
-	};
 
 	const [stickyDonorIDColumnsWidth, setStickyDonorIDColumnsWidth] = useState(74);
 
@@ -247,7 +203,7 @@ const ClinicalEntityDataTable = ({
 				`}
 			/>
 		);
-	} else if (noData) {
+	} else if (noTableData) {
 		return <NoDataCell />;
 	} else {
 		// Init + Page Settings
@@ -255,6 +211,49 @@ const ClinicalEntityDataTable = ({
 		let showCompletionStats = false;
 		let records = [];
 		let columns = [];
+
+		// Collect Error Data
+		const { clinicalErrors = [] } = clinicalData;
+
+		const [tableErrors, totalErrorCount] = getTableErrors(clinicalErrors, entityType);
+
+		const hasErrors = totalErrorCount > 0;
+
+		const sortEntityData = (prev, next) => {
+			let sortVal = 0;
+
+			if (hasErrors) {
+				// If Current Entity has Errors, Prioritize Data w/ Errors
+				const { errorsA, errorsB } = clinicalErrors.reduce(
+					(acc, current) => {
+						if (current.donorId == prev['donor_id']) {
+							acc.errorsA = -1;
+						}
+						if (current.donorId == next['donor_id']) {
+							acc.errorsB = 1;
+						}
+						return acc;
+					},
+					{ errorsA: 0, errorsB: 0 },
+				);
+
+				sortVal += errorsA + errorsB;
+			}
+
+			// Handles Manual User Sorting by Core Completion columns
+			const completionSortIndex = completionKeys.indexOf(sortKey);
+
+			if (completionSortIndex) {
+				const completionSortKey = completionColumnNames[completionSortIndex];
+				const completionA = prev[completionSortKey];
+				const completionB = next[completionSortKey];
+
+				sortVal = completionA === completionB ? 0 : completionA > completionB ? -1 : 1;
+				sortVal *= desc ? -1 : 1;
+			}
+
+			return sortVal;
+		};
 
 		// Map Completion Stats + Entity Data
 		const entityData = clinicalData.clinicalEntities.find(
