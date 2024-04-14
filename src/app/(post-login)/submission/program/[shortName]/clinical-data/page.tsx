@@ -27,7 +27,7 @@ import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import useUrlParamState from '@/app/hooks/useUrlParamState';
 import { notNull, parseDonorIdString } from '@/global/utils';
 import { css } from '@/lib/emotion';
-import { Container, Loader, Typography, VerticalTabs, useTheme } from '@icgc-argo/uikit';
+import { Container, Loader, Typography, VerticalTabs } from '@icgc-argo/uikit';
 import { useState } from 'react';
 import { setConfiguration } from 'react-grid-system';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable';
@@ -69,8 +69,6 @@ const parseSearchResult = (
 };
 
 const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }) => {
-	const theme = useTheme();
-
 	const [keyword, setKeyword] = useState('');
 	const [completionState, setCompletionState] = useState(CompletionStates['all']);
 	const [modalVisible, setModalVisible] = useState(false);
