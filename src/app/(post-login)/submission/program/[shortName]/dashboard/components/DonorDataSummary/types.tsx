@@ -17,9 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { DonorSummaryEntry } from '@/__generated__/gateway/graphql';
 import { ColumnSort, TableFilterRule } from '@icgc-argo/uikit';
-import { DonorSummaryEntry } from 'generated/gql_types';
-import { TableSortOrder } from 'global/types/table';
+import { TableSortOrder } from '../../DonorDataSummary/types';
 
 export type CompleteIncompleteFilterCounts = {
 	completed: number;

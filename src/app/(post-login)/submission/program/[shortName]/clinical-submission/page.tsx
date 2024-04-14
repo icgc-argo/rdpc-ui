@@ -107,7 +107,7 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 		},
 	});
 
-	const uploadClinicalSubmission = useMutation(
+	const uploadClinicalSubmission = useMutation<Response, Response, FormData>(
 		(formData) => {
 			const url = urlJoin(CLINICAL_API_ROOT, getProgramPath(UPLOAD_CLINICAL_DATA, shortName));
 			return uploadFileRequest(url, formData, egoJwt);
@@ -119,7 +119,7 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 				 * example if there is a file error
 				 * they are needed for GQL type completeness
 				 */
-				const propertiesNotReturnedFromSever = {
+				const propertiesNotReturnedFromServer = {
 					batchName: '',
 					creator: '',
 					createdAt: '',
@@ -130,7 +130,7 @@ const ClinicalSubmission = ({ shortName }: { shortName: string }) => {
 
 				const { programShortName, fileErrors, clinicalEntities, version } = result;
 				const clinicalEntitiesWithMissingProperties = clinicalEntities.map((entity) => ({
-					...propertiesNotReturnedFromSever,
+					...propertiesNotReturnedFromServer,
 					...entity,
 				}));
 				updateClinicalSubmissionQuery((previous) => ({

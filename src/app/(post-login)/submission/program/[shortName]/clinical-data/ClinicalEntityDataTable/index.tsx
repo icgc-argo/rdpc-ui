@@ -53,7 +53,10 @@ import {
 } from './tableConfig';
 import { getColumnWidth } from './util';
 
-const getTableErrors = (clinicalErrors, entityType) => {
+const getTableErrors = (
+	clinicalErrors,
+	entityType,
+): [{ entries: any[]; fieldName: any; entityName: string; errorMessage: string }[], number] => {
 	const tableErrorGroups = [];
 
 	clinicalErrors.forEach((donor) => {

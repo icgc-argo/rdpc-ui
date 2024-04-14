@@ -20,7 +20,7 @@
 import { displayDateAndTime, formatFileName } from '@/global/utils/clinical';
 import { css, styled, useTheme } from '@/lib/emotion';
 import { Icon, Outline, ThemeColorNames, Typography } from '@icgc-argo/uikit';
-import { ComponentType, FC, HtmlHTMLAttributes, ReactNode } from 'react';
+import { ComponentType, FC, HtmlHTMLAttributes, PropsWithChildren, ReactNode } from 'react';
 import { Col, Row } from 'react-grid-system';
 
 export const CellContentCenter = styled('div')`

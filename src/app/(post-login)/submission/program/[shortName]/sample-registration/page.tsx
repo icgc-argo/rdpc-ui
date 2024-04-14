@@ -104,7 +104,11 @@ const Register = ({ shortName }: { shortName: string }) => {
 	 * new HTTP endpoints don't return the same objects as strictly typed gql endpoints
 	 * data shape needs to match so state can stay in sync on the frontend
 	 */
-	type RequiredProperty = { key: string; accessor: string | (() => void); defaultValue: any };
+	type RequiredProperty = {
+		key: string;
+		accessor: string | ((resp: any) => void);
+		defaultValue: any;
+	};
 	const requiredProperties: RequiredProperty[] = [
 		{
 			key: 'errors',
