@@ -150,7 +150,7 @@ const Register = ({ shortName }: { shortName: string }) => {
 
 	// handlers
 	const uploadURL = urlJoin(CLINICAL_API_ROOT, getProgramPath(UPLOAD_REGISTRATION, shortName));
-	const uploadFile = useMutation(
+	const uploadFile = useMutation<Response, Response, FormData>(
 		(formData) => {
 			return uploadFileRequest(uploadURL, formData, egoJwt);
 		},
