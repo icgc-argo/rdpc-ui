@@ -18,6 +18,7 @@
  */
 'use client';
 
+import { ClinicalEntitySearchResultsQuery } from '@/__generated__/clinical/graphql';
 import ContentMain from '@/app/components/Content/ContentMain';
 import { pageWithPermissions } from '@/app/components/Page';
 import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
@@ -54,7 +55,7 @@ const defaultClinicalEntityTab = aliasedEntityNames.donor;
 // convert codegen automated types to definitions in existing code
 // make data object shape uniform
 const parseSearchResult = (
-	data: ClinicalEntitySearchResultResponse | undefined,
+	data: ClinicalEntitySearchResultsQuery | undefined,
 ): ClinicalEntitySearchResultResponse => {
 	if (!data) return emptySearchResponse;
 	return {

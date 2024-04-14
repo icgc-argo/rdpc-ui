@@ -25,6 +25,7 @@ import {
 	TableLegendStatusIcon,
 } from '@/app/components/Table/common';
 import { Icon, Typography, css, useTheme } from '@icgc-argo/uikit';
+import { FC } from 'react';
 import { Col, Row } from 'react-grid-system';
 import {
 	EMPTY_PROGRAM_SUMMARY_STATS,
@@ -33,11 +34,10 @@ import {
 } from './common';
 import { DonorDataReleaseState, ProgramDonorReleaseStats } from './types';
 
-const DonorSummaryTableLegend = ({
-	programDonorSummaryStats = EMPTY_PROGRAM_SUMMARY_STATS,
-}: {
+const DonorSummaryTableLegend: FC<{
+	className?: string;
 	programDonorSummaryStats: ProgramDonorReleaseStats;
-}) => {
+}> = ({ programDonorSummaryStats = EMPTY_PROGRAM_SUMMARY_STATS }) => {
 	const theme = useTheme();
 
 	const missingMatchedPairsCount =
