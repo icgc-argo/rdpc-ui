@@ -50,7 +50,6 @@ import {
 	defaultErrorPageSettings,
 	emptyCompletion,
 	errorColumns,
-	noDataCompletionStats,
 } from './tableConfig';
 import { getColumnWidth } from './util';
 
@@ -161,13 +160,9 @@ const ClinicalEntityDataTable = ({
 	useDefaultQuery: boolean;
 	noData: boolean;
 }) => {
-	// Init + Page Settings
-	let totalDocs = 0;
-	let showCompletionStats = false;
-	let records = [];
-	let columns = [];
 	const theme = useTheme();
 	const containerRef = createRef<HTMLDivElement>();
+
 	const defaultPageSettings =
 		useDefaultQuery && entityType === 'donor' ? defaultDonorSettings : defaultEntityPageSettings;
 	const [pageSettings, setPageSettings] = useState(defaultPageSettings);
@@ -241,11 +236,25 @@ const ClinicalEntityDataTable = ({
 
 	const sortEntityData = createSortEntityDataFunction(clinicalErrors, hasErrors, sortKey, desc);
 
-	// Map Completion Stats + Entity Data
-	if (noTableData) {
-		showCompletionStats = true;
-		records = noDataCompletionStats;
+	if (loading) {
+		return (
+			<DnaLoader
+				css={css`
+					display: flex;
+					justify-content: center;
+					width: 100%;
+				`}
+			/>
+		);
+	} else if (noData) {
+		return <NoDataCell />;
 	} else {
+		// Init + Page Settings
+		let totalDocs = 0;
+		let showCompletionStats = false;
+		let records = [];
+		let columns = [];
+		// Map Completion Stats + Entity Data
 		const entityData = clinicalData.clinicalEntities.find(
 			(entity) => entity.entityName === aliasedEntityNames[entityType],
 		);
@@ -267,6 +276,7 @@ const ClinicalEntityDataTable = ({
 				if (!columns.includes(r.name)) columns.push(r.name);
 			});
 		});
+
 		if (showCompletionStats) {
 			columns.splice(1, 0, ...Object.values(completionColumnHeaders));
 		}
@@ -439,9 +449,9 @@ const ClinicalEntityDataTable = ({
 
 		// use Emotion styling
 		const headerDonorIdStyle = css`
-			background: white,
-			position: absolute,
-		`;
+    background: white,
+    position: absolute,
+  `;
 		const stickyMarginStyle = css`
 			margin-left: ${stickyDonorIDColumnsWidth};
 		`;
@@ -549,17 +559,7 @@ const ClinicalEntityDataTable = ({
 	const numTablePages = Math.ceil(totalDocs / pageSize);
 	const numErrorPages = Math.ceil(totalErrorCount / errorPageSize);
 
-	return loading ? (
-		<DnaLoader
-			css={css`
-				display: flex;
-				justify-content: center;
-				width: 100%;
-			`}
-		/>
-	) : noTableData ? (
-		<NoDataCell />
-	) : (
+	return (
 		<div
 			ref={containerRef}
 			css={css`
