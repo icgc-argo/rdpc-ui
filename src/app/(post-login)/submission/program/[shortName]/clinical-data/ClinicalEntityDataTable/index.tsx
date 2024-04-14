@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2024 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -20,31 +20,15 @@
 import { ClinicalSearchResults } from '@/__generated__/clinical/graphql';
 import ErrorNotification from '@/app/components/ErrorNotification';
 import { TableInfoHeaderContainer } from '@/app/components/Table/common';
-import CLINICAL_ENTITY_DATA_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_DATA_QUERY';
-import CLINICAL_SCHEMA_VERSION from '@/app/gql/clinical/CLINICAL_SCHEMA_VERSION';
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
-import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from '@/global/constants';
-import {
-	ContentPlaceholder,
-	DnaLoader,
-	Icon,
-	Link,
-	NOTIFICATION_VARIANTS,
-	Table,
-	Typography,
-	css,
-	useTheme,
-} from '@icgc-argo/uikit';
-import memoize from 'lodash/memoize';
+import { css, useTheme } from '@emotion/react';
+import { DnaLoader, Icon, NOTIFICATION_VARIANTS, Table, Typography } from '@icgc-argo/uikit';
 import { createRef, useEffect, useState } from 'react';
-import urljoin from 'url-join';
 import {
 	Cell,
 	ClinicalCoreCompletionHeader,
 	TopLevelHeader,
 	styleThickBorder,
-} from './ClinicalDataTableComp';
+} from '../ClinicalDataTableComp';
 import {
 	ClinicalEntitySearchResultResponse,
 	CompletionStates,
@@ -52,261 +36,25 @@ import {
 	aliasedEntityFields,
 	aliasedEntityNames,
 	clinicalEntityDisplayNames,
-	clinicalEntityFields,
-	defaultClinicalEntityFilters,
 	emptyClinicalDataResponse,
 	emptySearchResponse,
-} from './common';
+} from '../common';
+import { DashIcon, NoDataCell, Subtitle } from './components';
+import { useGetEntityData } from './dataQuery';
+import {
+	completionColumnNames,
+	completionKeys,
+	coreCompletionFields,
+	defaultDonorSettings,
+	defaultEntityPageSettings,
+	defaultErrorPageSettings,
+	emptyCompletion,
+	errorColumns,
+	noDataCompletionStats,
+} from './tableConfig';
+import { getColumnWidth } from './util';
 
-export type DonorEntry = {
-	row: string;
-	isNew: boolean;
-	[k: string]: string | number | boolean;
-};
-
-const errorColumns = [
-	{
-		accessorKey: 'entries',
-		Header: '# Affected Records',
-		id: 'entries',
-		maxWidth: 135,
-	},
-	{
-		accessorKey: 'fieldName',
-		Header: `Field with Error`,
-		id: 'fieldName',
-		maxWidth: 215,
-	},
-	{
-		accessorKey: 'errorMessage',
-		Header: `Error Description`,
-		id: 'errorMessage',
-	},
-];
-
-const NoDataCell = () => (
-	<div
-		css={css`
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			padding: 80px 0;
-		`}
-	>
-		<ContentPlaceholder title="No Data Found.">
-			<img alt="No Data" src="/assets/no-data.svg" />
-		</ContentPlaceholder>
-	</div>
-);
-
-const completionKeys = Object.values(aliasSortNames);
-const completionColumnNames = Object.keys(aliasSortNames);
-const emptyCompletion = {
-	DO: 0,
-	PD: 0,
-	FO: 0,
-	NS: 0,
-	TR: 0,
-	TS: 0,
-};
-
-const noDataCompletionStats = [
-	{
-		donor_id: 0,
-		...emptyCompletion,
-	},
-];
-
-const completionColumnHeaders = {
-	donor: 'DO',
-	primaryDiagnosis: 'PD',
-	normalSpecimens: 'NS',
-	tumourSpecimens: 'TS',
-	treatments: 'TR',
-	followUps: 'FO',
-};
-
-const coreCompletionFields = Object.keys(completionColumnHeaders);
-
-const getColumnWidth = memoize<
-	(keyString: string, showCompletionStats: boolean, noData: boolean) => number
->((keyString, showCompletionStats, noData) => {
-	const minWidth = keyString === 'donor_id' ? 70 : showCompletionStats ? 40 : 95;
-	const maxWidth = noData && showCompletionStats ? 45 : 200;
-	const spacePerChar = 8;
-	const margin = 10;
-	const targetWidth = keyString.length * spacePerChar + margin;
-	return Math.max(Math.min(maxWidth, targetWidth), minWidth);
-});
-
-const defaultEntityPageSettings = {
-	page: defaultClinicalEntityFilters.page,
-	pageSize: defaultClinicalEntityFilters.pageSize,
-	sorted: [{ id: 'donorId', desc: true }],
-};
-
-const defaultDonorSettings = {
-	...defaultEntityPageSettings,
-	sorted: [{ id: 'completionStats.coreCompletionPercentage', desc: false }],
-};
-
-const defaultErrorPageSettings = {
-	page: 0,
-	pageSize: 5,
-	sorted: [{ id: 'donorId', desc: true }],
-};
-
-const validateEntityQueryName = (entityQuery) => {
-	const entities = typeof entityQuery === 'string' ? [entityQuery] : entityQuery;
-	return entities.map((entityName) => clinicalEntityFields.find((entity) => entity === entityName));
-};
-
-export const useGetEntityData = (
-	program: string,
-	entityType: string | string[],
-	page: number,
-	pageSize: number,
-	sort: string,
-	completionState: CompletionStates,
-	donorIds: number[],
-	submitterDonorIds: string[],
-) =>
-	useClinicalQuery(CLINICAL_ENTITY_DATA_QUERY, {
-		errorPolicy: 'all',
-		fetchPolicy: 'cache-and-network',
-		variables: {
-			programShortName: program,
-			filters: {
-				...defaultClinicalEntityFilters,
-				sort,
-				page,
-				pageSize,
-				completionState,
-				donorIds,
-				submitterDonorIds,
-				entityTypes: validateEntityQueryName(entityType),
-			},
-		},
-	});
-
-const DashIcon = (
-	<svg width="10" height="2" viewBox="0 0 10 2" fill="none" xmlns="http://www.w3.org/2000/svg">
-		<path d="M1 1H9" stroke="#BABCC2" strokeWidth="2" strokeLinecap="round" />
-	</svg>
-);
-
-const ClinicalEntityDataTable = ({
-	entityType,
-	program,
-	completionState = CompletionStates['all'],
-	currentDonors,
-	donorSearchResults = emptySearchResponse,
-	useDefaultQuery,
-	noData,
-}: {
-	entityType: string;
-	program: string;
-	completionState: CompletionStates;
-	currentDonors: number[];
-	donorSearchResults: ClinicalEntitySearchResultResponse;
-	useDefaultQuery: boolean;
-	noData: boolean;
-}) => {
-	const { DOCS_URL_ROOT } = useAppConfigContext();
-	const DOCS_DICTIONARY_PAGE = urljoin(DOCS_URL_ROOT, '/dictionary/');
-
-	// Init + Page Settings
-	let totalDocs = 0;
-	let showCompletionStats = false;
-	let records = [];
-	let columns = [];
-	const theme = useTheme();
-	const containerRef = createRef<HTMLDivElement>();
-	const defaultPageSettings =
-		useDefaultQuery && entityType === 'donor' ? defaultDonorSettings : defaultEntityPageSettings;
-	const [pageSettings, setPageSettings] = useState(defaultPageSettings);
-	const { page, pageSize, sorted } = pageSettings;
-	const [errorPageSettings, setErrorPageSettings] = useState(defaultErrorPageSettings);
-	const { page: errorPage, pageSize: errorPageSize, sorted: errorSorted } = errorPageSettings;
-	const { desc, id } = sorted[0];
-	const sortKey = aliasSortNames[id] || id;
-	const sort = `${desc ? '-' : ''}${sortKey}`;
-
-	const {
-		clinicalSearchResults: { searchResults, totalResults },
-	} = donorSearchResults || emptySearchResponse;
-
-	const nextSearchPage = (page + 1) * pageSize;
-
-	const donorIds = useDefaultQuery
-		? []
-		: currentDonors.length
-		? currentDonors
-		: searchResults.map(({ donorId }: ClinicalSearchResults) => donorId);
-
-	const submitterDonorIds =
-		useDefaultQuery || currentDonors.length
-			? []
-			: searchResults
-					.map(({ submitterDonorId }: ClinicalSearchResults) => submitterDonorId)
-					.filter((id) => !!id)
-					.slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
-
-	const latestDictionaryResponse = useClinicalQuery(CLINICAL_SCHEMA_VERSION);
-	const Subtitle = ({ program = '' }) => (
-		<div
-			css={css`
-				margin-bottom: 12px;
-			`}
-		>
-			<Link target="_blank" href={DOCS_DICTIONARY_PAGE}>
-				{!latestDictionaryResponse.loading &&
-					`Version ${latestDictionaryResponse.data.clinicalSubmissionSchemaVersion}`}
-			</Link>{' '}
-			of the data dictionary was released and has made some donors invalid. Please download the
-			error report to view the affected donors, then submit a corrected TSV file in the{' '}
-			<Link href={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(PROGRAM_SHORT_NAME_PATH, program)}>
-				Submit Clinical Data{' '}
-			</Link>
-			workspace.
-		</div>
-	);
-
-	const updatePageSettings = (key, value) => {
-		const newPageSettings = { ...pageSettings, [key]: value };
-
-		if (key === 'pageSize' && value !== pageSettings.pageSize) {
-			// Prevents bug querying nonexistent data
-			newPageSettings.page = 0;
-		}
-		setPageSettings(newPageSettings);
-		return newPageSettings;
-	};
-
-	useEffect(() => {
-		setPageSettings(defaultPageSettings);
-		setErrorPageSettings(defaultErrorPageSettings);
-	}, [entityType, useDefaultQuery]);
-
-	const { data: clinicalEntityData, loading } = useGetEntityData(
-		program,
-		entityType,
-		page,
-		pageSize,
-		sort,
-		completionState,
-		donorIds,
-		submitterDonorIds,
-	);
-
-	const { clinicalData } =
-		clinicalEntityData === undefined || loading ? emptyClinicalDataResponse : clinicalEntityData;
-
-	const noTableData = noData || clinicalData.clinicalEntities.length === 0;
-
-	// Collect Error Data
-	const { clinicalErrors = [] } = clinicalData;
+const getTableErrors = (clinicalErrors, entityType) => {
 	const tableErrorGroups = [];
 
 	clinicalErrors.forEach((donor) => {
@@ -352,47 +100,146 @@ const ClinicalEntityDataTable = ({
 		};
 	});
 
-	const totalErrors = tableErrors.reduce(
+	const totalErrorCount = tableErrors.reduce(
 		(errorCount, errorGroup) => errorCount + errorGroup.entries,
 		0,
 	);
-	const hasErrors = totalErrors > 0;
 
-	const sortEntityData = (prev, next) => {
-		let sortVal = 0;
+	return [tableErrors, totalErrorCount];
+};
 
-		if (hasErrors) {
-			// If Current Entity has Errors, Prioritize Data w/ Errors
-			const { errorsA, errorsB } = clinicalErrors.reduce(
-				(acc, current) => {
-					if (current.donorId == prev['donor_id']) {
-						acc.errorsA = -1;
-					}
-					if (current.donorId == next['donor_id']) {
-						acc.errorsB = 1;
-					}
-					return acc;
-				},
-				{ errorsA: 0, errorsB: 0 },
-			);
+const createSortEntityDataFunction = (clinicalErrors, hasErrors, sortKey, desc) => (prev, next) => {
+	let sortVal = 0;
 
-			sortVal += errorsA + errorsB;
+	if (hasErrors) {
+		// If Current Entity has Errors, Prioritize Data w/ Errors
+		const { errorsA, errorsB } = clinicalErrors.reduce(
+			(acc, current) => {
+				if (current.donorId == prev['donor_id']) {
+					acc.errorsA = -1;
+				}
+				if (current.donorId == next['donor_id']) {
+					acc.errorsB = 1;
+				}
+				return acc;
+			},
+			{ errorsA: 0, errorsB: 0 },
+		);
+
+		sortVal += errorsA + errorsB;
+	}
+
+	// Handles Manual User Sorting by Core Completion columns
+	const completionSortIndex = completionKeys.indexOf(sortKey);
+
+	if (completionSortIndex) {
+		const completionSortKey = completionColumnNames[completionSortIndex];
+		const completionA = prev[completionSortKey];
+		const completionB = next[completionSortKey];
+
+		sortVal = completionA === completionB ? 0 : completionA > completionB ? -1 : 1;
+		sortVal *= desc ? -1 : 1;
+	}
+
+	return sortVal;
+};
+
+const ClinicalEntityDataTable = ({
+	entityType,
+	program,
+	completionState = CompletionStates['all'],
+	currentDonors,
+	donorSearchResults = emptySearchResponse,
+	useDefaultQuery,
+	noData,
+}: {
+	entityType: string;
+	program: string;
+	completionState: CompletionStates;
+	currentDonors: number[];
+	donorSearchResults: ClinicalEntitySearchResultResponse;
+	useDefaultQuery: boolean;
+	noData: boolean;
+}) => {
+	// Init + Page Settings
+	let totalDocs = 0;
+	let showCompletionStats = false;
+	let records = [];
+	let columns = [];
+	const theme = useTheme();
+	const containerRef = createRef<HTMLDivElement>();
+	const defaultPageSettings =
+		useDefaultQuery && entityType === 'donor' ? defaultDonorSettings : defaultEntityPageSettings;
+	const [pageSettings, setPageSettings] = useState(defaultPageSettings);
+	const { page, pageSize, sorted } = pageSettings;
+
+	// !! this state never changes
+	const [errorPageSettings, setErrorPageSettings] = useState(defaultErrorPageSettings);
+	const { page: errorPage, pageSize: errorPageSize, sorted: errorSorted } = errorPageSettings;
+	const { desc, id } = sorted[0];
+	const sortKey = aliasSortNames[id] || id;
+	const sort = `${desc ? '-' : ''}${sortKey}`;
+
+	const {
+		clinicalSearchResults: { searchResults, totalResults },
+	} = donorSearchResults || emptySearchResponse;
+
+	const nextSearchPage = (page + 1) * pageSize;
+
+	const donorIds = useDefaultQuery
+		? []
+		: currentDonors.length
+		? currentDonors
+		: searchResults.map(({ donorId }: ClinicalSearchResults) => donorId);
+
+	const submitterDonorIds =
+		useDefaultQuery || currentDonors.length
+			? []
+			: searchResults
+					.map(({ submitterDonorId }: ClinicalSearchResults) => submitterDonorId)
+					.filter((id) => !!id)
+					.slice(page * pageSize, nextSearchPage < totalResults ? nextSearchPage : totalResults);
+
+	const updatePageSettings = (key, value) => {
+		const newPageSettings = { ...pageSettings, [key]: value };
+
+		if (key === 'pageSize' && value !== pageSettings.pageSize) {
+			// Prevents bug querying nonexistent data
+			newPageSettings.page = 0;
 		}
-
-		// Handles Manual User Sorting by Core Completion columns
-		const completionSortIndex = completionKeys.indexOf(sortKey);
-
-		if (completionSortIndex) {
-			const completionSortKey = completionColumnNames[completionSortIndex];
-			const completionA = prev[completionSortKey];
-			const completionB = next[completionSortKey];
-
-			sortVal = completionA === completionB ? 0 : completionA > completionB ? -1 : 1;
-			sortVal *= desc ? -1 : 1;
-		}
-
-		return sortVal;
+		setPageSettings(newPageSettings);
+		return newPageSettings;
 	};
+
+	useEffect(() => {
+		setPageSettings(defaultPageSettings);
+		setErrorPageSettings(defaultErrorPageSettings);
+	}, [entityType, useDefaultQuery]);
+
+	const { data: clinicalEntityData, loading } = useGetEntityData(
+		program,
+		entityType,
+		page,
+		pageSize,
+		sort,
+		completionState,
+		donorIds,
+		submitterDonorIds,
+	);
+
+	const { clinicalData } =
+		clinicalEntityData === undefined || loading ? emptyClinicalDataResponse : clinicalEntityData;
+
+	const noTableData = noData || clinicalData.clinicalEntities.length === 0;
+
+	// Collect Error Data
+	const { clinicalErrors = [] } = clinicalData;
+
+	const [tableErrors, totalErrorCount] = getTableErrors(clinicalErrors, entityType);
+
+	const hasErrors = totalErrorCount > 0;
+
+	const sortEntityData = createSortEntityDataFunction(clinicalErrors, hasErrors, sortKey, desc);
 
 	// Map Completion Stats + Entity Data
 	if (noTableData) {
@@ -700,7 +547,7 @@ const ClinicalEntityDataTable = ({
 	const tableMin = totalDocs > 0 ? page * pageSize + 1 : totalDocs;
 	const tableMax = totalDocs < (page + 1) * pageSize ? totalDocs : (page + 1) * pageSize;
 	const numTablePages = Math.ceil(totalDocs / pageSize);
-	const numErrorPages = Math.ceil(totalErrors / errorPageSize);
+	const numErrorPages = Math.ceil(totalErrorCount / errorPageSize);
 
 	return loading ? (
 		<DnaLoader
@@ -728,7 +575,7 @@ const ClinicalEntityDataTable = ({
 				>
 					<ErrorNotification
 						level={NOTIFICATION_VARIANTS.ERROR}
-						title={`${totalErrors.toLocaleString()} error(s) found on the current page of ${clinicalEntityDisplayNames[
+						title={`${totalErrorCount.toLocaleString()} error(s) found on the current page of ${clinicalEntityDisplayNames[
 							entityType
 						].toLowerCase()} table`}
 						subtitle={<Subtitle program={program} />}
