@@ -211,13 +211,15 @@ export const hasClinicalErrors = (
 			),
 	).length > 0;
 
-export const emptyClinicalDataResponse: SubmittedDataSideMenuQuery = {
+export const emptyClinicalDataResponse = (
+	programShortName: string,
+): SubmittedDataSideMenuQuery => ({
 	clinicalData: {
-		programShortName: '',
+		programShortName,
 		clinicalEntities: [],
 		clinicalErrors: [],
 	},
-};
+});
 
 export const emptySearchResponse: ClinicalEntitySearchResultResponse = {
 	clinicalSearchResults: {

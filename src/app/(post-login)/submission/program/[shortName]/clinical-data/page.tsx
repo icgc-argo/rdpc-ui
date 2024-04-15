@@ -151,7 +151,9 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 	);
 
 	const sideMenuData =
-		sideMenuQuery == undefined || sideMenuLoading ? emptyClinicalDataResponse : sideMenuQuery;
+		sideMenuQuery == undefined || sideMenuLoading
+			? emptyClinicalDataResponse(programShortName)
+			: sideMenuQuery;
 
 	const { clinicalData } = sideMenuData;
 
