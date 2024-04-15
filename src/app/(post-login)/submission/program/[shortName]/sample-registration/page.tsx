@@ -104,7 +104,11 @@ const Register = ({ shortName }: { shortName: string }) => {
 	 * new HTTP endpoints don't return the same objects as strictly typed gql endpoints
 	 * data shape needs to match so state can stay in sync on the frontend
 	 */
-	type RequiredProperty = { key: string; accessor: string | (() => void); defaultValue: any };
+	type RequiredProperty = {
+		key: string;
+		accessor: string | ((resp: any) => void);
+		defaultValue: any;
+	};
 	const requiredProperties: RequiredProperty[] = [
 		{
 			key: 'errors',
@@ -146,7 +150,7 @@ const Register = ({ shortName }: { shortName: string }) => {
 
 	// handlers
 	const uploadURL = urlJoin(CLINICAL_API_ROOT, getProgramPath(UPLOAD_REGISTRATION, shortName));
-	const uploadFile = useMutation(
+	const uploadFile = useMutation<Response, Response, FormData>(
 		(formData) => {
 			return uploadFileRequest(uploadURL, formData, egoJwt);
 		},

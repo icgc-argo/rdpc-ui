@@ -23,6 +23,7 @@ import { ContentError } from '@/app/components/placeholders';
 import CLINICAL_ERRORS_QUERY from '@/app/gql/clinical/CLINICAL_ERRORS_QUERY';
 import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import { displayDate, parseDonorIdString } from '@/global/utils';
+import { css } from '@/lib/emotion';
 import {
 	ColumnDef,
 	DEFAULT_TABLE_PAGE_SIZE,
@@ -38,11 +39,9 @@ import {
 	TableListFilterHeader,
 	TableTextFilterHeader,
 	ThemeColorNames,
-	css,
 	useTableTabs,
 	useTheme,
 } from '@icgc-argo/uikit';
-
 import { find } from 'lodash';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';

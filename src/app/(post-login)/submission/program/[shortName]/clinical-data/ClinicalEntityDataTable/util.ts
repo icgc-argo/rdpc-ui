@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2024 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,16 +17,21 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/** @type {import('next').NextConfig} */
+import { memoize } from 'lodash';
+import { clinicalEntityFields } from '../common';
 
-const nextConfig = {
-	reactStrictMode: true,
-	compiler: {
-		emotion: true,
-	},
-	eslint: {
-		ignoreDuringBuilds: true,
-	},
+export const validateEntityQueryName = (entityQuery) => {
+	const entities = typeof entityQuery === 'string' ? [entityQuery] : entityQuery;
+	return entities.map((entityName) => clinicalEntityFields.find((entity) => entity === entityName));
 };
 
-module.exports = nextConfig;
+export const getColumnWidth = memoize<
+	(keyString: string, showCompletionStats: boolean, noData: boolean) => number
+>((keyString, showCompletionStats, noData) => {
+	const minWidth = keyString === 'donor_id' ? 70 : showCompletionStats ? 40 : 95;
+	const maxWidth = noData && showCompletionStats ? 45 : 200;
+	const spacePerChar = 8;
+	const margin = 10;
+	const targetWidth = keyString.length * spacePerChar + margin;
+	return Math.max(Math.min(maxWidth, targetWidth), minWidth);
+});

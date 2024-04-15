@@ -27,17 +27,17 @@ const mergeParams = (
 	return new URLSearchParams([...previousParams, ...newParams]).toString();
 };
 
-const useUrlParamState = <T extends string>(
+const useUrlParamState = (
 	key: string,
-	initialValue: T,
+	initialValue: string,
 	usePushNavigation?: boolean,
-) => {
+): [string, (value: string) => void] => {
 	const params = useSearchParams();
 	const pathname = usePathname();
 	const router = useRouter();
 
 	const getUrlParamState = () => params.get(key) || '';
-	const setUrlState = (value: T) => {
+	const setUrlState = (value: string) => {
 		// make a mutable copy of search params and delete the value we're replacing
 		const oldParams = new URLSearchParams(params);
 		oldParams.delete(key);
@@ -57,7 +57,8 @@ const useUrlParamState = <T extends string>(
 		if (!params.has(key) && initialValue) setUrlState(initialValue);
 	}, []);
 
-	return [getUrlParamState(), setUrlState] as [T, (value: T) => void];
+	const paramState = getUrlParamState();
+	return [paramState, setUrlState];
 };
 
 export default useUrlParamState;

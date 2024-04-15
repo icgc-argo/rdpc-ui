@@ -18,6 +18,7 @@
  */
 'use client';
 
+import { ClinicalEntitySearchResultsQuery } from '@/__generated__/clinical/graphql';
 import ContentMain from '@/app/components/Content/ContentMain';
 import { pageWithPermissions } from '@/app/components/Page';
 import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
@@ -27,7 +28,7 @@ import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
 import useUrlParamState from '@/app/hooks/useUrlParamState';
 import { notNull, parseDonorIdString } from '@/global/utils';
 import { css } from '@/lib/emotion';
-import { Container, Loader, Typography, VerticalTabs, useTheme } from '@icgc-argo/uikit';
+import { Container, Loader, Typography, VerticalTabs } from '@icgc-argo/uikit';
 import { useState } from 'react';
 import { setConfiguration } from 'react-grid-system';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable';
@@ -54,7 +55,7 @@ const defaultClinicalEntityTab = aliasedEntityNames.donor;
 // convert codegen automated types to definitions in existing code
 // make data object shape uniform
 const parseSearchResult = (
-	data: ClinicalEntitySearchResultResponse | undefined,
+	data: ClinicalEntitySearchResultsQuery | undefined,
 ): ClinicalEntitySearchResultResponse => {
 	if (!data) return emptySearchResponse;
 	return {
@@ -69,8 +70,6 @@ const parseSearchResult = (
 };
 
 const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }) => {
-	const theme = useTheme();
-
 	const [keyword, setKeyword] = useState('');
 	const [completionState, setCompletionState] = useState(CompletionStates['all']);
 	const [modalVisible, setModalVisible] = useState(false);
@@ -152,7 +151,9 @@ const ClinicalDataPageComp = ({ programShortName }: { programShortName: string }
 	);
 
 	const sideMenuData =
-		sideMenuQuery == undefined || sideMenuLoading ? emptyClinicalDataResponse : sideMenuQuery;
+		sideMenuQuery == undefined || sideMenuLoading
+			? emptyClinicalDataResponse(programShortName)
+			: sideMenuQuery;
 
 	const { clinicalData } = sideMenuData;
 

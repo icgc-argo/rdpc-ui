@@ -171,6 +171,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	};
 
 	const value: AuthContextValue = {
+		fetchWithEgoToken,
 		egoJwt,
 		setEgoJwt,
 		authLoading,

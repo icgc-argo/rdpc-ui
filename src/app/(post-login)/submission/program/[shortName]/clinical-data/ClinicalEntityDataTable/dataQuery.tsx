@@ -17,16 +17,35 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/** @type {import('next').NextConfig} */
+import CLINICAL_ENTITY_DATA_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_DATA_QUERY';
+import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
+import { CompletionStates, defaultClinicalEntityFilters } from '../common';
+import { validateEntityQueryName } from './util';
 
-const nextConfig = {
-	reactStrictMode: true,
-	compiler: {
-		emotion: true,
-	},
-	eslint: {
-		ignoreDuringBuilds: true,
-	},
-};
-
-module.exports = nextConfig;
+export const useGetEntityData = (
+	program: string,
+	entityType: string | string[],
+	page: number,
+	pageSize: number,
+	sort: string,
+	completionState: CompletionStates,
+	donorIds: number[],
+	submitterDonorIds: string[],
+) =>
+	useClinicalQuery(CLINICAL_ENTITY_DATA_QUERY, {
+		errorPolicy: 'all',
+		fetchPolicy: 'cache-and-network',
+		variables: {
+			programShortName: program,
+			filters: {
+				...defaultClinicalEntityFilters,
+				sort,
+				page,
+				pageSize,
+				completionState,
+				donorIds,
+				submitterDonorIds,
+				entityTypes: validateEntityQueryName(entityType),
+			},
+		},
+	});

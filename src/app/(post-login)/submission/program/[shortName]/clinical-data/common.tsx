@@ -17,6 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { SubmittedDataSideMenuQuery } from '@/__generated__/clinical/graphql';
+
 export enum CoreCompletionEntities {
 	donor = 'donor',
 	primaryDiagnosis = 'primaryDiagnosis',
@@ -194,7 +196,7 @@ export const defaultClinicalEntityFilters: ClinicalFilter = {
 };
 
 export const hasClinicalErrors = (
-	{ clinicalErrors }: ClinicalEntityQueryResponse['clinicalData'],
+	{ clinicalErrors }: SubmittedDataSideMenuQuery['clinicalData'],
 	currentEntity: string,
 ) =>
 	clinicalErrors &&
@@ -209,12 +211,15 @@ export const hasClinicalErrors = (
 			),
 	).length > 0;
 
-export const emptyClinicalDataResponse: ClinicalEntityQueryResponse = {
+export const emptyClinicalDataResponse = (
+	programShortName: string,
+): SubmittedDataSideMenuQuery => ({
 	clinicalData: {
+		programShortName,
 		clinicalEntities: [],
 		clinicalErrors: [],
 	},
-};
+});
 
 export const emptySearchResponse: ClinicalEntitySearchResultResponse = {
 	clinicalSearchResults: {
