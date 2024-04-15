@@ -585,8 +585,8 @@ const ClinicalEntityDataTable = ({
 								entityType
 							].toLowerCase()} table`}
 							subtitle={<Subtitle program={program} />}
-							errors={tableErrors}
-							columnConfig={errorColumns}
+							reportData={tableErrors}
+							reportColumns={errorColumns}
 							tableProps={{
 								page: errorPage,
 								pages: numErrorPages,

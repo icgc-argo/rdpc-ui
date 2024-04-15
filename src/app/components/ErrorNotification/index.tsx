@@ -29,8 +29,7 @@ import {
 import union from 'lodash/union';
 import { ComponentProps, ReactNode, createRef } from 'react';
 
-export type ErrorReportColumns = { header: string; id: string };
-
+export type ErrorReportColumns = any;
 const ErrorNotification = <T extends { [k: string]: any }>({
 	level,
 	onClearClick,
@@ -40,6 +39,7 @@ const ErrorNotification = <T extends { [k: string]: any }>({
 	tableComponent = <></>,
 	title,
 	tsvExcludeCols = [],
+	tableProps,
 }: {
 	level: NotificationVariant;
 	onClearClick?: ComponentProps<typeof Button>['onClick'];
@@ -49,6 +49,7 @@ const ErrorNotification = <T extends { [k: string]: any }>({
 	tableComponent?: JSX.Element;
 	title: string;
 	tsvExcludeCols?: Array<keyof T>;
+	tableProps?: any;
 }) => {
 	const onDownloadClick = () => {
 		exportToTsv(reportData, {
@@ -56,9 +57,9 @@ const ErrorNotification = <T extends { [k: string]: any }>({
 			order: reportColumns.map((entry) => entry.id),
 			fileName: `${level}_report.tsv`,
 			headerDisplays: reportColumns.reduce(
-				(acc, { header, id }) => ({
+				(acc, { Header, id }) => ({
 					...acc,
-					[id]: header,
+					[id]: Header,
 				}),
 				{},
 			),

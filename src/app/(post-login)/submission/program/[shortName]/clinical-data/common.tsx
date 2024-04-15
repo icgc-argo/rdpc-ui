@@ -198,9 +198,7 @@ export const defaultClinicalEntityFilters: ClinicalFilter = {
 export const hasClinicalErrors = (
 	{
 		clinicalErrors,
-	}:
-		| ClinicalEntityQueryResponse['clinicalData']['clinicalErrors']
-		| SubmittedDataSideMenuQuery['clinicalData']['clinicalErrors'],
+	}: ClinicalEntityQueryResponse['clinicalData'] | SubmittedDataSideMenuQuery['clinicalData'],
 	currentEntity: string,
 ) =>
 	clinicalErrors &&
