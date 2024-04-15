@@ -193,7 +193,6 @@ const ClinicalEntityDataTable = ({
 
 	const { clinicalData } = clinicalEntityData;
 
-	// TODO: can you have ClinicalEntityErrors without ClinicalEntityData?
 	const noTableData = noData || clinicalData.clinicalEntities.length === 0;
 
 	const [stickyDonorIDColumnsWidth, setStickyDonorIDColumnsWidth] = useState(74);
