@@ -29,7 +29,7 @@ import {
 import union from 'lodash/union';
 import { ComponentProps, ReactNode, createRef } from 'react';
 
-export type ErrorReportColumns = any;
+export type ErrorReportColumns = { header: string; id: string };
 const ErrorNotification = <T extends { [k: string]: any }>({
 	level,
 	onClearClick,
