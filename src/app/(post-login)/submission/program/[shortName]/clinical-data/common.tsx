@@ -196,9 +196,7 @@ export const defaultClinicalEntityFilters: ClinicalFilter = {
 };
 
 export const hasClinicalErrors = (
-	{
-		clinicalErrors,
-	}: ClinicalEntityQueryResponse['clinicalData'] | SubmittedDataSideMenuQuery['clinicalData'],
+	{ clinicalErrors }: SubmittedDataSideMenuQuery['clinicalData'],
 	currentEntity: string,
 ) =>
 	clinicalErrors &&
@@ -213,8 +211,9 @@ export const hasClinicalErrors = (
 			),
 	).length > 0;
 
-export const emptyClinicalDataResponse: ClinicalEntityQueryResponse = {
+export const emptyClinicalDataResponse: SubmittedDataSideMenuQuery = {
 	clinicalData: {
+		programShortName: '',
 		clinicalEntities: [],
 		clinicalErrors: [],
 	},

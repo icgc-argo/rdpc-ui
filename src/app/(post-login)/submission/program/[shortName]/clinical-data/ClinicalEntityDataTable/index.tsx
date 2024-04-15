@@ -17,7 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ClinicalSearchResults } from '@/__generated__/clinical/graphql';
+import {
+	ClinicalEntitySearchResultsQuery,
+	ClinicalSearchResults,
+} from '@/__generated__/clinical/graphql';
 import ErrorNotification from '@/app/components/ErrorNotification';
 import { TableInfoHeaderContainer } from '@/app/components/Table/common';
 import { css, useTheme } from '@/lib/emotion';
@@ -123,7 +126,7 @@ const ClinicalEntityDataTable = ({
 	program: string;
 	completionState: CompletionStates;
 	currentDonors: number[];
-	donorSearchResults: ClinicalEntitySearchResultResponse;
+	donorSearchResults: ClinicalEntitySearchResultsQuery | ClinicalEntitySearchResultResponse;
 	useDefaultQuery: boolean;
 	noData: boolean;
 }) => {
