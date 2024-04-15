@@ -138,7 +138,6 @@ const ClinicalEntityDataTable = ({
 	const [pageSettings, setPageSettings] = useState(defaultPageSettings);
 	const { page, pageSize, sorted } = pageSettings;
 
-	// TODO: This state never changes
 	const [errorPageSettings, setErrorPageSettings] = useState(defaultErrorPageSettings);
 	const { page: errorPage, pageSize: errorPageSize, sorted: errorSorted } = errorPageSettings;
 	const { desc, id } = sorted[0];
