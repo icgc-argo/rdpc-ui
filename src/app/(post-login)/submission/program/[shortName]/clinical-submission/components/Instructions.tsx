@@ -19,8 +19,7 @@
 'use client';
 
 import CLINICAL_SCHEMA_VERSION from '@/app/gql/clinical/CLINICAL_SCHEMA_VERSION';
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
+import { useAppConfigContext, useClinicalQuery } from '@/app/hooks';
 import { CLINICAL_TEMPLATE_PATH } from '@/global/constants';
 import { css, useTheme } from '@/lib/emotion';
 import {

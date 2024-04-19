@@ -18,9 +18,8 @@
  */
 
 import CLINICAL_SUBMISSION_QUERY from '@/app/gql/clinical/CLINICAL_SUBMISSION_QUERY';
-import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
-import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
-import { css, Progress } from '@icgc-argo/uikit';
+import { useClinicalQuery, useSubmissionSystemStatus } from '@/app/hooks';
+import { Progress, css } from '@icgc-argo/uikit';
 import { ComponentProps, ComponentType, useMemo, useState } from 'react';
 
 const ClinicalSubmissionProgressBar: ComponentType<{

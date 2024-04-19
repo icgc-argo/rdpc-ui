@@ -17,10 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { useAuthContext } from '@/app/hooks/AuthProvider';
-import useCommonToasters from '@/app/hooks/useCommonToasters';
-import usePageContext from '@/app/hooks/usePageContext';
+import {
+	useAppConfigContext,
+	useAuthContext,
+	useCommonToasters,
+	usePageContext,
+} from '@/app/hooks';
 import { Button, Icon, css } from '@icgc-argo/uikit';
 import React from 'react';
 import { Col, Row } from 'react-grid-system';

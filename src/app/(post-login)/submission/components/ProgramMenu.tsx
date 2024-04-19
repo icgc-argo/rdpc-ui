@@ -22,11 +22,14 @@ import { SideMenuProgramStatusQuery, SubmissionState } from '@/__generated__/cli
 import Loader from '@/app/components/Loader';
 import SIDEMENU_PROGRAM_STATUS from '@/app/gql/clinical/SIDEMENU_PROGRAM_STATUS';
 import SIDEMENU_PROGRAMS from '@/app/gql/gateway/SIDEMENU_PROGRAMS';
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { useAuthContext } from '@/app/hooks/AuthProvider';
-import { useClinicalQuery, useGatewayQuery } from '@/app/hooks/useApolloQuery';
-import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
-import useUserRole from '@/app/hooks/useUserRole';
+import {
+	useAppConfigContext,
+	useAuthContext,
+	useClinicalQuery,
+	useGatewayQuery,
+	useSubmissionSystemStatus,
+	useUserRole,
+} from '@/app/hooks';
 import {
 	PROGRAM_CLINICAL_DATA_PATH,
 	PROGRAM_CLINICAL_SUBMISSION_PATH,

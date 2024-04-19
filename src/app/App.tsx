@@ -19,12 +19,15 @@
 // all our context providers won't work server side, beacuse React.Context is client side
 'use client';
 
-import { ApolloProvider } from '@/app/hooks/ApolloProvider';
-import { AppProvider } from '@/app/hooks/AppProvider';
-import { AuthProvider } from '@/app/hooks/AuthProvider';
-import GlobalLoaderProvider, { loaderPortalRef } from '@/app/hooks/GlobalLoaderProvider';
-import ThemeProvider from '@/app/hooks/ThemeProvider';
-import ToastProvider from '@/app/hooks/ToastProvider';
+import {
+	ApolloProvider,
+	AppProvider,
+	AuthProvider,
+	GlobalLoaderProvider,
+	ThemeProvider,
+	ToastProvider,
+	loaderPortalRef,
+} from '@/app/hooks';
 import { css } from '@/lib/emotion';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 import { ReactNode, forwardRef } from 'react';

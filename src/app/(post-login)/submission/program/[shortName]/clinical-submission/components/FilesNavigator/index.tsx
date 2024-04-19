@@ -18,9 +18,7 @@
  */
 
 import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
-import { useToaster } from '@/app/hooks/ToastProvider';
-import { useClinicalMutation } from '@/app/hooks/useApolloQuery';
-import useCommonToasters from '@/app/hooks/useCommonToasters';
+import { useClinicalMutation, useCommonToasters, useToaster } from '@/app/hooks';
 import { css } from '@/lib/emotion';
 import { Col } from 'react-grid-system';
 import { ClinicalEntity, ClinicalSubmission } from '../../types';

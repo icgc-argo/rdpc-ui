@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { useAppConfigContext } from '@/app/hooks';
 import { ContentPlaceholder, css, Link, styled, Typography } from '@icgc-argo/uikit';
 import urljoin from 'url-join';
 

@@ -19,7 +19,7 @@
 
 'use client';
 
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { useAppConfigContext } from '@/app/hooks';
 import { CLINICAL_TEMPLATE_PATH, CONTACT_PAGE_PATH } from '@/global/constants';
 import { css } from '@/lib/emotion';
 import {

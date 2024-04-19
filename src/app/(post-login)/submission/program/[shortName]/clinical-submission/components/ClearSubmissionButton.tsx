@@ -18,9 +18,7 @@
  */
 'use client';
 
-import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
-import { useToaster } from '@/app/hooks/ToastProvider';
-import useCommonToasters from '@/app/hooks/useCommonToasters';
+import { useCommonToasters, useGlobalLoader, useToaster } from '@/app/hooks';
 import { sleep } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import { Button } from '@icgc-argo/uikit';

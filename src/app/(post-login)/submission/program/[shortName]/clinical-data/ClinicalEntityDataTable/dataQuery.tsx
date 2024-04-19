@@ -18,7 +18,7 @@
  */
 
 import CLINICAL_ENTITY_DATA_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_DATA_QUERY';
-import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
+import { useClinicalQuery } from '@/app/hooks';
 import { CompletionStates, defaultClinicalEntityFilters } from '../common';
 import { validateEntityQueryName } from './util';
 

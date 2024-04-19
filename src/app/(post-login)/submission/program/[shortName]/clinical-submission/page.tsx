@@ -30,15 +30,18 @@ import { pageWithPermissions } from '@/app/components/Page';
 import CLINICAL_SUBMISSION_QUERY from '@/app/gql/clinical/CLINICAL_SUBMISSION_QUERY';
 import SIGN_OFF_SUBMISSION_MUTATION from '@/app/gql/clinical/SIGN_OFF_SUBMISSION_MUTATION';
 import VALIDATE_SUBMISSION_MUTATION from '@/app/gql/clinical/VALIDATE_SUBMISSION_MUTATION';
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { useAuthContext } from '@/app/hooks/AuthProvider';
-import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
-import { useToaster } from '@/app/hooks/ToastProvider';
-import { useClinicalMutation, useClinicalQuery } from '@/app/hooks/useApolloQuery';
-import useCommonToasters from '@/app/hooks/useCommonToasters';
-import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
-import useUrlQueryState from '@/app/hooks/useURLQueryState';
-import useUserConfirmationModalState from '@/app/hooks/useUserConfirmationModalState';
+import {
+	useAppConfigContext,
+	useAuthContext,
+	useClinicalMutation,
+	useClinicalQuery,
+	useCommonToasters,
+	useGlobalLoader,
+	useSubmissionSystemStatus,
+	useToaster,
+	useURLQueryState as useUrlQueryState,
+	useUserConfirmationModalState,
+} from '@/app/hooks';
 import {
 	PROGRAM_DASHBOARD_PATH,
 	PROGRAM_SHORT_NAME_PATH,

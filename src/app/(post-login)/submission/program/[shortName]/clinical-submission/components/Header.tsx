@@ -22,14 +22,16 @@ import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHead
 import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
 import APPROVE_SUBMISSION_MUTATION from '@/app/gql/gateway/APPROVE_SUBMISSION_MUTATION';
 import REOPEN_SUBMISSION_MUTATION from '@/app/gql/gateway/REOPEN_SUBMISSION_MUTATION';
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { useAuthContext } from '@/app/hooks/AuthProvider';
-import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
-import { useToaster } from '@/app/hooks/ToastProvider';
-import { useClinicalMutation } from '@/app/hooks/useApolloQuery';
-import useCommonToasters from '@/app/hooks/useCommonToasters';
-import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
-import useUserConfirmationModalState from '@/app/hooks/useUserConfirmationModalState';
+import {
+	useAppConfigContext,
+	useAuthContext,
+	useClinicalMutation,
+	useCommonToasters,
+	useGlobalLoader,
+	useSubmissionSystemStatus,
+	useToaster,
+	useUserConfirmationModalState,
+} from '@/app/hooks';
 import { sleep } from '@/global/utils';
 import { css, useTheme } from '@/lib/emotion';
 import { Button, Modal } from '@icgc-argo/uikit';
