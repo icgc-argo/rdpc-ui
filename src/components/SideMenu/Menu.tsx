@@ -18,6 +18,36 @@
  */
 'use client';
 
-import Home from '@/views/home/Home';
+import { css, useTheme } from '@/lib/emotion';
+import SideMenuContent from './Content';
+import SideMenuToggle, { TOGGLE_HEIGHT_PX } from './Toggle';
+import { SideMenuProps } from './types';
 
-export default Home;
+const SideMenu = ({ onToggle, isActive }: SideMenuProps) => {
+	const theme = useTheme();
+
+	return (
+		<div
+			css={css`
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				background-color: ${theme.colors.white};
+			`}
+		>
+			<div
+				css={css`
+					height: calc(100vh - ${TOGGLE_HEIGHT_PX}px);
+					overflow-y: auto;
+					visibility: ${isActive ? 'visible' : 'hidden'};
+				`}
+			>
+				<SideMenuContent />
+			</div>
+			<SideMenuToggle onToggle={onToggle} open={isActive} />
+		</div>
+	);
+};
+
+export default SideMenu;

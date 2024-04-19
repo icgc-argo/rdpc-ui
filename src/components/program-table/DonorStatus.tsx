@@ -18,6 +18,50 @@
  */
 'use client';
 
-import Home from '@/views/home/Home';
+import { Maybe } from '@/__generated__/clinical/graphql';
+import { css, useTheme } from '@/lib/emotion';
+import { Typography } from '@icgc-argo/uikit';
 
-export default Home;
+type DonorStatusProps = { submittedDonors?: Maybe<number>; commitmentDonors?: Maybe<number> };
+
+const DonorStatus = ({ submittedDonors, commitmentDonors }: DonorStatusProps) => {
+	const theme = useTheme();
+	const numerator = submittedDonors ? submittedDonors : 0;
+	const denominator = commitmentDonors ? commitmentDonors : 0;
+	const percentComplete =
+		numerator === 0 || denominator === 0
+			? '0%'
+			: `${((numerator / denominator) * 100).toFixed(2)}%`;
+
+	return (
+		<div
+			css={css`
+				display: flex;
+				flex-wrap: wrap;
+			`}
+		>
+			<Typography
+				variant="data"
+				component="div"
+				css={css`
+					margin-right: 15px;
+				`}
+			>
+				{numerator.toLocaleString()}
+				<span
+					css={css`
+						color: ${theme.colors.grey_2};
+					`}
+				>
+					{` / `}
+				</span>
+				{denominator.toLocaleString()}
+			</Typography>
+			<Typography variant="data" component="div">
+				{percentComplete}
+			</Typography>
+		</div>
+	);
+};
+
+export default DonorStatus;

@@ -17,18 +17,39 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-'use client';
+import { useTheme } from '@/lib/emotion';
+import { Pipe } from '@icgc-argo/uikit';
 
-import { pageWithPermissions } from '@/app/components/Page';
-import Dashboard from '@/views/submission/dashboard/components/Dashboard';
+enum PIPELINE_STATUS {
+	COMPLETE = 'complete',
+	IN_PROGRESS = 'inProgress',
+	ERROR = 'error',
+}
+type PipelineStats = Record<PIPELINE_STATUS, number>;
 
-const DashboardPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
-	const Page = pageWithPermissions(Dashboard, {
-		acceptedRoles: ['isProgramAdmin', 'isDataSubmitter', 'isRDPCAdmin', 'isDCCAdmin'],
-		programShortName: shortName,
-	});
+export const Pipeline = (stats: PipelineStats) => {
+	const theme = useTheme();
 
-	return <Page shortName={shortName} />;
+	const getBackgroundColour = (state: keyof PipelineStats) => {
+		interface ColourMapper {
+			[key: string]: keyof typeof theme.colors;
+		}
+		const mapper: ColourMapper = {
+			[PIPELINE_STATUS.COMPLETE]: 'accent1_dimmed',
+			[PIPELINE_STATUS.IN_PROGRESS]: 'warning_dark',
+			[PIPELINE_STATUS.ERROR]: 'error',
+		};
+		return mapper[state];
+	};
+
+	const shouldRender = (num: number) => num > 0;
+
+	const renderableStats = Object.keys(stats).filter((key) => shouldRender(stats[key]));
+
+	const pipeStats = renderableStats.map((stat) => (
+		<Pipe.Item key={stat} fill={getBackgroundColour(stat as keyof PipelineStats)}>
+			{stats[stat].toLocaleString()}
+		</Pipe.Item>
+	));
+	return <Pipe>{pipeStats}</Pipe>;
 };
-
-export default DashboardPage;

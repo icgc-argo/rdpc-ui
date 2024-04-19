@@ -18,6 +18,15 @@
  */
 'use client';
 
-import Home from '@/views/home/Home';
+const CancerTypes = ({ types }: { types: string[] }) => (
+	<div>
+		{types?.map((cancerType, i) => (
+			<div key={cancerType}>
+				{cancerType}
+				{i < types.length - 1 && ','}
+			</div>
+		))}
+	</div>
+);
 
-export default Home;
+export default CancerTypes;

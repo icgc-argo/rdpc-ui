@@ -18,6 +18,27 @@
  */
 'use client';
 
-import Home from '@/views/home/Home';
+import { css } from '@/lib/emotion';
+import { ReactNode } from 'react';
 
-export default Home;
+export const TableHeader = ({ children }: { children: ReactNode }) => (
+	<div
+		css={css`
+			font-size: 12px;
+			font-weight: 600;
+			padding: 0;
+			&:not(:last-of-type) {
+				border-right: 1px solid red;
+			}
+			min-height: 28px;
+			text-align: left;
+			display: flex;
+			align-items: center;
+			box-sizing: border-box;
+		`}
+	>
+		{children}
+	</div>
+);
+
+export default TableHeader;

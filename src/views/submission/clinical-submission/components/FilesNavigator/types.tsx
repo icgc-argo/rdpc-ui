@@ -16,8 +16,8 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
 
-import Home from '@/views/home/Home';
-
-export default Home;
+export type FileRecord = {
+	rowIndex: number;
+	status: 'ERROR' | 'UPDATE' | 'NEW' | 'NONE';
+};

@@ -18,6 +18,33 @@
  */
 'use client';
 
-import Home from '@/views/home/Home';
+import { Input, MenuItem, css } from '@icgc-argo/uikit';
 
-export default Home;
+export default function Search({
+	query,
+	onChange,
+}: {
+	query: string;
+	onChange: (s: string) => void;
+}) {
+	return (
+		<MenuItem
+			level={1}
+			selected
+			contentAs="div"
+			content={
+				<Input
+					aria-label="programs search"
+					onChange={(event) => {
+						onChange(event.target.value);
+					}}
+					value={query}
+					css={css`
+						flex: 1;
+					`}
+					preset="search"
+				/>
+			}
+		/>
+	);
+}

@@ -18,6 +18,17 @@
  */
 'use client';
 
-import Home from '@/views/home/Home';
+import { Maybe } from '@/__generated__/clinical/graphql';
 
-export default Home;
+const Countries = ({ countries }: { countries: Maybe<Maybe<string>[]> | undefined }) => (
+	<div>
+		{countries?.map((country, i) => (
+			<div key={country}>
+				{country}
+				{i < countries.length - 1 && ','}
+			</div>
+		))}
+	</div>
+);
+
+export default Countries;

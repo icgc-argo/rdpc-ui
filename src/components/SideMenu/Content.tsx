@@ -18,6 +18,22 @@
  */
 'use client';
 
-import Home from '@/views/home/Home';
+import { Icon, MenuItem, SubMenu } from '@icgc-argo/uikit';
+import { useState } from 'react';
+import ProgramMenu from '../ProgramMenu';
+import Search from '../Search';
 
-export default Home;
+const SideMenuContent = () => {
+	const [programNameSearch, setProgramNameSearch] = useState('');
+
+	return (
+		<SubMenu>
+			<MenuItem icon={<Icon name="programs" />} content={'My Programs'} selected>
+				<Search query={programNameSearch} onChange={setProgramNameSearch} />
+				<ProgramMenu shortNameSearchQuery={programNameSearch} />
+			</MenuItem>
+		</SubMenu>
+	);
+};
+
+export default SideMenuContent;

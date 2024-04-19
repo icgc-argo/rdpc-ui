@@ -17,18 +17,47 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-'use client';
+import PROGRAM_DONOR_SUMMARY_QUERY from '@/app/gql/gateway/PROGRAM_DONOR_SUMMARY_QUERY';
+import { useGatewayQuery, useTimeout } from '@/app/hooks';
+import { QueryHookOptions } from '@apollo/client';
+import { POLL_INTERVAL_MILLISECONDS } from '../../common';
+import {
+	DonorSummaryEntrySort,
+	ProgramDonorSummaryFilter,
+	ProgramDonorsSummaryQueryData,
+	ProgramDonorsSummaryQueryVariables,
+} from '../types';
 
-import { pageWithPermissions } from '@/app/components/Page';
-import Dashboard from '@/views/submission/dashboard/components/Dashboard';
-
-const DashboardPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
-	const Page = pageWithPermissions(Dashboard, {
-		acceptedRoles: ['isProgramAdmin', 'isDataSubmitter', 'isRDPCAdmin', 'isDCCAdmin'],
-		programShortName: shortName,
+export const useProgramDonorsSummaryQuery = ({
+	programShortName,
+	first,
+	offset,
+	sorts,
+	filters,
+	options = {},
+}: {
+	programShortName: string;
+	first: number;
+	offset: number;
+	sorts?: DonorSummaryEntrySort[];
+	filters?: ProgramDonorSummaryFilter[];
+	options?: Omit<
+		QueryHookOptions<ProgramDonorsSummaryQueryData, ProgramDonorsSummaryQueryVariables>,
+		'variables'
+	>;
+}) => {
+	const pollingTimeout = useTimeout(30000);
+	const variables = {
+		programShortName,
+		first,
+		offset,
+		sorts,
+		...(filters && Object.keys(filters).length > 0 && { filters }),
+	};
+	const hook = useGatewayQuery(PROGRAM_DONOR_SUMMARY_QUERY, {
+		...options,
+		variables,
+		pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
 	});
-
-	return <Page shortName={shortName} />;
+	return hook;
 };
-
-export default DashboardPage;

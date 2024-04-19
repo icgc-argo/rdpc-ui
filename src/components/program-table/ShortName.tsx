@@ -18,6 +18,13 @@
  */
 'use client';
 
-import Home from '@/views/home/Home';
+import { Link as UIKitLink } from '@icgc-argo/uikit';
+import Link from 'next/link';
 
-export default Home;
+const ShortName = ({ shortName }: { shortName: string }) => (
+	<Link href={`program/${shortName}/dashboard`} passHref legacyBehavior>
+		<UIKitLink>{shortName}</UIKitLink>
+	</Link>
+);
+
+export default ShortName;
