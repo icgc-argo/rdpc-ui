@@ -18,11 +18,10 @@
  */
 'use client';
 
-import { useAuthContext } from '@/app/hooks';
+import { UserRoleList, useAuthContext, useUserRole } from '@/app/hooks';
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { DnaLoader, css } from '@icgc-argo/uikit';
 import { redirect } from 'next/navigation';
-import useUserRole, { UserRoleList } from '../hooks';
 
 export type PageWithPermissionProps = { permissions: { shortName?: string } };
 

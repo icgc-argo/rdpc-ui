@@ -36,3 +36,4 @@ export { default as useUrlQueryState } from './useURLQueryState';
 export { default as useUrlParamState } from './useUrlParamState';
 export { default as useUserConfirmationModalState } from './useUserConfirmationModalState';
 export { default as useUserRole } from './useUserRole';
+export type { UserRoleList } from './useUserRole';
