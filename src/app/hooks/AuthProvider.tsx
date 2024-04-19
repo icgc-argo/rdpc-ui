@@ -19,7 +19,7 @@
 'use client';
 
 import Header from '@/app/components/Header';
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { useAppConfigContext } from '@/app/hooks';
 import { EGO_JWT_KEY, LOGIN_NONCE } from '@/global/constants';
 import { getFilename } from '@/global/utils/stringUtils';
 import createEgoUtils from '@icgc-argo/ego-token-utils';

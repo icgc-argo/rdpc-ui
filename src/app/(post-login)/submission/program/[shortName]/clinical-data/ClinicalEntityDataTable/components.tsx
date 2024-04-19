@@ -17,8 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import CLINICAL_SCHEMA_VERSION from '@/app/gql/clinical/CLINICAL_SCHEMA_VERSION';
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
+import { useAppConfigContext, useClinicalQuery } from '@/app/hooks';
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from '@/global/constants';
 import { ContentPlaceholder, Link, css } from '@icgc-argo/uikit';
 import urljoin from 'url-join';

@@ -20,8 +20,7 @@
 import { ContentError, ContentLoader } from '@/app/components/placeholders';
 import DASHBOARD_SUMMARY_QUERY from '@/app/gql/gateway/DASHBOARD_SUMMARY_QUERY';
 import PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY from '@/app/gql/gateway/PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY';
-import { useGatewayQuery } from '@/app/hooks/useApolloQuery';
-import { useTimeout } from '@/app/hooks/useTimeout';
+import { useGatewayQuery, useTimeout } from '@/app/hooks';
 import { QueryHookOptions, useQuery } from '@apollo/client';
 import { Typography, css, useElementDimension, useTheme } from '@icgc-argo/uikit';
 import { format as formatDate, subDays } from 'date-fns';

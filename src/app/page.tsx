@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { useAppConfigContext } from '@/app/hooks';
 import { css, useTheme } from '@/lib/emotion';
 import { DataCallout, Link, Typography, overtureLogo } from '@icgc-argo/uikit';
 import Image from 'next/image';

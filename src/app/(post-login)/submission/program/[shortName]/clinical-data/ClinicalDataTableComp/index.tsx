@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ARGOTheme } from '@/app/hooks/ThemeProvider';
+import { ARGOTheme } from '@/app/hooks';
 import { css } from '@/lib/emotion';
 import { Icon, Tooltip } from '@icgc-argo/uikit';
 import { ReactNode } from 'react';

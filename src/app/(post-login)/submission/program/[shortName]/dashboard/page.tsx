@@ -22,7 +22,7 @@
 import ContentMain from '@/app/components/Content/ContentMain';
 import { pageWithPermissions } from '@/app/components/Page';
 import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
+import { useAppConfigContext } from '@/app/hooks';
 import { css, styled } from '@/lib/emotion';
 import { Col, Row, ScreenClassRender, setConfiguration } from 'react-grid-system';
 import urlJoin from 'url-join';

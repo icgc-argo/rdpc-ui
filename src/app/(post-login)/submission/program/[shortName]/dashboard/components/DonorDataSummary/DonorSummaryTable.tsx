@@ -21,7 +21,7 @@ import { DonorSummaryEntry } from '@/__generated__/gateway/graphql';
 import { CellContentCenter, DataTableStarIcon as StarIcon } from '@/app/components/Table/common';
 import { ContentError } from '@/app/components/placeholders';
 import CLINICAL_ERRORS_QUERY from '@/app/gql/clinical/CLINICAL_ERRORS_QUERY';
-import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
+import { useClinicalQuery } from '@/app/hooks';
 import { displayDate, parseDonorIdString } from '@/global/utils';
 import { css } from '@/lib/emotion';
 import {

@@ -17,10 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { useToaster } from '@/app/hooks/ToastProvider';
+import { useAppConfigContext, useToaster } from '@/app/hooks';
 import { EGO_JWT_KEY } from '@/global/constants';
-import { Button, css, Icon, TOAST_VARIANTS } from '@icgc-argo/uikit';
+import { Button, Icon, TOAST_VARIANTS, css } from '@icgc-argo/uikit';
 import { format as formatDate } from 'date-fns';
 import { saveAs } from 'file-saver';
 import Cookies from 'js-cookie';

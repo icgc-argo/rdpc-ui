@@ -19,7 +19,7 @@
 
 import { ModalPortal } from '@/app/components/Modal';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
-import { useClinicalQuery } from '@/app/hooks/useApolloQuery';
+import { useClinicalQuery } from '@/app/hooks';
 import { Button, Modal, css } from '@icgc-argo/uikit/';
 import { Textarea } from '@icgc-argo/uikit/form/Textarea';
 import { useEffect, useState } from 'react';

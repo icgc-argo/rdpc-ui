@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2024 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,24 +17,23 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-'use client';
-
-import { useAuthContext } from '@/app/hooks';
-import { createApolloClient } from '@/lib/gql';
-import { ApolloProvider as DefaultApolloProvider } from '@apollo/client';
-import { ReactNode } from 'react';
-import { useAppConfigContext } from './AppProvider';
-
-export const ApolloProvider = ({ children }: { children: ReactNode }) => {
-	const auth = useAuthContext();
-	const { GATEWAY_API_ROOT, CLINICAL_API_ROOT } = useAppConfigContext();
-	const config = {
-		jwt: auth.egoJwt,
-		clinical: `${CLINICAL_API_ROOT}/graphql`,
-		gateway: `${GATEWAY_API_ROOT}/graphql`,
-	};
-
-	const apolloClient = createApolloClient(config);
-
-	return <DefaultApolloProvider client={apolloClient}>{children}</DefaultApolloProvider>;
-};
+export * from './ApolloProvider';
+export * from './AppProvider';
+export * from './AuthProvider';
+export {
+	default as GlobalLoaderProvider,
+	loaderPortalRef,
+	useGlobalLoader,
+} from './GlobalLoaderProvider';
+export { ARGOTheme, default as ThemeProvider } from './ThemeProvider';
+export { default as ToastProvider, useToaster } from './ToastProvider';
+export * from './useApolloQuery';
+export { default as useCommonToasters } from './useCommonToasters';
+export { default as usePageContext } from './usePageContext';
+export * from './useSubmissionSystemStatus';
+export * from './useTimeout';
+export { default as useUrlQueryState } from './useURLQueryState';
+export { default as useUrlParamState } from './useUrlParamState';
+export { default as useUserConfirmationModalState } from './useUserConfirmationModalState';
+export { default as useUserRole } from './useUserRole';
+export type { UserRoleList } from './useUserRole';

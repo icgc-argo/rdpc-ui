@@ -18,8 +18,7 @@
  */
 
 import PROGRAM_DONOR_SUMMARY_QUERY from '@/app/gql/gateway/PROGRAM_DONOR_SUMMARY_QUERY';
-import { useGatewayQuery } from '@/app/hooks/useApolloQuery';
-import { useTimeout } from '@/app/hooks/useTimeout';
+import { useGatewayQuery, useTimeout } from '@/app/hooks';
 import { QueryHookOptions } from '@apollo/client';
 import { POLL_INTERVAL_MILLISECONDS } from '../../common';
 import {

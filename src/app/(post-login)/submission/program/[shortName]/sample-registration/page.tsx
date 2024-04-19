@@ -28,12 +28,15 @@ import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHead
 import CLEAR_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/clinical/CLEAR_CLINICAL_REGISTRATION_MUTATION';
 import CLINICAL_SCHEMA_VERSION from '@/app/gql/clinical/CLINICAL_SCHEMA_VERSION';
 import GET_REGISTRATION_QUERY from '@/app/gql/clinical/GET_REGISTRATION_QUERY';
-import { useAppConfigContext } from '@/app/hooks/AppProvider';
-import { useAuthContext } from '@/app/hooks/AuthProvider';
-import { useToaster } from '@/app/hooks/ToastProvider';
-import { useClinicalMutation, useClinicalQuery } from '@/app/hooks/useApolloQuery';
-import useCommonToasters from '@/app/hooks/useCommonToasters';
-import { useSubmissionSystemStatus } from '@/app/hooks/useSubmissionSystemStatus';
+import {
+	useAppConfigContext,
+	useAuthContext,
+	useClinicalMutation,
+	useClinicalQuery,
+	useCommonToasters,
+	useSubmissionSystemStatus,
+	useToaster,
+} from '@/app/hooks';
 import { UPLOAD_REGISTRATION } from '@/global/constants';
 import { getProgramPath, notNull } from '@/global/utils';
 import { createFileFormData, uploadFileRequest } from '@/global/utils/form';

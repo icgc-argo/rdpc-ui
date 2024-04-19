@@ -20,9 +20,7 @@
 import { ModalPortal } from '@/app/components/Modal';
 import COMMIT_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/clinical/COMMIT_CLINICAL_REGISTRATION_MUTATION';
 import GET_REGISTRATION_QUERY from '@/app/gql/clinical/GET_REGISTRATION_QUERY';
-import { useGlobalLoader } from '@/app/hooks/GlobalLoaderProvider';
-import { useToaster } from '@/app/hooks/ToastProvider';
-import { useClinicalMutation } from '@/app/hooks/useApolloQuery';
+import { useClinicalMutation, useGlobalLoader, useToaster } from '@/app/hooks';
 import {
 	CONTACT_PAGE_PATH,
 	PROGRAM_DASHBOARD_PATH,
