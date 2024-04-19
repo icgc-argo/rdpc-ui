@@ -39,7 +39,7 @@ import {
 	useGlobalLoader,
 	useSubmissionSystemStatus,
 	useToaster,
-	useURLQueryState as useUrlQueryState,
+	useUrlQueryState,
 	useUserConfirmationModalState,
 } from '@/app/hooks';
 import {

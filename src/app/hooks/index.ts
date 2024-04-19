@@ -32,7 +32,7 @@ export { default as useCommonToasters } from './useCommonToasters';
 export { default as usePageContext } from './usePageContext';
 export * from './useSubmissionSystemStatus';
 export * from './useTimeout';
-export { default as useURLQueryState } from './useURLQueryState';
+export { default as useUrlQueryState } from './useURLQueryState';
 export { default as useUrlParamState } from './useUrlParamState';
 export { default as useUserConfirmationModalState } from './useUserConfirmationModalState';
 export { default as useUserRole } from './useUserRole';
