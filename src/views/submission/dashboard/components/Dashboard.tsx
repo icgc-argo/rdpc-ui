@@ -17,9 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import ContentMain from '@/app/components/Content/ContentMain';
-import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import { useAppConfigContext } from '@/app/hooks';
+import ContentMain from '@/components/Content/ContentMain';
+import { BreadcrumbTitle, HelpLink, PageHeader } from '@/components/PageHeader/PageHeader';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Col, Row, ScreenClassRender, setConfiguration } from 'react-grid-system';

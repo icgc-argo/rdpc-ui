@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ContentError } from '@/app/components/placeholders';
+import { ContentError } from '@/components/placeholders';
 import { Typography, css } from '@icgc-argo/uikit';
 import { Col, Row } from 'react-grid-system';
 import { DashboardCard } from '../common';

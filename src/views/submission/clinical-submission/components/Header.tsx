@@ -18,7 +18,6 @@
  */
 
 import { ModalPortal } from '@/app/components/Modal';
-import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
 import APPROVE_SUBMISSION_MUTATION from '@/app/gql/gateway/APPROVE_SUBMISSION_MUTATION';
 import REOPEN_SUBMISSION_MUTATION from '@/app/gql/gateway/REOPEN_SUBMISSION_MUTATION';
@@ -32,6 +31,7 @@ import {
 	useToaster,
 	useUserConfirmationModalState,
 } from '@/app/hooks';
+import { BreadcrumbTitle, HelpLink, PageHeader } from '@/components/PageHeader/PageHeader';
 import { sleep } from '@/global/utils';
 import { css, useTheme } from '@/lib/emotion';
 import { Button, Modal } from '@icgc-argo/uikit';

@@ -21,8 +21,8 @@ import {
 	ClinicalEntitySearchResultsQuery,
 	ClinicalSearchResults,
 } from '@/__generated__/clinical/graphql';
-import ErrorNotification from '@/app/components/ErrorNotification';
-import { TableInfoHeaderContainer } from '@/app/components/Table/common';
+import ErrorNotification from '@/components/ErrorNotification';
+import { TableInfoHeaderContainer } from '@/components/Table/common';
 import { css, useTheme } from '@/lib/emotion';
 import { DnaLoader, Icon, NOTIFICATION_VARIANTS, Table, Typography } from '@icgc-argo/uikit';
 import { createRef, useEffect, useState } from 'react';

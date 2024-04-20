@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { StatArea as StatAreaDisplay } from '@/app/components/Table/common';
+import { StatArea as StatAreaDisplay } from '@/components/Table/common';
 import { css, Icon, useTheme } from '@icgc-argo/uikit';
 import {
 	EMPTY_PROGRAM_SUMMARY_STATS,

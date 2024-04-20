@@ -1,4 +1,4 @@
-import { DataTableStarIcon, StatArea as StatAreaDisplay } from '@/app/components/Table/common';
+import { DataTableStarIcon, StatArea as StatAreaDisplay } from '@/components/Table/common';
 import { Icon } from '@icgc-argo/uikit';
 import pluralize from 'pluralize';
 import { ComponentProps } from 'react';

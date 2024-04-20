@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { DataTableStarIcon as StarIcon } from '@/app/components/Table/common';
+import { DataTableStarIcon as StarIcon } from '@/components/Table/common';
 import { ComponentProps } from 'react';
 import {
 	DonorDataReleaseState,

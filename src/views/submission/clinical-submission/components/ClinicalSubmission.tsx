@@ -23,14 +23,6 @@ import {
 	ErrorTableColumnProperties,
 	ErrorTableColumns,
 } from '@/app/(post-login)/submission/program/[shortName]/clinical-submission/types';
-import ContentMain from '@/app/components/Content/ContentMain';
-import ErrorNotification, { ErrorReportColumns } from '@/app/components/ErrorNotification';
-import {
-	errorNotificationTableProps,
-	getDefaultErrorTableColumns,
-} from '@/app/components/ErrorNotification/ErrorNotificationDefaultTable';
-import FileError from '@/app/components/FileError';
-import { ModalPortal } from '@/app/components/Modal';
 import CLINICAL_SUBMISSION_QUERY from '@/app/gql/clinical/CLINICAL_SUBMISSION_QUERY';
 import SIGN_OFF_SUBMISSION_MUTATION from '@/app/gql/clinical/SIGN_OFF_SUBMISSION_MUTATION';
 import VALIDATE_SUBMISSION_MUTATION from '@/app/gql/clinical/VALIDATE_SUBMISSION_MUTATION';
@@ -46,6 +38,14 @@ import {
 	useUrlQueryState,
 	useUserConfirmationModalState,
 } from '@/app/hooks';
+import ContentMain from '@/components/Content/ContentMain';
+import ErrorNotification, { ErrorReportColumns } from '@/components/ErrorNotification';
+import {
+	errorNotificationTableProps,
+	getDefaultErrorTableColumns,
+} from '@/components/ErrorNotification/ErrorNotificationDefaultTable';
+import FileError from '@/components/FileError';
+import { ModalPortal } from '@/components/Modal';
 import {
 	PROGRAM_DASHBOARD_PATH,
 	PROGRAM_SHORT_NAME_PATH,

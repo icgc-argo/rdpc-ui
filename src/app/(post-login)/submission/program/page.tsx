@@ -19,9 +19,9 @@
 
 'use client';
 
-import { BreadcrumbTitle, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import PROGRAMS_LIST_QUERY from '@/app/gql/gateway/PROGRAMS_LIST_QUERY';
 import { useAppConfigContext, useGatewayQuery } from '@/app/hooks';
+import { BreadcrumbTitle, PageHeader } from '@/components/PageHeader/PageHeader';
 import ProgramList from '@/components/ProgramList';
 import { notNull } from '@/global/utils';
 import { Loader } from '@icgc-argo/uikit';

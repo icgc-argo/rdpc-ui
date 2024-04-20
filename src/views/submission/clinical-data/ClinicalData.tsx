@@ -18,11 +18,11 @@
  */
 
 import { ClinicalEntitySearchResultsQuery } from '@/__generated__/clinical/graphql';
-import ContentMain from '@/app/components/Content/ContentMain';
-import { BreadcrumbTitle, HelpLink, PageHeader } from '@/app/components/PageHeader/PageHeader';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from '@/app/gql/clinical/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import { useClinicalQuery, useUrlParamState } from '@/app/hooks';
+import ContentMain from '@/components/Content/ContentMain';
+import { BreadcrumbTitle, HelpLink, PageHeader } from '@/components/PageHeader/PageHeader';
 import { notNull } from '@/global/utils';
 import { css } from '@emotion/react';
 import { Loader, Typography, VerticalTabs } from '@icgc-argo/uikit';

@@ -28,13 +28,13 @@ import {
 	ToastProvider,
 	loaderPortalRef,
 } from '@/app/hooks';
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import { modalPortalRef } from '@/components/Modal';
 import { css } from '@/lib/emotion';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 import { ReactNode, forwardRef } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import Footer from './components/Footer';
-import Header from './components/Header';
-import { modalPortalRef } from './components/Modal';
 
 // Apollo on app error messaging instead of error messages in webpages
 if (process.env.NODE_ENV === 'development') {
