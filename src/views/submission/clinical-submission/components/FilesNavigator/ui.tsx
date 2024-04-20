@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ContentPlaceholder } from '@/app/components/ContentPlaceholder';
+import { ContentPlaceholder } from '@/components/ContentPlaceholder';
 import ErrorNotification from '@/components/ErrorNotification';
 import ErrorNotificationDefaultTable, {
 	getDefaultErrorReportColumns,

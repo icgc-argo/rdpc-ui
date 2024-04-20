@@ -17,10 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ModalPortal } from '@/app/components/Modal';
 import COMMIT_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/clinical/COMMIT_CLINICAL_REGISTRATION_MUTATION';
 import GET_REGISTRATION_QUERY from '@/app/gql/clinical/GET_REGISTRATION_QUERY';
 import { useClinicalMutation, useGlobalLoader, useToaster } from '@/app/hooks';
+import { ModalPortal } from '@/components/Modal';
 import {
 	CONTACT_PAGE_PATH,
 	PROGRAM_DASHBOARD_PATH,

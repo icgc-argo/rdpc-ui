@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { pageWithPermissions } from '@/app/components/Page';
+import { pageWithPermissions } from '@/components/Page';
 import Register from '@/views/submission/sample-registration/components/Register';
 
 const RegisterPage = ({ params: { shortName } }: { params: { shortName: string } }) => {

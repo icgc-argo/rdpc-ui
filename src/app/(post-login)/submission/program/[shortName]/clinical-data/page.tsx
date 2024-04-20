@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { pageWithPermissions } from '@/app/components/Page';
+import { pageWithPermissions } from '@/components/Page';
 import ClinicalDataPageComp from '@/views/submission/clinical-data/ClinicalData';
 
 const ClinicalDataPage = ({ params: { shortName = '' } }: { params: { shortName: string } }) => {

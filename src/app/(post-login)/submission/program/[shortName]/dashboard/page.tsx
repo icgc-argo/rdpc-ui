@@ -19,7 +19,7 @@
 
 'use client';
 
-import { pageWithPermissions } from '@/app/components/Page';
+import { pageWithPermissions } from '@/components/Page';
 import Dashboard from '@/views/submission/dashboard/components/Dashboard';
 
 const DashboardPage = ({ params: { shortName } }: { params: { shortName: string } }) => {
