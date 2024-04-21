@@ -56,8 +56,7 @@ import {
 	Table,
 	Typography,
 } from '@icgc-argo/uikit';
-import { usePathname } from 'next/navigation';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { Container } from 'react-grid-system';
 import { useMutation } from 'react-query';

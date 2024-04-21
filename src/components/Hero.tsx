@@ -20,7 +20,7 @@
 import { useAppConfigContext } from '@/hooks';
 import { BUTTON_SIZES, Button, Icon, Typography, css, useTheme } from '@icgc-argo/uikit';
 import Link from 'next/link';
-import galaxyImage from '../../../public/assets/galaxy.png';
+import galaxyImage from '../../public/assets/galaxy.png';
 import RegionBanner from './RegionBanner';
 
 const Hero = () => {

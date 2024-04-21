@@ -19,7 +19,7 @@
 
 import { ContentPlaceholder, css, DnaLoader } from '@icgc-argo/uikit';
 import Image from 'next/image';
-import beakersImage from '../../../public/assets/beakers.svg';
+import beakersImage from '../../public/assets/beakers.svg';
 
 export default function NoDataMessage(props: { loading: boolean }) {
 	return (
