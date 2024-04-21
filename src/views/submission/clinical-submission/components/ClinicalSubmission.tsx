@@ -50,6 +50,7 @@ import {
 import { css } from '@emotion/react';
 import {
 	ColumnDef,
+	Container,
 	Loader,
 	NOTIFICATION_VARIANTS,
 	NotificationVariant,
@@ -58,7 +59,6 @@ import {
 } from '@icgc-argo/uikit';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { Container } from 'react-grid-system';
 import { useMutation } from 'react-query';
 import urlJoin from 'url-join';
 import { parseGQLResp } from '../data';

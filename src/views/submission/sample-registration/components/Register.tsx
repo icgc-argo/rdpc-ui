@@ -41,13 +41,13 @@ import {
 	BUTTON_SIZES,
 	BUTTON_VARIANTS,
 	Button,
+	Container,
 	NOTIFICATION_VARIANTS,
 	NotificationInteraction,
 	Typography,
 } from '@icgc-argo/uikit';
 import { get, isFunction, isString } from 'lodash';
 import { useState } from 'react';
-import { Container } from 'react-grid-system';
 import { useMutation } from 'react-query';
 import urlJoin from 'url-join';
 import FilePreview from './FilePreview';
