@@ -30,7 +30,7 @@ import {
 	PROGRAM_SHORT_NAME_PATH,
 	UPLOAD_CLINICAL_DATA,
 } from '@/global/constants';
-import { displayDateAndTime, getProgramPath, toDisplayError } from '@/global/utils';
+import { displayDateAndTime, getProgramPath, sleep, toDisplayError } from '@/global/utils';
 import { createFileFormData, uploadFileRequest } from '@/global/utils/form';
 import CLINICAL_SUBMISSION_QUERY from '@/gql/clinical/CLINICAL_SUBMISSION_QUERY';
 import SIGN_OFF_SUBMISSION_MUTATION from '@/gql/clinical/SIGN_OFF_SUBMISSION_MUTATION';
@@ -61,11 +61,14 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { Container } from 'react-grid-system';
 import { useMutation } from 'react-query';
-import { sleep } from 'react-query/types/core/utils';
 import urlJoin from 'url-join';
-import { ClinicalEntity } from '../../clinical-data/common';
 import { parseGQLResp } from '../data';
-import { ClinicalSubmissionError, ErrorTableColumnProperties, ErrorTableColumns } from '../types';
+import {
+	ClinicalEntity,
+	ClinicalSubmissionError,
+	ErrorTableColumnProperties,
+	ErrorTableColumns,
+} from '../types';
 import FilesNavigator from './FilesNavigator';
 import Header from './Header';
 import Instructions from './Instructions';
