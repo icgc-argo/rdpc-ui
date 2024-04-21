@@ -17,12 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { parseGQLResp } from '@/app/(post-login)/submission/program/[shortName]/clinical-submission/data';
-import {
-	ClinicalSubmissionError,
-	ErrorTableColumnProperties,
-	ErrorTableColumns,
-} from '@/app/(post-login)/submission/program/[shortName]/clinical-submission/types';
 import ContentMain from '@/components/Content/ContentMain';
 import ErrorNotification, { ErrorReportColumns } from '@/components/ErrorNotification';
 import {
@@ -70,6 +64,8 @@ import { useMutation } from 'react-query';
 import { sleep } from 'react-query/types/core/utils';
 import urlJoin from 'url-join';
 import { ClinicalEntity } from '../../clinical-data/common';
+import { parseGQLResp } from '../data';
+import { ClinicalSubmissionError, ErrorTableColumnProperties, ErrorTableColumns } from '../types';
 import FilesNavigator from './FilesNavigator';
 import Header from './Header';
 import Instructions from './Instructions';

@@ -22,7 +22,7 @@
 import { Program } from '@/__generated__/gateway/graphql';
 import { notNull } from '@/global/utils';
 import { ColumnDef } from '@icgc-argo/uikit';
-import { ArgoMembershipKey } from '../components/ProgramList';
+import { ArgoMembershipKey } from '../ProgramList';
 import CancerTypes from './CancerTypes';
 import Countries from './Countries';
 import DonorStatus from './DonorStatus';

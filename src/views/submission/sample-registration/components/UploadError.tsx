@@ -18,7 +18,7 @@
  */
 
 import { ClinicalRegistrationError, GetRegistrationQuery } from '@/__generated__/clinical/graphql';
-import TableHeader from '@/app/(post-login)/submission/program-table/Header';
+import TableHeader from '@/components/program-table/Header';
 import { exportToTsv, notNull, toDisplayError } from '@/global/utils';
 import { css, useTheme } from '@/lib/emotion';
 import {

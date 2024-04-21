@@ -25,10 +25,10 @@ import {
 	PROGRAM_SAMPLE_REGISTRATION_PATH,
 	PROGRAM_SHORT_NAME_PATH,
 } from '@/global/constants';
+import ClinicalSubmissionProgressBar from '@/views/common/ClinicalSubmissionProgressBar';
+import SampleRegistrationProgressBar from '@/views/common/SampleRegistrationProgressBar';
 import NextLink, { LinkProps } from 'next/link';
 import { ComponentType, ReactNode } from 'react';
-import ClinicalSubmissionProgressBar from '../../../../../app/(post-login)/submission/program/[shortName]/components/ClinicalSubmissionProgressBar';
-import SampleRegistrationProgressBar from '../../../../../app/(post-login)/submission/program/[shortName]/components/SampleRegistrationProgressBar';
 import { DashboardCard } from '../common';
 
 const ConditionalLink: ComponentType<{

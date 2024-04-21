@@ -39,12 +39,12 @@ import {
 	useUserRole,
 } from '@/hooks';
 import { css } from '@/lib/emotion';
+import { defaultClinicalEntityFilters } from '@/views/common/common';
 import { Icon, MenuItem } from '@icgc-argo/uikit';
 import orderBy from 'lodash/orderBy';
 import Link from 'next/link';
 import { notFound, useParams, usePathname } from 'next/navigation';
 import { FC, ReactNode, useState } from 'react';
-import { defaultClinicalEntityFilters } from '../common';
 
 const StatusMenuItem: FC<{ children: ReactNode }> = ({ children }) => {
 	return (
