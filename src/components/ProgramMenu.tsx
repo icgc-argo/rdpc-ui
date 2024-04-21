@@ -24,7 +24,6 @@ import {
 	PROGRAM_CLINICAL_DATA_PATH,
 	PROGRAM_CLINICAL_SUBMISSION_PATH,
 	PROGRAM_DASHBOARD_PATH,
-	PROGRAM_MANAGE_PATH,
 	PROGRAM_SAMPLE_REGISTRATION_PATH,
 } from '@/global/constants';
 import { getProgramPath, notNull } from '@/global/utils';
@@ -307,17 +306,6 @@ const MenuContent = ({ programName }: { programName: string }) => {
 							</StatusMenuItem>
 						}
 						selected={pathnameLastSegment === 'clinical-data'}
-					/>
-				</Link>
-			)}
-
-			{/** Manage Program */}
-			{userCanManageProgram && (
-				<Link href={getProgramPath(PROGRAM_MANAGE_PATH, programName)}>
-					<MenuItem
-						level={3}
-						content="Manage Program"
-						selected={pathnameLastSegment === 'manage'}
 					/>
 				</Link>
 			)}
