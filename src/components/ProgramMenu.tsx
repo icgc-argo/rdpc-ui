@@ -19,6 +19,14 @@
 'use client';
 
 import { SideMenuProgramStatusQuery, SubmissionState } from '@/__generated__/clinical/graphql';
+import {
+	useAppConfigContext,
+	useAuthContext,
+	useClinicalQuery,
+	useGatewayQuery,
+	useSubmissionSystemStatus,
+	useUserRole,
+} from '@/app/hooks';
 import Loader from '@/components/Loader';
 import {
 	PROGRAM_CLINICAL_DATA_PATH,
@@ -30,14 +38,6 @@ import {
 import { getProgramPath, notNull } from '@/global/utils';
 import SIDEMENU_PROGRAM_STATUS from '@/gql/clinical/SIDEMENU_PROGRAM_STATUS';
 import SIDEMENU_PROGRAMS from '@/gql/gateway/SIDEMENU_PROGRAMS';
-import {
-	useAppConfigContext,
-	useAuthContext,
-	useClinicalQuery,
-	useGatewayQuery,
-	useSubmissionSystemStatus,
-	useUserRole,
-} from '@/hooks';
 import { css } from '@/lib/emotion';
 import { defaultClinicalEntityFilters } from '@/views/common/common';
 import { Icon, MenuItem } from '@icgc-argo/uikit';
