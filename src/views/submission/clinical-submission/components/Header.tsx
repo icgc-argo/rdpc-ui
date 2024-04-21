@@ -17,9 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
-import APPROVE_SUBMISSION_MUTATION from '@/app/gql/gateway/APPROVE_SUBMISSION_MUTATION';
-import REOPEN_SUBMISSION_MUTATION from '@/app/gql/gateway/REOPEN_SUBMISSION_MUTATION';
+import { ModalPortal } from '@/components/Modal';
+import { BreadcrumbTitle, HelpLink, PageHeader } from '@/components/PageHeader/PageHeader';
+import { sleep } from '@/global/utils';
+import CLEAR_CLINICAL_SUBMISSION from '@/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
+import APPROVE_SUBMISSION_MUTATION from '@/gql/gateway/APPROVE_SUBMISSION_MUTATION';
+import REOPEN_SUBMISSION_MUTATION from '@/gql/gateway/REOPEN_SUBMISSION_MUTATION';
 import {
 	useAppConfigContext,
 	useAuthContext,
@@ -29,10 +32,7 @@ import {
 	useSubmissionSystemStatus,
 	useToaster,
 	useUserConfirmationModalState,
-} from '@/app/hooks';
-import { ModalPortal } from '@/components/Modal';
-import { BreadcrumbTitle, HelpLink, PageHeader } from '@/components/PageHeader/PageHeader';
-import { sleep } from '@/global/utils';
+} from '@/hooks';
 import { css, useTheme } from '@/lib/emotion';
 import { Button, Modal } from '@icgc-argo/uikit';
 import { useRouter } from 'next/navigation';

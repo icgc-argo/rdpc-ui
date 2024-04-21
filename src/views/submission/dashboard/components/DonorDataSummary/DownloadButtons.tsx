@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useAppConfigContext, useToaster } from '@/app/hooks';
 import { EGO_JWT_KEY } from '@/global/constants';
+import { useAppConfigContext, useToaster } from '@/hooks';
 import { Button, Icon, TOAST_VARIANTS, css } from '@icgc-argo/uikit';
 import { format as formatDate } from 'date-fns';
 import { saveAs } from 'file-saver';

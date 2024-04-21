@@ -19,8 +19,8 @@
 
 'use client';
 
-import { useAppConfigContext } from '@/app/hooks';
 import { CLINICAL_TEMPLATE_PATH, CONTACT_PAGE_PATH } from '@/global/constants';
+import { useAppConfigContext } from '@/hooks';
 import { css } from '@/lib/emotion';
 import {
 	BUTTON_SIZES,

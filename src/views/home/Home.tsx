@@ -18,8 +18,8 @@
  */
 'use client';
 
-import { useAppConfigContext } from '@/app/hooks';
 import Hero from '@/components/Hero';
+import { useAppConfigContext } from '@/hooks';
 import { css, useTheme } from '@/lib/emotion';
 import { DataCallout, Link, Typography, overtureLogo } from '@icgc-argo/uikit';
 import Image from 'next/image';

@@ -18,8 +18,8 @@
  */
 'use client';
 
-import { useCommonToasters, useGlobalLoader, useToaster } from '@/app/hooks';
 import { sleep } from '@/global/utils';
+import { useCommonToasters, useGlobalLoader, useToaster } from '@/hooks';
 import { css } from '@/lib/emotion';
 import { Button } from '@icgc-argo/uikit';
 import { FC } from 'react';

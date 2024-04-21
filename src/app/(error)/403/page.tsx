@@ -25,7 +25,7 @@ import NextLink from 'next/link';
 import { Col, Row } from 'react-grid-system';
 import dnaLockedImage from '../../../../public/assets/dna-locked.svg';
 import logoMarkImage from '../../../../public/assets/logomark.svg';
-import { useAppConfigContext } from '../../hooks/AppProvider';
+import { useAppConfigContext } from '../../../hooks/AppProvider';
 
 export default function Error403Page() {
 	const { DOCS_URL_ROOT } = useAppConfigContext();

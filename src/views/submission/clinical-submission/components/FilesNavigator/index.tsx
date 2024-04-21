@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import CLEAR_CLINICAL_SUBMISSION from '@/app/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
-import { useClinicalMutation, useCommonToasters, useToaster } from '@/app/hooks';
+import CLEAR_CLINICAL_SUBMISSION from '@/gql/clinical/CLEAR_CLINICAL_SUBMISSION';
+import { useClinicalMutation, useCommonToasters, useToaster } from '@/hooks';
 import { css } from '@/lib/emotion';
 import { Col } from 'react-grid-system';
 import { ClinicalEntity, ClinicalSubmission } from '../../types';

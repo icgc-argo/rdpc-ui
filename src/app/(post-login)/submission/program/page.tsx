@@ -19,11 +19,11 @@
 
 'use client';
 
-import PROGRAMS_LIST_QUERY from '@/app/gql/gateway/PROGRAMS_LIST_QUERY';
-import { useAppConfigContext, useGatewayQuery } from '@/app/hooks';
 import { BreadcrumbTitle, PageHeader } from '@/components/PageHeader/PageHeader';
 import ProgramList from '@/components/ProgramList';
 import { notNull } from '@/global/utils';
+import PROGRAMS_LIST_QUERY from '@/gql/gateway/PROGRAMS_LIST_QUERY';
+import { useAppConfigContext, useGatewayQuery } from '@/hooks';
 import { Loader } from '@icgc-argo/uikit';
 import { notFound } from 'next/navigation';
 

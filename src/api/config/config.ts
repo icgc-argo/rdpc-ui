@@ -18,7 +18,7 @@
  */
 
 import urljoin from 'url-join';
-import packageJSON from '../../../../package.json';
+import packageJSON from '../../../package.json';
 
 export type AppConfig = {
 	DOCS_URL_ROOT: string;

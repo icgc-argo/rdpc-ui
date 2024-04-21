@@ -19,7 +19,7 @@
 
 import { DonorSummaryEntry } from '@/__generated__/gateway/graphql';
 import { ColumnSort, TableFilterRule } from '@icgc-argo/uikit';
-import { TableSortOrder } from '../../../../../app/(post-login)/submission/program/[shortName]/dashboard/DonorDataSummary/types';
+import { TableSortOrder } from '../../DonorDataSummary/types';
 
 export type CompleteIncompleteFilterCounts = {
 	completed: number;

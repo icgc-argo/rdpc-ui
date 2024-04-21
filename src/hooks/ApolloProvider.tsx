@@ -19,7 +19,7 @@
 
 'use client';
 
-import { useAuthContext } from '@/app/hooks';
+import { useAuthContext } from '@/hooks';
 import { createApolloClient } from '@/lib/gql';
 import { ApolloProvider as DefaultApolloProvider } from '@apollo/client';
 import { ReactNode } from 'react';

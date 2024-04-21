@@ -26,7 +26,7 @@ import NextLink from 'next/link';
 import { Col, Row } from 'react-grid-system';
 import dnaBrokenImage from '../../public/assets/dna-broken.svg';
 import logoMarkImage from '../../public/assets/logomark.svg';
-import { useAppConfigContext } from './hooks/AppProvider';
+import { useAppConfigContext } from '../hooks/AppProvider';
 
 export default function Error404Page() {
 	const { DOCS_URL_ROOT } = useAppConfigContext();

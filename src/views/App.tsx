@@ -19,6 +19,9 @@
 // all our context providers won't work server side, beacuse React.Context is client side
 'use client';
 
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import { modalPortalRef } from '@/components/Modal';
 import {
 	ApolloProvider,
 	AppProvider,
@@ -27,10 +30,7 @@ import {
 	ThemeProvider,
 	ToastProvider,
 	loaderPortalRef,
-} from '@/app/hooks';
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
-import { modalPortalRef } from '@/components/Modal';
+} from '@/hooks';
 import { css } from '@/lib/emotion';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 import { ReactNode, forwardRef } from 'react';

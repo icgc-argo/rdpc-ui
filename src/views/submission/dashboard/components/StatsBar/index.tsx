@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import DASHBOARD_SUMMARY_QUERY from '@/app/gql/gateway/DASHBOARD_SUMMARY_QUERY';
-import { useGatewayQuery, useTimeout } from '@/app/hooks';
+import DASHBOARD_SUMMARY_QUERY from '@/gql/gateway/DASHBOARD_SUMMARY_QUERY';
+import { useGatewayQuery, useTimeout } from '@/hooks';
 import { Container, PercentBar, Typography, css, styled } from '@icgc-argo/uikit';
 import { ComponentType, ReactNode } from 'react';
 import { Col, Row } from 'react-grid-system';

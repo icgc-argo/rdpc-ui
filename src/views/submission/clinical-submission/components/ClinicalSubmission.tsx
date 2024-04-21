@@ -23,21 +23,6 @@ import {
 	ErrorTableColumnProperties,
 	ErrorTableColumns,
 } from '@/app/(post-login)/submission/program/[shortName]/clinical-submission/types';
-import CLINICAL_SUBMISSION_QUERY from '@/app/gql/clinical/CLINICAL_SUBMISSION_QUERY';
-import SIGN_OFF_SUBMISSION_MUTATION from '@/app/gql/clinical/SIGN_OFF_SUBMISSION_MUTATION';
-import VALIDATE_SUBMISSION_MUTATION from '@/app/gql/clinical/VALIDATE_SUBMISSION_MUTATION';
-import {
-	useAppConfigContext,
-	useAuthContext,
-	useClinicalMutation,
-	useClinicalQuery,
-	useCommonToasters,
-	useGlobalLoader,
-	useSubmissionSystemStatus,
-	useToaster,
-	useUrlQueryState,
-	useUserConfirmationModalState,
-} from '@/app/hooks';
 import ContentMain from '@/components/Content/ContentMain';
 import ErrorNotification, { ErrorReportColumns } from '@/components/ErrorNotification';
 import {
@@ -53,6 +38,21 @@ import {
 } from '@/global/constants';
 import { displayDateAndTime, getProgramPath, toDisplayError } from '@/global/utils';
 import { createFileFormData, uploadFileRequest } from '@/global/utils/form';
+import CLINICAL_SUBMISSION_QUERY from '@/gql/clinical/CLINICAL_SUBMISSION_QUERY';
+import SIGN_OFF_SUBMISSION_MUTATION from '@/gql/clinical/SIGN_OFF_SUBMISSION_MUTATION';
+import VALIDATE_SUBMISSION_MUTATION from '@/gql/clinical/VALIDATE_SUBMISSION_MUTATION';
+import {
+	useAppConfigContext,
+	useAuthContext,
+	useClinicalMutation,
+	useClinicalQuery,
+	useCommonToasters,
+	useGlobalLoader,
+	useSubmissionSystemStatus,
+	useToaster,
+	useUrlQueryState,
+	useUserConfirmationModalState,
+} from '@/hooks';
 import { css } from '@emotion/react';
 import {
 	ColumnDef,

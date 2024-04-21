@@ -18,11 +18,11 @@
  */
 
 import { DonorSummaryEntry } from '@/__generated__/gateway/graphql';
-import CLINICAL_ERRORS_QUERY from '@/app/gql/clinical/CLINICAL_ERRORS_QUERY';
-import { useClinicalQuery } from '@/app/hooks';
 import { CellContentCenter, DataTableStarIcon as StarIcon } from '@/components/Table/common';
 import { ContentError } from '@/components/placeholders';
 import { displayDate, parseDonorIdString } from '@/global/utils';
+import CLINICAL_ERRORS_QUERY from '@/gql/clinical/CLINICAL_ERRORS_QUERY';
+import { useClinicalQuery } from '@/hooks';
 import { css } from '@/lib/emotion';
 import {
 	ColumnDef,

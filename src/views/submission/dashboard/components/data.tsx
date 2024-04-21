@@ -23,7 +23,7 @@ import {
 	TumorNormalMatchedPairStatusCounts,
 	TumorNormalStatusCounts,
 	ValidInvalidFilterCounts,
-} from '../../../../app/(post-login)/submission/program/[shortName]/dashboard/DonorDataSummary/types';
+} from '../DonorDataSummary/types';
 
 export type ProgramDonorReleaseStats = {
 	registeredDonorsCount: number;

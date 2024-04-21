@@ -18,7 +18,7 @@
  */
 'use client';
 
-import { useAuthContext } from '@/app/hooks';
+import { useAuthContext } from '@/hooks';
 import { css, useTheme } from '@/lib/emotion';
 import { AppBarMenuItem, DnaLoader, Link, NavElement } from '@icgc-argo/uikit';
 import Image from 'next/image';

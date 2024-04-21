@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useAppConfigContext, useAuthContext } from '@/app/hooks';
+import { useAppConfigContext, useAuthContext } from '@/hooks';
 import { DnaLoader, css, useTheme } from '@icgc-argo/uikit';
 import { useRouter } from 'next/navigation';
 import { useQuery } from 'react-query';

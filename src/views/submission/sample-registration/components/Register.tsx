@@ -16,18 +16,6 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import CLEAR_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/clinical/CLEAR_CLINICAL_REGISTRATION_MUTATION';
-import CLINICAL_SCHEMA_VERSION from '@/app/gql/clinical/CLINICAL_SCHEMA_VERSION';
-import GET_REGISTRATION_QUERY from '@/app/gql/clinical/GET_REGISTRATION_QUERY';
-import {
-	useAppConfigContext,
-	useAuthContext,
-	useClinicalMutation,
-	useClinicalQuery,
-	useCommonToasters,
-	useSubmissionSystemStatus,
-	useToaster,
-} from '@/app/hooks';
 import Card from '@/components/Card';
 import ContentMain from '@/components/Content/ContentMain';
 import FileError from '@/components/FileError';
@@ -36,6 +24,18 @@ import { BreadcrumbTitle, HelpLink, PageHeader } from '@/components/PageHeader/P
 import { UPLOAD_REGISTRATION } from '@/global/constants';
 import { getProgramPath, notNull } from '@/global/utils';
 import { createFileFormData, uploadFileRequest } from '@/global/utils/form';
+import CLEAR_CLINICAL_REGISTRATION_MUTATION from '@/gql/clinical/CLEAR_CLINICAL_REGISTRATION_MUTATION';
+import CLINICAL_SCHEMA_VERSION from '@/gql/clinical/CLINICAL_SCHEMA_VERSION';
+import GET_REGISTRATION_QUERY from '@/gql/clinical/GET_REGISTRATION_QUERY';
+import {
+	useAppConfigContext,
+	useAuthContext,
+	useClinicalMutation,
+	useClinicalQuery,
+	useCommonToasters,
+	useSubmissionSystemStatus,
+	useToaster,
+} from '@/hooks';
 import { css } from '@emotion/react';
 import {
 	BUTTON_SIZES,

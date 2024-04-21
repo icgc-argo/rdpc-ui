@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useAppConfigContext } from '@/app/hooks';
+import { useAppConfigContext } from '@/hooks';
 import { BUTTON_SIZES, Button, Icon, Typography, css, useTheme } from '@icgc-argo/uikit';
 import Link from 'next/link';
 import galaxyImage from '../../../public/assets/galaxy.png';

@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import CLINICAL_ENTITY_DATA_QUERY from '@/app/gql/clinical/CLINICAL_ENTITY_DATA_QUERY';
-import { useClinicalQuery } from '@/app/hooks';
+import CLINICAL_ENTITY_DATA_QUERY from '@/gql/clinical/CLINICAL_ENTITY_DATA_QUERY';
+import { useClinicalQuery } from '@/hooks';
 import { CompletionStates, defaultClinicalEntityFilters } from '../common';
 import { validateEntityQueryName } from './util';
 

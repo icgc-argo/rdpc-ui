@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import GET_REGISTRATION_QUERY from '@/app/gql/clinical/GET_REGISTRATION_QUERY';
-import { useGatewayQuery, useSubmissionSystemStatus } from '@/app/hooks';
+import GET_REGISTRATION_QUERY from '@/gql/clinical/GET_REGISTRATION_QUERY';
+import { useGatewayQuery, useSubmissionSystemStatus } from '@/hooks';
 import { Progress } from '@icgc-argo/uikit';
 import get from 'lodash/get';
 import { ComponentProps, ComponentType } from 'react';

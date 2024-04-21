@@ -17,9 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import COMMIT_CLINICAL_REGISTRATION_MUTATION from '@/app/gql/clinical/COMMIT_CLINICAL_REGISTRATION_MUTATION';
-import GET_REGISTRATION_QUERY from '@/app/gql/clinical/GET_REGISTRATION_QUERY';
-import { useClinicalMutation, useGlobalLoader, useToaster } from '@/app/hooks';
 import { ModalPortal } from '@/components/Modal';
 import {
 	CONTACT_PAGE_PATH,
@@ -27,6 +24,9 @@ import {
 	PROGRAM_SHORT_NAME_PATH,
 } from '@/global/constants';
 import { sleep } from '@/global/utils';
+import COMMIT_CLINICAL_REGISTRATION_MUTATION from '@/gql/clinical/COMMIT_CLINICAL_REGISTRATION_MUTATION';
+import GET_REGISTRATION_QUERY from '@/gql/clinical/GET_REGISTRATION_QUERY';
+import { useClinicalMutation, useGlobalLoader, useToaster } from '@/hooks';
 import { Modal, TOAST_VARIANTS, Typography, Link as UIKitLink } from '@icgc-argo/uikit';
 import { get } from 'lodash';
 import Link from 'next/link';

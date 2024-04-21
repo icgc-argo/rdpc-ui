@@ -17,10 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import DASHBOARD_SUMMARY_QUERY from '@/app/gql/gateway/DASHBOARD_SUMMARY_QUERY';
-import PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY from '@/app/gql/gateway/PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY';
-import { useGatewayQuery, useTimeout } from '@/app/hooks';
 import { ContentError, ContentLoader } from '@/components/placeholders';
+import DASHBOARD_SUMMARY_QUERY from '@/gql/gateway/DASHBOARD_SUMMARY_QUERY';
+import PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY from '@/gql/gateway/PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY';
+import { useGatewayQuery, useTimeout } from '@/hooks';
 import { QueryHookOptions, useQuery } from '@apollo/client';
 import { Typography, css, useElementDimension, useTheme } from '@icgc-argo/uikit';
 import { format as formatDate, subDays } from 'date-fns';

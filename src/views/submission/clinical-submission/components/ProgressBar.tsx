@@ -19,7 +19,7 @@
 'use client';
 
 import { ClinicalSubmissionQuery } from '@/__generated__/clinical/graphql';
-import { useSubmissionSystemStatus } from '@/app/hooks';
+import { useSubmissionSystemStatus } from '@/hooks';
 import { css } from '@/lib/emotion';
 import { Progress, ProgressStatus } from '@icgc-argo/uikit';
 import { isEmpty } from 'lodash';
