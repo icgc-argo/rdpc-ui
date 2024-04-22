@@ -16,8 +16,37 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
 
-import Contact from '@/views/contact';
+import { ContentPlaceholder, css, DnaLoader } from '@icgc-argo/uikit';
+import Image from 'next/image';
+import beakersImage from '../../public/assets/beakers.svg';
 
-export default Contact;
+export default function NoDataMessage(props: { loading: boolean }) {
+	return (
+		<div
+			css={css`
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+			`}
+		>
+			{props.loading ? (
+				<DnaLoader />
+			) : (
+				<ContentPlaceholder
+					title="You do not have any registration data uploaded."
+					subtitle="Follow the instructions above to get started."
+				>
+					<Image
+						alt="Chemistry beakers"
+						src={beakersImage}
+						layout="fixed"
+						width={167}
+						height={151}
+					/>
+				</ContentPlaceholder>
+			)}
+		</div>
+	);
+}

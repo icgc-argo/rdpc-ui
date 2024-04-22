@@ -16,8 +16,36 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
 
-import Contact from '@/views/contact';
+import CLINICAL_ENTITY_DATA_QUERY from '@/gql/clinical/CLINICAL_ENTITY_DATA_QUERY';
+import { useClinicalQuery } from '@/hooks';
+import { CompletionStates, defaultClinicalEntityFilters } from '../common';
+import { validateEntityQueryName } from './util';
 
-export default Contact;
+export const useGetEntityData = (
+	program: string,
+	entityType: string | string[],
+	page: number,
+	pageSize: number,
+	sort: string,
+	completionState: CompletionStates,
+	donorIds: number[],
+	submitterDonorIds: string[],
+) =>
+	useClinicalQuery(CLINICAL_ENTITY_DATA_QUERY, {
+		errorPolicy: 'all',
+		fetchPolicy: 'cache-and-network',
+		variables: {
+			programShortName: program,
+			filters: {
+				...defaultClinicalEntityFilters,
+				sort,
+				page,
+				pageSize,
+				completionState,
+				donorIds,
+				submitterDonorIds,
+				entityTypes: validateEntityQueryName(entityType),
+			},
+		},
+	});

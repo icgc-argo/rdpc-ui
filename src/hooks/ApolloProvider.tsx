@@ -16,8 +16,25 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 'use client';
 
-import Contact from '@/views/contact';
+import { useAuthContext } from '@/hooks';
+import { createApolloClient } from '@/lib/gql';
+import { ApolloProvider as DefaultApolloProvider } from '@apollo/client';
+import { ReactNode } from 'react';
+import { useAppConfigContext } from './AppProvider';
 
-export default Contact;
+export const ApolloProvider = ({ children }: { children: ReactNode }) => {
+	const auth = useAuthContext();
+	const { GATEWAY_API_ROOT, CLINICAL_API_ROOT } = useAppConfigContext();
+	const config = {
+		jwt: auth.egoJwt,
+		clinical: `${CLINICAL_API_ROOT}/graphql`,
+		gateway: `${GATEWAY_API_ROOT}/graphql`,
+	};
+
+	const apolloClient = createApolloClient(config);
+
+	return <DefaultApolloProvider client={apolloClient}>{children}</DefaultApolloProvider>;
+};

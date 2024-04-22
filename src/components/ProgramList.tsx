@@ -16,41 +16,55 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+'use client';
 
-/** @jsxImportSource react */
-// ^ force default jsx runtime, @emotion/jsx doesn't play nice with server components
+import { Program } from '@/__generated__/gateway/graphql';
+import { containerStyle } from '@/global/styles/style';
+import { css, useTheme } from '@/lib/emotion';
+import { Table, Typography } from '@icgc-argo/uikit';
+import orderBy from 'lodash/orderBy';
+import { columns } from './program-table/config';
 
-import { BUILD_TIME_VARIABLES } from '@/global/constants';
-import App from '@/views/App';
-import { ReactNode } from 'react';
+export type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 
-async function getAppConfig() {
-	// cache: "no-store" ensures it's run server side
-	// url cannot be root - will cause infinite loop
-	try {
-		const configResp = await fetch(BUILD_TIME_VARIABLES.RUNTIME_CONFIG_URL, {
-			cache: 'no-store',
-		});
-		return await configResp.json();
-	} catch (e) {
-		if (process.env.NEXT_IS_BUILDING === 'true') {
-			console.log(
-				"Failed to retrieve server runtime config. Colocated api route won't be available during build.",
-			);
-		} else {
-			console.error(e);
-		}
-		return {};
-	}
-}
+export default function ProgramList({ programs }: { programs: Program[] }) {
+	const theme = useTheme();
+	const sortedProgramList = orderBy(programs, 'name');
+	const programsArraySize = programs.length;
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
-	const appConfig = await getAppConfig();
 	return (
-		<html lang="en">
-			<body>
-				<App config={appConfig}>{children}</App>
-			</body>
-		</html>
+		<div
+			css={css`
+				margin: 25px 25px 18px 25px;
+				padding: 16px 15px 6px;
+				${containerStyle(theme)}
+			`}
+		>
+			<Typography
+				variant="label"
+				color="grey"
+				component="div"
+				css={css`
+					min-height: 32px;
+					display: flex;
+					align-items: center;
+					margin-bottom: 8px;
+				`}
+			>
+				{programsArraySize.toLocaleString()} results
+			</Typography>
+			<Table
+				data={sortedProgramList}
+				columns={columns}
+				pageCount={20}
+				withSideBorders
+				withRowBorder
+				withStripes
+				withHeaders
+				withPagination
+				showPageSizeOptions
+				loading={false}
+			/>
+		</div>
 	);
 }

@@ -16,8 +16,48 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-'use client';
 
-import LoggingIn from '@/views/logging-in';
+import PROGRAM_DONOR_SUMMARY_QUERY from '@/gql/gateway/PROGRAM_DONOR_SUMMARY_QUERY';
+import { useGatewayQuery, useTimeout } from '@/hooks';
+import { QueryHookOptions } from '@apollo/client';
+import { POLL_INTERVAL_MILLISECONDS } from '../../common';
+import {
+	DonorSummaryEntrySort,
+	ProgramDonorSummaryFilter,
+	ProgramDonorsSummaryQueryData,
+	ProgramDonorsSummaryQueryVariables,
+} from '../types';
 
-export default LoggingIn;
+export const useProgramDonorsSummaryQuery = ({
+	programShortName,
+	first,
+	offset,
+	sorts,
+	filters,
+	options = {},
+}: {
+	programShortName: string;
+	first: number;
+	offset: number;
+	sorts?: DonorSummaryEntrySort[];
+	filters?: ProgramDonorSummaryFilter[];
+	options?: Omit<
+		QueryHookOptions<ProgramDonorsSummaryQueryData, ProgramDonorsSummaryQueryVariables>,
+		'variables'
+	>;
+}) => {
+	const pollingTimeout = useTimeout(30000);
+	const variables = {
+		programShortName,
+		first,
+		offset,
+		sorts,
+		...(filters && Object.keys(filters).length > 0 && { filters }),
+	};
+	const hook = useGatewayQuery(PROGRAM_DONOR_SUMMARY_QUERY, {
+		...options,
+		variables,
+		pollInterval: !pollingTimeout ? POLL_INTERVAL_MILLISECONDS : 0,
+	});
+	return hook;
+};
