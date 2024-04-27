@@ -22,19 +22,19 @@ import { aliasSortNames, defaultClinicalEntityFilters } from '../common';
 export const errorColumns = [
 	{
 		accessorKey: 'entries',
-		Header: '# Affected Records',
+		header: '# Affected Records',
 		id: 'entries',
 		maxWidth: 135,
 	},
 	{
 		accessorKey: 'fieldName',
-		Header: `Field with Error`,
+		header: `Field with Error`,
 		id: 'fieldName',
 		maxWidth: 215,
 	},
 	{
 		accessorKey: 'errorMessage',
-		Header: `Error Description`,
+		header: `Error Description`,
 		id: 'errorMessage',
 	},
 ];
