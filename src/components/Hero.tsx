@@ -85,6 +85,8 @@ const Hero = () => {
 						margin: '18px 0px 35px',
 						textAlign: 'center',
 						fontWeight: 600,
+						WebkitFontSmoothing: 'antialiased',
+						MozOsxFontSmoothing: 'antialiased',
 					})}
 					as="h1"
 				>
@@ -98,12 +100,21 @@ const Hero = () => {
 					css={css({
 						marginBottom: '62px',
 						lineHeight: '24px',
+						fontWeight: 500,
+						WebkitFontSmoothing: 'antialiased',
+						MozOsxFontSmoothing: 'grayscale',
 					})}
 				>
 					The International Cancer Genome Consortium Accelerating Research in Genomic Oncology (ICGC
 					ARGO) aims to{' '}
-					<b>uniformly analyze specimens from 100,000 donors with high quality clinical data</b> in
-					order to address outstanding questions that are vital to the quest to defeat cancer.
+					<strong
+						css={css`
+							font-weight: 700;
+						`}
+					>
+						uniformly analyze specimens from 100,000 donors with high quality clinical data
+					</strong>{' '}
+					in order to address outstanding questions that are vital to the quest to defeat cancer.
 				</Typography>
 
 				<Link
