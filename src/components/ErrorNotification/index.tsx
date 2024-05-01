@@ -57,9 +57,9 @@ const ErrorNotification = <T extends { [k: string]: any }>({
 			order: reportColumns.map((entry) => entry.id),
 			fileName: `${level}_report.tsv`,
 			headerDisplays: reportColumns.reduce(
-				(acc, { Header, id }) => ({
+				(acc, { header, id }) => ({
 					...acc,
-					[id]: Header,
+					[id]: header,
 				}),
 				{},
 			),

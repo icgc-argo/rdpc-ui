@@ -181,7 +181,7 @@ const renderDataSubmissionLinks = (
 	programStatusData?: ReturnType<typeof parseProgramStatusGQLResp>,
 ) => (
 	<>
-		<Link href={registrationPath}>
+		<Link href={registrationPath} legacyBehavior>
 			<MenuItem
 				level={3}
 				content={
@@ -195,7 +195,7 @@ const renderDataSubmissionLinks = (
 		</Link>
 
 		{/** Submit clinical data */}
-		<Link href={submissionPath}>
+		<Link href={submissionPath} legacyBehavior>
 			<MenuItem
 				level={3}
 				content={
@@ -275,11 +275,13 @@ const MenuContent = ({ programName }: { programName: string }) => {
 	) : programStatusData?.clinicalRegistrationInProgress ? (
 		<Icon name="ellipses" fill="warning" width="15px" />
 	) : null;
+	const route = getProgramPath(PROGRAM_DASHBOARD_PATH, programName);
 
 	return (
 		<>
 			{/** Dashboard */}
-			<Link href={getProgramPath(PROGRAM_DASHBOARD_PATH, programName)}>
+
+			<Link href={route} legacyBehavior>
 				<MenuItem level={3} content="Dashboard" selected={pathnameLastSegment === 'dashboard'} />
 			</Link>
 
@@ -296,7 +298,7 @@ const MenuContent = ({ programName }: { programName: string }) => {
 
 			{/** Submitted Data */}
 			{userCanViewData && (
-				<Link href={getProgramPath(PROGRAM_CLINICAL_DATA_PATH, programName)}>
+				<Link href={getProgramPath(PROGRAM_CLINICAL_DATA_PATH, programName)} legacyBehavior>
 					<MenuItem
 						level={3}
 						content={

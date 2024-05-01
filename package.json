@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "npm run clean && next dev",
     "build": "npm run clean && NEXT_IS_BUILDING=true next build",
+    "serve": "npm run clean && next build && next start",
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
