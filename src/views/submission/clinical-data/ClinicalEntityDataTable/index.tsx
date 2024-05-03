@@ -39,6 +39,7 @@ import {
 	aliasedEntityFields,
 	aliasedEntityNames,
 	clinicalEntityDisplayNames,
+	emptyClinicalDataResponse,
 	emptySearchResponse,
 } from '../common';
 import { DashIcon, NoDataCell, Subtitle } from './components';
@@ -191,7 +192,10 @@ const ClinicalEntityDataTable = ({
 		submitterDonorIds,
 	);
 
-	const { clinicalData } = clinicalEntityData;
+	const { clinicalData } =
+		clinicalEntityData === undefined || loading
+			? emptyClinicalDataResponse(program)
+			: clinicalEntityData;
 
 	const noTableData = noData || clinicalData.clinicalEntities.length === 0;
 
