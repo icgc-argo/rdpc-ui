@@ -217,7 +217,7 @@ const ClinicalChart = ({
 							<LineChart
 								activeLines={activeLines}
 								chartType={chartType}
-								data={rangeQueryData}
+								data={rangeQueryData as any}
 								hasQuarterLines
 								hasYAxisThresholdLine
 								height={CHART_HEIGHT}
