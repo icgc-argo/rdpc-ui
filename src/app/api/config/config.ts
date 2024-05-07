@@ -34,7 +34,9 @@ export type AppConfig = {
 	EGO_LOGIN_URL: string;
 	DACO_ROOT: string;
 	GATEWAY_API_ROOT: string;
+	GATEWAY_API_GRAPHQL: string;
 	CLINICAL_API_ROOT: string;
+	CLINICAL_API_GRAPHQL: string;
 };
 
 /**
@@ -80,11 +82,19 @@ export const getAppConfig = (serverEnv: any): AppConfig => {
 		GATEWAY_API_ROOT:
 			serverEnv.NEXT_PUBLIC_GATEWAY_API_ROOT ||
 			process.env.NEXT_PUBLIC_GATEWAY_API_ROOT ||
-			'https://argo-gateway.dev.argo.cancercollaboratory.org',
+			'https://argo-gateway.argo-dev.cumulus.genomeinformatics.org',
+		GATEWAY_API_GRAPHQL:
+			serverEnv.NEXT_PUBLIC_GATEWAY_API_GRAPHQL ||
+			process.env.NEXT_PUBLIC_GATEWAY_API_GRAPHQL ||
+			'https://argo-gateway.argo-dev.cumulus.genomeinformatics.org/graphql',
 		CLINICAL_API_ROOT:
 			serverEnv.NEXT_PUBLIC_CLINICAL_API_ROOT ||
 			process.env.NEXT_PUBLIC_CLINICAL_API_ROOT ||
-			'https://argo-gateway.dev.argo.cancercollaboratory.org',
+			'https://clinical.argo-qa.cumulus.genomeinformatics.org',
+		CLINICAL_API_GRAPHQL:
+			serverEnv.NEXT_PUBLIC_CLINICAL_API_GRAPHQL ||
+			process.env.NEXT_PUBLIC_CLINICAL_API_GRAPHQL ||
+			'https://clinical.argo-qa.cumulus.genomeinformatics.org/gql',
 	};
 
 	return config;

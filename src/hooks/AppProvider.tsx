@@ -36,7 +36,9 @@ const defaultContext = {
 	EGO_LOGIN_URL: '',
 	DACO_ROOT: '',
 	GATEWAY_API_ROOT: '',
+	GATEWAY_API_GRAPHQL: '',
 	CLINICAL_API_ROOT: '',
+	CLINICAL_API_GRAPHQL: '',
 };
 
 const AppConfig = createContext<AppConfig>(defaultContext);

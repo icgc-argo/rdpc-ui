@@ -27,7 +27,7 @@ const gqlConfig: CodegenConfig = {
 		'./src/__generated__/gateway/': {
 			documents: ['src/**/gql/gateway/*.ts'],
 			preset: 'client',
-			schema: `${process.env.NEXT_PUBLIC_GATEWAY_API_ROOT}`,
+			schema: `${process.env.NEXT_PUBLIC_GATEWAY_API_GRAPHQL}`,
 			presetConfig: {
 				gqlTagName: 'gql',
 			},
@@ -35,7 +35,7 @@ const gqlConfig: CodegenConfig = {
 		'./src/__generated__/clinical/': {
 			documents: ['src/**/gql/clinical/*.ts'],
 			preset: 'client',
-			schema: `${process.env.NEXT_PUBLIC_CLINICAL_API_ROOT}`,
+			schema: `${process.env.NEXT_PUBLIC_CLINICAL_API_GRAPHQL}`,
 			presetConfig: {
 				gqlTagName: 'gql',
 			},
