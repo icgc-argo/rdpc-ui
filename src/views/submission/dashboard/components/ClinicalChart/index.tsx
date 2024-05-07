@@ -70,7 +70,6 @@ const useProgramDonorPublishedAnalysisByDateRangeQuery = (
 	const pollingTimeout = useTimeout(30000);
 	const hook = useGatewayQuery(PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY, {
 		...options,
-		skip: !dateRangeFrom || !dateRangeTo,
 		variables: {
 			bucketCount,
 			dateRangeFrom,
@@ -157,9 +156,13 @@ const ClinicalChart = ({
 			: activeLines.concat(line);
 		setActiveLines(nextLines);
 	};
+
 	const hasError = rangeQueryError || programQueryError;
-	const isLoading =
-		(rangeQueryData && rangeQueryData.length === 0) || rangeQueryLoading || programQueryLoading;
+
+	const isLoading = rangeQueryLoading || programQueryLoading;
+
+	const noData = !hasError && !isLoading && rangeQueryData && rangeQueryData.length === 0;
+
 	const showLegend = chartType === 'molecular' && !isLoading && !hasError;
 
 	return (
@@ -189,7 +192,7 @@ const ClinicalChart = ({
 					padding: ${CHART_PADDING}px 0;
 				`}
 			>
-				{hasError ? (
+				{hasError || noData ? (
 					<ContentError />
 				) : isLoading ? (
 					<ContentLoader />
@@ -214,7 +217,7 @@ const ClinicalChart = ({
 							<LineChart
 								activeLines={activeLines}
 								chartType={chartType}
-								data={rangeQueryData as any}
+								data={rangeQueryData}
 								hasQuarterLines
 								hasYAxisThresholdLine
 								height={CHART_HEIGHT}
