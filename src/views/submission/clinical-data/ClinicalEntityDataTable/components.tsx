@@ -19,7 +19,8 @@
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from '@/global/constants';
 import CLINICAL_SCHEMA_VERSION from '@/gql/clinical/CLINICAL_SCHEMA_VERSION';
 import { useAppConfigContext, useClinicalQuery } from '@/hooks';
-import { ContentPlaceholder, Link, css } from '@icgc-argo/uikit';
+import { ContentPlaceholder, css } from '@icgc-argo/uikit';
+import Link from 'next/link';
 import urljoin from 'url-join';
 
 export const NoDataCell = () => (

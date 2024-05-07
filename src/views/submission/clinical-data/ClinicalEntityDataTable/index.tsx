@@ -191,12 +191,13 @@ const ClinicalEntityDataTable = ({
 		submitterDonorIds,
 	);
 
-	const { clinicalData } = clinicalEntityData;
+	const { clinicalData = { clinicalEntities: [], clinicalErrors: [] } } = loading
+		? {}
+		: clinicalEntityData;
 
 	const noTableData = noData || clinicalData.clinicalEntities.length === 0;
 
 	const [stickyDonorIDColumnsWidth, setStickyDonorIDColumnsWidth] = useState(74);
-
 	if (loading) {
 		return (
 			<DnaLoader

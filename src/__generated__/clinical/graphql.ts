@@ -19,103 +19,10 @@ export type Scalars = {
 	Int: { input: number; output: number };
 	Float: { input: number; output: number };
 	DateTime: { input: any; output: any };
-	/** A JSON scalar */
-	JSON: { input: any; output: any };
-	/** Long type */
-	Long: { input: any; output: any };
 	SchemaList: { input: any; output: any };
+	_Any: { input: any; output: any };
+	_FieldSet: { input: any; output: any };
 };
-
-export type AggregationResult = {
-	__typename?: 'AggregationResult';
-	totalHits: Scalars['String']['output'];
-};
-
-export type AnalysesSearchResult = {
-	__typename?: 'AnalysesSearchResult';
-	content?: Maybe<Array<Analysis>>;
-	info: SearchResultInfo;
-};
-
-export type Analysis = {
-	__typename?: 'Analysis';
-	analysisId: Scalars['ID']['output'];
-	analysisState?: Maybe<AnalysisState>;
-	analysisType?: Maybe<Scalars['String']['output']>;
-	analysisVersion?: Maybe<Scalars['Int']['output']>;
-	donors?: Maybe<Array<Maybe<Donor>>>;
-	experiment?: Maybe<Scalars['JSON']['output']>;
-	files?: Maybe<Array<Maybe<AnalysisFile>>>;
-	firstPublishedAt?: Maybe<Scalars['String']['output']>;
-	inputForRuns?: Maybe<Array<Maybe<Run>>>;
-	publishedAt?: Maybe<Scalars['String']['output']>;
-	repositories?: Maybe<Array<Maybe<Repository>>>;
-	studyId?: Maybe<Scalars['String']['output']>;
-	updatedAt?: Maybe<Scalars['String']['output']>;
-	workflow?: Maybe<Workflow>;
-};
-
-export type AnalysisFilesArgs = {
-	filter?: InputMaybe<AnalysisFileFilter>;
-};
-
-export type AnalysisInputForRunsArgs = {
-	filter?: InputMaybe<RunsFilter>;
-};
-
-export type AnalysisFile = {
-	__typename?: 'AnalysisFile';
-	analysisTools?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-	dataType?: Maybe<Scalars['String']['output']>;
-	fileAccess?: Maybe<Scalars['String']['output']>;
-	fileType?: Maybe<Scalars['String']['output']>;
-	md5Sum?: Maybe<Scalars['String']['output']>;
-	metrics?: Maybe<Scalars['JSON']['output']>;
-	name?: Maybe<Scalars['String']['output']>;
-	objectId?: Maybe<Scalars['String']['output']>;
-	size?: Maybe<Scalars['Long']['output']>;
-};
-
-export type AnalysisFileFilter = {
-	/** Filter returns files with all values in analysisTools array */
-	analysisTools?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-	dataType?: InputMaybe<Scalars['String']['input']>;
-	fileAccess?: InputMaybe<Scalars['String']['input']>;
-	fileType?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type AnalysisFilter = {
-	analysisId?: InputMaybe<Scalars['String']['input']>;
-	analysisState?: InputMaybe<AnalysisState>;
-	analysisType?: InputMaybe<Scalars['String']['input']>;
-	analysisVersion?: InputMaybe<Scalars['Int']['input']>;
-	code?: InputMaybe<Scalars['String']['input']>;
-	donorId?: InputMaybe<Scalars['String']['input']>;
-	runId?: InputMaybe<Scalars['String']['input']>;
-	sampleId?: InputMaybe<Scalars['String']['input']>;
-	sampleType?: InputMaybe<Scalars['String']['input']>;
-	specimenId?: InputMaybe<Scalars['String']['input']>;
-	studyId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type AnalysisSort = {
-	fieldName: AnalysisSortField;
-	order: SortOrder;
-};
-
-export enum AnalysisSortField {
-	AnalysisId = 'analysisId',
-	AnalysisState = 'analysisState',
-	FirstPublishedAt = 'firstPublishedAt',
-	PublishedAt = 'publishedAt',
-	UpdatedAt = 'updatedAt',
-}
-
-export enum AnalysisState {
-	Published = 'PUBLISHED',
-	Suppressed = 'SUPPRESSED',
-	Unpublished = 'UNPUBLISHED',
-}
 
 /** Collated Clinical Data Query Response */
 export type ClinicalData = {
@@ -357,112 +264,8 @@ export type CoreCompletionFields = {
 	treatments: Scalars['Float']['output'];
 };
 
-export enum DateFields {
-	CompleteTime = 'completeTime',
-	StartTime = 'startTime',
-}
-
-export type DateRange = {
-	fieldName: DateFields;
-	fromEpochMilli?: InputMaybe<Scalars['Long']['input']>;
-	toEpochMilli?: InputMaybe<Scalars['Long']['input']>;
-};
-
-export type Donor = {
-	__typename?: 'Donor';
-	donorId?: Maybe<Scalars['ID']['output']>;
-	gender?: Maybe<Scalars['String']['output']>;
-	specimens?: Maybe<Array<Maybe<Specimen>>>;
-	submitterDonorId?: Maybe<Scalars['String']['output']>;
-};
-
-export type EngineParameters = {
-	__typename?: 'EngineParameters';
-	defaultContainer?: Maybe<Scalars['String']['output']>;
-	latest?: Maybe<Scalars['Boolean']['output']>;
-	launchDir?: Maybe<Scalars['String']['output']>;
-	projectDir?: Maybe<Scalars['String']['output']>;
-	resume?: Maybe<Scalars['String']['output']>;
-	revision?: Maybe<Scalars['String']['output']>;
-	workDir?: Maybe<Scalars['String']['output']>;
-};
-
-export type File = {
-	__typename?: 'File';
-	analysis?: Maybe<FileAnalysis>;
-	analysisTools?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-	dataType?: Maybe<Scalars['String']['output']>;
-	donors?: Maybe<Array<Maybe<Donor>>>;
-	file?: Maybe<FileMeta>;
-	fileAccess?: Maybe<Scalars['String']['output']>;
-	fileType?: Maybe<Scalars['String']['output']>;
-	metrics?: Maybe<Scalars['JSON']['output']>;
-	objectId: Scalars['ID']['output'];
-	repositories?: Maybe<Array<Maybe<Repository>>>;
-	studyId?: Maybe<Scalars['String']['output']>;
-};
-
-export type FileAnalysis = {
-	__typename?: 'FileAnalysis';
-	analysisId?: Maybe<Scalars['ID']['output']>;
-	analysisState?: Maybe<AnalysisState>;
-	analysisType?: Maybe<Scalars['String']['output']>;
-	analysisVersion?: Maybe<Scalars['Int']['output']>;
-	experiment?: Maybe<Scalars['JSON']['output']>;
-};
-
-export type FileFilter = {
-	analysisId?: InputMaybe<Scalars['String']['input']>;
-	/** Filter returns files with all values in analysisTools array */
-	analysisTools?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-	dataType?: InputMaybe<Scalars['String']['input']>;
-	donorId?: InputMaybe<Scalars['String']['input']>;
-	fileAccess?: InputMaybe<Scalars['String']['input']>;
-	name?: InputMaybe<Scalars['String']['input']>;
-	objectId?: InputMaybe<Scalars['String']['input']>;
-	studyId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type FileMeta = {
-	__typename?: 'FileMeta';
-	dataType?: Maybe<Scalars['String']['output']>;
-	indexFile?: Maybe<IndexFile>;
-	md5sum?: Maybe<Scalars['String']['output']>;
-	name?: Maybe<Scalars['String']['output']>;
-	size?: Maybe<Scalars['Long']['output']>;
-};
-
-export type FileSort = {
-	fieldName: FileSortField;
-	order: SortOrder;
-};
-
-export enum FileSortField {
-	DataType = 'dataType',
-	FileAccess = 'fileAccess',
-	Name = 'name',
-	ObjectId = 'objectId',
-}
-
-export type FilesSearchResult = {
-	__typename?: 'FilesSearchResult';
-	content?: Maybe<Array<File>>;
-	info: SearchResultInfo;
-};
-
-export type IndexFile = {
-	__typename?: 'IndexFile';
-	dataType?: Maybe<Scalars['String']['output']>;
-	fileType?: Maybe<Scalars['String']['output']>;
-	md5sum?: Maybe<Scalars['String']['output']>;
-	name?: Maybe<Scalars['String']['output']>;
-	objectId?: Maybe<Scalars['String']['output']>;
-	size?: Maybe<Scalars['Long']['output']>;
-};
-
 export type Mutation = {
 	__typename?: 'Mutation';
-	cancelRun?: Maybe<RunsResponse>;
 	/** Remove the Clinical Registration data currently uploaded and not committed */
 	clearClinicalRegistration: Scalars['Boolean']['output'];
 	/**
@@ -481,14 +284,8 @@ export type Mutation = {
 	 * - If there is NO update: merges clinical data to system, returning an empty submission
 	 */
 	commitClinicalSubmission: ClinicalSubmissionData;
-	startAutomation?: Maybe<MutationResponse>;
-	startRun?: Maybe<RunsResponse>;
 	/** Validate the uploaded clinical files */
 	validateClinicalSubmission: ClinicalSubmissionData;
-};
-
-export type MutationCancelRunArgs = {
-	runId: Scalars['ID']['input'];
 };
 
 export type MutationClearClinicalRegistrationArgs = {
@@ -512,37 +309,14 @@ export type MutationCommitClinicalSubmissionArgs = {
 	version: Scalars['String']['input'];
 };
 
-export type MutationStartAutomationArgs = {
-	analysisId: Scalars['String']['input'];
-};
-
-export type MutationStartRunArgs = {
-	request: RunsRequest;
-};
-
 export type MutationValidateClinicalSubmissionArgs = {
 	programShortName: Scalars['String']['input'];
 	version: Scalars['String']['input'];
 };
 
-export type MutationResponse = {
-	__typename?: 'MutationResponse';
-	analysis?: Maybe<Analysis>;
-	message?: Maybe<Scalars['String']['output']>;
-};
-
-export type Page = {
-	from: Scalars['Int']['input'];
-	size: Scalars['Int']['input'];
-};
-
 export type Query = {
 	__typename?: 'Query';
-	aggregateAnalyses: AggregationResult;
-	aggregateFiles: AggregationResult;
-	aggregateRuns: AggregationResult;
-	aggregateTasks: AggregationResult;
-	analyses: AnalysesSearchResult;
+	_service: _Service;
 	/** Retrieve all stored Clinical Entity and Donor Completion data for a program */
 	clinicalData: ClinicalData;
 	/** Retrieve all stored Clinical Migration Errors for a program */
@@ -559,47 +333,6 @@ export type Query = {
 	clinicalSubmissionTypesList: Array<Maybe<Scalars['SchemaList']['output']>>;
 	/** Retrieve current stored Clinical Submission data for a program */
 	clinicalSubmissions: ClinicalSubmissionData;
-	files: FilesSearchResult;
-	runs: RunsSearchResult;
-	/**
-	 * Given a donorId, this query fetches all of its published normal analyses then fetches all
-	 * published matched tumour analyses with same analysisType, sampleType, studyId, donorId and
-	 * experimental_strategy.
-	 * The analysisType can be included to further filter the pairs by type.
-	 * The studyId can be included to only fetch pairs for donor within a study.
-	 */
-	sampleMatchedAnalysesForDonor?: Maybe<Array<Maybe<SampleMatchedAnalysisPair>>>;
-	/**
-	 * Given an analysisId, match it to its tumour-normal counter part with same experimental_strategy,
-	 * analysisType, sampleType, donorId and studyId.
-	 * If analysis is tumour matches matchedNormalSubmitterSampleId to analyses with same submitterSampleId.
-	 * If analysis is normal matches submitterSampleId and matchedNormalSubmitterSampleId.
-	 * Non PUBLISHED analyses are ignored.
-	 */
-	sampleMatchedAnalysisPairs?: Maybe<Array<Maybe<SampleMatchedAnalysisPair>>>;
-	tasks: TasksSearchResult;
-};
-
-export type QueryAggregateAnalysesArgs = {
-	filter?: InputMaybe<AnalysisFilter>;
-};
-
-export type QueryAggregateFilesArgs = {
-	filter?: InputMaybe<FileFilter>;
-};
-
-export type QueryAggregateRunsArgs = {
-	filter?: InputMaybe<RunsFilter>;
-};
-
-export type QueryAggregateTasksArgs = {
-	filter?: InputMaybe<TasksFilter>;
-};
-
-export type QueryAnalysesArgs = {
-	filter?: InputMaybe<AnalysisFilter>;
-	page?: InputMaybe<Page>;
-	sorts?: InputMaybe<Array<AnalysisSort>>;
 };
 
 export type QueryClinicalDataArgs = {
@@ -629,183 +362,6 @@ export type QueryClinicalSubmissionsArgs = {
 	programShortName: Scalars['String']['input'];
 };
 
-export type QueryFilesArgs = {
-	filter?: InputMaybe<FileFilter>;
-	page?: InputMaybe<Page>;
-	sorts?: InputMaybe<Array<FileSort>>;
-};
-
-export type QueryRunsArgs = {
-	dateRanges?: InputMaybe<Array<DateRange>>;
-	filter?: InputMaybe<RunsFilter>;
-	page?: InputMaybe<Page>;
-	sorts?: InputMaybe<Array<RunSort>>;
-};
-
-export type QuerySampleMatchedAnalysesForDonorArgs = {
-	req: SampleMatchedAnalysesForDonorReq;
-};
-
-export type QuerySampleMatchedAnalysisPairsArgs = {
-	analysisId: Scalars['String']['input'];
-};
-
-export type QueryTasksArgs = {
-	dateRanges?: InputMaybe<Array<DateRange>>;
-	filter?: InputMaybe<TasksFilter>;
-	page?: InputMaybe<Page>;
-	sorts?: InputMaybe<Array<TaskSort>>;
-};
-
-export type Repository = {
-	__typename?: 'Repository';
-	code?: Maybe<Scalars['String']['output']>;
-	country?: Maybe<Scalars['String']['output']>;
-	name?: Maybe<Scalars['String']['output']>;
-	organization?: Maybe<Scalars['String']['output']>;
-	type?: Maybe<Scalars['String']['output']>;
-	url?: Maybe<Scalars['String']['output']>;
-};
-
-/**  RequestEngineParameters is EngineParameters, but gql requires distinct input and type */
-export type RequestEngineParameters = {
-	defaultContainer?: InputMaybe<Scalars['String']['input']>;
-	latest?: InputMaybe<Scalars['Boolean']['input']>;
-	launchDir?: InputMaybe<Scalars['String']['input']>;
-	projectDir?: InputMaybe<Scalars['String']['input']>;
-	resume?: InputMaybe<Scalars['String']['input']>;
-	revision?: InputMaybe<Scalars['String']['input']>;
-	workDir?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type Run = {
-	__typename?: 'Run';
-	commandLine?: Maybe<Scalars['String']['output']>;
-	completeTime?: Maybe<Scalars['String']['output']>;
-	duration?: Maybe<Scalars['Long']['output']>;
-	engineParameters?: Maybe<EngineParameters>;
-	errorReport?: Maybe<Scalars['String']['output']>;
-	exitStatus?: Maybe<Scalars['Int']['output']>;
-	inputAnalyses?: Maybe<Array<Maybe<Analysis>>>;
-	parameters?: Maybe<Scalars['JSON']['output']>;
-	producedAnalyses?: Maybe<Array<Maybe<Analysis>>>;
-	repository?: Maybe<Scalars['String']['output']>;
-	runId: Scalars['ID']['output'];
-	sessionId?: Maybe<Scalars['String']['output']>;
-	startTime?: Maybe<Scalars['String']['output']>;
-	state?: Maybe<Scalars['String']['output']>;
-	success?: Maybe<Scalars['Boolean']['output']>;
-	tasks?: Maybe<Array<Maybe<Task>>>;
-};
-
-export type RunCompleteTimeArgs = {
-	format?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type RunInputAnalysesArgs = {
-	filter?: InputMaybe<AnalysisFilter>;
-};
-
-export type RunProducedAnalysesArgs = {
-	filter?: InputMaybe<AnalysisFilter>;
-};
-
-export type RunStartTimeArgs = {
-	format?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type RunTasksArgs = {
-	state?: InputMaybe<Scalars['String']['input']>;
-	tag?: InputMaybe<Scalars['String']['input']>;
-	taskId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type RunSort = {
-	fieldName: RunSortField;
-	order: SortOrder;
-};
-
-export enum RunSortField {
-	CompleteTime = 'completeTime',
-	Repository = 'repository',
-	RunId = 'runId',
-	SessionId = 'sessionId',
-	StartTime = 'startTime',
-	State = 'state',
-}
-
-export type RunsFilter = {
-	analysisId?: InputMaybe<Scalars['String']['input']>;
-	repository?: InputMaybe<Scalars['String']['input']>;
-	runId?: InputMaybe<Scalars['String']['input']>;
-	sessionId?: InputMaybe<Scalars['String']['input']>;
-	state?: InputMaybe<Scalars['String']['input']>;
-	studyId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type RunsRequest = {
-	tags?: InputMaybe<Scalars['JSON']['input']>;
-	workflowEngineParams?: InputMaybe<RequestEngineParameters>;
-	workflowParams?: InputMaybe<Scalars['JSON']['input']>;
-	workflowType?: InputMaybe<Scalars['String']['input']>;
-	workflowTypeVersion?: InputMaybe<Scalars['String']['input']>;
-	workflowUrl: Scalars['String']['input'];
-};
-
-export type RunsResponse = {
-	__typename?: 'RunsResponse';
-	runId?: Maybe<Scalars['ID']['output']>;
-};
-
-export type RunsSearchResult = {
-	__typename?: 'RunsSearchResult';
-	content?: Maybe<Array<Run>>;
-	info: SearchResultInfo;
-};
-
-export type Sample = {
-	__typename?: 'Sample';
-	matchedNormalSubmitterSampleId?: Maybe<Scalars['String']['output']>;
-	sampleId?: Maybe<Scalars['ID']['output']>;
-	sampleType?: Maybe<Scalars['String']['output']>;
-	submitterSampleId?: Maybe<Scalars['String']['output']>;
-};
-
-export type SampleMatchedAnalysesForDonorReq = {
-	analysisType?: InputMaybe<Scalars['String']['input']>;
-	donorId: Scalars['String']['input'];
-	sampleType?: InputMaybe<Scalars['String']['input']>;
-	studyId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type SampleMatchedAnalysisPair = {
-	__typename?: 'SampleMatchedAnalysisPair';
-	normalSampleAnalysis?: Maybe<Analysis>;
-	tumourSampleAnalysis?: Maybe<Analysis>;
-};
-
-export type SearchResultInfo = {
-	__typename?: 'SearchResultInfo';
-	contentCount: Scalars['String']['output'];
-	hasNextFrom: Scalars['String']['output'];
-	totalHits: Scalars['String']['output'];
-};
-
-export enum SortOrder {
-	Asc = 'asc',
-	Desc = 'desc',
-}
-
-export type Specimen = {
-	__typename?: 'Specimen';
-	samples?: Maybe<Array<Maybe<Sample>>>;
-	specimenId?: Maybe<Scalars['ID']['output']>;
-	specimenTissueSource?: Maybe<Scalars['String']['output']>;
-	specimenType?: Maybe<Scalars['String']['output']>;
-	submitterSpecimenId?: Maybe<Scalars['String']['output']>;
-	tumourNormalDesignation?: Maybe<Scalars['String']['output']>;
-};
-
 export type SpecimenCoreCompletion = {
 	__typename?: 'SpecimenCoreCompletion';
 	coreCompletionPercentage: Scalars['Float']['output'];
@@ -825,82 +381,9 @@ export enum SubmissionState {
 	Valid = 'VALID',
 }
 
-export type Task = {
-	__typename?: 'Task';
-	attempt?: Maybe<Scalars['Int']['output']>;
-	completeTime?: Maybe<Scalars['String']['output']>;
-	container?: Maybe<Scalars['String']['output']>;
-	cpus?: Maybe<Scalars['Int']['output']>;
-	duration?: Maybe<Scalars['Long']['output']>;
-	exit?: Maybe<Scalars['Int']['output']>;
-	memory?: Maybe<Scalars['Long']['output']>;
-	name?: Maybe<Scalars['String']['output']>;
-	peakRss?: Maybe<Scalars['Long']['output']>;
-	peakVmem?: Maybe<Scalars['Long']['output']>;
-	process?: Maybe<Scalars['String']['output']>;
-	readBytes?: Maybe<Scalars['Long']['output']>;
-	realtime?: Maybe<Scalars['Long']['output']>;
-	rss?: Maybe<Scalars['Long']['output']>;
-	run?: Maybe<Run>;
-	runId?: Maybe<Scalars['String']['output']>;
-	script?: Maybe<Scalars['String']['output']>;
-	sessionId?: Maybe<Scalars['String']['output']>;
-	startTime?: Maybe<Scalars['String']['output']>;
-	state?: Maybe<Scalars['String']['output']>;
-	submitTime?: Maybe<Scalars['String']['output']>;
-	tag?: Maybe<Scalars['String']['output']>;
-	taskId?: Maybe<Scalars['ID']['output']>;
-	vmem?: Maybe<Scalars['Long']['output']>;
-	workdir?: Maybe<Scalars['String']['output']>;
-	writeBytes?: Maybe<Scalars['Long']['output']>;
-};
-
-export type TaskCompleteTimeArgs = {
-	format?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type TaskStartTimeArgs = {
-	format?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type TaskSort = {
-	fieldName: TaskSortField;
-	order: SortOrder;
-};
-
-export enum TaskSortField {
-	CompleteTime = 'completeTime',
-	Cpus = 'cpus',
-	Memory = 'memory',
-	RunId = 'runId',
-	SessionId = 'sessionId',
-	StartTime = 'startTime',
-	State = 'state',
-}
-
-export type TasksFilter = {
-	runId?: InputMaybe<Scalars['String']['input']>;
-	sessionId?: InputMaybe<Scalars['String']['input']>;
-	state?: InputMaybe<Scalars['String']['input']>;
-	tag?: InputMaybe<Scalars['String']['input']>;
-	workDir?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type TasksSearchResult = {
-	__typename?: 'TasksSearchResult';
-	content?: Maybe<Array<Task>>;
-	info: SearchResultInfo;
-};
-
-export type Workflow = {
-	__typename?: 'Workflow';
-	analysisTools?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-	genomeBuild?: Maybe<Scalars['String']['output']>;
-	inputs?: Maybe<Array<Maybe<Scalars['JSON']['output']>>>;
-	run?: Maybe<Run>;
-	runId: Scalars['ID']['output'];
-	workflowName?: Maybe<Scalars['String']['output']>;
-	workflowVersion?: Maybe<Scalars['String']['output']>;
+export type _Service = {
+	__typename?: '_Service';
+	sdl?: Maybe<Scalars['String']['output']>;
 };
 
 export type ClearClinicalRegistrationMutationVariables = Exact<{

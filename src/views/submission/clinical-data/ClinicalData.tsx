@@ -25,9 +25,9 @@ import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '@/gql/clinical/CLINICAL_ENTITY
 import SUBMITTED_DATA_SIDE_MENU_QUERY from '@/gql/clinical/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import { useClinicalQuery, useUrlParamState } from '@/hooks';
 import { css } from '@emotion/react';
-import { Loader, Typography, VerticalTabs } from '@icgc-argo/uikit';
+import { Container, Loader, Typography, VerticalTabs } from '@icgc-argo/uikit';
 import { useState } from 'react';
-import { Container, setConfiguration } from 'react-grid-system';
+import { setConfiguration } from 'react-grid-system';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable';
 import ClinicalDownloadButton from './DownloadButtons';
 import SearchBar from './SearchBar';
