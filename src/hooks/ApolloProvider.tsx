@@ -23,15 +23,21 @@ import { useAuthContext } from '@/hooks';
 import { createApolloClient } from '@/lib/gql';
 import { ApolloProvider as DefaultApolloProvider } from '@apollo/client';
 import { ReactNode } from 'react';
+import urlJoin from 'url-join';
 import { useAppConfigContext } from './AppProvider';
 
 export const ApolloProvider = ({ children }: { children: ReactNode }) => {
 	const auth = useAuthContext();
-	const { GATEWAY_API_ROOT, CLINICAL_API_ROOT } = useAppConfigContext();
+	const {
+		CLINICAL_API_ROOT,
+		GATEWAY_API_ROOT,
+		CLINICAL_GRAPHQL_ENDPOINT,
+		GATEWAY_GRAPHQL_ENDPOINT,
+	} = useAppConfigContext();
 	const config = {
 		jwt: auth.egoJwt,
-		clinical: `${CLINICAL_API_ROOT}/graphql`,
-		gateway: `${GATEWAY_API_ROOT}/graphql`,
+		clinical: urlJoin(CLINICAL_API_ROOT, CLINICAL_GRAPHQL_ENDPOINT),
+		gateway: urlJoin(GATEWAY_API_ROOT, GATEWAY_GRAPHQL_ENDPOINT),
 	};
 
 	const apolloClient = createApolloClient(config);

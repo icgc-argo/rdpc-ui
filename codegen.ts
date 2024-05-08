@@ -19,6 +19,7 @@
 
 import { CodegenConfig } from '@graphql-codegen/cli';
 import dotenv from 'dotenv';
+import urlJoin from 'url-join';
 
 dotenv.config({ path: '.env' });
 
@@ -27,7 +28,10 @@ const gqlConfig: CodegenConfig = {
 		'./src/__generated__/gateway/': {
 			documents: ['src/**/gql/gateway/*.ts'],
 			preset: 'client',
-			schema: `${process.env.NEXT_PUBLIC_GATEWAY_API_ROOT}`,
+			schema: urlJoin(
+				process.env.NEXT_PUBLIC_GATEWAY_API_ROOT,
+				process.env.NEXT_PUBLIC_GATEWAY_GRAPHQL_ENDPOINT,
+			),
 			presetConfig: {
 				gqlTagName: 'gql',
 			},
@@ -35,7 +39,10 @@ const gqlConfig: CodegenConfig = {
 		'./src/__generated__/clinical/': {
 			documents: ['src/**/gql/clinical/*.ts'],
 			preset: 'client',
-			schema: `${process.env.NEXT_PUBLIC_CLINICAL_API_ROOT}`,
+			schema: urlJoin(
+				process.env.NEXT_PUBLIC_CLINICAL_API_ROOT,
+				process.env.NEXT_PUBLIC_CLINICAL_GRAPHQL_ENDPOINT,
+			),
 			presetConfig: {
 				gqlTagName: 'gql',
 			},
