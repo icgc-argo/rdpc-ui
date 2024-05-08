@@ -18,10 +18,10 @@
  */
 'use client';
 
-import { HEADER_HEIGHT_PX } from '@/app/components/Header';
+import { HEADER_HEIGHT_PX } from '@/components/Header';
+import SideMenu from '@/components/SideMenu/Menu';
 import { css, useTheme } from '@/lib/emotion';
 import { ReactNode, useState } from 'react';
-import SideMenu from './components/SideMenu/Menu';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
 	const theme = useTheme();

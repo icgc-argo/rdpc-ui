@@ -21,17 +21,21 @@ export const EGO_JWT_KEY = 'EGO_JWT';
 export const LOGIN_NONCE = 'LOGIN_NONCE';
 
 export const BUILD_TIME_VARIABLES = {
-	RUNTIME_CONFIG_URL: process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL || '',
+	RUNTIME_CONFIG_URL:
+		process.env.NEXT_PUBLIC_RUNTIME_CONFIG_URL || 'http://localhost:3000/api/config',
 };
 
 export const CONTACT_PAGE_PATH = '/contact';
 export const SUBMISSION_PATH = `/submission`;
 export const PROGRAM_SHORT_NAME_PATH = `[shortName]`;
 export const PROGRAM_DASHBOARD_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/dashboard`;
-export const PROGRAM_MANAGE_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/manage`;
 export const PROGRAM_SAMPLE_REGISTRATION_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/sample-registration`;
 export const PROGRAM_CLINICAL_SUBMISSION_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/clinical-submission`;
 export const PROGRAM_CLINICAL_DATA_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/clinical-data`;
 export const CREATE_PROGRAM_PAGE_PATH = `${SUBMISSION_PATH}/program/create`;
+
+// Upload paths
+export const UPLOAD_REGISTRATION = `/clinical/api/submission/program/${PROGRAM_SHORT_NAME_PATH}/registration`;
+export const UPLOAD_CLINICAL_DATA = `/clinical/api/submission/program/${PROGRAM_SHORT_NAME_PATH}/clinical/submissionUpload`;
 
 export const CLINICAL_TEMPLATE_PATH = '/clinical/proxy/template';

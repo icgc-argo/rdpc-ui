@@ -19,17 +19,30 @@
 
 import { CodegenConfig } from '@graphql-codegen/cli';
 import dotenv from 'dotenv';
+import urlJoin from 'url-join';
 
-// point to .env.local because .env in nextjs is a default committed file
-dotenv.config({ path: '.env.local' });
+dotenv.config({ path: '.env' });
 
 const gqlConfig: CodegenConfig = {
-	schema: `${process.env.NEXT_PUBLIC_GATEWAY_API_ROOT}/graphql`,
-	documents: ['src/**/gql/*.ts'],
 	generates: {
-		'./src/__generated__/': {
+		'./src/__generated__/gateway/': {
+			documents: ['src/**/gql/gateway/*.ts'],
 			preset: 'client',
-			plugins: [],
+			schema: urlJoin(
+				process.env.NEXT_PUBLIC_GATEWAY_API_ROOT,
+				process.env.NEXT_PUBLIC_GATEWAY_GRAPHQL_ENDPOINT,
+			),
+			presetConfig: {
+				gqlTagName: 'gql',
+			},
+		},
+		'./src/__generated__/clinical/': {
+			documents: ['src/**/gql/clinical/*.ts'],
+			preset: 'client',
+			schema: urlJoin(
+				process.env.NEXT_PUBLIC_CLINICAL_API_ROOT,
+				process.env.NEXT_PUBLIC_CLINICAL_GRAPHQL_ENDPOINT,
+			),
 			presetConfig: {
 				gqlTagName: 'gql',
 			},

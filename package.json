@@ -1,17 +1,19 @@
 {
   "name": "rdpc-ui",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "NEXT_IS_BUILDING=true next build",
+    "dev": "npm run clean && next dev",
+    "build": "npm run clean && NEXT_IS_BUILDING=true next build",
+    "serve": "npm run clean && next build && next start",
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
     "test": "echo 'Add tests please :)'",
     "gql:compile": "graphql-codegen",
     "gql:watch": "graphql-codegen -w",
-    "type-check": "tsc -p ./tsconfig.json"
+    "type-check": "tsc -p ./tsconfig.json",
+    "clean": "rimraf .next"
   },
   "dependencies": {
     "@apollo/client": "^3.8.1",
@@ -20,12 +22,14 @@
     "@icgc-argo/uikit": "^3.0.1",
     "@types/url-join": "^4.0.1",
     "apollo-upload-client": "^17.0.0",
+    "browser-fs-access": "^0.35.0",
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
+    "file-saver": "^2.0.5",
     "graphql": "^16.8.0",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
-    "next": "^13.4.19",
+    "next": "^14.2.2",
     "pluralize": "^8.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -45,6 +49,7 @@
     "@graphql-codegen/cli": "^5.0.0",
     "@graphql-codegen/client-preset": "^4.1.0",
     "@parcel/watcher": "^2.2.0",
+    "@playwright/test": "^1.41.2",
     "@types/apollo-upload-client": "^17.0.2",
     "@types/js-cookie": "^3.0.3",
     "@types/lodash": "^4.14.195",
@@ -63,6 +68,7 @@
     "lint-staged": "^13.2.2",
     "prettier": "^3.0.3",
     "prettier-plugin-organize-imports": "^3.2.2",
+    "rimraf": "^5.0.5",
     "typescript": "^5.1.6"
   },
   "lint-staged": {

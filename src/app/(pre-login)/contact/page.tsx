@@ -18,25 +18,6 @@
  */
 'use client';
 
-import { css, useTheme } from '@icgc-argo/uikit';
-import { Row } from 'react-grid-system';
-import Form from './components/form';
-import Info from './components/info';
-
-const Contact = () => {
-	const theme = useTheme();
-	return (
-		<Row
-			nogutter
-			css={css`
-				height: 100%;
-				background: ${theme.colors.white};
-			`}
-		>
-			<Info />
-			<Form />
-		</Row>
-	);
-};
+import Contact from '@/views/contact';
 
 export default Contact;

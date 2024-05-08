@@ -19,3 +19,4 @@
 export * from './clinical';
 export * from './misc';
 export * from './types';
+export * from './url';

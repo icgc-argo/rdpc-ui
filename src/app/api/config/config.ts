@@ -34,6 +34,9 @@ export type AppConfig = {
 	EGO_LOGIN_URL: string;
 	DACO_ROOT: string;
 	GATEWAY_API_ROOT: string;
+	GATEWAY_GRAPHQL_ENDPOINT: string;
+	CLINICAL_API_ROOT: string;
+	CLINICAL_GRAPHQL_ENDPOINT: string;
 };
 
 /**
@@ -66,7 +69,7 @@ export const getAppConfig = (serverEnv: any): AppConfig => {
 			serverEnv.NEXT_PUBLIC_EGO_PUBLIC_KEY || process.env.NEXT_PUBLIC_EGO_PUBLIC_KEY || '',
 		UI_VERSION: packageJSON.version,
 		REGION: serverEnv.NEXT_PUBLIC_REGION || process.env.NEXT_PUBLIC_REGION || '',
-		DATA_CENTER: serverEnv.NEXT_PUBLIC_DATA_CENTER || process.env.NEXT_PUBLIC_DATA_CENTER || '',
+		DATA_CENTER: serverEnv.NEXT_PUBLIC_DATA_CENTER || process.env.NEXT_PUBLIC_DATA_CENTER || 'DC1',
 		PLATFORM_UI_ROOT:
 			serverEnv.NEXT_PUBLIC_PLATFORM_UI_ROOT || process.env.NEXT_PUBLIC_PLATFORM_UI_ROOT || '',
 		RECAPTCHA_SITE_KEY:
@@ -79,7 +82,19 @@ export const getAppConfig = (serverEnv: any): AppConfig => {
 		GATEWAY_API_ROOT:
 			serverEnv.NEXT_PUBLIC_GATEWAY_API_ROOT ||
 			process.env.NEXT_PUBLIC_GATEWAY_API_ROOT ||
-			'https://argo-gateway.dev.argo.cancercollaboratory.org',
+			'http://localhost:PORT',
+		GATEWAY_GRAPHQL_ENDPOINT:
+			serverEnv.NEXT_PUBLIC_GATEWAY_GRAPHQL_ENDPOINT ||
+			process.env.NEXT_PUBLIC_GATEWAY_GRAPHQL_ENDPOINT ||
+			'GRAPH_QL',
+		CLINICAL_API_ROOT:
+			serverEnv.NEXT_PUBLIC_CLINICAL_API_ROOT ||
+			process.env.NEXT_PUBLIC_CLINICAL_API_ROOT ||
+			'http://localhost:PORT',
+		CLINICAL_GRAPHQL_ENDPOINT:
+			serverEnv.NEXT_PUBLIC_CLINICAL_GRAPHQL_ENDPOINT ||
+			process.env.NEXT_PUBLIC_CLINICAL_GRAPHQL_ENDPOINT ||
+			'GRAPH_QL',
 	};
 
 	return config;
