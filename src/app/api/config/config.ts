@@ -82,19 +82,19 @@ export const getAppConfig = (serverEnv: any): AppConfig => {
 		GATEWAY_API_ROOT:
 			serverEnv.NEXT_PUBLIC_GATEWAY_API_ROOT ||
 			process.env.NEXT_PUBLIC_GATEWAY_API_ROOT ||
-			'https://argo-gateway.argo-dev.cumulus.genomeinformatics.org',
+			'http://localhost:PORT',
 		GATEWAY_API_GRAPHQL:
 			serverEnv.NEXT_PUBLIC_GATEWAY_API_GRAPHQL ||
 			process.env.NEXT_PUBLIC_GATEWAY_API_GRAPHQL ||
-			'https://argo-gateway.argo-dev.cumulus.genomeinformatics.org/graphql',
+			'http://localhost:PORT',
 		CLINICAL_API_ROOT:
 			serverEnv.NEXT_PUBLIC_CLINICAL_API_ROOT ||
 			process.env.NEXT_PUBLIC_CLINICAL_API_ROOT ||
-			'https://clinical.argo-qa.cumulus.genomeinformatics.org',
+			'http://localhost:PORT',
 		CLINICAL_API_GRAPHQL:
 			serverEnv.NEXT_PUBLIC_CLINICAL_API_GRAPHQL ||
 			process.env.NEXT_PUBLIC_CLINICAL_API_GRAPHQL ||
-			'https://clinical.argo-qa.cumulus.genomeinformatics.org/gql',
+			'http://localhost:PORT',
 	};
 
 	return config;
