@@ -19,7 +19,7 @@
 
 'use client';
 
-import { AppConfig } from '@/app/api/config/config';
+import type { AppConfig } from '@/app/api/config/config';
 import { ReactNode, createContext, useContext } from 'react';
 
 const defaultContext = {
@@ -36,9 +36,9 @@ const defaultContext = {
 	EGO_LOGIN_URL: '',
 	DACO_ROOT: '',
 	GATEWAY_API_ROOT: '',
-	GATEWAY_API_GRAPHQL: '',
+	GATEWAY_GRAPHQL_ENDPOINT: '',
 	CLINICAL_API_ROOT: '',
-	CLINICAL_API_GRAPHQL: '',
+	CLINICAL_GRAPHQL_ENDPOINT: '',
 };
 
 const AppConfig = createContext<AppConfig>(defaultContext);
