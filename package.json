@@ -46,6 +46,7 @@
     "@emotion/styled": "^11.11.0"
   },
   "devDependencies": {
+    "@elastic/elasticsearch": "^7.17.0",
     "@graphql-codegen/cli": "^5.0.0",
     "@graphql-codegen/client-preset": "^4.1.0",
     "@parcel/watcher": "^2.2.0",
@@ -69,6 +70,7 @@
     "prettier": "^3.0.3",
     "prettier-plugin-organize-imports": "^3.2.2",
     "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
     "typescript": "^5.1.6"
   },
   "lint-staged": {
